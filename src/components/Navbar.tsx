@@ -39,11 +39,18 @@ const navItems = [
   {
     type: 'dropdown',
     name: 'Explore',
+    heading: 'Explore',
     links: [
-      { name: 'Gallery', href: '/gallery' },
-      { name: 'Events', href: '/explore/events' },
-      { name: 'Blog', href: '/explore/blog' },
+      { name: 'Students Zone', description: 'Discover student life and resources', href: '/explore/students-zone', icon: 'PersonStanding' },
+      { name: 'Infrastructure', description: 'Explore our facilities and campus', href: '/explore/infrastructure', icon: 'HomeHeart' },
+      { name: 'Gallery', description: 'View our creative works and events', href: '/explore/gallery', icon: 'LayoutGrid' },
+      { name: 'News & Events', description: 'Stay updated with the latest happenings', href: '/explore/news-events', icon: 'CalendarDays' },
     ],
+    footer: {
+      text: 'Start your design journey',
+      linkText: 'Apply now',
+      linkHref: '/admissions'
+    }
   },
 ];
 
@@ -63,7 +70,7 @@ const Navbar = () => {
           <>
             {/* Nav Links - Centered */}
             <div className="hidden md:flex flex-grow justify-center">
-              <div className="flex items-center space-x-6"> {/* Changed space-x-8 to space-x-6 */}
+              <div className="flex items-center space-x-6">
                 {navItems.map((item) => (
                   item.type === 'link' ? (
                     <Link
