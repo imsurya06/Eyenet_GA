@@ -5,7 +5,8 @@ import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 import OurProgramsSection from '@/components/OurProgramsSection';
 import ImpactByNumbersSection from '@/components/ImpactByNumbersSection';
 import StudentStoriesSection from '@/components/StudentStoriesSection';
-import CallToActionSection from '@/components/CallToActionSection'; // Import the new component
+import CallToActionSection from '@/components/CallToActionSection';
+import NewsletterSection from '@/components/NewsletterSection'; // Import the new component
 
 const Index = () => {
   return (
@@ -63,6 +64,9 @@ const Index = () => {
 
       {/* Call To Action Section */}
       <CallToActionSection />
+
+      {/* Newsletter Section */}
+      <NewsletterSection />
     </>
   );
 };
