@@ -1,12 +1,12 @@
 "use client";
 
 import React from 'react';
-import { NavLink } from 'react-router-dom'; // Changed to NavLink
+import { NavLink } from 'react-router-dom';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import * as LucideIcons from 'lucide-react';
 
-interface CourseDropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof NavLink> { // Changed to NavLink
+interface CourseDropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof NavLink> {
   href: string;
   title: string;
   description?: string;
@@ -21,13 +21,13 @@ const CourseDropdownMenuItem = React.forwardRef<
 
   return (
     <DropdownMenuItem asChild>
-      <NavLink // Changed to NavLink
+      <NavLink
         ref={ref}
         to={href}
         className={({ isActive }) =>
           cn(
             "flex items-start gap-3 rounded-md p-3 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            isActive && "text-primary", // Apply text-primary when active
+            isActive && "text-primary",
             className
           )
         }
@@ -43,10 +43,10 @@ const CourseDropdownMenuItem = React.forwardRef<
             ?
           </div>
         )}
-        <div className="flex flex-col justify-center h-[3.5rem]"> {/* Changed to flexbox for vertical centering */}
-          <p className="text-sm font-medium leading-none">{title}</p>
+        <div className="flex flex-col justify-center h-[3.5rem]">
+          <p className="text-sm font-normal leading-none">{title}</p> {/* Changed font-medium to font-normal */}
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {description || '\u00A0'} {/* Always render, use non-breaking space if no description */}
+            {description || '\u00A0'}
           </p>
           {children}
         </div>

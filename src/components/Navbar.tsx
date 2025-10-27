@@ -76,7 +76,7 @@ const Navbar = () => {
 
   const handleClose = (dropdownName: 'Courses' | 'Explore') => {
     const timeoutRef = dropdownName === 'Courses' ? coursesTimeoutRef : exploreTimeoutRef;
-    const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
+    const setOpenState = dropdownName === 'Courses' ? setOpenState : setExploreOpen;
 
     timeoutRef.current = setTimeout(() => {
       setOpenState(false);
@@ -134,7 +134,7 @@ const Navbar = () => {
                       to={item.href}
                       className={({ isActive }) =>
                         cn(
-                          "text-regular font-medium transition-colors hover:text-primary px-4 py-2 rounded-md",
+                          "text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
                           isActive && "text-primary"
                         )
                       }
@@ -151,7 +151,7 @@ const Navbar = () => {
                         <Button
                           variant="ghost"
                           className={cn(
-                            "text-regular font-medium transition-colors hover:text-primary",
+                            "text-regular font-normal transition-colors hover:text-primary",
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
@@ -189,7 +189,7 @@ const Navbar = () => {
                             <DropdownMenuSeparator className="my-2" />
                             <div className="px-3 py-2 text-sm">
                               {item.footer.text}{' '}
-                              <Link to={item.footer.linkHref} className="text-primary hover:underline font-medium">
+                              <Link to={item.footer.linkHref} className="text-primary hover:underline font-normal">
                                 {item.footer.linkText}
                               </Link>
                             </div>
@@ -232,7 +232,7 @@ const Navbar = () => {
                       to={item.href}
                       className={({ isActive }) =>
                         cn(
-                          "text-lg font-medium hover:text-primary",
+                          "text-lg font-normal hover:text-primary",
                           isActive ? "text-primary" : "text-muted-foreground"
                         )
                       }
@@ -243,7 +243,7 @@ const Navbar = () => {
                     <React.Fragment key={item.name}>
                       <span
                         className={cn(
-                          "text-lg font-medium",
+                          "text-lg font-normal",
                           (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
                           (item.name === 'Explore' && isExplorePathActive) && "text-primary",
                           !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
