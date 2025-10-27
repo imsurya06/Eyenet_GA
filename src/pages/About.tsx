@@ -2,13 +2,15 @@
 
 import React from 'react';
 import AboutHeroSection from '@/components/AboutHeroSection';
-import WhyChooseUsSection from '@/components/WhyChooseUsSection'; // Import the WhyChooseUsSection
+import WhyChooseUsSection from '@/components/WhyChooseUsSection';
+import FounderDirectorSection from '@/components/FounderDirectorSection'; // Import the new component
 
 const About = () => {
   return (
     <>
       <AboutHeroSection />
-      <WhyChooseUsSection /> {/* Add the WhyChooseUsSection here */}
+      <WhyChooseUsSection />
+      <FounderDirectorSection /> {/* Add the FounderDirectorSection here */}
     </>
   );
 };
