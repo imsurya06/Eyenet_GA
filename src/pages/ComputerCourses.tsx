@@ -8,12 +8,8 @@ import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnS
 const ComputerCourses = () => {
   return (
     <>
-      <AnimateOnScroll isHero={true} delay={500}>
-        <ComputerCoursesSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <CallToActionSection />
-      </AnimateOnScroll>
+      <ComputerCoursesSection />
+      <CallToActionSection />
     </>
   );
 };

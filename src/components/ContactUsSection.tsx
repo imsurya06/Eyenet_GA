@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import AnimateOnScroll from './AnimateOnScroll';
 
 const ContactUsSection = () => {
   return (
@@ -15,37 +16,47 @@ const ContactUsSection = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
         {/* Left Section: Contact Information */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
-            Contact us
-          </h2>
-          <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </p>
+          <AnimateOnScroll delay={100}>
+            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
+              Contact us
+            </h2>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={200}>
+            <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </AnimateOnScroll>
 
           <div className="space-y-6 w-full flex flex-col items-center lg:items-start"> {/* Added flex-col items-center for mobile centering */}
-            <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
-              <Mail className="h-6 w-6 text-primary" />
-              <a href="mailto:email@example.com" className="text-text-regular font-body text-foreground hover:underline">
-                email@example.com
-              </a>
-            </div>
-            <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
-              <Phone className="h-6 w-6 text-primary" />
-              <a href="tel:+15550000000" className="text-text-regular font-body text-foreground hover:underline">
-                +1 (555) 000-0000
-              </a>
-            </div>
-            <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
-              <MapPin className="h-6 w-6 text-primary" />
-              <p className="text-text-regular font-body text-foreground">
-                123 Sample St, Sydney NSW 2000 AU
-              </p>
-            </div>
+            <AnimateOnScroll delay={300}>
+              <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
+                <Mail className="h-6 w-6 text-primary" />
+                <a href="mailto:email@example.com" className="text-text-regular font-body text-foreground hover:underline">
+                  email@example.com
+                </a>
+              </div>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={400}>
+              <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
+                <Phone className="h-6 w-6 text-primary" />
+                <a href="tel:+15550000000" className="text-text-regular font-body text-foreground hover:underline">
+                  +1 (555) 000-0000
+                </a>
+              </div>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={500}>
+              <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
+                <MapPin className="h-6 w-6 text-primary" />
+                <p className="text-text-regular font-body text-foreground">
+                  123 Sample St, Sydney NSW 2000 AU
+                </p>
+              </div>
+            </AnimateOnScroll>
           </div>
         </div>
 
         {/* Right Section: Contact Form */}
-        <div className="w-full max-w-lg mx-auto lg:mx-0">
+        <AnimateOnScroll delay={600} className="w-full max-w-lg mx-auto lg:mx-0">
           <form className="space-y-6">
             <div>
               <Label htmlFor="name" className="text-text-regular font-body text-foreground mb-2 block">
@@ -93,7 +104,7 @@ const ContactUsSection = () => {
               Submit
             </Button>
           </form>
-        </div>
+        </AnimateOnScroll>
       </div>
     </section>
   );

@@ -13,27 +13,13 @@ import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnS
 const About = () => {
   return (
     <>
-      <AnimateOnScroll isHero={true} delay={500}>
-        <AboutHeroSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <WhyChooseUsSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <FounderDirectorSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <ImageGallerySection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <TestimonialsSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <LocationSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <ContactUsSection />
-      </AnimateOnScroll>
+      <AboutHeroSection />
+      <WhyChooseUsSection />
+      <FounderDirectorSection />
+      <ImageGallerySection />
+      <TestimonialsSection />
+      <LocationSection />
+      <ContactUsSection />
     </>
   );
 };

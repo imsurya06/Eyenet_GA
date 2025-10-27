@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
+import AnimateOnScroll from './AnimateOnScroll';
 
 const InfrastructureHeroSection = () => {
   const infrastructureImages = [
@@ -31,14 +32,18 @@ const InfrastructureHeroSection = () => {
   return (
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">
-          Infrastructure
-        </h1>
-        <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
-          We have well enough infrastructure to enhance the life of students.
-        </p>
+        <AnimateOnScroll isHero={true} delay={500}>
+          <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">
+            Infrastructure
+          </h1>
+        </AnimateOnScroll>
+        <AnimateOnScroll isHero={true} delay={600}>
+          <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
+            We have well enough infrastructure to enhance the life of students.
+          </p>
+        </AnimateOnScroll>
 
-        <div className="w-full">
+        <AnimateOnScroll isHero={true} delay={700} className="w-full">
           <Carousel
             plugins={[plugin.current]}
             className="w-full"
@@ -66,7 +71,7 @@ const InfrastructureHeroSection = () => {
             <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
             <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
           </Carousel>
-        </div>
+        </AnimateOnScroll>
       </div>
     </section>
   );

@@ -10,18 +10,10 @@ import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnS
 const FashionDesignCourses = () => {
   return (
     <>
-      <AnimateOnScroll isHero={true} delay={500}>
-        <FashionCoursesSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <AdditionalFashionCoursesSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <MoreFashionCoursesSection />
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <CallToActionSection />
-      </AnimateOnScroll>
+      <FashionCoursesSection />
+      <AdditionalFashionCoursesSection />
+      <MoreFashionCoursesSection />
+      <CallToActionSection />
     </>
   );
 };

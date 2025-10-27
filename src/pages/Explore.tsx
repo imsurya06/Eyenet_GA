@@ -3,11 +3,11 @@ import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnS
 
 const Explore = () => {
   return (
-    <AnimateOnScroll isHero={true} delay={500}> {/* Apply hero animation */}
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <AnimateOnScroll isHero={true} delay={500}> {/* Apply hero animation */}
         <h1 className="text-h1-mobile md:text-h1-desktop font-heading">Explore Page</h1>
-      </div>
-    </AnimateOnScroll>
+      </AnimateOnScroll>
+    </div>
   );
 };
 
