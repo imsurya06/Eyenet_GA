@@ -91,7 +91,7 @@ const Admissions = () => {
                     <SelectItem value="chudithar-making">Chudithar Making</SelectItem>
                     <SelectItem value="blouse-making">Blouse Making</SelectItem>
                     <SelectItem value="drafting-pattern-making">Drafting & Pattern Making</SelectItem>
-                    <SelectItem value="aaei-making-course">Aaei Making Course</SelectItem>
+                    <SelectItem value="aari-making-course">Aari Making Course</SelectItem> {/* Corrected here */}
                     <SelectItem value="fashion-illustration-course">Fashion Illustration Course</SelectItem>
                     <SelectItem value="fabric-painting-course">Fabric Painting Course</SelectItem>
                   </SelectContent>
