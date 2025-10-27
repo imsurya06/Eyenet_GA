@@ -5,7 +5,8 @@ import AboutHeroSection from '@/components/AboutHeroSection';
 import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 import FounderDirectorSection from '@/components/FounderDirectorSection';
 import ImageGallerySection from '@/components/ImageGallerySection';
-import TestimonialsSection from '@/components/TestimonialsSection'; // Import the new TestimonialsSection
+import TestimonialsSection from '@/components/TestimonialsSection';
+import LocationSection from '@/components/LocationSection'; // Import the LocationSection
 
 const About = () => {
   return (
@@ -14,7 +15,8 @@ const About = () => {
       <WhyChooseUsSection />
       <FounderDirectorSection />
       <ImageGallerySection />
-      <TestimonialsSection /> {/* Add the TestimonialsSection here */}
+      <TestimonialsSection />
+      <LocationSection /> {/* Add the LocationSection here */}
     </>
   );
 };
