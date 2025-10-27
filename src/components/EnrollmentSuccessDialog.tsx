@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle } from 'lucide-react';
-// Removed AnimateOnScroll import as it's no longer needed here
+import { CheckCircle, X } from 'lucide-react'; // Import X icon
 
 interface EnrollmentSuccessDialogProps {
   show: boolean;
@@ -21,6 +20,17 @@ const EnrollmentSuccessDialog: React.FC<EnrollmentSuccessDialogProps> = ({ show,
 
       {/* Dialog Content */}
       <div className="relative bg-white p-8 md:p-10 rounded-lg shadow-2xl max-w-md w-full text-center transform scale-95 opacity-0 animate-in fade-in zoom-in-95 duration-300">
+        {/* Close Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-3 right-3 h-8 w-8 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </Button>
+
         <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-6" />
         <h3 className="text-h4-mobile md:text-h4-desktop font-heading mb-4 text-foreground">
           Congratulations!
