@@ -115,7 +115,7 @@ const Navbar = () => {
   const isExplorePathActive = exploreItem ? isDropdownPathActive(exploreItem.links) : false;
 
   return (
-    <nav className="bg-background text-foreground shadow-lg py-4">
+    <nav className="bg-background text-foreground shadow-lg py-2"> {/* Changed py-4 to py-2 */}
       <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
