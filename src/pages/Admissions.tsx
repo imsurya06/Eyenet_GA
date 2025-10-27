@@ -13,9 +13,54 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnScroll
+import AnimateOnScroll from '@/components/AnimateOnScroll';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { showSuccess } from '@/utils/toast';
+import ConfettiOverlay from '@/components/ConfettiOverlay'; // Import the new ConfettiOverlay
+
+const formSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  mobile: z.string().regex(/^\d{10}$/, { message: 'Mobile number must be 10 digits.' }),
+  program: z.string().min(1, { message: 'Please select a program.' }),
+  terms: z.boolean().refine((val) => val === true, {
+    message: 'You must accept the terms and conditions.',
+  }),
+});
 
 const Admissions = () => {
+  const [showConfetti, setShowConfetti] = React.useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      mobile: '',
+      program: '',
+      terms: false,
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+    // Simulate API call or form submission
+    showSuccess(`You have enrolled for ${values.program}. Let's start your career with us.`);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3000); // Hide confetti after 3 seconds
+    form.reset(); // Reset form fields after submission
+  };
+
   return (
     <section
       className="relative min-h-screen bg-cover bg-center py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] flex items-center justify-center"
@@ -43,77 +88,139 @@ const Admissions = () => {
             <p className="text-text-medium font-body text-gray-600 mb-8">
               Let's Start your design journey
             </p>
-            <form className="space-y-6">
-              <div>
-                <Label htmlFor="name" className="text-text-regular font-body text-foreground mb-2 block text-left">
-                  Name*
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder=""
-                  className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
+                        Name*
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="name"
+                          type="text"
+                          placeholder=""
+                          className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div>
-                <Label htmlFor="email" className="text-text-regular font-body text-foreground mb-2 block text-left">
-                  Email*
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder=""
-                  className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
+                        Email*
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder=""
+                          className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div>
-                <Label htmlFor="mobile" className="text-text-regular font-body text-foreground mb-2 block text-left">
-                  Mobile Number*
-                </Label>
-                <Input
-                  id="mobile"
-                  type="tel"
-                  placeholder=""
-                  className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
+                <FormField
+                  control={form.control}
+                  name="mobile"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
+                        Mobile Number*
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="mobile"
+                          type="tel"
+                          placeholder=""
+                          className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div>
-                <Label htmlFor="program" className="text-text-regular font-body text-foreground mb-2 block text-left">
-                  Program*
-                </Label>
-                <Select>
-                  <SelectTrigger className="w-full h-12 px-4 py-2 text-text-regular border border-input bg-muted focus:ring-ring focus:ring-offset-background">
-                    <SelectValue placeholder="Select a program" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="diploma-fashion-designing">Diploma in Fashion Designing</SelectItem>
-                    <SelectItem value="diploma-dress-making-female">Diploma in Dress Making (Female)</SelectItem>
-                    <SelectItem value="diploma-dress-making-kids">Diploma in Dress Making (kids)</SelectItem>
-                    <SelectItem value="chudithar-making">Chudithar Making</SelectItem>
-                    <SelectItem value="blouse-making">Blouse Making</SelectItem>
-                    <SelectItem value="drafting-pattern-making">Drafting & Pattern Making</SelectItem>
-                    <SelectItem value="aari-making-course">Aari Making Course</SelectItem> {/* Corrected here */}
-                    <SelectItem value="fashion-illustration-course">Fashion Illustration Course</SelectItem>
-                    <SelectItem value="fabric-painting-course">Fabric Painting Course</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="terms" className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
-                <Label htmlFor="terms" className="text-text-regular font-body text-gray-600 text-left">
-                  I accept the{' '}
-                  <Link to="/terms-of-service" className="underline hover:text-primary">
-                    Terms
-                  </Link>
-                </Label>
-              </div>
-              <Button type="submit" className="w-full h-12 px-6 py-2 text-text-regular bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out hover:scale-[1.02]">
-                Enroll
-              </Button>
-            </form>
+                <FormField
+                  control={form.control}
+                  name="program"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
+                        Program*
+                      </FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full h-12 px-4 py-2 text-text-regular border border-input bg-muted focus:ring-ring focus:ring-offset-background">
+                            <SelectValue placeholder="Select a program" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Diploma in Fashion Designing">Diploma in Fashion Designing</SelectItem>
+                          <SelectItem value="Diploma in Dress Making (Female)">Diploma in Dress Making (Female)</SelectItem>
+                          <SelectItem value="Diploma in Dress Making (Child)">Diploma in Dress Making (Child)</SelectItem>
+                          <SelectItem value="Chudithar Making">Chudithar Making</SelectItem>
+                          <SelectItem value="Blouse Making">Blouse Making</SelectItem>
+                          <SelectItem value="Drafting & Pattern Making">Drafting & Pattern Making</SelectItem>
+                          <SelectItem value="Aari Making Course">Aari Making Course</SelectItem>
+                          <SelectItem value="Fashion Illustration Course">Fashion Illustration Course</SelectItem>
+                          <SelectItem value="Fabric Painting Course">Fabric Painting Course</SelectItem>
+                          <SelectItem value="Computer Basics & Applications">Computer Basics & Applications</SelectItem>
+                          <SelectItem value="Web Designing">Web Designing</SelectItem>
+                          <SelectItem value="Photoshop Mastery">Photoshop Mastery</SelectItem>
+                          <SelectItem value="Computer Application & Programming">Computer Application & Programming</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="terms"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="terms"
+                          className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel htmlFor="terms" className="text-text-regular font-body text-gray-600 text-left">
+                          I accept the{' '}
+                          <Link to="/terms-of-service" className="underline hover:text-primary">
+                            Terms
+                          </Link>
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full h-12 px-6 py-2 text-text-regular bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 ease-in-out hover:scale-[1.02]">
+                  Enroll
+                </Button>
+              </form>
+            </Form>
           </div>
         </AnimateOnScroll>
       </div>
+      <ConfettiOverlay show={showConfetti} />
     </section>
   );
 };
