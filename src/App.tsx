@@ -20,6 +20,7 @@ import CourseDetailsPage from "./pages/CourseDetailsPage";
 import ComputerCourses from "./pages/ComputerCourses"; // Import the new page
 import Footer from "./components/Footer";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop /> {/* Add ScrollToTop here */}
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
