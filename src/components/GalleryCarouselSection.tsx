@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card"; // Using Card for consistent styling
+import Autoplay from "embla-carousel-autoplay"; // Import Autoplay plugin
 
 const GalleryCarouselSection = () => {
   const carouselImages = [
@@ -17,6 +18,10 @@ const GalleryCarouselSection = () => {
     { src: '/images/img3.png', alt: 'South Indian Designer Concert 3' },
     { src: '/images/img4.png', alt: 'South Indian Designer Concert 4' },
   ];
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: false }) // Autoplay every 3 seconds, don't stop on user interaction
+  );
 
   return (
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
@@ -33,7 +38,13 @@ const GalleryCarouselSection = () => {
 
         {/* Right Section: Carousel */}
         <div className="w-full max-w-lg mx-auto lg:mx-0">
-          <Carousel className="w-full">
+          <Carousel
+            plugins={[plugin.current]}
+            className="w-full"
+            opts={{
+              loop: true, // Enable looping
+            }}
+          >
             <CarouselContent>
               {carouselImages.map((image, index) => (
                 <CarouselItem key={index}>
