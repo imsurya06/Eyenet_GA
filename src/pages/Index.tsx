@@ -7,7 +7,7 @@ import OurProgramsSection from '@/components/OurProgramsSection';
 import ImpactByNumbersSection from '@/components/ImpactByNumbersSection';
 import StudentStoriesSection from '@/components/StudentStoriesSection';
 import CallToActionSection from '@/components/CallToActionSection';
-import NewsletterSection from '@/components/NewsletterSection';
+// Removed import for NewsletterSection
 import FAQSection from '@/components/FAQSection';
 import LocationSection from '@/components/LocationSection'; // Import the new component
 // Removed ImageGallerySection from here
@@ -69,8 +69,7 @@ const Index = () => {
       {/* Call To Action Section */}
       <CallToActionSection />
 
-      {/* Newsletter Section */}
-      <NewsletterSection />
+      {/* Newsletter Section (Removed) */}
 
       {/* FAQ Section */}
       <FAQSection />
