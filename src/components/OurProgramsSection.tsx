@@ -11,7 +11,6 @@ const OurProgramsSection = () => {
       description: 'Learn essential computer programs from basics to advanced.',
       href: '/courses/fashion-design',
     },
-    // Removed 'Graphic design' program card
     {
       image: '/images/computer-courses.png',
       title: 'Computer Courses',
@@ -30,9 +29,9 @@ const OurProgramsSection = () => {
         Discover our range of specialized design programs tailored to modern industry demands.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div className="flex flex-wrap justify-center gap-8 mb-16"> {/* Changed to flexbox for centering */}
         {programs.map((program, index) => (
-          <div key={index} className="flex flex-col items-center">
+          <div key={index} className="flex flex-col items-center max-w-sm"> {/* Added max-w-sm for consistent card width */}
             <div className="w-full h-48 md:h-64 overflow-hidden rounded-lg mb-6">
               <img
                 src={program.image}
