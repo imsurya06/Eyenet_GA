@@ -127,8 +127,11 @@
 }
 
 @layer components {
-  .hide-close-button button[data-radix-dialog-close] { /* Removed '>' for broader targeting */
+  /* This rule targets the close button within any element that has the 'hide-close-button' class */
+  .hide-close-button [data-radix-dialog-close] {
     display: none !important;
+    visibility: hidden !important; /* Added visibility hidden for extra measure */
+    pointer-events: none !important; /* Disable interaction */
   }
 }
 
