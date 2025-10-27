@@ -56,9 +56,9 @@ export default {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
           primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground)",
           accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground)",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
@@ -67,6 +67,34 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        heading: ['Cormorant Garamond', 'serif'],
+        body: ['Source Sans 3', 'sans-serif'],
+      },
+      fontSize: {
+        // Desktop Headings
+        'h1-desktop': ['4.5rem', { lineHeight: '120%' }], // 72px
+        'h2-desktop': ['3.25rem', { lineHeight: '120%' }], // 52px
+        'h3-desktop': ['2.75rem', { lineHeight: '120%' }], // 44px
+        'h4-desktop': ['2.25rem', { lineHeight: '140%' }], // 36px
+        'h5-desktop': ['1.75rem', { lineHeight: '140%' }], // 28px
+        'h6-desktop': ['1.375rem', { lineHeight: '140%' }], // 22px
+
+        // Mobile Headings
+        'h1-mobile': ['2.75rem', { lineHeight: '120%' }], // 44px
+        'h2-mobile': ['2.5rem', { lineHeight: '120%' }], // 40px
+        'h3-mobile': ['2rem', { lineHeight: '120%' }], // 32px
+        'h4-mobile': ['1.5rem', { lineHeight: '140%' }], // 24px
+        'h5-mobile': ['1.25rem', { lineHeight: '140%' }], // 20px
+        'h6-mobile': ['1.125rem', { lineHeight: '140%' }], // 18px
+
+        // Body Text Sizes
+        'text-large': ['1.375rem', { lineHeight: '160%' }], // 22px
+        'text-medium': ['1.125rem', { lineHeight: '160%' }], // 18px
+        'text-regular': ['1rem', { lineHeight: '160%' }], // 16px
+        'text-small': ['0.875rem', { lineHeight: '160%' }], // 14px
+        'text-tiny': ['0.75rem', { lineHeight: '160%' }], // 12px
       },
       keyframes: {
         "accordion-down": {
