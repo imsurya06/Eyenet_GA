@@ -90,19 +90,19 @@ const Navbar = () => {
   };
 
   const handleOpenChange = (dropdownName: 'Courses' | 'Explore', openState: boolean) => {
-    // This handles closing via escape key or clicking outside.
-    // If Radix wants to close it, we should respect that immediately and clear any pending hover close timers.
-    if (!openState) {
-      if (dropdownName === 'Courses') {
-        if (coursesTimeoutRef.current) clearTimeout(coursesTimeoutRef.current);
-        setCoursesOpen(false);
-      } else if (dropdownName === 'Explore') {
-        if (exploreTimeoutRef.current) clearTimeout(exploreTimeoutRef.current);
-        setExploreOpen(false);
+    const timeoutRef = dropdownName === 'Courses' ? coursesTimeoutRef : exploreTimeoutRef;
+    const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
+
+    if (openState) { // Radix wants to open (e.g., keyboard interaction)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      setOpenState(true);
+    } else { // Radix wants to close (e.g., escape key, click outside, or internal hover logic)
+      // Only force close immediately if there's no active hover-based close timer.
+      // This prevents Radix's internal close from overriding our delayed hover close.
+      if (!timeoutRef.current) {
+        setOpenState(false);
       }
     }
-    // If Radix wants to open (e.g., keyboard interaction), we also respect it.
-    // Our onMouseEnter will also set it to true, so this is fine.
   };
 
   return (
