@@ -4,7 +4,8 @@ import React from 'react';
 import AboutHeroSection from '@/components/AboutHeroSection';
 import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 import FounderDirectorSection from '@/components/FounderDirectorSection';
-import ImageGallerySection from '@/components/ImageGallerySection'; // Import the ImageGallerySection
+import ImageGallerySection from '@/components/ImageGallerySection';
+import TestimonialsSection from '@/components/TestimonialsSection'; // Import the new TestimonialsSection
 
 const About = () => {
   return (
@@ -12,7 +13,8 @@ const About = () => {
       <AboutHeroSection />
       <WhyChooseUsSection />
       <FounderDirectorSection />
-      <ImageGallerySection /> {/* Add the ImageGallerySection here */}
+      <ImageGallerySection />
+      <TestimonialsSection /> {/* Add the TestimonialsSection here */}
     </>
   );
 };
