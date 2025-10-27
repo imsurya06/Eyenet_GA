@@ -1,5 +1,7 @@
 import React from 'react';
-import GalleryCarouselSection from '@/components/GalleryCarouselSection'; // Import the new component
+import GalleryCarouselSection from '@/components/GalleryCarouselSection';
+import GalleryGridSection from '@/components/GalleryGridSection'; // Import the new component
+import CallToActionSection from '@/components/CallToActionSection'; // Import the existing CallToActionSection
 
 const Gallery = () => {
   return (
@@ -38,7 +40,9 @@ const Gallery = () => {
           </div>
         </div>
       </section>
-      <GalleryCarouselSection /> {/* Add the new carousel section here */}
+      <GalleryCarouselSection />
+      <GalleryGridSection /> {/* Add the new image grid section here */}
+      <CallToActionSection /> {/* Add the Call To Action section here */}
     </>
   );
 };
