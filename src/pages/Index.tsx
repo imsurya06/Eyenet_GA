@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 const Index = () => {
   return (
-    <div className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row items-center justify-center px-4 py-8 md:py-16 lg:py-24 md:px-8 lg:px-16 bg-background">
+    <div className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row items-center justify-center px-4 py-8 md:py-16 lg:py-24 md:px-8 lg:px-[80px] bg-background">
       {/* Mobile Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
