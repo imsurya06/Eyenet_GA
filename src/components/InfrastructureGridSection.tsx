@@ -4,10 +4,10 @@ import React from 'react';
 
 const InfrastructureGridSection = () => {
   const gridImages = [
-    { src: '/public/placeholder.svg', alt: 'Infrastructure Image 1' },
-    { src: '/public/placeholder.svg', alt: 'Infrastructure Image 2' },
-    { src: '/public/placeholder.svg', alt: 'Infrastructure Image 3' },
-    { src: '/public/placeholder.svg', alt: 'Infrastructure Image 4' },
+    { src: '/images/pexels-pixabay-256491.jpg', alt: 'Computer Lab' },
+    { src: '/images/pexels-tima-miroshnichenko-6550407.jpg', alt: 'Classroom' },
+    { src: '/images/pexels-pixabay-356065.jpg', alt: 'Library' },
+    { src: '/images/pexels-gabriel-manjarres-119584478-19064143.jpg', alt: 'Student in classroom' },
   ];
 
   return (
