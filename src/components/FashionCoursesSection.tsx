@@ -45,7 +45,7 @@ const FashionCoursesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.map((course, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col"> {/* Added flex flex-col */}
+            <div key={index} className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
               <div className="w-full h-48 overflow-hidden">
                 <img
                   src={course.image}
@@ -53,21 +53,26 @@ const FashionCoursesSection = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-6 flex flex-col flex-grow"> {/* Added flex flex-col flex-grow */}
+              <div className="p-6 flex flex-col flex-grow">
                 <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-4">
                   {course.tag}
                 </span>
                 <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
-                  {course.title}
+                  <Link to={`/courses/fashion-design/${course.title.toLowerCase().replace(/\s+/g, '-')}`} className="hover:underline">
+                    {course.title}
+                  </Link>
                 </h3>
                 <p className="text-text-regular font-body text-gray-600 mb-6">
-                  {course.description}
+                  {course.description.split('Details...')[0]}
+                  <Link to={`/courses/fashion-design/${course.title.toLowerCase().replace(/\s+/g, '-')}`} className="text-primary hover:underline ml-1">
+                    Details...
+                  </Link>
                 </p>
-                <div className="flex items-center justify-between mt-auto"> {/* Added mt-auto to push to bottom */}
+                <div className="flex items-center justify-between mt-auto">
                   <Link to={course.brochureLink} className="text-text-regular font-body text-primary hover:underline">
                     Download Brochure
                   </Link>
-                  <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-text-regular">
+                  <Button asChild className="bg-primary hover:bg-primary/90 text-white px-6 py-3 text-text-regular">
                     <Link to={course.enrollLink}>
                       Enroll <ArrowRight className="ml-2 h-4 w-4 inline-block" />
                     </Link>
