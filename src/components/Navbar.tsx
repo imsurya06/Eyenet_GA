@@ -4,14 +4,37 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Menu, ChevronDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'About Us', href: '/about' },
-  { name: 'Courses', href: '/courses' },
-  { name: 'Gallery', href: '/gallery' },
+const navItems = [
+  { type: 'link', name: 'Home', href: '/' },
+  { type: 'link', name: 'About', href: '/about' },
+  { type: 'link', name: 'Admissions', href: '/admissions' },
+  {
+    type: 'dropdown',
+    name: 'Courses',
+    links: [
+      { name: 'All Courses', href: '/courses' },
+      { name: 'Fashion Design', href: '/courses/fashion-design' },
+      { name: 'Interior Design', href: '/courses/interior-design' },
+    ],
+  },
+  {
+    type: 'dropdown',
+    name: 'Explore',
+    links: [
+      { name: 'Gallery', href: '/gallery' },
+      { name: 'Events', href: '/explore/events' },
+      { name: 'Blog', href: '/explore/blog' },
+    ],
+  },
 ];
 
 const Navbar = () => {
@@ -31,14 +54,35 @@ const Navbar = () => {
             {/* Nav Links - Centered */}
             <div className="hidden md:flex flex-grow justify-center">
               <div className="flex items-center space-x-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.href}
-                    className="text-sm font-medium transition-colors hover:text-primary"
-                  >
-                    {link.name}
-                  </Link>
+                {navItems.map((item) => (
+                  item.type === 'link' ? (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="text-sm font-medium transition-colors hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <DropdownMenu key={item.name}>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary"
+                        >
+                          {item.name}
+                          <ChevronDown className="ml-1 h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        {item.links.map((link) => (
+                          <DropdownMenuItem key={link.name} asChild>
+                            <Link to={link.href}>{link.name}</Link>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )
                 ))}
               </div>
             </div>
@@ -66,14 +110,31 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
               <nav className="flex flex-col gap-4 pt-6">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.href}
-                    className="text-lg font-medium hover:text-primary"
-                  >
-                    {link.name}
-                  </Link>
+                {navItems.map((item) => (
+                  item.type === 'link' ? (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="text-lg font-medium hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <React.Fragment key={item.name}>
+                      <span className="text-lg font-medium text-muted-foreground">{item.name}</span>
+                      <div className="ml-4 flex flex-col gap-2">
+                        {item.links.map((link) => (
+                          <Link
+                            key={link.name}
+                            to={link.href}
+                            className="text-base text-muted-foreground hover:text-primary"
+                          >
+                            {link.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </React.Fragment>
+                  )
                 ))}
                 <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   <Link to="/contact">Contact</Link>
