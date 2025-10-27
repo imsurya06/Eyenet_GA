@@ -37,7 +37,7 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
               <Link to="/contact">Contact</Link>
             </Button>
             <Button variant="default">
@@ -66,7 +66,7 @@ const Navbar = () => {
                     {link.name}
                   </Link>
                 ))}
-                <Button variant="outline" asChild className="mt-4">
+                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   <Link to="/contact">Contact</Link>
                 </Button>
                 <Button variant="default" className="mt-2">
