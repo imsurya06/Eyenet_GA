@@ -56,6 +56,8 @@ const navItems = [
 
 const Navbar = () => {
   const isMobile = useIsMobile();
+  const [coursesOpen, setCoursesOpen] = React.useState(false);
+  const [exploreOpen, setExploreOpen] = React.useState(false);
 
   return (
     <nav className="bg-background text-foreground shadow-sm">
@@ -81,46 +83,61 @@ const Navbar = () => {
                       {item.name}
                     </Link>
                   ) : (
-                    <DropdownMenu key={item.name}>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className="text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary"
-                        >
-                          {item.name}
-                          <ChevronDown className="ml-1 h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-80 p-4 bg-muted" align="start">
-                        {item.heading && (
-                          <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
-                            {item.heading}
-                          </DropdownMenuLabel>
-                        )}
-                        <div className="grid gap-1">
-                          {item.links.map((link) => (
-                            <CourseDropdownMenuItem
-                              key={link.name}
-                              href={link.href}
-                              title={link.name}
-                              description={link.description}
-                              icon={link.icon as keyof typeof LucideIcons}
-                            />
-                          ))}
-                        </div>
-                        {item.footer && (
-                          <>
-                            <DropdownMenuSeparator className="my-2" />
-                            <div className="px-3 py-2 text-sm">
-                              {item.footer.text}{' '}
-                              <Link to={item.footer.linkHref} className="text-primary hover:underline font-medium">
-                                {item.footer.linkText}
-                              </Link>
-                            </div>
-                          </>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div
+                      key={item.name}
+                      onMouseEnter={() => {
+                        if (item.name === 'Courses') setCoursesOpen(true);
+                        if (item.name === 'Explore') setExploreOpen(true);
+                      }}
+                      onMouseLeave={() => {
+                        if (item.name === 'Courses') setCoursesOpen(false);
+                        if (item.name === 'Explore') setExploreOpen(false);
+                      }}
+                    >
+                      <DropdownMenu
+                        open={item.name === 'Courses' ? coursesOpen : exploreOpen}
+                        onOpenChange={item.name === 'Courses' ? setCoursesOpen : setExploreOpen}
+                      >
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="text-sm font-medium transition-colors hover:text-primary data-[state=open]:text-primary"
+                          >
+                            {item.name}
+                            <ChevronDown className="ml-1 h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-80 p-4 bg-muted" align="start">
+                          {item.heading && (
+                            <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
+                              {item.heading}
+                            </DropdownMenuLabel>
+                          )}
+                          <div className="grid gap-1">
+                            {item.links.map((link) => (
+                              <CourseDropdownMenuItem
+                                key={link.name}
+                                href={link.href}
+                                title={link.name}
+                                description={link.description}
+                                icon={link.icon as keyof typeof LucideIcons}
+                              />
+                            ))}
+                          </div>
+                          {item.footer && (
+                            <>
+                              <DropdownMenuSeparator className="my-2" />
+                              <div className="px-3 py-2 text-sm">
+                                {item.footer.text}{' '}
+                                <Link to={item.footer.linkHref} className="text-primary hover:underline font-medium">
+                                  {item.footer.linkText}
+                                </Link>
+                              </div>
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   )
                 ))}
               </div>
