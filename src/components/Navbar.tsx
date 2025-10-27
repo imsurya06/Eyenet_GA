@@ -61,45 +61,12 @@ const Navbar = () => {
   const [exploreOpen, setExploreOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = React.useState(false); // State for mobile sheet
 
-  const coursesTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const exploreTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpen = (dropdownName: 'Courses' | 'Explore') => {
-    const timeoutRef = dropdownName === 'Courses' ? coursesTimeoutRef : exploreTimeoutRef;
-    const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-    setOpenState(true);
-  };
-
-  const handleClose = (dropdownName: 'Courses' | 'Explore') => {
-    const timeoutRef = dropdownName === 'Courses' ? coursesTimeoutRef : exploreTimeoutRef;
-    const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
-
-    timeoutRef.current = setTimeout(() => {
-      setOpenState(false);
-    }, 150); // Delay for closing
-  };
-
-  const handleRadixOpenChange = (dropdownName: 'Courses' | 'Explore', newOpenState: boolean) => {
-    const timeoutRef = dropdownName === 'Courses' ? coursesTimeoutRef : exploreTimeoutRef;
-    const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
-
-    if (newOpenState) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      setOpenState(true);
+  // Simplified onOpenChange handler
+  const handleDropdownOpenChange = (dropdownName: 'Courses' | 'Explore', newOpenState: boolean) => {
+    if (dropdownName === 'Courses') {
+      setCoursesOpen(newOpenState);
     } else {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      setOpenState(false);
+      setExploreOpen(newOpenState);
     }
   };
 
@@ -115,7 +82,7 @@ const Navbar = () => {
   const isExplorePathActive = exploreItem ? isDropdownPathActive(exploreItem.links) : false;
 
   return (
-    <nav className="bg-background text-foreground shadow-lg py-2"> {/* Changed py-4 to py-2 */}
+    <nav className="bg-background text-foreground shadow-lg py-2">
       <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
@@ -146,18 +113,17 @@ const Navbar = () => {
                     <DropdownMenu
                       key={item.name}
                       open={item.name === 'Courses' ? coursesOpen : exploreOpen}
-                      onOpenChange={(newOpenState) => handleRadixOpenChange(item.name as 'Courses' | 'Explore', newOpenState)}
+                      onOpenChange={(newOpenState) => handleDropdownOpenChange(item.name as 'Courses' | 'Explore', newOpenState)}
                     >
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           className={cn(
-                            "text-regular font-normal transition-colors hover:text-primary focus-visible:outline-none", // Added focus-visible:outline-none
+                            "text-regular font-normal transition-colors hover:text-primary focus-visible:outline-none",
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
-                          onMouseEnter={() => handleOpen(item.name as 'Courses' | 'Explore')}
-                          onMouseLeave={() => handleClose(item.name as 'Courses' | 'Explore')}
+                          // Removed onMouseEnter and onMouseLeave from here
                         >
                           {item.name}
                           <ChevronDown className="ml-1 h-4 w-4" />
@@ -166,8 +132,7 @@ const Navbar = () => {
                       <DropdownMenuContent
                         className="w-80 p-4 bg-muted data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-300"
                         align="start"
-                        onMouseEnter={() => handleOpen(item.name as 'Courses' | 'Explore')}
-                        onMouseLeave={() => handleClose(item.name as 'Courses' | 'Explore')}
+                        // Removed onMouseEnter and onMouseLeave from here
                       >
                         {item.heading && (
                           <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
@@ -256,7 +221,6 @@ const Navbar = () => {
                       </span>
                       <div className="ml-4 flex flex-col gap-2">
                         {item.links.map((link) => (
-                          // Close sheet on link click
                           <NavLink
                             key={link.name}
                             to={link.href}
