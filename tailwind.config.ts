@@ -62,8 +62,6 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        "eyenet-red": "#A6002B",
-        "eyenet-purple": "#8B008B",
       },
       borderRadius: {
         lg: "var(--radius)",
