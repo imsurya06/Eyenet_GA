@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -15,6 +15,7 @@ import { Menu, ChevronDown } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import CourseDropdownMenuItem from './CourseDropdownMenuItem.tsx';
+import { cn } from '@/lib/utils'; // Import cn utility
 
 const navItems = [
   { type: 'link', name: 'Home', href: '/' },
@@ -55,6 +56,7 @@ const navItems = [
 
 const Navbar = () => {
   const isMobile = useIsMobile();
+  const location = useLocation(); // Use useLocation hook
   const [coursesOpen, setCoursesOpen] = React.useState(false);
   const [exploreOpen, setExploreOpen] = React.useState(false);
 
@@ -86,15 +88,12 @@ const Navbar = () => {
     const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
 
     if (newOpenState) {
-      // Radix wants to open (e.g., keyboard navigation). We respect it and clear any pending close.
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
       setOpenState(true);
     } else {
-      // Radix wants to close (e.g., escape key, click outside).
-      // We should close immediately, overriding any hover-based close delay.
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
@@ -102,6 +101,17 @@ const Navbar = () => {
       setOpenState(false);
     }
   };
+
+  // Determine if a dropdown's sub-links are active
+  const isDropdownPathActive = (links: { href: string }[]) => {
+    return links.some(link => location.pathname.startsWith(link.href));
+  };
+
+  const coursesItem = navItems.find(item => item.name === 'Courses' && item.type === 'dropdown');
+  const isCoursesPathActive = coursesItem ? isDropdownPathActive(coursesItem.links) : false;
+
+  const exploreItem = navItems.find(item => item.name === 'Explore' && item.type === 'dropdown');
+  const isExplorePathActive = exploreItem ? isDropdownPathActive(exploreItem.links) : false;
 
   return (
     <nav className="bg-background text-foreground shadow-lg py-4">
@@ -119,13 +129,18 @@ const Navbar = () => {
               <div className="flex items-center space-x-6">
                 {navItems.map((item) => (
                   item.type === 'link' ? (
-                    <Link
+                    <NavLink
                       key={item.name}
                       to={item.href}
-                      className="text-regular font-medium transition-colors hover:text-primary px-4 py-2 rounded-md"
+                      className={({ isActive }) =>
+                        cn(
+                          "text-regular font-medium transition-colors hover:text-primary px-4 py-2 rounded-md",
+                          isActive && "text-primary"
+                        )
+                      }
                     >
                       {item.name}
-                    </Link>
+                    </NavLink>
                   ) : (
                     <DropdownMenu
                       key={item.name}
@@ -135,7 +150,11 @@ const Navbar = () => {
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
-                          className="text-regular font-medium transition-colors hover:text-primary data-[state=open]:text-primary"
+                          className={cn(
+                            "text-regular font-medium transition-colors hover:text-primary",
+                            (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
+                            (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
+                          )}
                           onMouseEnter={() => handleOpen(item.name as 'Courses' | 'Explore')}
                           onMouseLeave={() => handleClose(item.name as 'Courses' | 'Explore')}
                         >
@@ -208,25 +227,44 @@ const Navbar = () => {
               <nav className="flex flex-col gap-4 pt-6">
                 {navItems.map((item) => (
                   item.type === 'link' ? (
-                    <Link
+                    <NavLink
                       key={item.name}
                       to={item.href}
-                      className="text-lg font-medium hover:text-primary"
+                      className={({ isActive }) =>
+                        cn(
+                          "text-lg font-medium hover:text-primary",
+                          isActive ? "text-primary" : "text-muted-foreground"
+                        )
+                      }
                     >
                       {item.name}
-                    </Link>
+                    </NavLink>
                   ) : (
                     <React.Fragment key={item.name}>
-                      <span className="text-lg font-medium text-muted-foreground">{item.name}</span>
+                      <span
+                        className={cn(
+                          "text-lg font-medium",
+                          (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
+                          (item.name === 'Explore' && isExplorePathActive) && "text-primary",
+                          !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
+                        )}
+                      >
+                        {item.name}
+                      </span>
                       <div className="ml-4 flex flex-col gap-2">
                         {item.links.map((link) => (
-                          <Link
+                          <NavLink
                             key={link.name}
                             to={link.href}
-                            className="text-base text-muted-foreground hover:text-primary"
+                            className={({ isActive }) =>
+                              cn(
+                                "text-base hover:text-primary",
+                                isActive ? "text-primary" : "text-muted-foreground"
+                              )
+                            }
                           >
                             {link.name}
-                          </Link>
+                          </NavLink>
                         ))}
                       </div>
                     </React.Fragment>

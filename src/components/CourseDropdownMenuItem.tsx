@@ -1,12 +1,12 @@
 "use client";
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom'; // Changed to NavLink
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import * as LucideIcons from 'lucide-react';
 
-interface CourseDropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof Link> {
+interface CourseDropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof NavLink> { // Changed to NavLink
   href: string;
   title: string;
   description?: string;
@@ -21,13 +21,16 @@ const CourseDropdownMenuItem = React.forwardRef<
 
   return (
     <DropdownMenuItem asChild>
-      <Link
+      <NavLink // Changed to NavLink
         ref={ref}
         to={href}
-        className={cn(
-          "flex items-start gap-3 rounded-md p-3 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-          className
-        )}
+        className={({ isActive }) =>
+          cn(
+            "flex items-start gap-3 rounded-md p-3 text-left text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            isActive && "text-primary", // Apply text-primary when active
+            className
+          )
+        }
         {...props}
       >
         {IconComponent ? (
@@ -47,7 +50,7 @@ const CourseDropdownMenuItem = React.forwardRef<
           </p>
           {children}
         </div>
-      </Link>
+      </NavLink>
     </DropdownMenuItem>
   );
 });
