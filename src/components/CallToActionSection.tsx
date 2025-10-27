@@ -20,7 +20,7 @@ const CallToActionSection = () => {
           <Button asChild className="px-6 py-3 text-text-regular bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link to="/admissions">Apply now</Link>
           </Button>
-          <Button asChild variant="outline" className="px-6 py-3 text-text-regular border-primary text-red-500 hover:bg-primary hover:text-primary-foreground">
+          <Button asChild variant="outline" className="px-6 py-3 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground">
             <Link to="/contact">Request info</Link>
           </Button>
         </div>
