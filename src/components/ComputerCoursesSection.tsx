@@ -76,7 +76,7 @@ const ComputerCoursesSection = () => {
                       {course.title}
                     </Link>
                   </h3>
-                  <p className="text-text-regular font-body text-gray-600 mb-6">
+                  <p className="text-text-regular font-body text-gray-600 mb-6 min-h-[4.8rem]"> {/* Added min-h-[4.8rem] */}
                     {course.description.split('Details...')[0]}
                     <Link to={`/courses/computer-courses/${course.title.toLowerCase().replace(/\s+/g, '-')}`} className="text-primary hover:underline ml-1">
                       Details...
