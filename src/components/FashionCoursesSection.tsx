@@ -72,8 +72,8 @@ const FashionCoursesSection = () => {
                   <Link to={course.brochureLink} className="text-text-regular font-body text-primary hover:underline">
                     Download Brochure
                   </Link>
-                  <Button asChild className="bg-primary hover:bg-primary/90 text-white px-6 py-3 text-text-regular">
-                    <Link to={course.enrollLink}>
+                  <Button asChild className="bg-primary hover:bg-primary/90 px-6 py-3 text-text-regular">
+                    <Link to={course.enrollLink} className="text-white"> {/* Added text-white here */}
                       Enroll <ArrowRight className="ml-2 h-4 w-4 inline-block" />
                     </Link>
                   </Button>
