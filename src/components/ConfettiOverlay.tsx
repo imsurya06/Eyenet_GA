@@ -24,12 +24,15 @@ const ConfettiOverlay: React.FC<ConfettiOverlayProps> = ({ show, duration = 3000
   if (!isVisible) return null;
 
   // Generate more confetti pieces with varied sizes and colors
-  const confettiPieces = Array.from({ length: 100 }).map((_, i) => (
+  const confettiPieces = Array.from({ length: 200 }).map((_, i) => (
     <div
       key={i}
       className={cn(
         "absolute rounded-full opacity-0 animate-fall",
-        i % 3 === 0 ? "bg-primary w-3 h-3" : i % 3 === 1 ? "bg-yellow-400 w-2 h-2" : "bg-blue-400 w-4 h-4", // Varied colors and sizes
+        i % 4 === 0 ? "bg-primary w-4 h-4" : // Larger primary color
+        i % 4 === 1 ? "bg-yellow-400 w-3 h-3" : // Medium yellow
+        i % 4 === 2 ? "bg-blue-400 w-5 h-5" : // Even larger blue
+        "bg-green-400 w-2 h-2", // Smaller green
       )}
       style={{
         left: `${Math.random() * 100}%`,
