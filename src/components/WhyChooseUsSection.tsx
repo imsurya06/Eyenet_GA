@@ -25,7 +25,7 @@ const WhyChooseUsSection = () => {
               </p>
             </div>
             {index < stats.length - 1 && (
-              <div className="hidden md:block h-24 w-px bg-gray-300"></div> {/* Vertical separator for desktop */}
+              <div className="hidden md:block h-24 w-px bg-gray-300"></div> { /* Vertical separator for desktop */ }
             )}
           </React.Fragment>
         ))}
