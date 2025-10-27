@@ -194,7 +194,7 @@ const Navbar = () => {
               <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 <Link to="/contact">Contact</Link>
               </Button>
-              <Button variant="default" className="hover:animate-shake"> {/* Changed to hover:animate-shake */}
+              <Button variant="default" className="hover:animate-shake"> {/* This class will now work */}
                 Apply
               </Button>
             </div>
@@ -264,7 +264,7 @@ const Navbar = () => {
                 <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
                 </Button>
-                <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}> {/* Changed to hover:animate-shake */}
+                <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}> {/* This class will now work */}
                   Apply
                 </Button>
               </nav>

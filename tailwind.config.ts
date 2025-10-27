@@ -113,10 +113,23 @@ export default {
             height: "0",
           },
         },
+        shake: { // Defined the shake keyframes here
+          "0%, 100%": { transform: "translateX(0) rotate(0deg)" },
+          "10%": { transform: "translateX(-5px) rotate(-4deg)" },
+          "20%": { transform: "translateX(5px) rotate(4deg)" },
+          "30%": { transform: "translateX(-5px) rotate(-4deg)" },
+          "40%": { transform: "translateX(5px) rotate(4deg)" },
+          "50%": { transform: "translateX(-5px) rotate(-4deg)" },
+          "60%": { transform: "translateX(5px) rotate(4deg)" },
+          "70%": { transform: "translateX(-5px) rotate(-4deg)" },
+          "80%": { transform: "translateX(5px) rotate(4deg)" },
+          "90%": { transform: "translateX(-5px) rotate(-4deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shake: "shake 0.8s infinite", // Registered the shake animation with a duration and infinite loop
       },
     },
   },
