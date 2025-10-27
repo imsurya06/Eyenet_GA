@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 import OurProgramsSection from '@/components/OurProgramsSection';
 import ImpactByNumbersSection from '@/components/ImpactByNumbersSection';
 import StudentStoriesSection from '@/components/StudentStoriesSection';
@@ -51,9 +50,6 @@ const Index = () => {
           />
         </div>
       </div>
-
-      {/* Why Choose Us Section */}
-      <WhyChooseUsSection />
 
       {/* Our Programs Section */}
       <OurProgramsSection />
