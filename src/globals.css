@@ -127,7 +127,7 @@
 }
 
 @layer components {
-  .hide-close-button > button[data-radix-dialog-close] {
+  .hide-close-button button[data-radix-dialog-close] { /* Removed '>' for broader targeting */
     display: none !important;
   }
 }
