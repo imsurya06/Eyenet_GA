@@ -31,8 +31,8 @@ const EnrollmentSuccessDialog: React.FC<EnrollmentSuccessDialogProps> = ({ show,
             You have enrolled for <span className="font-semibold text-primary">{courseName}</span>. Let's start your career with us.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex justify-center">
-          <Button onClick={onClose} className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-text-regular">
+        <DialogFooter className="flex justify-center mt-4"> {/* Added mt-4 for spacing and ensured justify-center */}
+          <Button onClick={onClose} className="bg-primary hover:bg-primary/90 text-white px-6 py-3 text-text-regular"> {/* Explicitly set text-white */}
             Awesome!
           </Button>
         </DialogFooter>
