@@ -26,7 +26,7 @@ const OurProgramsSection = () => {
   ];
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-[#fdfaf6] text-center">
+    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-[#fdfaf6] text-center">
       <p className="text-text-regular font-body text-gray-600 mb-4">Our programs</p>
       <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-8 max-w-3xl mx-auto">
         Comprehensive design courses for aspiring creatives

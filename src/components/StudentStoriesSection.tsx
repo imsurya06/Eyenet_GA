@@ -21,7 +21,7 @@ const StudentStoriesSection = () => {
   ];
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-center">
+    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-center">
       <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
         Student stories
       </h2>

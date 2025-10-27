@@ -9,7 +9,7 @@ const CallToActionSection = () => {
       style={{ backgroundImage: 'url(/images/design-journey-cta.png)' }}
     >
       <div className="absolute inset-0 bg-black/60"></div> {/* Dark overlay */}
-      <div className="relative z-10 text-center text-white px-4 md:px-8 lg:px-[80px]">
+      <div className="relative z-10 text-center text-white px-3 md:px-8 lg:px-[80px]">
         <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 max-w-3xl mx-auto">
           Start your design journey
         </h2>

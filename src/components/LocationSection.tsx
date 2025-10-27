@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LocationSection = () => {
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-center lg:text-left">
+    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-center lg:text-left">
       <p className="text-text-regular font-body text-gray-600 mb-4">Our location</p>
       <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-16 max-w-3xl mx-auto lg:mx-0">
         We are Madurai based institute
