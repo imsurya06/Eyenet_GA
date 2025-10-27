@@ -19,9 +19,9 @@ const ImpactByNumbersSection = () => {
         Transforming creative potential into professional success stories.
       </p>
 
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-10">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-10 max-w-5xl mx-auto"> {/* Added max-w-5xl and mx-auto here */}
         {/* Video Player */}
-        <div className="w-full lg:w-1/2 aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg"> {/* Removed max-w-2xl and mx-auto */}
+        <div className="w-full lg:w-1/2 aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
           <video
             src="/videos/impact-video.mp4"
             controls
@@ -34,7 +34,7 @@ const ImpactByNumbersSection = () => {
         </div>
 
         {/* Statistics */}
-        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8"> {/* Adjusted alignment for lg screens */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
           {stats.map((stat, index) => (
             <div key={index}>
               <p className="text-h2-mobile md:text-h2-desktop font-heading text-foreground mb-1">
