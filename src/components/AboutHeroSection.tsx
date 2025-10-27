@@ -21,7 +21,7 @@ const AboutHeroSection = () => {
         </div>
 
         {/* Image and Text Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 md:mb-16 lg:mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10 md:mb-12 lg:mb-16"> {/* Reduced bottom margin here */}
           {/* Left Image */}
           <div className="w-full h-[400px] md:h-[500px] overflow-hidden rounded-lg shadow-lg">
             <img
@@ -33,7 +33,7 @@ const AboutHeroSection = () => {
 
           {/* Right Image and Text */}
           <div className="flex flex-col gap-8">
-            <div className="w-full h-[350px] md:h-[450px] overflow-hidden rounded-lg shadow-lg">
+            <div className="w-full h-[400px] md:h-[500px] overflow-hidden rounded-lg shadow-lg"> {/* Increased height here */}
               <img
                 src="/images/about-image-2.png"
                 alt="Fashion model in light green attire"
