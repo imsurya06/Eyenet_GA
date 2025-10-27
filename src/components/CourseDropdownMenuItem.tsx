@@ -30,9 +30,14 @@ const CourseDropdownMenuItem = React.forwardRef<
         )}
         {...props}
       >
-        {IconComponent && (
+        {IconComponent ? (
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <IconComponent className="h-5 w-5" />
+          </div>
+        ) : (
+          // Fallback for when IconComponent is not found
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-red-500 text-white">
+            ?
           </div>
         )}
         <div className="grid gap-1">
