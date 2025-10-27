@@ -10,7 +10,7 @@ const AboutHeroSection = () => {
         <div className="mb-12 md:mb-16 lg:mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
             <h1 className="text-h1-mobile md:text-h1-desktop font-heading text-foreground leading-tight">
-              Eyenet a <br /> Educational Academy {/* Added <br /> here */}
+              Eyenet a <br /> Educational Academy
             </h1>
           </div>
           <div className="flex items-end justify-start lg:justify-end">
@@ -31,8 +31,8 @@ const AboutHeroSection = () => {
             />
           </div>
 
-          {/* Right Image and Text */}
-          <div className="flex flex-col gap-8">
+          {/* Right Image and Text - Hidden on mobile, visible on lg and above */}
+          <div className="hidden lg:flex flex-col gap-8"> {/* Added hidden lg:flex */}
             <div className="w-full h-[400px] md:h-[500px] overflow-hidden rounded-lg shadow-lg">
               <img
                 src="/images/about-image-2.png"
