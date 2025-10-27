@@ -34,7 +34,7 @@ const ImpactByNumbersSection = () => {
         </div>
 
         {/* Statistics */}
-        <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
+        <div className="w-full lg:w-1/2 flex flex-col items-center text-center space-y-8"> {/* Changed lg:items-start and lg:text-left to items-center and text-center */}
           {stats.map((stat, index) => (
             <div key={index}>
               <p className="text-h2-mobile md:text-h2-desktop font-heading text-foreground mb-1">
