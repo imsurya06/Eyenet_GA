@@ -22,20 +22,20 @@ const ContactUsSection = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
 
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
+          <div className="space-y-6 w-full flex flex-col items-center lg:items-start"> {/* Added flex-col items-center for mobile centering */}
+            <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
               <Mail className="h-6 w-6 text-primary" />
               <a href="mailto:email@example.com" className="text-text-regular font-body text-foreground hover:underline">
                 email@example.com
               </a>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
               <Phone className="h-6 w-6 text-primary" />
               <a href="tel:+15550000000" className="text-text-regular font-body text-foreground hover:underline">
                 +1 (555) 000-0000
               </a>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
               <MapPin className="h-6 w-6 text-primary" />
               <p className="text-text-regular font-body text-foreground">
                 123 Sample St, Sydney NSW 2000 AU
