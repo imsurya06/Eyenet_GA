@@ -104,8 +104,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-background text-foreground shadow-lg py-4"> {/* Changed shadow-md to shadow-lg */}
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+    <nav className="bg-background text-foreground shadow-lg py-4">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8 lg:px-16">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-8" />
