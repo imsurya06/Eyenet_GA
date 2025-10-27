@@ -12,9 +12,10 @@ import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 import Admissions from "./pages/Admissions";
 import Explore from "./pages/Explore";
-import StudentsZone from "./pages/StudentsZone"; // Import new page
-import Infrastructure from "./pages/Infrastructure"; // Import new page
-import NewsEvents from "./pages/NewsEvents"; // Import new page
+import StudentsZone from "./pages/StudentsZone";
+import Infrastructure from "./pages/Infrastructure";
+import NewsEvents from "./pages/NewsEvents";
+import Footer from "./components/Footer"; // Import the new Footer component
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const queryClient = new QueryClient();
@@ -31,16 +32,17 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/gallery" element={<Gallery />} /> {/* Keep existing gallery route */}
-          <Route path="/explore" element={<Explore />} /> {/* Keep existing explore route */}
-          <Route path="/explore/students-zone" element={<StudentsZone />} /> {/* New route */}
-          <Route path="/explore/infrastructure" element={<Infrastructure />} /> {/* New route */}
-          <Route path="/explore/gallery" element={<Gallery />} /> {/* New route for dropdown */}
-          <Route path="/explore/news-events" element={<NewsEvents />} /> {/* New route */}
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/explore/students-zone" element={<StudentsZone />} />
+          <Route path="/explore/infrastructure" element={<Infrastructure />} />
+          <Route path="/explore/gallery" element={<Gallery />} />
+          <Route path="/explore/news-events" element={<NewsEvents />} />
           <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer /> {/* Add the Footer component here */}
         <MadeWithDyad />
       </BrowserRouter>
     </TooltipProvider>
