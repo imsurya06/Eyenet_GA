@@ -53,7 +53,7 @@ const Contact = () => {
                 id="message"
                 placeholder="Type your message..."
                 rows={6}
-                className="px-4 py-3 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background resize-y"
+                className="px-4 py-3 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background resize-none"
               />
             </div>
             <div className="flex items-center space-x-2 justify-center lg:justify-start">
