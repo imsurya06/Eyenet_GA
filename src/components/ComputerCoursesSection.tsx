@@ -63,7 +63,7 @@ const ComputerCoursesSection = () => {
               </div>
               <div className="p-6 flex flex-col flex-grow">
                 <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-4">
-                  {course.tag}
+                  {course.tag} / Offline
                 </span>
                 <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
                   <Link to={`/courses/computer-courses/${course.title.toLowerCase().replace(/\s+/g, '-')}`} className="hover:underline">
