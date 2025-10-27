@@ -25,7 +25,7 @@ const Index = () => {
         </div>
 
         {/* Left Section: Text Content */}
-        <div className="relative z-10 flex-1 text-center md:text-left max-w-2xl md:mr-12 mb-8 md:mb-0">
+        <div className="relative z-10 flex-1 text-center md:text-left max-w-2xl md:mr-12 md:mb-0"> {/* Removed mb-8 for mobile */}
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-white md:text-foreground">
             Design your future with creative excellence
           </h1>
