@@ -12,7 +12,6 @@ const navLinks = [
   { name: 'About Us', href: '/about' },
   { name: 'Courses', href: '/courses' },
   { name: 'Gallery', href: '/gallery' },
-  { name: 'Contact Us', href: '/contact' },
 ];
 
 const Navbar = () => {
@@ -38,14 +37,13 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            <Button variant="outline" asChild>
+              <Link to="/contact">Contact</Link>
+            </Button>
+            <Button variant="default">
+              Apply
+            </Button>
           </div>
-        )}
-
-        {/* Login Button - Desktop */}
-        {!isMobile && (
-          <Button variant="default" className="hidden md:inline-flex">
-            Login
-          </Button>
         )}
 
         {/* Mobile Navigation */}
@@ -68,8 +66,11 @@ const Navbar = () => {
                     {link.name}
                   </Link>
                 ))}
-                <Button variant="default" className="mt-4">
-                  Login
+                <Button variant="outline" asChild className="mt-4">
+                  <Link to="/contact">Contact</Link>
+                </Button>
+                <Button variant="default" className="mt-2">
+                  Apply
                 </Button>
               </nav>
             </SheetContent>
