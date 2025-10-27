@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import WhyChooseUsSection from '@/components/WhyChooseUsSection'; // Import the new component
+import WhyChooseUsSection from '@/components/WhyChooseUsSection';
+import OurProgramsSection from '@/components/OurProgramsSection'; // Import the new component
 
 const Index = () => {
   return (
@@ -45,8 +46,11 @@ const Index = () => {
         </div>
       </div>
 
-      {/* New Why Choose Us Section */}
+      {/* Why Choose Us Section */}
       <WhyChooseUsSection />
+
+      {/* Our Programs Section */}
+      <OurProgramsSection />
     </>
   );
 };
