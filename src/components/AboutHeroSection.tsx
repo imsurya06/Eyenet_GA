@@ -4,7 +4,7 @@ import React from 'react';
 
 const AboutHeroSection = () => {
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
+    <section className="py-8 md:py-12 lg:py-16 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-6xl mx-auto">
         {/* Main Title and Subtitle */}
         <div className="mb-12 md:mb-16 lg:mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8">
