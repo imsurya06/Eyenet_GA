@@ -84,25 +84,6 @@ const Navbar = () => {
     }, 150); // Delay for closing
   };
 
-  const handleRadixOpenChange = (dropdownName: 'Courses' | 'Explore', newOpenState: boolean) => {
-    const timeoutRef = dropdownName === 'Courses' ? coursesTimeoutRef : exploreTimeoutRef;
-    const setOpenState = dropdownName === 'Courses' ? setCoursesOpen : setExploreOpen;
-
-    if (newOpenState) {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      setOpenState(true);
-    } else {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      setOpenState(false);
-    }
-  };
-
   // Determine if a dropdown's sub-links are active
   const isDropdownPathActive = (links: { href: string }[]) => {
     return links.some(link => location.pathname.startsWith(link.href));
@@ -146,13 +127,13 @@ const Navbar = () => {
                     <DropdownMenu
                       key={item.name}
                       open={item.name === 'Courses' ? coursesOpen : exploreOpen}
-                      onOpenChange={(newOpenState) => handleRadixOpenChange(item.name as 'Courses' | 'Explore', newOpenState)}
+                      // Removed onOpenChange prop to avoid conflicts
                     >
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           className={cn(
-                            "text-regular font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0", // Added focus-visible:ring-0 focus-visible:ring-offset-0
+                            "text-regular font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
