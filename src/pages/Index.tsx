@@ -1,13 +1,37 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">Welcome to Eyenet</h1>
-        <p className="text-medium font-body text-gray-600">
-          Your journey in fashion and design starts here!
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col md:flex-row items-center justify-center bg-background px-4 py-8 md:py-0">
+      {/* Left Section: Text Content */}
+      <div className="flex-1 text-center md:text-left max-w-2xl md:mr-12 mb-8 md:mb-0">
+        <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground">
+          Design your future with creative excellence
+        </h1>
+        <p className="text-text-medium font-body text-gray-600 mb-8">
+          Transform your passion into a professional career. Our institute offers
+          comprehensive design education that bridges creativity with industry
+          expertise.
         </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <Button asChild className="px-6 py-3 text-text-regular">
+            <Link to="/courses">Explore courses</Link>
+          </Button>
+          <Button variant="outline" asChild className="px-6 py-3 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+            <Link to="/contact">Request info</Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Right Section: Image */}
+      <div className="flex-1 flex justify-center md:justify-end">
+        <img
+          src="/images/hero-model.png"
+          alt="Fashion model illustration"
+          className="max-w-full h-auto md:max-w-lg lg:max-w-xl object-cover"
+        />
       </div>
     </div>
   );
