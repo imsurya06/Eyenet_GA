@@ -105,7 +105,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-background text-foreground shadow-lg py-4">
-      <div className="flex h-16 items-center justify-between px-4 md:px-8 lg:px-[80px]">
+      <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-8" />
