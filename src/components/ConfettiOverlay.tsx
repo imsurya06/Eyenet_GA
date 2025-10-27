@@ -47,26 +47,6 @@ const ConfettiOverlay: React.FC<ConfettiOverlayProps> = ({ show, duration = 3000
   return (
     <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
       {confettiPieces}
-      <style jsx>{`
-        @keyframes fall {
-          0% {
-            transform: translateY(-100vh) rotate(0deg) scale(0.5);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh) rotate(720deg) scale(1);
-            opacity: 0;
-          }
-        }
-        .animate-fall {
-          animation-name: fall;
-          animation-timing-function: ease-in;
-          animation-fill-mode: forwards;
-        }
-      `}</style>
     </div>
   );
 };
