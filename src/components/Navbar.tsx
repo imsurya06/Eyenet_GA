@@ -12,10 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
-import { Menu, ChevronDown } from 'lucide-react'; // Keep Menu and ChevronDown if used directly
-import * as LucideIcons from 'lucide-react'; // Import all Lucide icons for type resolution
+import { Menu, ChevronDown } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import CourseDropdownMenuItem from './CourseDropdownMenuItem.tsx'; // Explicitly add .tsx extension
+import CourseDropdownMenuItem from './CourseDropdownMenuItem.tsx';
 
 const navItems = [
   { type: 'link', name: 'Home', href: '/' },
@@ -42,7 +42,7 @@ const navItems = [
     heading: 'Explore',
     links: [
       { name: 'Students Zone', description: 'Discover student life and resources', href: '/explore/students-zone', icon: 'PersonStanding' },
-      { name: 'Infrastructure', description: 'Explore our facilities and campus', href: '/explore/infrastructure', icon: 'Home' }, {/* Changed from 'HomeHeart' to 'Home' */}
+      { name: 'Infrastructure', description: 'Explore our facilities and campus', href: '/explore/infrastructure', icon: 'Home' },
       { name: 'Gallery', description: 'View our creative works and events', href: '/explore/gallery', icon: 'LayoutGrid' },
       { name: 'News & Events', description: 'Stay updated with the latest happenings', href: '/explore/news-events', icon: 'CalendarDays' },
     ],
