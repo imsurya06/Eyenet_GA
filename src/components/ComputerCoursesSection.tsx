@@ -8,7 +8,7 @@ import { ArrowRight } from 'lucide-react';
 const ComputerCoursesSection = () => {
   const courses = [
     {
-      image: '/images/computer-basics-applications.png',
+      image: '/images/img001.png', // Updated image path
       tag: 'Course',
       title: 'Computer Basics & Applications',
       description: 'Computer concepts, Windows, Networking principles, Microsoft office, C, C++ Programming. Details...',
@@ -16,7 +16,7 @@ const ComputerCoursesSection = () => {
       enrollLink: '/admissions',
     },
     {
-      image: '/images/web-designing.png',
+      image: '/images/img002.png', // Updated image path
       tag: 'Course',
       title: 'Web Designing',
       description: 'Computer Basics, MS-front Page, Dreamweaver, HTML, Gif animation, Photoshop. Details...',
@@ -24,7 +24,7 @@ const ComputerCoursesSection = () => {
       enrollLink: '/admissions',
     },
     {
-      image: '/images/photoshop-mastery.png',
+      image: '/images/img003.png', // Updated image path
       tag: 'Course',
       title: 'Photoshop Mastery',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Details...',
@@ -32,7 +32,7 @@ const ComputerCoursesSection = () => {
       enrollLink: '/admissions',
     },
     {
-      image: '/images/computer-application-programming.png',
+      image: '/images/img004.png', // Updated image path
       tag: 'Course',
       title: 'Computer Application & Programming',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros. Details...',
