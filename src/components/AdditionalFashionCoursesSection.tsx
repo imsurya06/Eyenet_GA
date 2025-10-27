@@ -8,7 +8,7 @@ import { ArrowRight } from 'lucide-react';
 const AdditionalFashionCoursesSection = () => {
   const courses = [
     {
-      image: '/images/chudithar-making.png',
+      image: '/images/img4.png', // Updated to use img4.png
       tag: 'Course',
       title: 'Chudithar Making',
       description: 'A Churithar Making Course is a specialized program designed to teach the skills required to Details...',
@@ -16,7 +16,7 @@ const AdditionalFashionCoursesSection = () => {
       enrollLink: '/admissions',
     },
     {
-      image: '/images/blouse-making.png',
+      image: '/images/img5.png', // Updated to use img5.png
       tag: 'Course',
       title: 'Blouse Making',
       description: 'A Blouse Making Course is a specialized program designed to teach the skills and Details...',
@@ -24,7 +24,7 @@ const AdditionalFashionCoursesSection = () => {
       enrollLink: '/admissions',
     },
     {
-      image: '/images/drafting-pattern-making.png',
+      image: '/images/img6.png', // Updated to use img6.png
       tag: 'Course',
       title: 'Drafting & Pattern Making',
       description: 'A Drafting & Pattern Making Course is a specialized program designed to teach the Details...',
