@@ -98,6 +98,8 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
     const brochureLink = values.brochureFile ? `/brochures/${values.brochureFile.name}` : '#';
     const imageUrl = values.courseImage ? `/images/${values.courseImage.name}` : '/placeholder.svg'; // Corrected placeholder path
 
+    console.log("Generated Image URL for new course:", imageUrl); // Log the generated URL
+
     const newCourse: Course = {
       id: `new-course-${Date.now()}`, // Unique ID
       image: imageUrl,
@@ -302,6 +304,9 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
                 </Label>
               </FormControl>
               {form.formState.errors.courseImage && <FormMessage>{form.formState.errors.courseImage.message?.toString()}</FormMessage>}
+              <p className="text-text-small text-red-500 mt-2">
+                <strong>Important:</strong> For the image to appear after adding, you must manually copy the selected image file (e.g., "{form.getValues('courseImage')?.name || 'your-image.png'}") into the `public/images` directory of your project.
+              </p>
             </FormItem>
 
             <DialogFooter className="mt-4">
