@@ -16,20 +16,21 @@ import { cn } from '@/lib/utils'; // Import cn for combining class names
 interface EnrollmentSuccessDialogProps {
   show: boolean;
   courseName: string;
+  userName: string; // Added userName prop
   onClose: () => void;
 }
 
-const EnrollmentSuccessDialog: React.FC<EnrollmentSuccessDialogProps> = ({ show, courseName, onClose }) => {
+const EnrollmentSuccessDialog: React.FC<EnrollmentSuccessDialogProps> = ({ show, courseName, userName, onClose }) => {
   return (
     <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent className={cn("max-w-md p-8 md:p-10 text-center flex flex-col items-center space-y-6")} hideCloseButton={true}> {/* Added hideCloseButton={true} */}
+      <DialogContent className={cn("max-w-md p-8 md:p-10 text-center flex flex-col items-center space-y-6")} hideCloseButton={true}>
         <DialogHeader className="flex flex-col items-center space-y-4">
           <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
           <DialogTitle className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
             Congratulations!
           </DialogTitle>
           <DialogDescription className="text-text-medium font-body text-gray-700 text-center">
-            You have enrolled for <span className="font-semibold text-primary">{courseName}</span>. Let's start your career with us.
+            Welcome <span className="font-semibold text-primary">{userName}</span>! You have enrolled for <span className="font-semibold text-primary">{courseName}</span>. Let's start your career with us.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-center">

@@ -42,6 +42,7 @@ const Admissions = () => {
   const [showConfetti, setShowConfetti] = React.useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = React.useState(false);
   const [enrolledCourseName, setEnrolledCourseName] = React.useState('');
+  const [enrolledUserName, setEnrolledUserName] = React.useState(''); // New state for user name
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,6 +59,7 @@ const Admissions = () => {
     console.log(values);
     // Simulate API call or form submission
     setEnrolledCourseName(values.program);
+    setEnrolledUserName(values.name); // Set the user's name
     setShowConfetti(true);
     setShowSuccessDialog(true);
     
@@ -234,6 +236,7 @@ const Admissions = () => {
       <EnrollmentSuccessDialog
         show={showSuccessDialog}
         courseName={enrolledCourseName}
+        userName={enrolledUserName} // Pass the user name here
         onClose={handleCloseSuccessDialog}
       />
     </section>
