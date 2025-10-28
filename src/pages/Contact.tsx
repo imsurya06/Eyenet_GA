@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label';
 import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnScroll
 
 const Contact = () => {
+  const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu&g_ep=EgoyMDI1MTAyNi4wIKXMDSoASAFQAw%3D%3D";
+
   return (
     <section className="py-12 md:py-16 lg:py-20 px-6 md:px-8 lg:px-[80px] bg-background text-foreground min-h-[calc(100vh-12rem)] flex items-center">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full">
@@ -85,11 +87,13 @@ const Contact = () => {
 
         {/* Right Section: Map Image */}
         <AnimateOnScroll isHero={true} delay={900} className="w-full h-[400px] md:h-[550px] bg-gray-200 rounded-lg overflow-hidden shadow-lg mx-auto lg:mx-0">
-          <img
-            src="/images/madurai-map.png"
-            alt="Map of Eye Net Educational Academy in Madurai"
-            className="w-full h-full object-cover"
-          />
+          <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+            <img
+              src="/images/madurai-map.png"
+              alt="Map of Eye Net Educational Academy in Madurai"
+              className="w-full h-full object-cover"
+            />
+          </a>
         </AnimateOnScroll>
       </div>
     </section>
