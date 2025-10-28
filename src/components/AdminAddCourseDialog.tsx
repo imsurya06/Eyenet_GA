@@ -310,7 +310,7 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
             </FormItem>
 
             <DialogFooter className="mt-4">
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-text-regular">
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white text-text-regular"> {/* Changed to text-white */}
                 Add Course
               </Button>
             </DialogFooter>
