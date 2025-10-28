@@ -13,7 +13,7 @@ const FashionCoursesSection = () => {
       tag: 'Course',
       title: 'Diploma in Fashion Designing',
       description: 'A Diploma in Fashion Designing is a specialized program designed to equip students with the skills and Details...',
-      brochureLink: '/brochures/Course details v1.pdf', // Updated to the new PDF path
+      brochureLink: '/brochures/Course-details-v1.pdf', // Updated to the new PDF path
       enrollLink: '/admissions',
     },
     {
