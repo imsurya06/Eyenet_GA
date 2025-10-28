@@ -4,19 +4,20 @@ import { useSearchParams } from 'react-router-dom';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import AdminHeader from '@/components/AdminHeader';
 import AdminCourseFilter from '@/components/AdminCourseFilter';
-import AdminCourseCard from '@/components/AdminCourseCard'; // Import the new AdminCourseCard
-import { allCourses, Course } from '@/data/courses'; // Import allCourses data
+import AdminCourseCard from '@/components/AdminCourseCard';
+import useCourses from '@/hooks/use-courses'; // Import the new hook
 
 const AdminCourses = () => {
   const [searchParams] = useSearchParams();
   const categoryFilter = searchParams.get('category');
+  const { courses, deleteCourse } = useCourses(); // Use the new hook
 
   const filteredCourses = React.useMemo(() => {
     if (!categoryFilter) {
-      return allCourses;
+      return courses; // Use courses from the hook
     }
-    return allCourses.filter(course => course.category === categoryFilter);
-  }, [categoryFilter]);
+    return courses.filter(course => course.category === categoryFilter);
+  }, [categoryFilter, courses]); // Depend on courses from the hook
 
   return (
     <div className="flex-1 flex flex-col">
@@ -33,7 +34,7 @@ const AdminCourses = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredCourses.map((course, index) => (
               <AnimateOnScroll key={course.id} delay={200 + index * 50}>
-                <AdminCourseCard course={course} />
+                <AdminCourseCard course={course} onDelete={deleteCourse} /> {/* Pass onDelete */}
               </AnimateOnScroll>
             ))}
           </div>

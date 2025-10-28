@@ -3,11 +3,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import { allCourses } from '@/data/courses'; // Import allCourses
+import useCourses from '@/hooks/use-courses'; // Import useCourses
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const course = allCourses.find(c => c.id === slug);
+  const { courses } = useCourses(); // Use the hook to get courses
+  const course = courses.find(c => c.id === slug); // Find course from the hook's state
 
   if (!course) {
     return (

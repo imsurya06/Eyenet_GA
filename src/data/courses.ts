@@ -12,7 +12,7 @@ export interface Course {
   icon?: React.ElementType; // Optional icon for dropdowns
 }
 
-export const allCourses: Course[] = [
+export const initialCourses: Course[] = [
   // Fashion Design Courses
   {
     id: 'diploma-in-fashion-designing',

@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { allCourses } from '@/data/courses'; // Import allCourses
+import useCourses from '@/hooks/use-courses'; // Import useCourses
 
 const MoreFashionCoursesSection = () => {
-  const courses = allCourses.filter(course => 
+  const { courses } = useCourses(); // Use the hook to get courses
+
+  const moreFashionCourses = courses.filter(course => 
     course.category === 'fashion' && 
     (course.id === 'aari-making-course' || 
      course.id === 'fashion-illustration-course' || 
@@ -19,7 +21,7 @@ const MoreFashionCoursesSection = () => {
     <section className="py-10 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course, index) => (
+          {moreFashionCourses.map((course, index) => (
             <AnimateOnScroll key={course.id} delay={100 + index * 150}>
               <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
                 <div className="w-full h-48 overflow-hidden">

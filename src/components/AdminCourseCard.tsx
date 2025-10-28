@@ -5,12 +5,24 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Course } from '@/data/courses'; // Import the Course interface
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"; // Import AlertDialog components
 
 interface AdminCourseCardProps {
   course: Course;
+  onDelete: (id: string) => void; // New prop for delete action
 }
 
-const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course }) => {
+const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete }) => {
   return (
     <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
       <div className="w-full h-48 overflow-hidden">
@@ -34,9 +46,28 @@ const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course }) => {
           <Button variant="outline" size="sm" className="flex-1 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
             <Pencil className="h-4 w-4 mr-2" /> Edit
           </Button>
-          <Button variant="destructive" size="sm" className="flex-1">
-            <Trash2 className="h-4 w-4 mr-2" /> Delete
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="sm" className="flex-1">
+                <Trash2 className="h-4 w-4 mr-2" /> Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  "{course.title}" course from all pages.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => onDelete(course.id)}>
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </div>
