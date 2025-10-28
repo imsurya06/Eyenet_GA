@@ -80,7 +80,7 @@ const Navbar = () => {
 
     timeoutRef.current = setTimeout(() => {
       setOpenState(false);
-    }, 150); // Delay for closing
+    }, 250); // Increased delay for closing to 250ms
   };
 
   // Determine if a dropdown's sub-links are active
@@ -127,8 +127,6 @@ const Navbar = () => {
                       key={item.name}
                       open={item.name === 'Courses' ? coursesOpen : exploreOpen}
                       onOpenChange={(newOpenState) => {
-                        // Only update our state if Radix is trying to close it,
-                        // otherwise let our hover handlers manage opening.
                         if (!newOpenState) {
                           handleClose(item.name as 'Courses' | 'Explore');
                         }
