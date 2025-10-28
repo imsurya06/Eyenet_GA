@@ -2,7 +2,8 @@
 
 import React from 'react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import BlogsDisplaySection from '@/components/BlogsDisplaySection'; // Import the new component
+import BlogsDisplaySection from '@/components/BlogsDisplaySection';
+import StudentWriteBlogSection from '@/components/StudentWriteBlogSection'; // Import the new component
 
 const StudentsZone = () => {
   return (
@@ -15,6 +16,7 @@ const StudentsZone = () => {
       </AnimateOnScroll>
       
       <BlogsDisplaySection />
+      <StudentWriteBlogSection /> {/* Add the new section here */}
     </div>
   );
 };
