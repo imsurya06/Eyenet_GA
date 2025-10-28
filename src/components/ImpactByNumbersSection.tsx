@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 
@@ -9,6 +11,10 @@ const ImpactByNumbersSection = () => {
     { value: '85%', label: 'Student satisfaction' },
     { value: '75%', label: 'Industry recognition' },
   ];
+
+  const handleCanPlay = () => {
+    console.log("Video can play!");
+  };
 
   return (
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-center">
@@ -26,17 +32,18 @@ const ImpactByNumbersSection = () => {
         </p>
       </AnimateOnScroll>
 
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-10 max-w-5xl mx-auto"> {/* Added max-w-5xl and mx-auto here */}
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-10 max-w-5xl mx-auto">
         {/* Video Player */}
         <AnimateOnScroll delay={400} className="w-full lg:w-1/2">
           <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
             <video
-              src="/videos/Video_Generation_With_Animated_Logo.mp4" // Updated video source
+              src="/videos/Video_Generation_With_Animated_Logo.mp4"
               controls
               muted
               loop
-              autoPlay // Corrected to autoPlay
+              autoPlay
               className="w-full h-full object-cover"
+              onCanPlay={handleCanPlay} // Added this line
             >
               Your browser does not support the video tag.
             </video>
