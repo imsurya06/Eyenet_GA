@@ -55,7 +55,7 @@ const AnimateOnScroll: React.FC<AnimateOnScrollProps> = ({
     <div
       ref={ref}
       className={cn(
-        "transition-all duration-700 ease-out",
+        "transition-all duration-500 ease-out", // Changed from duration-700 to duration-500
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
         className
       )}

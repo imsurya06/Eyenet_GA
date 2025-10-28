@@ -18,7 +18,7 @@ const MoreFashionCoursesSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {moreFashionCourses.map((course, index) => (
-            <AnimateOnScroll key={course.id} delay={100 + index * 150}>
+            <AnimateOnScroll key={course.id} delay={50 + index * 75}> {/* Reduced delay increment */}
               <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
                 <div className="w-full h-48 overflow-hidden">
                   <img

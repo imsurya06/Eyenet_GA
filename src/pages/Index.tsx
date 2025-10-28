@@ -26,7 +26,7 @@ const Index = () => {
         </div>
 
         {/* Left Section: Text Content */}
-        <AnimateOnScroll isHero={true} delay={500} className="relative z-10 text-center md:text-left max-w-2xl md:mr-12 md:mb-0 md:flex-1"> {/* Changed flex-1 to md:flex-1 */}
+        <AnimateOnScroll isHero={true} delay={100} className="relative z-10 text-center md:text-left max-w-2xl md:mr-12 md:mb-0 md:flex-1"> {/* Changed flex-1 to md:flex-1 */}
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-white md:text-foreground">
             Design your <br className="hidden md:block" /> future with creative excellence
           </h1>
@@ -46,7 +46,7 @@ const Index = () => {
         </AnimateOnScroll>
 
         {/* Right Section: Image (Desktop Only) */}
-        <AnimateOnScroll isHero={true} delay={700} className="hidden md:flex flex-1 justify-center md:justify-end relative z-10">
+        <AnimateOnScroll isHero={true} delay={200} className="hidden md:flex flex-1 justify-center md:justify-end relative z-10">
           <img
             src="/images/hero-model.png"
             alt="Fashion model illustration"

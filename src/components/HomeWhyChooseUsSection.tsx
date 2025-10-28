@@ -43,7 +43,7 @@ const HomeWhyChooseUsSection = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
         {features.map((feature, index) => (
-          <AnimateOnScroll key={index} delay={400 + index * 150}>
+          <AnimateOnScroll key={index} delay={200 + index * 75}> {/* Reduced delay increment */}
             <div className="flex flex-col items-center">
               <div className="w-full h-48 md:h-64 overflow-hidden rounded-lg mb-6">
                 <img

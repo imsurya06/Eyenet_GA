@@ -36,7 +36,7 @@ const StudentStoriesSection = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {testimonials.map((testimonial, index) => (
-          <AnimateOnScroll key={index} delay={300 + index * 150}>
+          <AnimateOnScroll key={index} delay={150 + index * 75}> {/* Reduced delay increment */}
             <div className="flex flex-col items-center text-center p-4">
               <p className="text-text-medium font-body text-foreground mb-8 italic max-w-xs">
                 "{testimonial.quote}"
