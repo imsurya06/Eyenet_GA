@@ -35,6 +35,7 @@ const ImpactByNumbersSection = () => {
               controls
               muted
               loop
+              autoPlay // Corrected to autoPlay
               className="w-full h-full object-cover"
             >
               Your browser does not support the video tag.
