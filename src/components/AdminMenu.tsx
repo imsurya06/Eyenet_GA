@@ -54,6 +54,8 @@ const AdminMenu: React.FC<AdminMenuProps> = ({ className }) => {
       <DropdownMenuContent
         className="w-40 p-1 bg-muted data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-300"
         align="end"
+        sideOffset={10} // Moves the dropdown 10px down from the trigger
+        alignOffset={-50} // Moves the dropdown 50px to the right from its aligned end position
         onMouseEnter={handleOpen}
         onMouseLeave={handleClose}
       >
