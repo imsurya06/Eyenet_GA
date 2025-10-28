@@ -17,10 +17,11 @@ import Infrastructure from "./pages/Infrastructure";
 import NewsEvents from "./pages/NewsEvents";
 import FashionDesignCourses from "./pages/FashionDesignCourses";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
-import ComputerCourses from "./pages/ComputerCourses"; // Import the new page
+import ComputerCourses from "./pages/ComputerCourses";
+import AdminLogin from "./pages/AdminLogin"; // Import the new AdminLogin page
 import Footer from "./components/Footer";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import ScrollToTop from "./components/ScrollToTop"; // Import the new ScrollToTop component
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +31,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollToTop /> {/* Add ScrollToTop here */}
+        <ScrollToTop />
         <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
@@ -39,8 +40,8 @@ const App = () => (
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/fashion-design" element={<FashionDesignCourses />} />
           <Route path="/courses/fashion-design/:slug" element={<CourseDetailsPage />} />
-          <Route path="/courses/computer-courses" element={<ComputerCourses />} /> {/* Add the new route here */}
-          <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} /> {/* Dynamic route for computer courses */}
+          <Route path="/courses/computer-courses" element={<ComputerCourses />} />
+          <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/explore/students-zone" element={<StudentsZone />} />
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/explore/gallery" element={<Gallery />} />
           <Route path="/explore/news-events" element={<NewsEvents />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin-login" element={<AdminLogin />} /> {/* Add the new route here */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

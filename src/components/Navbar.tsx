@@ -15,6 +15,7 @@ import { Menu, ChevronDown } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import CourseDropdownMenuItem from './CourseDropdownMenuItem.tsx';
+import AdminMenu from './AdminMenu'; // Import the new AdminMenu component
 import { cn } from '@/lib/utils'; // Import cn utility
 
 const navItems = [
@@ -209,6 +210,7 @@ const Navbar = () => {
               <Button variant="default" className="hover:animate-shake">
                 Apply
               </Button>
+              <AdminMenu /> {/* Add the AdminMenu here */}
             </div>
           </>
         )}
@@ -279,6 +281,7 @@ const Navbar = () => {
                 <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}>
                   Apply
                 </Button>
+                <AdminMenu className="mt-2" /> {/* Add AdminMenu to mobile nav as well */}
               </nav>
             </SheetContent>
           </Sheet>
