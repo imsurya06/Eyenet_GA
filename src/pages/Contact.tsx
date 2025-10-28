@@ -30,7 +30,7 @@ const Contact = () => {
           </AnimateOnScroll>
 
           <AnimateOnScroll isHero={true} delay={800} className="space-y-6 w-full max-w-md">
-            <form className="space-y-6">
+            <form action="https://formspree.io/f/myzbeqer" method="POST" className="space-y-6">
               <div>
                 <Label htmlFor="name" className="text-text-regular font-body text-foreground mb-2 block text-left">
                   Name
@@ -38,6 +38,7 @@ const Contact = () => {
                 <Input
                   id="name"
                   type="text"
+                  name="name" // Added name attribute
                   placeholder=""
                   className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
                 />
@@ -49,6 +50,7 @@ const Contact = () => {
                 <Input
                   id="email"
                   type="email"
+                  name="email" // Added name attribute
                   placeholder=""
                   className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
                 />
@@ -59,13 +61,14 @@ const Contact = () => {
                 </Label>
                 <Textarea
                   id="message"
+                  name="message" // Added name attribute
                   placeholder="Type your message..."
                   rows={6}
                   className="px-4 py-3 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background resize-none"
                 />
               </div>
               <div className="flex items-center space-x-2 justify-center lg:justify-start">
-                <Checkbox id="terms" className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
+                <Checkbox id="terms" name="terms" className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" /> {/* Added name attribute */}
                 <Label htmlFor="terms" className="text-text-regular font-body text-gray-600">
                   I accept the{' '}
                   <Link to="/terms-of-service" className="underline hover:text-primary">

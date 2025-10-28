@@ -57,7 +57,7 @@ const ContactUsSection = () => {
 
         {/* Right Section: Contact Form */}
         <AnimateOnScroll delay={600} className="w-full max-w-lg mx-auto lg:mx-0">
-          <form className="space-y-6">
+          <form action="https://formspree.io/f/myzbeqer" method="POST" className="space-y-6">
             <div>
               <Label htmlFor="name" className="text-text-regular font-body text-foreground mb-2 block">
                 Name
@@ -65,6 +65,7 @@ const ContactUsSection = () => {
               <Input
                 id="name"
                 type="text"
+                name="name" // Added name attribute
                 placeholder=""
                 className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
               />
@@ -76,6 +77,7 @@ const ContactUsSection = () => {
               <Input
                 id="email"
                 type="email"
+                name="email" // Added name attribute
                 placeholder=""
                 className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
               />
@@ -86,13 +88,14 @@ const ContactUsSection = () => {
               </Label>
               <Textarea
                 id="message"
+                name="message" // Added name attribute
                 placeholder="Type your message..."
                 rows={6}
                 className="px-4 py-3 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background resize-y"
               />
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="terms" className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" />
+              <Checkbox id="terms" name="terms" className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" /> {/* Added name attribute */}
               <Label htmlFor="terms" className="text-text-regular font-body text-gray-600">
                 I accept the{' '}
                 <Link to="/terms-of-service" className="underline hover:text-primary">
