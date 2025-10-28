@@ -5,7 +5,7 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 import AdminHeader from '@/components/AdminHeader';
 import AdminCourseFilter from '@/components/AdminCourseFilter';
 import AdminCourseCard from '@/components/AdminCourseCard';
-import useCourses from '@/hooks/use-courses'; // Import the new hook
+import { useCourses } from '@/context/CourseContext'; // Corrected import path
 
 const AdminCourses = () => {
   const [searchParams] = useSearchParams();

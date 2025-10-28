@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import useCourses from '@/hooks/use-courses'; // Import useCourses
+import { useCourses } from '@/context/CourseContext'; // Corrected import path
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();

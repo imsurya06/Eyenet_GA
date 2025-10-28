@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
-import useCourses from '@/hooks/use-courses'; // Import useCourses
+import { useCourses } from '@/context/CourseContext'; // Corrected import path
 
 const ComputerCoursesSection = () => {
   const { courses } = useCourses(); // Use the hook to get courses
