@@ -32,7 +32,8 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 import ScrollToTop from "./components/ScrollToTop";
 import { CourseProvider } from "./context/CourseContext";
 import { GalleryImageProvider } from "./context/GalleryImageContext";
-import { InfrastructureImageProvider } from "./context/InfrastructureImageContext"; // Import InfrastructureImageProvider
+import { InfrastructureImageProvider } from "./context/InfrastructureImageContext";
+import { NewsEventsProvider } from "./context/NewsEventsContext"; // Import NewsEventsProvider
 
 const queryClient = new QueryClient();
 
@@ -70,43 +71,45 @@ const App = () => {
           <ScrollToTop />
           <CourseProvider>
             <GalleryImageProvider>
-              <InfrastructureImageProvider> {/* Wrap with InfrastructureImageProvider */}
-                <ConditionalNavbar />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/admissions" element={<Admissions />} />
-                  <Route path="/courses" element={<Courses />} />
-                  <Route path="/courses/fashion-design" element={<FashionDesignCourses />} />
-                  <Route path="/courses/fashion-design/:slug" element={<CourseDetailsPage />} />
-                  <Route path="/courses/computer-courses" element={<ComputerCourses />} />
-                  <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/explore" element={<Explore />} />
-                  <Route path="/explore/students-zone" element={<StudentsZone />} />
-                  <Route path="/explore/infrastructure" element={<Infrastructure />} />
-                  <Route path="/explore/gallery" element={<Gallery />} />
-                  <Route path="/explore/news-events" element={<NewsEvents />} />
-                  <Route path="/blogs" element={<Blogs />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/admin-login" element={<AdminLogin />} />
-                  
-                  {/* Admin Dashboard with nested routes */}
-                  <Route path="/admin-dashboard" element={<AdminDashboard />}>
-                    <Route index element={<AdminCourses />} />
-                    <Route path="courses" element={<AdminCourses />} />
-                    <Route path="gallery" element={<AdminGallery />} />
-                    <Route path="infrastructure" element={<AdminInfrastructure />} /> {/* This will be our new infrastructure management page */}
-                    <Route path="news-events" element={<AdminNewsEvents />} />
-                    <Route path="blogs" element={<AdminBlogs />} />
-                    <Route path="images" element={<AdminImages />} />
-                  </Route>
+              <InfrastructureImageProvider>
+                <NewsEventsProvider> {/* Wrap with NewsEventsProvider */}
+                  <ConditionalNavbar />
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/admissions" element={<Admissions />} />
+                    <Route path="/courses" element={<Courses />} />
+                    <Route path="/courses/fashion-design" element={<FashionDesignCourses />} />
+                    <Route path="/courses/fashion-design/:slug" element={<CourseDetailsPage />} />
+                    <Route path="/courses/computer-courses" element={<ComputerCourses />} />
+                    <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} />
+                    <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/explore" element={<Explore />} />
+                    <Route path="/explore/students-zone" element={<StudentsZone />} />
+                    <Route path="/explore/infrastructure" element={<Infrastructure />} />
+                    <Route path="/explore/gallery" element={<Gallery />} />
+                    <Route path="/explore/news-events" element={<NewsEvents />} />
+                    <Route path="/blogs" element={<Blogs />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/admin-login" element={<AdminLogin />} />
+                    
+                    {/* Admin Dashboard with nested routes */}
+                    <Route path="/admin-dashboard" element={<AdminDashboard />}>
+                      <Route index element={<AdminCourses />} />
+                      <Route path="courses" element={<AdminCourses />} />
+                      <Route path="gallery" element={<AdminGallery />} />
+                      <Route path="infrastructure" element={<AdminInfrastructure />} />
+                      <Route path="news-events" element={<AdminNewsEvents />} /> {/* This will be our new news/events management page */}
+                      <Route path="blogs" element={<AdminBlogs />} />
+                      <Route path="images" element={<AdminImages />} />
+                    </Route>
 
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-                <ConditionalFooter />
-                <MadeWithDyad />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                  <ConditionalFooter />
+                  <MadeWithDyad />
+                </NewsEventsProvider>
               </InfrastructureImageProvider>
             </GalleryImageProvider>
           </CourseProvider>
