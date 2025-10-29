@@ -84,6 +84,8 @@ const Admissions = () => {
             </p>
             <Form {...form}> {/* Added Form wrapper here */}
               <form action="https://formspree.io/f/myzbeqer" method="POST" className="space-y-6">
+                {/* Hidden input for Formspree redirect */}
+                <input type="hidden" name="_next" value={`${window.location.origin}/`} />
                 <FormField
                   control={form.control}
                   name="name"
