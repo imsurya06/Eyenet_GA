@@ -18,12 +18,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from 'sonner'; // Using sonner for toasts
+import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
 
 // Define the schema for the login form
 const formSchema = z.object({
-  username: z.string().min(1, { message: 'Username is required.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }), // Changed from username to email
   password: z.string().min(1, { message: 'Password is required.' }),
-  mobile: z.string().regex(/^\d{10}$/, { message: 'Mobile number must be 10 digits.' }),
+  // Removed mobile as it's not part of Supabase email/password auth
 });
 
 const AdminLogin = () => {
@@ -32,34 +33,37 @@ const AdminLogin = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
-      mobile: '',
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // --- IMPORTANT: This is client-side authorization for demonstration purposes ONLY. ---
-    // --- In a real application, this logic MUST be handled securely on a backend server. ---
-    const ADMIN_USERNAME = "eyenet-fs@25";
-    const ADMIN_PASSWORD = "06072004";
-    const ADMIN_MOBILE = "8754255020";
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
 
-    if (
-      values.username === ADMIN_USERNAME &&
-      values.password === ADMIN_PASSWORD &&
-      values.mobile === ADMIN_MOBILE
-    ) {
-      toast.success("Login successful! Redirecting to admin dashboard...");
-      // Save username to local storage
-      localStorage.setItem('adminUsername', values.username);
-      // Simulate successful login and redirect
-      // In a real app, you'd set a token/session here
-      setTimeout(() => {
-        navigate('/admin-dashboard'); // Redirect to the new admin dashboard
-      }, 1500);
-    } else {
-      toast.error("Invalid credentials. Please try again.");
+      if (error) {
+        console.error("Supabase login error:", error);
+        toast.error(`Login failed: ${error.message}`);
+        return;
+      }
+
+      if (data.user) {
+        toast.success("Login successful! Redirecting to admin dashboard...");
+        // Store the user's email for display purposes (or a derived username)
+        localStorage.setItem('adminUsername', data.user.email || 'Admin User');
+        setTimeout(() => {
+          navigate('/admin-dashboard');
+        }, 1500);
+      } else {
+        toast.error("Login failed: No user data received.");
+      }
+    } catch (err: any) {
+      console.error("Unexpected login error:", err);
+      toast.error(`An unexpected error occurred: ${err.message || 'Please try again.'}`);
     }
   };
 
@@ -81,17 +85,17 @@ const AdminLogin = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="username"
+                name="email" // Changed to email
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
-                      Username*
+                      Email*
                     </FormLabel>
                     <FormControl>
                       <Input
-                        id="username"
-                        type="text"
-                        placeholder=""
+                        id="email"
+                        type="email" // Changed to email type
+                        placeholder="admin@example.com"
                         className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
                         {...field}
                       />
@@ -112,28 +116,7 @@ const AdminLogin = () => {
                       <Input
                         id="password"
                         type="password"
-                        placeholder=""
-                        className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="mobile"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
-                      Mobile Number*
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        id="mobile"
-                        type="tel"
-                        placeholder=""
+                        placeholder="••••••••"
                         className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
                         {...field}
                       />
