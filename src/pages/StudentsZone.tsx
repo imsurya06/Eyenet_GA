@@ -3,8 +3,8 @@
 import React from 'react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import BlogsDisplaySection from '@/components/BlogsDisplaySection';
-import WriteBlogButton from '@/components/WriteBlogButton'; // Import the new button component
-import WriteTestimonialButton from '@/components/WriteTestimonialButton'; // Import the new testimonial button
+import WriteBlogButton from '@/components/WriteBlogButton';
+import StudentTestimonialFormSection from '@/components/StudentTestimonialFormSection'; // Import the new form section
 
 const StudentsZone = () => {
   return (
@@ -17,8 +17,8 @@ const StudentsZone = () => {
       </AnimateOnScroll>
       
       <BlogsDisplaySection />
-      <WriteBlogButton /> {/* Add the new fixed button here */}
-      <WriteTestimonialButton /> {/* Add the new fixed testimonial button here */}
+      <WriteBlogButton />
+      <StudentTestimonialFormSection /> {/* Add the testimonial form section here */}
     </div>
   );
 };
