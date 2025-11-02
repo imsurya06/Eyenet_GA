@@ -15,7 +15,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { cn } from '@/lib/utils';
 
 interface AdminNewsEventCardProps {
   newsEvent: NewsEvent;
@@ -33,30 +32,30 @@ const AdminNewsEventCard: React.FC<AdminNewsEventCardProps> = ({ newsEvent, onDe
   const CategoryIcon = newsEvent.category === 'news' ? Newspaper : CalendarDays;
 
   return (
-    <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-row h-60">
-      {/* Left Section: Fixed "Phone" Design (simulated with green background) */}
-      <div className="w-[120px] h-full flex-shrink-0 bg-green-600 relative flex items-center justify-center">
-        {/* This section is designed to mimic the phone image from your screenshot.
-            If you have a specific image asset for this phone, it would be placed here.
-            For now, it's a solid green background to match the general color scheme. */}
-      </div>
-
-      {/* Right Section: Content */}
-      <div className="p-4 flex flex-col flex-grow justify-between overflow-hidden">
-        <div className="flex items-center justify-end gap-2 mb-2"> {/* Pushed to the right */}
+    <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
+      {newsEvent.image && (
+        <div className="w-full h-48 overflow-hidden">
+          <img
+            src={newsEvent.image}
+            alt={newsEvent.title}
+            className="w-full h-full object-cover object-top"
+          />
+        </div>
+      )}
+      <div className="p-4 flex flex-col flex-grow">
+        <div className="flex items-center gap-2 mb-2">
           <span className="inline-flex items-center bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full border border-input">
             <CategoryIcon className="h-3 w-3 mr-1" />
             {newsEvent.category.charAt(0).toUpperCase() + newsEvent.category.slice(1)}
           </span>
-          <span className="inline-flex items-center bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full border border-input">
-            <CalendarDays className="h-3 w-3 mr-1" />
+          <span className="text-text-small font-body text-gray-600">
             {formattedDate}
           </span>
         </div>
-        <h3 className="text-h3-mobile md:text-h3-desktop font-heading mb-2 text-foreground line-clamp-1">
+        <h3 className="text-h6-mobile md:text-h6-desktop font-heading mb-2 text-foreground h-[2.8rem] overflow-hidden">
           {newsEvent.title}
         </h3>
-        <p className="text-text-regular font-body text-gray-600 mb-4 flex-grow overflow-hidden line-clamp-2">
+        <p className="text-text-regular font-body text-gray-600 mb-4 h-[4.8rem] overflow-hidden">
           {newsEvent.description}
         </p>
         <div className="flex items-center gap-2 mt-auto">
