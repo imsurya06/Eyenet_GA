@@ -165,7 +165,7 @@
     135deg, /* Diagonal gradient from top-left to bottom-right */
     hsl(var(--primary)) 0%,
     hsl(var(--primary)) 20%,
-    hsl(var(--primary-foreground)) 50%, /* White highlight */
+    hsl(0 0% 90%) 50%, /* Silver highlight */
     hsl(var(--primary)) 80%,
     hsl(var(--primary)) 100%
   );
@@ -173,5 +173,5 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine-diagonal 4s ease-in-out infinite; /* Apply the animation */
+  animation: shine-diagonal 8s ease-in-out infinite; /* Apply the animation */
 }
