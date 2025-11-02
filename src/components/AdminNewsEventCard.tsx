@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { cn } from '@/lib/utils'; // Import cn for conditional class names
 
 interface AdminNewsEventCardProps {
   newsEvent: NewsEvent;
@@ -32,30 +33,36 @@ const AdminNewsEventCard: React.FC<AdminNewsEventCardProps> = ({ newsEvent, onDe
   const CategoryIcon = newsEvent.category === 'news' ? Newspaper : CalendarDays;
 
   return (
-    <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
-      {newsEvent.image && (
-        <div className="w-full h-48 overflow-hidden">
+    <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col md:flex-row h-auto"> {/* Horizontal layout for card */}
+      {/* Image/Color Block */}
+      <div className={cn(
+        "w-full md:w-48 h-48 md:h-auto flex-shrink-0 overflow-hidden",
+        !newsEvent.image && "bg-primary" // Fallback background color if no image
+      )}>
+        {newsEvent.image && (
           <img
             src={newsEvent.image}
             alt={newsEvent.title}
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-center"
           />
-        </div>
-      )}
-      <div className="p-4 flex flex-col flex-grow">
+        )}
+      </div>
+      {/* Content */}
+      <div className="p-4 flex flex-col flex-grow justify-between">
         <div className="flex items-center gap-2 mb-2">
           <span className="inline-flex items-center bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full border border-input">
             <CategoryIcon className="h-3 w-3 mr-1" />
             {newsEvent.category.charAt(0).toUpperCase() + newsEvent.category.slice(1)}
           </span>
-          <span className="text-text-small font-body text-gray-600">
+          <span className="inline-flex items-center bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full border border-input">
+            <CalendarDays className="h-3 w-3 mr-1" />
             {formattedDate}
           </span>
         </div>
-        <h3 className="text-h6-mobile md:text-h6-desktop font-heading mb-2 text-foreground h-[2.8rem] overflow-hidden">
+        <h3 className="text-h6-mobile md:text-h6-desktop font-heading mb-2 text-foreground">
           {newsEvent.title}
         </h3>
-        <p className="text-text-regular font-body text-gray-600 mb-4 h-[4.8rem] overflow-hidden">
+        <p className="text-text-regular font-body text-gray-600 mb-4 flex-grow overflow-hidden">
           {newsEvent.description}
         </p>
         <div className="flex items-center gap-2 mt-auto">

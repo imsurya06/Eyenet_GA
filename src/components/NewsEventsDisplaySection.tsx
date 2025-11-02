@@ -5,6 +5,7 @@ import { useNewsEvents } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
 import { CalendarDays, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom'; // Assuming we might want to link to individual news/event pages later
+import { cn } from '@/lib/utils'; // Import cn for conditional class names
 
 const NewsEventsDisplaySection = () => {
   const { newsEvents } = useNewsEvents();
@@ -27,7 +28,7 @@ const NewsEventsDisplaySection = () => {
         </AnimateOnScroll>
 
         {sortedNewsEvents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-col gap-6 max-w-4xl mx-auto"> {/* Changed to flex-col for stacking, added max-w-4xl */}
             {sortedNewsEvents.map((item, index) => {
               const CategoryIcon = item.category === 'news' ? Newspaper : CalendarDays;
               const formattedDate = new Date(item.date).toLocaleDateString('en-US', {
@@ -38,30 +39,36 @@ const NewsEventsDisplaySection = () => {
 
               return (
                 <AnimateOnScroll key={item.id} delay={300 + index * 100}>
-                  <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col h-full">
-                    {item.image && (
-                      <div className="w-full h-48 overflow-hidden">
+                  <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col md:flex-row h-auto"> {/* Horizontal layout for card */}
+                    {/* Image/Color Block */}
+                    <div className={cn(
+                      "w-full md:w-48 h-48 md:h-auto flex-shrink-0 overflow-hidden",
+                      !item.image && "bg-primary" // Fallback background color if no image
+                    )}>
+                      {item.image && (
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="w-full h-full object-cover object-top"
+                          className="w-full h-full object-cover object-center"
                         />
-                      </div>
-                    )}
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="flex items-center gap-2 mb-4">
+                      )}
+                    </div>
+                    {/* Content */}
+                    <div className="p-4 flex flex-col flex-grow justify-center">
+                      <div className="flex items-center gap-2 mb-2">
                         <span className="inline-flex items-center bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full border border-input">
                           <CategoryIcon className="h-3 w-3 mr-1" />
                           {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
                         </span>
-                        <span className="text-text-small font-body text-gray-600">
+                        <span className="inline-flex items-center bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full border border-input">
+                          <CalendarDays className="h-3 w-3 mr-1" />
                           {formattedDate}
                         </span>
                       </div>
-                      <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden">
+                      <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
                         {item.title}
                       </h3>
-                      <p className="text-text-regular font-body text-gray-600 mb-6 flex-grow overflow-hidden">
+                      <p className="text-text-regular font-body text-gray-600 flex-grow overflow-hidden">
                         {item.description}
                       </p>
                       {/* Optional: Add a "Read More" link if you have individual news/event pages */}
