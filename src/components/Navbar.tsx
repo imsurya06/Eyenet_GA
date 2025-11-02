@@ -224,9 +224,9 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
               {/* Logo inside the SheetContent */}
-              <div className="flex items-center justify-center py-4 border-b border-border mb-4">
-                <Link to="/" onClick={() => setIsSheetOpen(false)}>
-                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-12" /> {/* Increased size for clarity */}
+              <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white"> {/* Added bg-white for clear background */}
+                <Link to="/" onClick={() => setIsSheetOpen(false)} className="w-full flex justify-center"> {/* Ensured link takes full width and centers content */}
+                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-16 object-contain" /> {/* Increased h-12 to h-16, added object-contain */}
                 </Link>
               </div>
               <nav className="flex flex-col gap-4 pt-6">
