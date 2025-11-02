@@ -4,6 +4,7 @@ import React from 'react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import BlogsDisplaySection from '@/components/BlogsDisplaySection';
 import WriteBlogButton from '@/components/WriteBlogButton'; // Import the new button component
+import StudentTestimonialForm from '@/components/StudentTestimonialForm'; // Import the new testimonial form
 
 const StudentsZone = () => {
   return (
@@ -16,6 +17,7 @@ const StudentsZone = () => {
       </AnimateOnScroll>
       
       <BlogsDisplaySection />
+      <StudentTestimonialForm /> {/* Add the testimonial form here */}
       <WriteBlogButton /> {/* Add the new button here */}
     </div>
   );
