@@ -3,7 +3,7 @@
 import React from 'react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import BlogsDisplaySection from '@/components/BlogsDisplaySection';
-import StudentWriteBlogSection from '@/components/StudentWriteBlogSection'; // Import the new component
+import WriteBlogButton from '@/components/WriteBlogButton'; // Import the new button component
 
 const StudentsZone = () => {
   return (
@@ -16,7 +16,7 @@ const StudentsZone = () => {
       </AnimateOnScroll>
       
       <BlogsDisplaySection />
-      <StudentWriteBlogSection /> {/* Add the new section here */}
+      <WriteBlogButton /> {/* Add the new button here */}
     </div>
   );
 };
