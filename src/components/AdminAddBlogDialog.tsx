@@ -33,7 +33,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'; // Import Select components
 
 interface AdminAddBlogDialogProps {
   open: boolean;
@@ -49,8 +48,6 @@ const formSchema = z.object({
   date: z.date({ required_error: 'A date is required.' }),
   content: z.string().min(10, { message: 'Content must be at least 10 characters.' }),
   imageFile: z.any().optional(), // File object is optional for editing
-  category: z.enum(['fashion', 'computer', 'student-life', 'industry-insights'], { message: 'Please select a category.' }), // Added category
-  readTime: z.string().min(1, { message: 'Read time is required.' }), // Added readTime
 });
 
 const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenChange, editingBlog, onSave }) => {
@@ -64,8 +61,6 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
       date: undefined,
       content: '',
       imageFile: undefined,
-      category: undefined, // Default to undefined
-      readTime: '',
     },
   });
 
@@ -77,8 +72,6 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
         date: new Date(editingBlog.date),
         content: editingBlog.content,
         imageFile: undefined,
-        category: editingBlog.category,
-        readTime: editingBlog.readTime,
       });
       setImagePreview(editingBlog.image || null);
     } else if (open && !editingBlog) {
@@ -88,8 +81,6 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
         date: undefined,
         content: '',
         imageFile: undefined,
-        category: undefined,
-        readTime: '',
       });
       setImagePreview(null);
     }
@@ -140,8 +131,6 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
       date: format(values.date, 'yyyy-MM-dd'),
       content: values.content,
       image: imageUrl,
-      category: values.category,
-      readTime: values.readTime,
     };
 
     onSave(blogToSave);
@@ -236,44 +225,6 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
                   <FormLabel className="text-text-regular font-body text-foreground">Content:</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Blog post content" rows={8} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-text-regular font-body text-foreground">Category:</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="fashion">Fashion</SelectItem>
-                      <SelectItem value="computer">Computer</SelectItem>
-                      <SelectItem value="student-life">Student Life</SelectItem>
-                      <SelectItem value="industry-insights">Industry Insights</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="readTime"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-text-regular font-body text-foreground">Read Time (e.g., "5 min read"):</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 5 min read" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
