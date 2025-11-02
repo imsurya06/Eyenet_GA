@@ -112,12 +112,13 @@ const StudentTestimonialFormSection: React.FC = () => {
                   <FormItem className="flex items-center justify-between"> {/* Added flex classes here */}
                     <FormLabel className="text-text-regular font-body text-foreground">Your Rating:</FormLabel>
                     <FormControl>
+                      {/* Adjusted justify for stars */}
                       <StarRating
                         rating={field.value}
                         onRatingChange={field.onChange}
                         editable
                         size={28}
-                        className="justify-end" {/* Adjusted justify for stars */}
+                        className="justify-end" 
                       />
                     </FormControl>
                     <FormMessage />
