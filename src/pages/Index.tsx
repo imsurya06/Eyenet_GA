@@ -36,7 +36,7 @@ const Index = () => {
             expertise.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <Button asChild className="px-6 py-3 text-text-regular text-white shine-effect"> {/* Added shine-effect class */}
+            <Button asChild className="px-6 py-3 text-text-regular text-white">
               <Link to="/courses">Explore courses</Link>
             </Button>
             <Button variant="outline" asChild className="px-6 py-3 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground">
