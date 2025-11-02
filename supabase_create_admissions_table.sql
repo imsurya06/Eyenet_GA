@@ -16,7 +16,7 @@ ON public.admissions FOR INSERT
 TO public
 WITH CHECK (true);
 
--- Admissions are viewable by authenticated users (no change here)
+-- Admissions are viewable by authenticated users
 CREATE POLICY "Admissions are viewable by authenticated users."
 ON public.admissions FOR SELECT
 TO authenticated

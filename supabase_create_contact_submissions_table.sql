@@ -15,7 +15,7 @@ ON public.contact_submissions FOR INSERT
 TO public
 WITH CHECK (true);
 
--- Contact submissions are viewable by authenticated users (no change here)
+-- Contact submissions are viewable by authenticated users
 CREATE POLICY "Contact submissions are viewable by authenticated users."
 ON public.contact_submissions FOR SELECT
 TO authenticated
