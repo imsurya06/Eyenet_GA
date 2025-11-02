@@ -8,7 +8,7 @@ const AboutHeroSection = () => {
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
         {/* Main Title and Subtitle - Centered */}
-        <div className="text-center mb-8 md:mb-10 lg:mb-12"> {/* Reduced bottom margin here */}
+        <div className="text-center mb-8 md:mb-10 lg:mb-12">
           <AnimateOnScroll isHero={true} delay={100}>
             <h1 className="text-h1-mobile md:text-h1-desktop font-heading text-foreground leading-tight mb-4">
               Eyenet: A Creative Educational Academy
@@ -22,7 +22,7 @@ const AboutHeroSection = () => {
         </div>
 
         {/* Main Hero Image */}
-        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[300px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-xl shadow-lg mb-12 md:mb-16 lg:mb-20">
+        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[300px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-xl shadow-lg mb-12 md:mb-16 lg:mb-20 animate-float">
           <img
             src="/images/about-image-1.png"
             alt="Fashion model in traditional attire"
