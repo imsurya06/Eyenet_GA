@@ -125,11 +125,17 @@ export default {
           "80%": { transform: "translateX(5px) rotate(4deg)" },
           "90%": { transform: "translateX(-5px) rotate(-4deg)" },
         },
+        float: { // New float keyframes
+          '0%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+          '100%': { transform: 'translateY(0px)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         shake: "shake 0.8s infinite", // Registered the shake animation with a duration and infinite loop
+        float: 'float 3s ease-in-out infinite', // Registered the float animation
       },
     },
   },
