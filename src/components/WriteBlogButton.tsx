@@ -11,8 +11,9 @@ const WriteBlogButton = () => {
   return (
     <>
       <Button
-        variant="outline"
-        className="fixed bottom-8 right-8 z-50 px-6 py-3 text-text-regular border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.05] flex items-center gap-2"
+        // Changed variant from "outline" to "default" and updated class names for filled blue background and white text
+        variant="default"
+        className="fixed bottom-8 right-8 z-50 px-6 py-3 text-text-regular bg-blue-700 text-white hover:bg-blue-800 shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.05] flex items-center gap-2"
         onClick={() => setIsDialogOpen(true)}
       >
         <PencilLine className="h-5 w-5" />
