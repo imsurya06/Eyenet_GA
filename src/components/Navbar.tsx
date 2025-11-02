@@ -97,7 +97,7 @@ const Navbar = () => {
       <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10 md:h-14" /> {/* Changed h-8 to h-10 */}
+          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10 md:h-14" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -163,7 +163,7 @@ const Navbar = () => {
                         }}
                         onMouseLeave={() => {
                           if (item.name === 'Courses') handleClose(setCoursesOpen, coursesCloseTimeoutRef);
-                          else handleClose(setExploreOpen, exploreCloseTimeoutRef);
+                          else handleClose(setExploreOpen, coursesCloseTimeoutRef);
                         }}
                       >
                         {item.heading && (
@@ -223,6 +223,12 @@ const Navbar = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
+              {/* Logo inside the SheetContent */}
+              <div className="flex items-center justify-center py-4 border-b border-border mb-4">
+                <Link to="/" onClick={() => setIsSheetOpen(false)}>
+                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-12" /> {/* Increased size for clarity */}
+                </Link>
+              </div>
               <nav className="flex flex-col gap-4 pt-6">
                 {navItems.map((item) => (
                   item.type === 'link' ? (
