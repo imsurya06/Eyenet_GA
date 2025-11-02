@@ -208,7 +208,7 @@ const Navbar = () => {
               <Button variant="default" className="hover:animate-shake">
                 Apply
               </Button>
-              <AdminMenu />
+              <AdminMenu /> {/* AdminMenu is rendered only on desktop */}
             </div>
           </>
         )}
@@ -277,7 +277,7 @@ const Navbar = () => {
                 <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}>
                   Apply
                 </Button>
-                <AdminMenu className="mt-2" />
+                {/* AdminMenu is intentionally NOT rendered here for mobile */}
               </nav>
             </SheetContent>
           </Sheet>
