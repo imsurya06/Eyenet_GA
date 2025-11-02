@@ -33,6 +33,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Blog } from '@/data/blogs';
 import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'; // Import Select components
 
 interface StudentWriteBlogDialogProps {
   open: boolean;
@@ -46,6 +47,8 @@ const formSchema = z.object({
   date: z.date({ required_error: 'A date is required.' }),
   content: z.string().min(50, { message: 'Content must be at least 50 characters.' }),
   imageFile: z.any().optional(), // File object is optional
+  category: z.enum(['fashion', 'computer', 'student-life', 'industry-insights'], { message: 'Please select a category.' }), // Added category
+  readTime: z.string().min(1, { message: 'Read time is required.' }), // Added readTime
 });
 
 const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, onOpenChange }) => {
@@ -60,6 +63,8 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
       date: new Date(), // Default to today's date
       content: '',
       imageFile: undefined,
+      category: undefined, // Default to undefined
+      readTime: '',
     },
   });
 
@@ -72,6 +77,8 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
         date: new Date(),
         content: '',
         imageFile: undefined,
+        category: undefined,
+        readTime: '',
       });
       setImagePreview(null);
     }
@@ -123,6 +130,8 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
       date: format(values.date, 'yyyy-MM-dd'),
       content: values.content,
       image: imageUrl, // Use the uploaded image URL
+      category: values.category, // Added category
+      readTime: values.readTime, // Added readTime
     };
 
     addBlog(blogToSave);
@@ -217,6 +226,44 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
                   <FormLabel className="text-text-regular font-body text-foreground">Blog Content:</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Write your blog post here..." rows={10} {...field} required />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text-regular font-body text-foreground">Category:</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="fashion">Fashion</SelectItem>
+                      <SelectItem value="computer">Computer</SelectItem>
+                      <SelectItem value="student-life">Student Life</SelectItem>
+                      <SelectItem value="industry-insights">Industry Insights</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="readTime"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text-regular font-body text-foreground">Read Time (e.g., "5 min read"):</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 5 min read" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
