@@ -1,1 +1,0 @@
-ALTER TABLE public.admissions ENABLE ROW LEVEL SECURITY;

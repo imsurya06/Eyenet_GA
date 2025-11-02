@@ -4,7 +4,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ListChecks, Image, Home, Newspaper, BookOpen, MessageSquareText } from 'lucide-react'; // Import MessageSquareText
+import { ArrowRight, ListChecks, Image, Home, Newspaper, BookOpen } from 'lucide-react';
 
 interface SidebarLink {
   name: string;
@@ -14,7 +14,6 @@ interface SidebarLink {
 }
 
 const sidebarNavItems: SidebarLink[] = [
-  { name: 'Notifications', href: '/admin-dashboard/enrollments-messages', icon: MessageSquareText }, // Renamed and moved to top
   { name: 'Courses', href: '/admin-dashboard/courses', icon: ListChecks },
   { name: 'Image Gallery', href: '/admin-dashboard/gallery', icon: Image },
   { name: 'Infrastructure', href: '/admin-dashboard/infrastructure', icon: Home },
@@ -24,7 +23,7 @@ const sidebarNavItems: SidebarLink[] = [
 
 const AdminSidebar = () => {
   return (
-    <aside className="fixed left-0 top-0 w-64 bg-background border-r border-border h-screen flex flex-col shadow-lg z-40">
+    <aside className="fixed left-0 top-0 w-64 bg-background border-r border-border h-screen flex flex-col shadow-lg z-40"> {/* Added fixed, left-0, top-0, and z-40 */}
       {/* Logo */}
       <div className="p-6 border-b border-border flex justify-center">
         <Link to="/">

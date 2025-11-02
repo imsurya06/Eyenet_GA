@@ -1,1 +1,0 @@
-GRANT INSERT ON public.admissions TO anon;

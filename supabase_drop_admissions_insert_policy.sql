@@ -1,1 +1,0 @@
-DROP POLICY IF EXISTS "Enable insert for authenticated users" ON public.admissions;
