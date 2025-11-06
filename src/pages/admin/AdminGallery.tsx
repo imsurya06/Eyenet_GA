@@ -4,13 +4,13 @@ import { useSearchParams } from 'react-router-dom';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import AdminHeader from '@/components/AdminHeader';
 import AdminGalleryImageCard from '@/components/AdminGalleryImageCard';
-import AdminAddImageDialog from '@/components/AdminAddImageDialog'; // Import the modified dialog
+import AdminAddImageDialog from '@/components/AdminAddImageDialog';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Filter, Image, LayoutGrid, CalendarDays } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { GalleryImage } from '@/data/galleryImages'; // Import GalleryImage interface
+import { GalleryImage } from '@/data/galleryImages';
 
 const filterItems = [
   { name: 'All Images', category: null, icon: LayoutGrid },
@@ -24,7 +24,7 @@ const AdminGallery = () => {
   const categoryFilter = searchParams.get('category');
   const { galleryImages, deleteGalleryImage, addGalleryImage, updateGalleryImage } = useGalleryImages();
   const [isAddImageDialogOpen, setIsAddImageDialogOpen] = useState(false);
-  const [editingImage, setEditingImage] = useState<GalleryImage | null>(null); // State to hold the image being edited
+  const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
 
   const filteredImages = React.useMemo(() => {
     if (!categoryFilter) {
@@ -34,44 +34,27 @@ const AdminGallery = () => {
   }, [categoryFilter, galleryImages]);
 
   const handleAddImageClick = () => {
-    setEditingImage(null); // Ensure we're in "add" mode
+    setEditingImage(null);
     setIsAddImageDialogOpen(true);
   };
 
   const handleEditImage = (image: GalleryImage) => {
-    setEditingImage(image); // Set the image to be edited
+    setEditingImage(image);
     setIsAddImageDialogOpen(true);
   };
 
   const handleSaveImage = (image: GalleryImage) => {
     if (editingImage) {
-      updateGalleryImage(image); // Update existing image
+      updateGalleryImage(image);
     } else {
-      addGalleryImage(image); // Add new image
+      addGalleryImage(image);
     }
-    setIsAddImageDialogOpen(false); // Close dialog after saving
-    setEditingImage(null); // Reset editing state
+    setIsAddImageDialogOpen(false);
+    setEditingImage(null);
   };
 
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
-  const closeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpenFilterDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsFilterDropdownOpen(true);
-  };
-
-  const handleCloseFilterDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsFilterDropdownOpen(false);
-    }, 150);
-  };
+  // Removed closeTimeoutRef and handleOpenFilterDropdown/handleCloseFilterDropdown functions as they were for hover.
 
   return (
     <div className="flex-1 flex flex-col">
@@ -81,13 +64,12 @@ const AdminGallery = () => {
         <h3 className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
           Our Gallery
         </h3>
-        <DropdownMenu open={isFilterDropdownOpen} onOpenChange={setIsFilterDropdownOpen}>
+        <DropdownMenu open={isFilterDropdownOpen} onOpenChange={setIsFilterDropdownOpen}> {/* Open/close on click */}
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
               className="px-4 py-2 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              onMouseEnter={handleOpenFilterDropdown}
-              onMouseLeave={handleCloseFilterDropdown}
+              // Removed onMouseEnter and onMouseLeave
             >
               Filter <Filter className="ml-2 h-4 w-4" />
             </Button>
@@ -97,8 +79,7 @@ const AdminGallery = () => {
             align="end"
             sideOffset={10}
             alignOffset={-5}
-            onMouseEnter={handleOpenFilterDropdown}
-            onMouseLeave={handleCloseFilterDropdown}
+            // Removed onMouseEnter and onMouseLeave
           >
             {filterItems.map((item, index) => (
               <React.Fragment key={item.name}>

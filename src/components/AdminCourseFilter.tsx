@@ -21,37 +21,19 @@ const filterItems = [
 
 const AdminCourseFilter = () => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const closeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpen = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsOpen(false);
-    }, 150); // Delay closing
-  };
+  // Removed closeTimeoutRef and handleOpen/handleClose functions as they were for hover.
 
   return (
     <div className="bg-background border-b border-border p-6 md:p-8 lg:p-10 flex items-center justify-between">
       <h3 className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
         Our Courses
       </h3>
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}> {/* Open/close on click */}
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             className="px-4 py-2 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-            onMouseEnter={handleOpen}
-            onMouseLeave={handleClose}
+            // Removed onMouseEnter and onMouseLeave
           >
             Filter <Filter className="ml-2 h-4 w-4" />
           </Button>
@@ -61,8 +43,7 @@ const AdminCourseFilter = () => {
           align="end"
           sideOffset={10}
           alignOffset={-5}
-          onMouseEnter={handleOpen}
-          onMouseLeave={handleClose}
+          // Removed onMouseEnter and onMouseLeave
         >
           {filterItems.map((item, index) => (
             <React.Fragment key={item.name}>

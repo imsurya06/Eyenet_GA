@@ -18,34 +18,16 @@ interface AdminMenuProps {
 
 const AdminMenu: React.FC<AdminMenuProps> = ({ className }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const closeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpen = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsOpen(false);
-    }, 150); // Delay closing
-  };
+  // Removed closeTimeoutRef and handleOpen/handleClose functions as they were for hover.
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}> {/* Open/close on click */}
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
           className={cn("h-8 w-8", className)}
-          onMouseEnter={handleOpen}
-          onMouseLeave={handleClose}
+          // Removed onMouseEnter and onMouseLeave
         >
           <MoreVertical className="h-5 w-5" />
           <span className="sr-only">Admin menu</span>
@@ -56,8 +38,7 @@ const AdminMenu: React.FC<AdminMenuProps> = ({ className }) => {
         align="end"
         sideOffset={10} // Moves the dropdown 10px down from the trigger
         alignOffset={-50} // Moves the dropdown 50px to the right from its aligned end position
-        onMouseEnter={handleOpen}
-        onMouseLeave={handleClose}
+        // Removed onMouseEnter and onMouseLeave
       >
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to="/admin-login">Admin?</Link>

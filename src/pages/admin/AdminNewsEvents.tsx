@@ -33,44 +33,27 @@ const AdminNewsEvents = () => {
   }, [categoryFilter, newsEvents]);
 
   const handleAddNewsEventClick = () => {
-    setEditingNewsEvent(null); // Ensure we're in "add" mode
+    setEditingNewsEvent(null);
     setIsAddNewsEventDialogOpen(true);
   };
 
   const handleEditNewsEvent = (newsEvent: NewsEvent) => {
-    setEditingNewsEvent(newsEvent); // Set the item to be edited
+    setEditingNewsEvent(newsEvent);
     setIsAddNewsEventDialogOpen(true);
   };
 
   const handleSaveNewsEvent = (newsEvent: NewsEvent) => {
     if (editingNewsEvent) {
-      updateNewsEvent(newsEvent); // Update existing item
+      updateNewsEvent(newsEvent);
     } else {
-      addNewsEvent(newsEvent); // Add new item
+      addNewsEvent(newsEvent);
     }
-    setIsAddNewsEventDialogOpen(false); // Close dialog after saving
-    setEditingNewsEvent(null); // Reset editing state
+    setIsAddNewsEventDialogOpen(false);
+    setEditingNewsEvent(null);
   };
 
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
-  const closeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpenFilterDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsFilterDropdownOpen(true);
-  };
-
-  const handleCloseFilterDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsFilterDropdownOpen(false);
-    }, 150);
-  };
+  // Removed closeTimeoutRef and handleOpenFilterDropdown/handleCloseFilterDropdown functions as they were for hover.
 
   return (
     <div className="flex-1 flex flex-col">
@@ -80,13 +63,12 @@ const AdminNewsEvents = () => {
         <h3 className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
           News & Events
         </h3>
-        <DropdownMenu open={isFilterDropdownOpen} onOpenChange={setIsFilterDropdownOpen}>
+        <DropdownMenu open={isFilterDropdownOpen} onOpenChange={setIsFilterDropdownOpen}> {/* Open/close on click */}
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
               className="px-4 py-2 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              onMouseEnter={handleOpenFilterDropdown}
-              onMouseLeave={handleCloseFilterDropdown}
+              // Removed onMouseEnter and onMouseLeave
             >
               Filter <Filter className="ml-2 h-4 w-4" />
             </Button>
@@ -96,8 +78,7 @@ const AdminNewsEvents = () => {
             align="end"
             sideOffset={10}
             alignOffset={-5}
-            onMouseEnter={handleOpenFilterDropdown}
-            onMouseLeave={handleCloseFilterDropdown}
+            // Removed onMouseEnter and onMouseLeave
           >
             {filterItems.map((item, index) => (
               <React.Fragment key={item.name}>

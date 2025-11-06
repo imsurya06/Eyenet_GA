@@ -1,10 +1,13 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Facebook, Instagram, X, Linkedin, Youtube } from 'lucide-react';
+import PrivacyPolicyDialog from './PrivacyPolicyDialog';
+import TermsAndConditionsDialog from './TermsAndConditionsDialog';
+import CookieSettingsDialog from './CookieSettingsDialog';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -33,21 +36,19 @@ const Footer = () => {
     { icon: Youtube, href: 'https://youtube.com', name: 'YouTube' },
   ];
 
-  const legalLinks = [
-    { name: 'Privacy Policy', href: '/privacy-policy' }, // Assuming these pages exist
-    { name: 'Terms of Service', href: '/terms-of-service' },
-    { name: 'Cookies Settings', href: '/cookies-settings' },
-  ];
+  // State for dialogs
+  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
+  const [isTermsAndConditionsOpen, setIsTermsAndConditionsOpen] = useState(false);
+  const [isCookieSettingsOpen, setIsCookieSettingsOpen] = useState(false);
 
   return (
     <footer className="bg-muted text-foreground pt-12 md:pt-16 lg:pt-20">
       <div className="container mx-auto px-3 md:px-8 lg:px-[80px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-x-20 pb-12 md:pb-16 lg:pb-20">
-        {/* Column 1: Logo (Newsletter section removed) */}
+        {/* Column 1: Logo */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <Link to="/" className="mb-6">
             <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10" />
           </Link>
-          {/* Newsletter section removed from here */}
         </div>
 
         {/* Column 2 & 3: Links */}
@@ -113,18 +114,23 @@ const Footer = () => {
             © {currentYear} eyenet. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center sm:justify-end gap-x-6 gap-y-2">
-            {legalLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className="text-text-small font-body text-gray-500 hover:text-primary transition-colors"
-              >
-                {link.name}
-              </Link>
-            ))}
+            <Button variant="link" onClick={() => setIsPrivacyPolicyOpen(true)} className="text-text-small font-body text-gray-500 hover:text-primary p-0 h-auto">
+              Privacy Policy
+            </Button>
+            <Button variant="link" onClick={() => setIsTermsAndConditionsOpen(true)} className="text-text-small font-body text-gray-500 hover:text-primary p-0 h-auto">
+              Terms of Service
+            </Button>
+            <Button variant="link" onClick={() => setIsCookieSettingsOpen(true)} className="text-text-small font-body text-gray-500 hover:text-primary p-0 h-auto">
+              Cookies Settings
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Dialog Components */}
+      <PrivacyPolicyDialog open={isPrivacyPolicyOpen} onOpenChange={setIsPrivacyPolicyOpen} />
+      <TermsAndConditionsDialog open={isTermsAndConditionsOpen} onOpenChange={setIsTermsAndConditionsOpen} />
+      <CookieSettingsDialog open={isCookieSettingsOpen} onOpenChange={setIsCookieSettingsOpen} />
     </footer>
   );
 };

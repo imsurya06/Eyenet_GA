@@ -16,12 +16,12 @@ import AdminAddCourseDialog from './AdminAddCourseDialog';
 import AdminAddImageDialog from './AdminAddImageDialog';
 import AdminAddInfrastructureImageDialog from './AdminAddInfrastructureImageDialog';
 import AdminAddNewsEventDialog from './AdminAddNewsEventDialog';
-import AdminAddBlogDialog from './AdminAddBlogDialog'; // Import the new dialog component
+import AdminAddBlogDialog from './AdminAddBlogDialog';
 import { useCourses } from '@/context/CourseContext';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { useInfrastructureImages } from '@/context/InfrastructureImageContext';
 import { useNewsEvents } from '@/context/NewsEventsContext';
-import { useBlogs } from '@/context/BlogContext'; // Import BlogContext
+import { useBlogs } from '@/context/BlogContext';
 import { toast } from 'sonner';
 
 const AdminAddDropdown = () => {
@@ -29,32 +29,15 @@ const AdminAddDropdown = () => {
   const { addGalleryImage } = useGalleryImages();
   const { addInfrastructureImage } = useInfrastructureImages();
   const { addNewsEvent } = useNewsEvents();
-  const { addBlog } = useBlogs(); // Use the addBlog function from context
+  const { addBlog } = useBlogs();
 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isAddCourseDialogOpen, setIsAddCourseDialogOpen] = React.useState(false);
   const [isAddImageDialogOpen, setIsAddImageDialogOpen] = React.useState(false);
   const [isAddInfrastructureImageDialogOpen, setIsAddInfrastructureImageDialogOpen] = React.useState(false);
   const [isAddNewsEventDialogOpen, setIsAddNewsEventDialogOpen] = React.useState(false);
-  const [isAddBlogDialogOpen, setIsAddBlogDialogOpen] = React.useState(false); // New state for blog dialog
-  const closeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpenDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsDropdownOpen(true);
-  };
-
-  const handleCloseDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsDropdownOpen(false);
-    }, 150);
-  };
+  const [isAddBlogDialogOpen, setIsAddBlogDialogOpen] = React.useState(false);
+  // Removed closeTimeoutRef and handleOpenDropdown/handleCloseDropdown functions as they were for hover.
 
   const handleAddCourseClick = () => {
     setIsAddCourseDialogOpen(true);
@@ -76,19 +59,18 @@ const AdminAddDropdown = () => {
     setIsDropdownOpen(false);
   };
 
-  const handleAddBlogClick = () => { // New handler for blog dialog
+  const handleAddBlogClick = () => {
     setIsAddBlogDialogOpen(true);
     setIsDropdownOpen(false);
   };
 
   return (
     <>
-      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}> {/* Open/close on click */}
         <DropdownMenuTrigger asChild>
           <Button
             className="bg-primary hover:bg-primary/90 px-6 py-3 text-text-regular rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-[1.02] !text-white"
-            onMouseEnter={handleOpenDropdown}
-            onMouseLeave={handleCloseDropdown}
+            // Removed onMouseEnter and onMouseLeave
           >
             Add <Plus className="ml-2 h-4 w-4" />
           </Button>
@@ -98,8 +80,7 @@ const AdminAddDropdown = () => {
           align="end"
           sideOffset={10}
           alignOffset={-5}
-          onMouseEnter={handleOpenDropdown}
-          onMouseLeave={handleCloseDropdown}
+          // Removed onMouseEnter and onMouseLeave
         >
           <DropdownMenuItem asChild className="cursor-pointer">
             <div
@@ -145,7 +126,6 @@ const AdminAddDropdown = () => {
           </DropdownMenuItem>
           <DropdownMenuSeparator className="my-1" />
 
-          {/* Updated "Blogs" item to open the dialog */}
           <DropdownMenuItem asChild className="cursor-pointer">
             <div
               className="flex items-center gap-2 px-2 py-2 text-text-regular font-body transition-colors hover:bg-accent hover:text-accent-foreground rounded-sm"
@@ -197,9 +177,9 @@ const AdminAddDropdown = () => {
       <AdminAddBlogDialog
         open={isAddBlogDialogOpen}
         onOpenChange={setIsAddBlogDialogOpen}
-        editingBlog={null} // Always null when opened from "Add" dropdown
+        editingBlog={null}
         onSave={(blog) => {
-          addBlog(blog); // Use the addBlog function
+          addBlog(blog);
           toast.success(`Blog "${blog.title}" added successfully!`);
         }}
       />

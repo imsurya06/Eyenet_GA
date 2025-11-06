@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Filter, LayoutGrid, Monitor, BookOpen, Building2, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { InfrastructureImage } from '@/data/infrastructureImages'; // Import InfrastructureImage interface
+import { InfrastructureImage } from '@/data/infrastructureImages';
 
 const filterItems = [
   { name: 'All Images', category: null, icon: LayoutGrid },
@@ -26,7 +26,7 @@ const AdminInfrastructure = () => {
   const categoryFilter = searchParams.get('category');
   const { infrastructureImages, deleteInfrastructureImage, addInfrastructureImage, updateInfrastructureImage } = useInfrastructureImages();
   const [isAddImageDialogOpen, setIsAddImageDialogOpen] = useState(false);
-  const [editingImage, setEditingImage] = useState<InfrastructureImage | null>(null); // State to hold the image being edited
+  const [editingImage, setEditingImage] = useState<InfrastructureImage | null>(null);
 
   const filteredImages = React.useMemo(() => {
     if (!categoryFilter) {
@@ -36,44 +36,27 @@ const AdminInfrastructure = () => {
   }, [categoryFilter, infrastructureImages]);
 
   const handleAddImageClick = () => {
-    setEditingImage(null); // Ensure we're in "add" mode
+    setEditingImage(null);
     setIsAddImageDialogOpen(true);
   };
 
   const handleEditImage = (image: InfrastructureImage) => {
-    setEditingImage(image); // Set the image to be edited
+    setEditingImage(image);
     setIsAddImageDialogOpen(true);
   };
 
   const handleSaveImage = (image: InfrastructureImage) => {
     if (editingImage) {
-      updateInfrastructureImage(image); // Update existing image
+      updateInfrastructureImage(image);
     } else {
-      addInfrastructureImage(image); // Add new image
+      addInfrastructureImage(image);
     }
-    setIsAddImageDialogOpen(false); // Close dialog after saving
-    setEditingImage(null); // Reset editing state
+    setIsAddImageDialogOpen(false);
+    setEditingImage(null);
   };
 
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
-  const closeTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpenFilterDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setIsFilterDropdownOpen(true);
-  };
-
-  const handleCloseFilterDropdown = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsFilterDropdownOpen(false);
-    }, 150);
-  };
+  // Removed closeTimeoutRef and handleOpenFilterDropdown/handleCloseFilterDropdown functions as they were for hover.
 
   return (
     <div className="flex-1 flex flex-col">
@@ -83,13 +66,12 @@ const AdminInfrastructure = () => {
         <h3 className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
           Our Infrastructure
         </h3>
-        <DropdownMenu open={isFilterDropdownOpen} onOpenChange={setIsFilterDropdownOpen}>
+        <DropdownMenu open={isFilterDropdownOpen} onOpenChange={setIsFilterDropdownOpen}> {/* Open/close on click */}
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
               className="px-4 py-2 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              onMouseEnter={handleOpenFilterDropdown}
-              onMouseLeave={handleCloseFilterDropdown}
+              // Removed onMouseEnter and onMouseLeave
             >
               Filter <Filter className="ml-2 h-4 w-4" />
             </Button>
@@ -99,8 +81,7 @@ const AdminInfrastructure = () => {
             align="end"
             sideOffset={10}
             alignOffset={-5}
-            onMouseEnter={handleOpenFilterDropdown}
-            onMouseLeave={handleCloseFilterDropdown}
+            // Removed onMouseEnter and onMouseLeave
           >
             {filterItems.map((item, index) => (
               <React.Fragment key={item.name}>

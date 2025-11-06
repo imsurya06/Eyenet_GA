@@ -19,21 +19,21 @@ import AdminMenu from './AdminMenu';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { type: 'link', name: 'Home', to: '/' }, // Changed href to to
-  { type: 'link', name: 'About', to: '/about' }, // Changed href to to
-  { type: 'link', name: 'Admissions', to: '/admissions' }, // Changed href to to
+  { type: 'link', name: 'Home', to: '/' },
+  { type: 'link', name: 'About', to: '/about' },
+  { type: 'link', name: 'Admissions', to: '/admissions' },
   {
     type: 'dropdown',
     name: 'Courses',
     heading: 'courses',
     links: [
-      { name: 'Fashion design Courses', description: 'Professional certification for creative professionals', to: '/courses/fashion-design', icon: LucideIcons.Tablet }, // Changed href to to, passed icon component
-      { name: 'Computer courses', description: 'Digital and print design curriculum', to: '/courses/computer-courses', icon: LucideIcons.Laptop }, // Changed href to to, passed icon component
+      { name: 'Fashion design Courses', description: 'Professional certification for creative professionals', to: '/courses/fashion-design', icon: LucideIcons.Tablet },
+      { name: 'Computer courses', description: 'Digital and print design curriculum', to: '/courses/computer-courses', icon: LucideIcons.Laptop },
     ],
     footer: {
       text: 'Start your design journey',
       linkText: 'Apply now',
-      linkTo: '/admissions' // Changed linkHref to linkTo
+      linkTo: '/admissions'
     }
   },
   {
@@ -41,15 +41,15 @@ const navItems = [
     name: 'Explore',
     heading: 'Explore',
     links: [
-      { name: 'Students Zone', description: 'Discover student life and resources', to: '/explore/students-zone', icon: LucideIcons.PersonStanding }, // Changed href to to, passed icon component
-      { name: 'Infrastructure', description: 'Explore our facilities and campus', to: '/explore/infrastructure', icon: LucideIcons.Home }, // Changed href to to, passed icon component
-      { name: 'Gallery', description: 'View our creative works and events', to: '/explore/gallery', icon: LucideIcons.LayoutGrid }, // Changed href to to, passed icon component
-      { name: 'News & Events', description: 'Stay updated with the latest happenings', to: '/explore/news-events', icon: LucideIcons.CalendarDays }, // Changed href to to, passed icon component
+      { name: 'Students Zone', description: 'Discover student life and resources', to: '/explore/students-zone', icon: LucideIcons.PersonStanding },
+      { name: 'Infrastructure', description: 'Explore our facilities and campus', to: '/explore/infrastructure', icon: LucideIcons.Home },
+      { name: 'Gallery', description: 'View our creative works and events', to: '/explore/gallery', icon: LucideIcons.LayoutGrid },
+      { name: 'News & Events', description: 'Stay updated with the latest happenings', to: '/explore/news-events', icon: LucideIcons.CalendarDays },
     ],
     footer: {
       text: 'Start your design journey',
       linkText: 'Apply now',
-      linkTo: '/admissions' // Changed linkHref to linkTo
+      linkTo: '/admissions'
     }
   },
 ];
@@ -61,29 +61,11 @@ const Navbar = () => {
   const [exploreOpen, setExploreOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
-  const coursesCloseTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const exploreCloseTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleOpen = (setOpen: React.Dispatch<React.SetStateAction<boolean>>, closeTimeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>) => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-    setOpen(true);
-  };
-
-  const handleClose = (setOpen: React.Dispatch<React.SetStateAction<boolean>>, closeTimeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>) => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-    }
-    closeTimeoutRef.current = setTimeout(() => {
-      setOpen(false);
-    }, 150);
-  };
+  // Removed closeTimeoutRef and handleOpen/handleClose functions as they were for hover.
 
   // Determine if a dropdown's sub-links are active
-  const isDropdownPathActive = (links: { to: string }[]) => { // Changed href to to
-    return links.some(link => location.pathname.startsWith(link.to)); // Changed href to to
+  const isDropdownPathActive = (links: { to: string }[]) => {
+    return links.some(link => location.pathname.startsWith(link.to));
   };
 
   const coursesItem = navItems.find(item => item.name === 'Courses' && item.type === 'dropdown');
@@ -110,7 +92,7 @@ const Navbar = () => {
                   item.type === 'link' ? (
                     <NavLink
                       key={item.name}
-                      to={item.to} // Using 'to'
+                      to={item.to}
                       className={({ isActive }) =>
                         cn(
                           "text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
@@ -124,23 +106,9 @@ const Navbar = () => {
                     <DropdownMenu
                       key={item.name}
                       open={item.name === 'Courses' ? coursesOpen : exploreOpen}
-                      onOpenChange={(newOpenState) => {
-                        if (!newOpenState) {
-                          if (item.name === 'Courses') handleClose(setCoursesOpen, coursesCloseTimeoutRef);
-                          else handleClose(setExploreOpen, exploreCloseTimeoutRef);
-                        }
-                      }}
+                      onOpenChange={item.name === 'Courses' ? setCoursesOpen : setExploreOpen} // Open/close on click
                     >
-                      <DropdownMenuTrigger asChild
-                        onMouseEnter={() => {
-                          if (item.name === 'Courses') handleOpen(setCoursesOpen, coursesCloseTimeoutRef);
-                          else handleOpen(setExploreOpen, exploreCloseTimeoutRef);
-                        }}
-                        onMouseLeave={() => {
-                          if (item.name === 'Courses') handleClose(setCoursesOpen, coursesCloseTimeoutRef);
-                          else handleClose(setExploreOpen, exploreCloseTimeoutRef);
-                        }}
-                      >
+                      <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           className={cn(
@@ -157,14 +125,7 @@ const Navbar = () => {
                       <DropdownMenuContent
                         className="w-80 p-4 bg-muted data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-300"
                         align="start"
-                        onMouseEnter={() => {
-                          if (item.name === 'Courses') handleOpen(setCoursesOpen, coursesCloseTimeoutRef);
-                          else handleOpen(setExploreOpen, exploreCloseTimeoutRef);
-                        }}
-                        onMouseLeave={() => {
-                          if (item.name === 'Courses') handleClose(setCoursesOpen, coursesCloseTimeoutRef);
-                          else handleClose(setExploreOpen, coursesCloseTimeoutRef);
-                        }}
+                        // Removed onMouseEnter and onMouseLeave
                       >
                         {item.heading && (
                           <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
@@ -175,10 +136,10 @@ const Navbar = () => {
                           {item.links.map((link) => (
                             <CourseDropdownMenuItem
                               key={link.name}
-                              to={link.to} // Using 'to'
+                              to={link.to}
                               title={link.name}
                               description={link.description}
-                              icon={link.icon} // Passing icon component directly
+                              icon={link.icon}
                             />
                           ))}
                         </div>
@@ -187,7 +148,7 @@ const Navbar = () => {
                             <DropdownMenuSeparator className="my-2" />
                             <div className="px-3 py-2 text-sm">
                               {item.footer.text}{' '}
-                              <Link to={item.footer.linkTo} className="text-primary hover:underline font-normal"> {/* Using linkTo */}
+                              <Link to={item.footer.linkTo} className="text-primary hover:underline font-normal">
                                 {item.footer.linkText}
                               </Link>
                             </div>
@@ -208,7 +169,7 @@ const Navbar = () => {
               <Button variant="default" className="hover:animate-shake">
                 Apply
               </Button>
-              <AdminMenu /> {/* AdminMenu is rendered only on desktop */}
+              <AdminMenu />
             </div>
           </>
         )}
@@ -225,8 +186,8 @@ const Navbar = () => {
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
               {/* Logo inside the SheetContent */}
               <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white">
-                <Link to="/" onClick={() => setIsSheetOpen(false)} className="w-full flex justify-center">
-                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="max-h-16 w-auto object-contain" /> {/* Changed h-16 to max-h-16 and added w-auto */}
+                <Link to="/" onClick={() => setIsSheetOpen(false)} className="flex justify-center">
+                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="max-h-16 w-auto object-contain" />
                 </Link>
               </div>
               <nav className="flex flex-col gap-4 pt-6">
@@ -234,7 +195,7 @@ const Navbar = () => {
                   item.type === 'link' ? (
                     <NavLink
                       key={item.name}
-                      to={item.to} // Using 'to'
+                      to={item.to}
                       onClick={() => setIsSheetOpen(false)}
                       className={({ isActive }) =>
                         cn(
@@ -261,7 +222,7 @@ const Navbar = () => {
                         {item.links.map((link) => (
                           <NavLink
                             key={link.name}
-                            to={link.to} // Using 'to'
+                            to={link.to}
                             onClick={() => setIsSheetOpen(false)}
                             className={({ isActive }) =>
                               cn(
