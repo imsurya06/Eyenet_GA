@@ -30,7 +30,6 @@ import { useCourses } from '@/context/CourseContext';
 import { toast } from 'sonner';
 import { Course } from '@/data/courses';
 import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
-import LazyImage from './LazyImage'; // Import LazyImage
 
 interface AdminAddCourseDialogProps {
   open: boolean;
@@ -362,7 +361,7 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
               <FormControl>
                 <Label htmlFor="image-upload" className="flex flex-col items-center justify-center w-full h-48 border border-input bg-muted rounded-md cursor-pointer hover:bg-accent transition-colors">
                   {courseImagePreview ? (
-                    <LazyImage src={courseImagePreview} alt="Course Preview" className="h-full w-full object-cover object-top rounded-md" />
+                    <img src={courseImagePreview} alt="Course Preview" className="h-full w-full object-cover object-top rounded-md" />
                   ) : (
                     <>
                       <ImagePlus className="h-8 w-8 mb-2 text-gray-500" />

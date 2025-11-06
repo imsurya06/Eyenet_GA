@@ -15,7 +15,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import LazyImage from './LazyImage'; // Import LazyImage
 
 interface AdminInfrastructureImageCardProps {
   image: InfrastructureImage;
@@ -27,7 +26,7 @@ const AdminInfrastructureImageCard: React.FC<AdminInfrastructureImageCardProps> 
   return (
     <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
       <div className="w-full h-48 overflow-hidden">
-        <LazyImage
+        <img
           src={image.src}
           alt={image.alt}
           className="w-full h-full object-cover object-center"

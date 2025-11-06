@@ -2,7 +2,6 @@
 
 import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
-import LazyImage from './LazyImage'; // Import LazyImage
 
 const InfrastructureImageGridSection = () => {
   return (
@@ -24,19 +23,19 @@ const InfrastructureImageGridSection = () => {
           <div className="flex flex-col gap-6">
             <AnimateOnScroll delay={300}>
               <div className="w-full h-[250px] overflow-hidden rounded-lg shadow-md">
-                <LazyImage src="/images/pexels-pixabay-256491.jpg" alt="Computer Lab" className="w-full h-full object-cover object-center" />
+                <img src="/images/pexels-pixabay-256491.jpg" alt="Computer Lab" className="w-full h-full object-cover object-center" />
               </div>
             </AnimateOnScroll>
-            <AnimateOnScroll delay={375}> {/* Adjusted delay */}
+            <AnimateOnScroll delay={400}>
               <div className="w-full h-[250px] overflow-hidden rounded-lg shadow-md">
-                <LazyImage src="/images/pexels-tima-miroshnichenko-6550407.jpg" alt="Classroom" className="w-full h-full object-cover object-center" />
+                <img src="/images/pexels-tima-miroshnichenko-6550407.jpg" alt="Classroom" className="w-full h-full object-cover object-center" />
               </div>
             </AnimateOnScroll>
           </div>
 
           {/* Right Column - Contains one tall image */}
-          <AnimateOnScroll delay={450} className="w-full h-[524px] overflow-hidden rounded-lg shadow-md"> {/* Adjusted height to match stacked images + gap */}
-            <LazyImage src="/images/pexels-pixabay-356065.jpg" alt="Library" className="w-full h-full object-cover object-center" />
+          <AnimateOnScroll delay={500} className="w-full h-[524px] overflow-hidden rounded-lg shadow-md"> {/* Adjusted height to match stacked images + gap */}
+            <img src="/images/pexels-pixabay-356065.jpg" alt="Library" className="w-full h-full object-cover object-center" />
           </AnimateOnScroll>
         </div>
       </div>

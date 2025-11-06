@@ -16,7 +16,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"; // Import AlertDialog components
-import LazyImage from './LazyImage'; // Import LazyImage
 
 interface AdminCourseCardProps {
   course: Course;
@@ -28,7 +27,7 @@ const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete, onE
   return (
     <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
       <div className="w-full h-48 overflow-hidden">
-        <LazyImage
+        <img
           src={course.image}
           alt={course.title}
           className="w-full h-full object-cover object-top"

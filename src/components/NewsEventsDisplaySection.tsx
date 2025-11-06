@@ -5,7 +5,6 @@ import { useNewsEvents } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
 import { CalendarDays, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom'; // Assuming we might want to link to individual news/event pages later
-import LazyImage from './LazyImage'; // Import LazyImage
 
 const NewsEventsDisplaySection = () => {
   const { newsEvents } = useNewsEvents();
@@ -38,11 +37,11 @@ const NewsEventsDisplaySection = () => {
               });
 
               return (
-                <AnimateOnScroll key={item.id} delay={300 + index * 75}> {/* Reduced delay increment */}
+                <AnimateOnScroll key={item.id} delay={300 + index * 100}>
                   <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col h-full">
                     {item.image && (
                       <div className="w-full h-48 overflow-hidden">
-                        <LazyImage
+                        <img
                           src={item.image}
                           alt={item.title}
                           className="w-full h-full object-cover object-top"

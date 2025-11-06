@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Star, ArrowRight } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useTestimonials } from '@/context/TestimonialContext'; // Import useTestimonials
-import LazyImage from './LazyImage'; // Import LazyImage
 
 const TestimonialsSection = () => {
   const { testimonials, loading } = useTestimonials(); // Use the context
@@ -51,7 +50,7 @@ const TestimonialsSection = () => {
             </AnimateOnScroll>
           ) : approvedTestimonials.length > 0 ? (
             approvedTestimonials.map((testimonial, index) => (
-              <AnimateOnScroll key={testimonial.id} delay={400 + index * 75}> {/* Reduced delay increment */}
+              <AnimateOnScroll key={testimonial.id} delay={400 + index * 100}>
                 <div className="bg-muted p-6 rounded-lg shadow-sm flex flex-col justify-between items-center text-center md:items-start md:text-left">
                   <div className="mb-4">
                     <div className="flex items-center mb-3 justify-center md:justify-start">
@@ -65,7 +64,7 @@ const TestimonialsSection = () => {
                   </div>
                   <div className="flex flex-col items-center md:flex-row md:items-center mt-4">
                     {/* Placeholder avatar - you might want to add an avatar field to your testimonial data */}
-                    <LazyImage
+                    <img
                       src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${testimonial.name}`}
                       alt={testimonial.name}
                       className="h-10 w-10 rounded-full mb-2 md:mb-0 md:mr-3 object-cover"

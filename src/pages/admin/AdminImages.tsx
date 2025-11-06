@@ -2,7 +2,6 @@
 import React from 'react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import AdminHeader from '@/components/AdminHeader';
-import LazyImage from '@/components/LazyImage'; // Import LazyImage
 
 const AdminImages = () => {
   return (

@@ -11,7 +11,6 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import AnimateOnScroll from './AnimateOnScroll';
-import LazyImage from './LazyImage'; // Import LazyImage
 
 const InfrastructureHeroSection = () => {
   const infrastructureImages = [
@@ -58,7 +57,7 @@ const InfrastructureHeroSection = () => {
                   <div className="p-1">
                     <Card className="border-none shadow-lg">
                       <CardContent className="flex aspect-video items-center justify-center p-0 overflow-hidden rounded-lg">
-                        <LazyImage
+                        <img
                           src={image.src}
                           alt={image.alt}
                           className="w-full h-full object-cover object-center"
