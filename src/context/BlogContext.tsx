@@ -29,7 +29,6 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         .order('date', { ascending: false }); // Order by date, newest first
 
       if (error) {
-        console.error('Error fetching blogs:', error);
         toast.error('Failed to load blogs.');
         setBlogs(initialBlogs); // Fallback to initial data if Supabase fails
       } else {
@@ -50,7 +49,6 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       .select(); // Select the inserted data to get any default values/timestamps
 
     if (error) {
-      console.error('Error adding blog:', error);
       toast.error('Failed to add blog.');
     } else if (data && data.length > 0) {
       setBlogs(prevBlogs => [...prevBlogs, data[0]]);
@@ -65,7 +63,6 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting blog:', error);
       toast.error('Failed to delete blog.');
     } else {
       setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
@@ -81,7 +78,6 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       .select(); // Select the updated data
 
     if (error) {
-      console.error('Error updating blog:', error);
       toast.error('Failed to update blog.');
     } else if (data && data.length > 0) {
       setBlogs(prevBlogs =>

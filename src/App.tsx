@@ -25,8 +25,7 @@ import AdminGallery from "./pages/admin/AdminGallery";
 import AdminInfrastructure from "./pages/admin/AdminInfrastructure";
 import AdminNewsEvents from "./pages/admin/AdminNewsEvents";
 import AdminBlogs from "./pages/admin/AdminBlogs";
-import AdminImages from "./pages/admin/AdminImages"; // Import the new AdminImages page
-import AdminTestimonials from "./pages/admin/AdminTestimonials"; // Import AdminTestimonials
+import AdminTestimonials from "./pages/admin/AdminTestimonials";
 import Blogs from "./pages/Blogs";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -35,7 +34,7 @@ import { GalleryImageProvider } from "./context/GalleryImageContext";
 import { InfrastructureImageProvider } from "./context/InfrastructureImageContext";
 import { NewsEventsProvider } from "./context/NewsEventsContext";
 import { BlogProvider } from "./context/BlogContext";
-import { TestimonialProvider } from "./context/TestimonialContext"; // Import TestimonialProvider
+import { TestimonialProvider } from "./context/TestimonialContext";
 
 const queryClient = new QueryClient();
 
@@ -76,7 +75,7 @@ const App = () => {
               <InfrastructureImageProvider>
                 <NewsEventsProvider>
                   <BlogProvider>
-                    <TestimonialProvider> {/* Wrap with TestimonialProvider */}
+                    <TestimonialProvider>
                       <ConditionalNavbar />
                       <Routes>
                         <Route path="/" element={<Index />} />
@@ -105,8 +104,7 @@ const App = () => {
                           <Route path="infrastructure" element={<AdminInfrastructure />} />
                           <Route path="news-events" element={<AdminNewsEvents />} />
                           <Route path="blogs" element={<AdminBlogs />} />
-                          <Route path="images" element={<AdminImages />} />
-                          <Route path="testimonials" element={<AdminTestimonials />} /> {/* New route */}
+                          <Route path="testimonials" element={<AdminTestimonials />} />
                         </Route>
 
                         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
