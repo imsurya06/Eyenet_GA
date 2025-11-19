@@ -37,9 +37,9 @@ const ImpactByNumbersSection = () => {
               autoPlay
               // poster="/public/placeholder.svg"
               className="w-full h-full object-cover"
-              src="videos/impact-video.mp4"
+              src="/videos/impact-video.mp4"
             >
-              <source src="videos/impact-video.mp4" type="video/mp4" />
+              <source src="/videos/impact-video.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
