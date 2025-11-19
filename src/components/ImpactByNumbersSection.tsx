@@ -31,10 +31,10 @@ const ImpactByNumbersSection = () => {
         <AnimateOnScroll delay={400} className="w-full lg:w-1/2">
           <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
             <video
-                 src={"videos/impact-video.mp4"}
-                 autoPlay
-                 controls={true}
-                 loop
+                  src={"videos/impact-video.mp4"}
+                  autoPlay
+                  controls={true}
+                  loop
                   playsInline
                   onPlay={() => console.log("play start")}
                   onPause={() => console.log("pause")}
