@@ -61,6 +61,8 @@ const Navbar = () => {
   const [exploreOpen, setExploreOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
+  // Removed closeTimeoutRef and handleOpen/handleClose functions as they were for hover.
+
   // Determine if a dropdown's sub-links are active
   const isDropdownPathActive = (links: { to: string }[]) => {
     return links.some(link => location.pathname.startsWith(link.to));
@@ -74,10 +76,10 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2">
-      <div className="flex h-20 items-center justify-between px-3 md:px-8 lg:px-[80px]"> {/* Increased height to h-20 */}
+      <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-12 md:h-16" /> {/* Increased logo height */}
+          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10 md:h-14" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -93,7 +95,7 @@ const Navbar = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "text-text-medium font-normal transition-colors hover:text-primary px-4 py-2 rounded-md", // Changed to text-text-medium
+                          "text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
                           isActive && "text-primary"
                         )
                       }
@@ -111,7 +113,7 @@ const Navbar = () => {
                           variant="ghost"
                           className={cn(
                             "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                            "!text-text-medium", // Changed to text-text-medium
+                            "!text-medium",
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
@@ -144,7 +146,7 @@ const Navbar = () => {
                         {item.footer && (
                           <>
                             <DropdownMenuSeparator className="my-2" />
-                            <div className="px-3 py-2 text-text-medium"> {/* Changed to text-text-medium */}
+                            <div className="px-3 py-2 text-sm">
                               {item.footer.text}{' '}
                               <Link to={item.footer.linkTo} className="text-primary hover:underline font-normal">
                                 {item.footer.linkText}
@@ -161,10 +163,10 @@ const Navbar = () => {
 
             {/* Buttons - Right aligned */}
             <div className="hidden md:flex items-center space-x-4">
-              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground text-text-medium"> {/* Changed to text-text-medium */}
+              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 <Link to="/contact">Contact</Link>
               </Button>
-              <Button variant="default" className="hover:animate-shake text-text-medium"> {/* Changed to text-text-medium */}
+              <Button variant="default" className="hover:animate-shake">
                 Apply
               </Button>
               <AdminMenu />
@@ -197,7 +199,7 @@ const Navbar = () => {
                       onClick={() => setIsSheetOpen(false)}
                       className={({ isActive }) =>
                         cn(
-                          "text-xl font-normal hover:text-primary", // Changed to text-xl
+                          "text-lg font-normal hover:text-primary",
                           isActive ? "text-primary" : "text-muted-foreground"
                         )
                       }
@@ -208,7 +210,7 @@ const Navbar = () => {
                     <React.Fragment key={item.name}>
                       <span
                         className={cn(
-                          "text-xl font-normal", // Changed to text-xl
+                          "text-lg font-normal",
                           (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
                           (item.name === 'Explore' && isExplorePathActive) && "text-primary",
                           !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
@@ -224,7 +226,7 @@ const Navbar = () => {
                             onClick={() => setIsSheetOpen(false)}
                             className={({ isActive }) =>
                               cn(
-                                "text-lg hover:text-primary", // Changed to text-lg
+                                "text-base hover:text-primary",
                                 isActive ? "text-primary" : "text-muted-foreground"
                               )
                             }
@@ -236,10 +238,10 @@ const Navbar = () => {
                     </React.Fragment>
                   )
                 ))}
-                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-text-medium"> {/* Changed to text-text-medium */}
+                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
                 </Button>
-                <Button variant="default" className="mt-2 hover:animate-shake text-text-medium" onClick={() => setIsSheetOpen(false)}> {/* Changed to text-text-medium */}
+                <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}>
                   Apply
                 </Button>
                 {/* AdminMenu is intentionally NOT rendered here for mobile */}
