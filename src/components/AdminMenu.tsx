@@ -29,8 +29,10 @@ const AdminMenu: React.FC<AdminMenuProps> = ({ className }) => {
           className={cn("h-8 w-8", className)}
           // Removed onMouseEnter and onMouseLeave
         >
-          <MoreVertical className="h-5 w-5" />
-          <span className="sr-only">Admin menu</span>
+          <span> {/* Wrap children in a span */}
+            <MoreVertical className="h-5 w-5" />
+            <span className="sr-only">Admin menu</span>
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

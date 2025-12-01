@@ -118,8 +118,10 @@ const Navbar = () => {
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
                         >
-                          {item.name}
-                          <ChevronDown className="ml-1 h-4 w-4" />
+                          <span> {/* Wrap children in a span */}
+                            {item.name}
+                            <ChevronDown className="ml-1 h-4 w-4" />
+                          </span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent
@@ -179,8 +181,10 @@ const Navbar = () => {
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle navigation menu</span>
+                <span> {/* Wrap children in a span */}
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle navigation menu</span>
+                </span>
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
