@@ -62,16 +62,20 @@ const AdminBlogCard: React.FC<AdminBlogCardProps> = ({ blog, onDelete, onEdit })
         </p>
         <div className="flex items-center gap-2 mt-auto">
           <Button
-            variant="default" // Changed to default variant
+            variant="outline" // Reverted to outline variant
             size="sm"
-            className="flex-1 bg-primary hover:bg-primary/90 !text-white" // Updated classes for solid maroon background
+            className="flex-1 border-primary text-primary hover:bg-primary/10" // Reverted classes for outlined primary
             onClick={() => onEdit(blog)}
           >
             <Pencil className="h-4 w-4 mr-2" /> Edit
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm" className="flex-1">
+              <Button
+                variant="default" // Changed to default variant
+                size="sm"
+                className="flex-1 bg-primary hover:bg-primary/90 !text-white" // Updated classes for solid maroon background
+              >
                 <Trash2 className="h-4 w-4 mr-2" /> Delete
               </Button>
             </AlertDialogTrigger>
