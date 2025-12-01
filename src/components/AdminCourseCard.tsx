@@ -45,9 +45,9 @@ const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete, onE
         </p>
         <div className="flex items-center gap-2 mt-auto">
           <Button
-            variant="outline"
+            variant="default" // Changed to default variant
             size="sm"
-            className="flex-1 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            className="flex-1 bg-primary hover:bg-primary/90 !text-white" // Updated classes for solid maroon background
             onClick={() => onEdit(course)} // Call onEdit with the current course
           >
             <Pencil className="h-4 w-4 mr-2" /> Edit
