@@ -89,12 +89,12 @@ export default {
         'h5-mobile': ['1.25rem', { lineHeight: '140%' }], // 20px
         'h6-mobile': ['1.125rem', { lineHeight: '140%' }], // 18px
 
-        // Body Text Sizes
-        'text-large': ['1.375rem', { lineHeight: '160%' }], // 22px
-        'text-medium': ['1.125rem', { lineHeight: '160%' }], // 18px
-        'text-regular': ['1rem', { lineHeight: '160%' }], // 16px
-        'text-small': ['0.875rem', { lineHeight: '160%' }], // 14px
-        'text-tiny': ['0.75rem', { lineHeight: '160%' }], // 12px
+        // Body Text Sizes (Increased by ~2px each)
+        'text-large': ['1.5rem', { lineHeight: '160%' }], // 24px
+        'text-medium': ['1.25rem', { lineHeight: '160%' }], // 20px
+        'text-regular': ['1.125rem', { lineHeight: '160%' }], // 18px
+        'text-small': ['1rem', { lineHeight: '160%' }], // 16px
+        'text-tiny': ['0.875rem', { lineHeight: '160%' }], // 14px
       },
       keyframes: {
         "accordion-down": {
