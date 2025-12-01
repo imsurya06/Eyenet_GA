@@ -93,7 +93,7 @@ const Navbar = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "text-medium font-normal transition-colors hover:text-primary px-4 py-2 rounded-md", // Changed to text-medium
+                          "text-large font-normal transition-colors hover:text-primary px-4 py-2 rounded-md", // Changed to text-large
                           isActive && "text-primary"
                         )
                       }
@@ -111,7 +111,7 @@ const Navbar = () => {
                           variant="ghost"
                           className={cn(
                             "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                            "text-medium", // Changed to text-medium
+                            "text-large", // Changed to text-large
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
