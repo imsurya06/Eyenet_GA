@@ -31,24 +31,21 @@ const CourseDropdownMenuItem = React.forwardRef<
         }
         {...props}
       >
-        {/* Wrapped the icon and text content in a single div */}
-        <div className="flex items-start gap-3">
-          {IconComponent ? ( // Render IconComponent if it exists
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <IconComponent className="h-5 w-5" />
-            </div>
-          ) : (
-            // Fallback for when IconComponent is not provided
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-red-500 text-white">
-              ?
-            </div>
-          )}
-          <div className="flex flex-col justify-center h-[3.5rem]">
-            <p className="text-sm font-normal leading-none">{title}</p>
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-              {description || '\u00A0'}
-            </p>
+        {IconComponent ? ( // Render IconComponent if it exists
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <IconComponent className="h-5 w-5" />
           </div>
+        ) : (
+          // Fallback for when IconComponent is not provided
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-red-500 text-white">
+            ?
+          </div>
+        )}
+        <div className="flex flex-col justify-center h-[3.5rem]">
+          <p className="text-sm font-normal leading-none">{title}</p>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {description || '\u00A0'}
+          </p>
         </div>
       </NavLink>
     </DropdownMenuItem>

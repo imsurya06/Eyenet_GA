@@ -76,7 +76,7 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2">
-      <div className="flex h-20 items-center justify-between px-3 md:px-8 lg:px-[80px]"> {/* Increased height to h-20 */}
+      <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10 md:h-14" />
@@ -95,7 +95,7 @@ const Navbar = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "text-text-medium font-normal transition-colors hover:text-primary px-4 py-2 rounded-md", // Changed to text-text-medium
+                          "text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
                           isActive && "text-primary"
                         )
                       }
@@ -113,15 +113,13 @@ const Navbar = () => {
                           variant="ghost"
                           className={cn(
                             "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                            "!text-large", // Changed to !text-large
+                            "!text-medium",
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
                         >
-                          <span> {/* Wrap children in a span */}
-                            {item.name}
-                            <ChevronDown className="ml-1 h-4 w-4" />
-                          </span>
+                          {item.name}
+                          <ChevronDown className="ml-1 h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent
@@ -165,10 +163,10 @@ const Navbar = () => {
 
             {/* Buttons - Right aligned */}
             <div className="hidden md:flex items-center space-x-4">
-              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 text-text-medium"> {/* Changed to text-text-medium */}
+              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                 <Link to="/contact">Contact</Link>
               </Button>
-              <Button variant="default" className="hover:animate-shake px-6 py-3 text-text-medium"> {/* Changed to text-text-medium */}
+              <Button variant="default" className="hover:animate-shake">
                 Apply
               </Button>
               <AdminMenu />
@@ -181,10 +179,8 @@ const Navbar = () => {
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
-                <span> {/* Wrap children in a span */}
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Toggle navigation menu</span>
-                </span>
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
@@ -203,7 +199,7 @@ const Navbar = () => {
                       onClick={() => setIsSheetOpen(false)}
                       className={({ isActive }) =>
                         cn(
-                          "text-xl font-normal hover:text-primary", // Changed to text-xl
+                          "text-lg font-normal hover:text-primary",
                           isActive ? "text-primary" : "text-muted-foreground"
                         )
                       }
@@ -214,7 +210,7 @@ const Navbar = () => {
                     <React.Fragment key={item.name}>
                       <span
                         className={cn(
-                          "text-xl font-normal", // Changed to text-xl
+                          "text-lg font-normal",
                           (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
                           (item.name === 'Explore' && isExplorePathActive) && "text-primary",
                           !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
@@ -230,7 +226,7 @@ const Navbar = () => {
                             onClick={() => setIsSheetOpen(false)}
                             className={({ isActive }) =>
                               cn(
-                                "text-lg hover:text-primary", // Changed to text-lg
+                                "text-base hover:text-primary",
                                 isActive ? "text-primary" : "text-muted-foreground"
                               )
                             }
@@ -242,10 +238,10 @@ const Navbar = () => {
                     </React.Fragment>
                   )
                 ))}
-                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 text-text-medium"> {/* Added text-text-medium */}
+                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
                 </Button>
-                <Button variant="default" className="mt-2 hover:animate-shake px-6 py-3 text-text-medium" onClick={() => setIsSheetOpen(false)}> {/* Added text-text-medium */}
+                <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}>
                   Apply
                 </Button>
                 {/* AdminMenu is intentionally NOT rendered here for mobile */}

@@ -73,9 +73,7 @@ const AdminInfrastructure = () => {
               className="px-4 py-2 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground"
               // Removed onMouseEnter and onMouseLeave
             >
-              <span> {/* Wrap children in a span */}
-                Filter <Filter className="ml-2 h-4 w-4" />
-              </span>
+              Filter <Filter className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -103,10 +101,8 @@ const AdminInfrastructure = () => {
                       setIsFilterDropdownOpen(false);
                     }}
                   >
-                    <span> {/* Wrap children in a span */}
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.name}</span>
-                    </span>
+                    <item.icon className="h-5 w-5" />
+                    <span>{item.name}</span>
                   </Button>
                 </DropdownMenuItem>
                 {index < filterItems.length - 1 && <DropdownMenuSeparator className="my-1" />}
