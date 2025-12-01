@@ -28,7 +28,7 @@
     --accent: 210 30% 90%; /* Slightly darker grey for hover effect */
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 100% 50%; /* Pure Red for danger */
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
@@ -76,7 +76,7 @@
     --accent: 217.2 25% 25%; /* Slightly lighter grey for hover effect in dark mode */
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 100% 50%; /* Pure Red for danger */
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
