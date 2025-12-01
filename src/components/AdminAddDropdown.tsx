@@ -72,7 +72,9 @@ const AdminAddDropdown = () => {
             className="bg-primary hover:bg-primary/90 px-6 py-3 text-text-regular rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-[1.02] !text-white"
             // Removed onMouseEnter and onMouseLeave
           >
-            Add <Plus className="ml-2 h-4 w-4" />
+            <span> {/* Wrap children in a span */}
+              Add <Plus className="ml-2 h-4 w-4" />
+            </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
