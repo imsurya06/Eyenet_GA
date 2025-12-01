@@ -76,7 +76,7 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2">
-      <div className="flex h-16 items-center justify-between px-3 md:px-8 lg:px-[80px]">
+      <div className="flex h-20 items-center justify-between px-3 md:px-8 lg:px-[80px]"> {/* Increased height to h-20 */}
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10 md:h-14" />
@@ -95,7 +95,7 @@ const Navbar = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
+                          "text-text-medium font-normal transition-colors hover:text-primary px-4 py-2 rounded-md", // Changed to text-text-medium
                           isActive && "text-primary"
                         )
                       }
@@ -113,7 +113,7 @@ const Navbar = () => {
                           variant="ghost"
                           className={cn(
                             "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                            "!text-medium",
+                            "!text-large", // Changed to !text-large
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
@@ -163,10 +163,10 @@ const Navbar = () => {
 
             {/* Buttons - Right aligned */}
             <div className="hidden md:flex items-center space-x-4">
-              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 text-text-medium"> {/* Changed to text-text-medium */}
                 <Link to="/contact">Contact</Link>
               </Button>
-              <Button variant="default" className="hover:animate-shake">
+              <Button variant="default" className="hover:animate-shake px-6 py-3 text-text-medium"> {/* Changed to text-text-medium */}
                 Apply
               </Button>
               <AdminMenu />
@@ -199,7 +199,7 @@ const Navbar = () => {
                       onClick={() => setIsSheetOpen(false)}
                       className={({ isActive }) =>
                         cn(
-                          "text-lg font-normal hover:text-primary",
+                          "text-xl font-normal hover:text-primary", // Changed to text-xl
                           isActive ? "text-primary" : "text-muted-foreground"
                         )
                       }
@@ -210,7 +210,7 @@ const Navbar = () => {
                     <React.Fragment key={item.name}>
                       <span
                         className={cn(
-                          "text-lg font-normal",
+                          "text-xl font-normal", // Changed to text-xl
                           (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
                           (item.name === 'Explore' && isExplorePathActive) && "text-primary",
                           !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
@@ -226,7 +226,7 @@ const Navbar = () => {
                             onClick={() => setIsSheetOpen(false)}
                             className={({ isActive }) =>
                               cn(
-                                "text-base hover:text-primary",
+                                "text-lg hover:text-primary", // Changed to text-lg
                                 isActive ? "text-primary" : "text-muted-foreground"
                               )
                             }
@@ -238,10 +238,10 @@ const Navbar = () => {
                     </React.Fragment>
                   )
                 ))}
-                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 text-text-medium"> {/* Added text-text-medium */}
                   <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
                 </Button>
-                <Button variant="default" className="mt-2 hover:animate-shake" onClick={() => setIsSheetOpen(false)}>
+                <Button variant="default" className="mt-2 hover:animate-shake px-6 py-3 text-text-medium" onClick={() => setIsSheetOpen(false)}> {/* Added text-text-medium */}
                   Apply
                 </Button>
                 {/* AdminMenu is intentionally NOT rendered here for mobile */}
