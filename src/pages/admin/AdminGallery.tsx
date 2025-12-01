@@ -101,8 +101,10 @@ const AdminGallery = () => {
                       setIsFilterDropdownOpen(false);
                     }}
                   >
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.name}</span>
+                    <span> {/* Wrap children in a span */}
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.name}</span>
+                    </span>
                   </Button>
                 </DropdownMenuItem>
                 {index < filterItems.length - 1 && <DropdownMenuSeparator className="my-1" />}
