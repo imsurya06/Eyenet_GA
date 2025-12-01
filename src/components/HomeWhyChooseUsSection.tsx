@@ -52,6 +52,12 @@ const HomeWhyChooseUsSection = () => {
                   className="w-full h-full object-cover object-center"
                 />
               </div>
+              <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-text-regular font-body text-gray-600 max-w-xs">
+                {feature.description}
+              </p>
             </div>
           </AnimateOnScroll>
         ))}
