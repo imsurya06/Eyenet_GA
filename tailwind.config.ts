@@ -89,6 +89,10 @@ export default {
         'h5-mobile': ['1.25rem', { lineHeight: '140%' }], // 20px
         'h6-mobile': ['1.125rem', { lineHeight: '140%' }], // 18px
 
+        // Custom Hero Heading Sizes
+        'hero-h1-desktop': ['5.5rem', { lineHeight: '110%' }], // Even larger for desktop
+        'hero-h1-mobile': ['3.25rem', { lineHeight: '110%' }], // Larger for mobile
+        
         // Body Text Sizes
         'text-large': ['1.375rem', { lineHeight: '160%' }], // 22px
         'text-medium': ['1.125rem', { lineHeight: '160%' }], // 18px
