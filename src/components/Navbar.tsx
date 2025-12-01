@@ -61,8 +61,6 @@ const Navbar = () => {
   const [exploreOpen, setExploreOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
-  // Removed closeTimeoutRef and handleOpen/handleClose functions as they were for hover.
-
   // Determine if a dropdown's sub-links are active
   const isDropdownPathActive = (links: { to: string }[]) => {
     return links.some(link => location.pathname.startsWith(link.to));
@@ -95,7 +93,7 @@ const Navbar = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
+                          "text-medium font-normal transition-colors hover:text-primary px-4 py-2 rounded-md", // Changed to text-medium
                           isActive && "text-primary"
                         )
                       }
@@ -113,7 +111,7 @@ const Navbar = () => {
                           variant="ghost"
                           className={cn(
                             "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                            "!text-medium",
+                            "text-medium", // Changed to text-medium
                             (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
                             (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                           )}
