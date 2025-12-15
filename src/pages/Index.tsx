@@ -12,6 +12,7 @@ import FAQSection from '@/components/FAQSection';
 import LocationSection from '@/components/LocationSection'; // Import the new component
 // Removed ImageGallerySection from here
 import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import the new component
+import CollaborationsSection from '@/components/CollaborationsSection'; // Import the new CollaborationsSection
 
 const Index = () => {
   return (
@@ -54,6 +55,9 @@ const Index = () => {
           />
         </AnimateOnScroll>
       </div>
+
+      {/* Collaborations Section */}
+      <CollaborationsSection />
 
       {/* Why Choose Us Section (Home Page Specific) */}
       <HomeWhyChooseUsSection />
