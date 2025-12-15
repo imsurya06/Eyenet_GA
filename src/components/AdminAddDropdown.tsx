@@ -10,18 +10,20 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { Plus, ListChecks, LayoutGrid, Home, Newspaper, BookOpen, Building2 } from 'lucide-react';
+import { Plus, ListChecks, LayoutGrid, Home, Newspaper, BookOpen, Building2, Users } from 'lucide-react'; // Import Users icon
 import { cn } from '@/lib/utils';
 import AdminAddCourseDialog from './AdminAddCourseDialog';
 import AdminAddImageDialog from './AdminAddImageDialog';
 import AdminAddInfrastructureImageDialog from './AdminAddInfrastructureImageDialog';
 import AdminAddNewsEventDialog from './AdminAddNewsEventDialog';
 import AdminAddBlogDialog from './AdminAddBlogDialog';
+import AdminAddFacultyDialog from './AdminAddFacultyDialog'; // Import AdminAddFacultyDialog
 import { useCourses } from '@/context/CourseContext';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { useInfrastructureImages } from '@/context/InfrastructureImageContext';
 import { useNewsEvents } from '@/context/NewsEventsContext';
 import { useBlogs } from '@/context/BlogContext';
+import { useFaculty } from '@/context/FacultyContext'; // Import useFaculty
 import { toast } from 'sonner';
 
 const AdminAddDropdown = () => {
@@ -30,6 +32,7 @@ const AdminAddDropdown = () => {
   const { addInfrastructureImage } = useInfrastructureImages();
   const { addNewsEvent } = useNewsEvents();
   const { addBlog } = useBlogs();
+  const { addFaculty } = useFaculty(); // Use addFaculty from context
 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isAddCourseDialogOpen, setIsAddCourseDialogOpen] = React.useState(false);
@@ -37,7 +40,7 @@ const AdminAddDropdown = () => {
   const [isAddInfrastructureImageDialogOpen, setIsAddInfrastructureImageDialogOpen] = React.useState(false);
   const [isAddNewsEventDialogOpen, setIsAddNewsEventDialogOpen] = React.useState(false);
   const [isAddBlogDialogOpen, setIsAddBlogDialogOpen] = React.useState(false);
-  // Removed closeTimeoutRef and handleOpenDropdown/handleCloseDropdown functions as they were for hover.
+  const [isAddFacultyDialogOpen, setIsAddFacultyDialogOpen] = React.useState(false); // State for Faculty dialog
 
   const handleAddCourseClick = () => {
     setIsAddCourseDialogOpen(true);
@@ -64,13 +67,17 @@ const AdminAddDropdown = () => {
     setIsDropdownOpen(false);
   };
 
+  const handleAddFacultyClick = () => { // New handler for Faculty
+    setIsAddFacultyDialogOpen(true);
+    setIsDropdownOpen(false);
+  };
+
   return (
     <>
-      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}> {/* Open/close on click */}
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button
             className="bg-primary hover:bg-primary/90 px-6 py-3 text-text-regular rounded-full shadow-md transition-all duration-300 ease-in-out hover:scale-[1.02] !text-white"
-            // Removed onMouseEnter and onMouseLeave
           >
             Add <Plus className="ml-2 h-4 w-4" />
           </Button>
@@ -80,7 +87,6 @@ const AdminAddDropdown = () => {
           align="end"
           sideOffset={10}
           alignOffset={-5}
-          // Removed onMouseEnter and onMouseLeave
         >
           <DropdownMenuItem asChild className="cursor-pointer">
             <div
@@ -135,6 +141,17 @@ const AdminAddDropdown = () => {
               <span>Blogs</span>
             </div>
           </DropdownMenuItem>
+          <DropdownMenuSeparator className="my-1" /> {/* Separator for new item */}
+
+          <DropdownMenuItem asChild className="cursor-pointer">
+            <div
+              className="flex items-center gap-2 px-2 py-2 text-text-regular font-body transition-colors hover:bg-accent hover:text-accent-foreground rounded-sm"
+              onClick={handleAddFacultyClick} // New Faculty option
+            >
+              <Users className="h-4 w-4" />
+              <span>Faculty</span>
+            </div>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -181,6 +198,15 @@ const AdminAddDropdown = () => {
         onSave={(blog) => {
           addBlog(blog);
           toast.success(`Blog "${blog.title}" added successfully!`);
+        }}
+      />
+      <AdminAddFacultyDialog
+        open={isAddFacultyDialogOpen}
+        onOpenChange={setIsAddFacultyDialogOpen}
+        editingFaculty={null}
+        onSave={(facultyMember) => {
+          addFaculty(facultyMember);
+          toast.success(`Faculty member "${facultyMember.name}" added successfully!`);
         }}
       />
     </>

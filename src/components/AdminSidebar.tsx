@@ -4,7 +4,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ListChecks, Image, Home, Newspaper, BookOpen, MessageSquareText } from 'lucide-react'; // Import MessageSquareText
+import { ArrowRight, ListChecks, Image, Home, Newspaper, BookOpen, MessageSquareText, Users } from 'lucide-react'; // Import Users icon
 
 interface SidebarLink {
   name: string;
@@ -19,7 +19,8 @@ const sidebarNavItems: SidebarLink[] = [
   { name: 'Infrastructure', href: '/admin-dashboard/infrastructure', icon: Home },
   { name: 'News & Events', href: '/admin-dashboard/news-events', icon: Newspaper },
   { name: 'Blogs', href: '/admin-dashboard/blogs', icon: BookOpen },
-  { name: 'Testimonials', href: '/admin-dashboard/testimonials', icon: MessageSquareText }, // New Testimonials link
+  { name: 'Testimonials', href: '/admin-dashboard/testimonials', icon: MessageSquareText },
+  { name: 'Faculty', href: '/admin-dashboard/faculty', icon: Users }, // New Faculty link
 ];
 
 const AdminSidebar = () => {

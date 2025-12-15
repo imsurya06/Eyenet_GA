@@ -27,6 +27,7 @@ import AdminNewsEvents from "./pages/admin/AdminNewsEvents";
 import AdminBlogs from "./pages/admin/AdminBlogs";
 import AdminImages from "./pages/admin/AdminImages"; // Import the new AdminImages page
 import AdminTestimonials from "./pages/admin/AdminTestimonials"; // Import AdminTestimonials
+import AdminFaculty from "./pages/admin/AdminFaculty"; // Import AdminFaculty
 import Blogs from "./pages/Blogs";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -35,7 +36,8 @@ import { GalleryImageProvider } from "./context/GalleryImageContext";
 import { InfrastructureImageProvider } from "./context/InfrastructureImageContext";
 import { NewsEventsProvider } from "./context/NewsEventsContext";
 import { BlogProvider } from "./context/BlogContext";
-import { TestimonialProvider } from "./context/TestimonialContext"; // Import TestimonialProvider
+import { TestimonialProvider } from "./context/TestimonialContext";
+import { FacultyProvider } from "./context/FacultyContext"; // Import FacultyProvider
 
 const queryClient = new QueryClient();
 
@@ -76,43 +78,46 @@ const App = () => {
               <InfrastructureImageProvider>
                 <NewsEventsProvider>
                   <BlogProvider>
-                    <TestimonialProvider> {/* Wrap with TestimonialProvider */}
-                      <ConditionalNavbar />
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/admissions" element={<Admissions />} />
-                        <Route path="/courses" element={<Courses />} />
-                        <Route path="/courses/fashion-design" element={<FashionDesignCourses />} />
-                        <Route path="/courses/fashion-design/:slug" element={<CourseDetailsPage />} />
-                        <Route path="/courses/computer-courses" element={<ComputerCourses />} />
-                        <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} />
-                        <Route path="/gallery" element={<Gallery />} />
-                        <Route path="/explore" element={<Explore />} />
-                        <Route path="/explore/students-zone" element={<StudentsZone />} />
-                        <Route path="/explore/infrastructure" element={<Infrastructure />} />
-                        <Route path="/explore/gallery" element={<Gallery />} />
-                        <Route path="/explore/news-events" element={<NewsEvents />} />
-                        <Route path="/blogs" element={<Blogs />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/admin-login" element={<AdminLogin />} />
-                        
-                        {/* Admin Dashboard with nested routes */}
-                        <Route path="/admin-dashboard" element={<AdminDashboard />}>
-                          <Route index element={<AdminCourses />} />
-                          <Route path="courses" element={<AdminCourses />} />
-                          <Route path="gallery" element={<AdminGallery />} />
-                          <Route path="infrastructure" element={<AdminInfrastructure />} />
-                          <Route path="news-events" element={<AdminNewsEvents />} />
-                          <Route path="blogs" element={<AdminBlogs />} />
-                          <Route path="images" element={<AdminImages />} />
-                          <Route path="testimonials" element={<AdminTestimonials />} /> {/* New route */}
-                        </Route>
+                    <TestimonialProvider>
+                      <FacultyProvider> {/* Wrap with FacultyProvider */}
+                        <ConditionalNavbar />
+                        <Routes>
+                          <Route path="/" element={<Index />} />
+                          <Route path="/about" element={<About />} />
+                          <Route path="/admissions" element={<Admissions />} />
+                          <Route path="/courses" element={<Courses />} />
+                          <Route path="/courses/fashion-design" element={<FashionDesignCourses />} />
+                          <Route path="/courses/fashion-design/:slug" element={<CourseDetailsPage />} />
+                          <Route path="/courses/computer-courses" element={<ComputerCourses />} />
+                          <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} />
+                          <Route path="/gallery" element={<Gallery />} />
+                          <Route path="/explore" element={<Explore />} />
+                          <Route path="/explore/students-zone" element={<StudentsZone />} />
+                          <Route path="/explore/infrastructure" element={<Infrastructure />} />
+                          <Route path="/explore/gallery" element={<Gallery />} />
+                          <Route path="/explore/news-events" element={<NewsEvents />} />
+                          <Route path="/blogs" element={<Blogs />} />
+                          <Route path="/contact" element={<Contact />} />
+                          <Route path="/admin-login" element={<AdminLogin />} />
+                          
+                          {/* Admin Dashboard with nested routes */}
+                          <Route path="/admin-dashboard" element={<AdminDashboard />}>
+                            <Route index element={<AdminCourses />} />
+                            <Route path="courses" element={<AdminCourses />} />
+                            <Route path="gallery" element={<AdminGallery />} />
+                            <Route path="infrastructure" element={<AdminInfrastructure />} />
+                            <Route path="news-events" element={<AdminNewsEvents />} />
+                            <Route path="blogs" element={<AdminBlogs />} />
+                            <Route path="images" element={<AdminImages />} />
+                            <Route path="testimonials" element={<AdminTestimonials />} />
+                            <Route path="faculty" element={<AdminFaculty />} /> {/* New route */}
+                          </Route>
 
-                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                      <ConditionalFooter />
+                          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                        <ConditionalFooter />
+                      </FacultyProvider>
                     </TestimonialProvider>
                   </BlogProvider>
                 </NewsEventsProvider>
