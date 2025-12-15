@@ -9,7 +9,7 @@ const FacultySection = () => {
   const { faculty, loading } = useFaculty();
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
+    <section id="faculty-section" className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll delay={100}>
           <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">

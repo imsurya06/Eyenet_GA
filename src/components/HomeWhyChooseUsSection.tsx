@@ -12,16 +12,19 @@ const HomeWhyChooseUsSection = () => {
       image: '/images/faculty.png',
       title: 'Experienced faculty',
       description: 'Industry veterans with real-world design expertise guide our students.',
+      linkTo: '/explore/infrastructure#faculty-section',
     },
     {
       image: '/images/facilities.png',
       title: 'State-of-the-art facilities',
       description: 'Modern studios and advanced technology support innovative learning.',
+      linkTo: '/explore/infrastructure#facilities-section',
     },
     {
       image: '/images/partnerships.png',
       title: 'Industry partnerships',
       description: 'Direct connections with leading design firms create unique opportunities.',
+      linkTo: '/#collaborations-section',
     },
   ];
 
@@ -43,22 +46,24 @@ const HomeWhyChooseUsSection = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
         {features.map((feature, index) => (
-          <AnimateOnScroll key={index} delay={200 + index * 75}> {/* Reduced delay increment */}
-            <div className="flex flex-col items-center">
-              <div className="w-full h-48 md:h-64 overflow-hidden rounded-lg mb-6">
-                <img
-                  src={feature.image}
-                  alt={feature.title}
-                  className="w-full h-full object-contain"
-                />
+          <AnimateOnScroll key={index} delay={200 + index * 75}>
+            <Link to={feature.linkTo} className="block group">
+              <div className="flex flex-col items-center p-4 rounded-lg transition-all duration-300 group-hover:shadow-lg group-hover:scale-[1.02] group-hover:bg-muted">
+                <div className="w-full h-48 md:h-64 overflow-hidden rounded-lg mb-6">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 group-hover:text-primary transition-colors">
+                  {feature.title}
+                </h3>
+                <p className="text-text-regular font-body text-gray-600 max-w-xs">
+                  {feature.description}
+                </p>
               </div>
-              <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-text-regular font-body text-gray-600 max-w-xs">
-                {feature.description}
-              </p>
-            </div>
+            </Link>
           </AnimateOnScroll>
         ))}
       </div>
