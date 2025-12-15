@@ -11,7 +11,7 @@ const ImpactByNumbersSection = () => {
   ];
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false); // State to track if video is playing
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -21,7 +21,7 @@ const ImpactByNumbersSection = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           // Play video when it enters the viewport
-          videoElement.play().catch(error => console.log("Video play interrupted:", error));
+          videoElement.play().catch(error => console.log("Video play interrupted:", error)); // Catch potential play() errors
           setIsPlaying(true);
         } else {
           // Pause video when it leaves the viewport
@@ -41,7 +41,7 @@ const ImpactByNumbersSection = () => {
         observer.unobserve(videoElement);
       }
     };
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-center">
