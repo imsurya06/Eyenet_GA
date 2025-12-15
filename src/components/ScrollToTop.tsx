@@ -7,20 +7,38 @@ const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (hash) {
-      // If there's a hash, try to scroll to the element
-      const id = hash.replace('#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        // Use a timeout to ensure the element is rendered and the page has settled
-        const timer = setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 100); // Small delay to allow page rendering
-        return () => clearTimeout(timer);
-      }
-    } else {
-      // If no hash, scroll to the top of the page
+    // Scroll to top on pathname change if no hash
+    if (!hash) {
       window.scrollTo(0, 0);
+      return;
+    }
+
+    // If there's a hash, try to scroll to the element
+    const id = hash.replace('#', '');
+    const element = document.getElementById(id);
+
+    if (element) {
+      // If element is found immediately, scroll
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If not found immediately, wait for DOM to be ready or element to appear
+      const checkElement = setInterval(() => {
+        const foundElement = document.getElementById(id);
+        if (foundElement) {
+          foundElement.scrollIntoView({ behavior: 'smooth' });
+          clearInterval(checkElement);
+        }
+      }, 100); // Check every 100ms
+
+      // Clear interval after a certain time to prevent infinite loop
+      const timeout = setTimeout(() => {
+        clearInterval(checkElement);
+      }, 2000); // Stop checking after 2 seconds
+
+      return () => {
+        clearInterval(checkElement);
+        clearTimeout(timeout);
+      };
     }
   }, [pathname, hash]); // Depend on both pathname and hash
 
