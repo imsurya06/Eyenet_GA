@@ -41,13 +41,13 @@ const OurProgramsSection = () => {
       <div className="flex flex-wrap justify-center gap-8 mb-16">
         {programs.map((program, index) => (
           <AnimateOnScroll key={index} delay={200 + index * 75}>
-            <Link to={program.href} className="block group"> {/* Wrap the card with Link */}
+            <Link to={program.href} className="block group">
               <div className="flex flex-col items-center max-w-sm">
                 <div className="w-full h-48 md:h-64 overflow-hidden rounded-lg mb-6">
                   <img
                     src={program.image}
                     alt={program.title}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 group-hover:text-primary transition-colors">

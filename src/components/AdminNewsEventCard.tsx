@@ -38,7 +38,7 @@ const AdminNewsEventCard: React.FC<AdminNewsEventCardProps> = ({ newsEvent, onDe
           <img
             src={newsEvent.image}
             alt={newsEvent.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
         </div>
       )}
@@ -60,9 +60,9 @@ const AdminNewsEventCard: React.FC<AdminNewsEventCardProps> = ({ newsEvent, onDe
         </p>
         <div className="flex items-center gap-2 mt-auto">
           <Button
-            variant="outline" // Reverted to outline variant
+            variant="outline"
             size="sm"
-            className="flex-1 border-primary text-primary hover:bg-primary/10" // Reverted classes for outlined primary
+            className="flex-1 border-primary text-primary hover:bg-primary/10"
             onClick={() => onEdit(newsEvent)}
           >
             <Pencil className="h-4 w-4 mr-2" /> Edit
@@ -70,9 +70,9 @@ const AdminNewsEventCard: React.FC<AdminNewsEventCardProps> = ({ newsEvent, onDe
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
-                variant="default" // Changed to default variant
+                variant="default"
                 size="sm"
-                className="flex-1 bg-primary hover:bg-primary/90 !text-white" // Updated classes for solid maroon background
+                className="flex-1 bg-primary hover:bg-primary/90 !text-white"
               >
                 <Trash2 className="h-4 w-4 mr-2" /> Delete
               </Button>

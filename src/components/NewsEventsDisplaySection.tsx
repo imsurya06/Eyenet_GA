@@ -4,7 +4,7 @@ import React from 'react';
 import { useNewsEvents } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
 import { CalendarDays, Newspaper } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Assuming we might want to link to individual news/event pages later
+import { Link } from 'react-router-dom';
 
 const NewsEventsDisplaySection = () => {
   const { newsEvents } = useNewsEvents();
@@ -44,7 +44,7 @@ const NewsEventsDisplaySection = () => {
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-top"
                         />
                       </div>
                     )}

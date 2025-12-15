@@ -8,8 +8,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card"; // Using Card for consistent styling
-import Autoplay from "embla-carousel-autoplay"; // Import Autoplay plugin
+import { Card, CardContent } from "@/components/ui/card";
+import Autoplay from "embla-carousel-autoplay";
 import AnimateOnScroll from './AnimateOnScroll';
 
 const GalleryCarouselSection = () => {
@@ -21,12 +21,12 @@ const GalleryCarouselSection = () => {
   ];
 
   const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: false }) // Autoplay every 3 seconds, don't stop on user interaction
+    Autoplay({ delay: 3000, stopOnInteraction: false })
   );
 
   return (
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
-      <div className="max-w-7xl mx-auto"> {/* This container now holds both text and carousel */}
+      <div className="max-w-7xl mx-auto">
         {/* Text Content - now above the carousel */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left mb-8">
           <AnimateOnScroll delay={100}>
@@ -47,7 +47,7 @@ const GalleryCarouselSection = () => {
             plugins={[plugin.current]}
             className="w-full"
             opts={{
-              loop: true, // Enable looping
+              loop: true,
             }}
           >
             <CarouselContent>
@@ -59,7 +59,7 @@ const GalleryCarouselSection = () => {
                         <img
                           src={image.src}
                           alt={image.alt}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-top"
                         />
                       </CardContent>
                     </Card>

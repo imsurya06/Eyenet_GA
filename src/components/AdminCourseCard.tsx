@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
-import { Course } from '@/data/courses'; // Import the Course interface
+import { Course } from '@/data/courses';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,12 +15,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"; // Import AlertDialog components
+} from "@/components/ui/alert-dialog";
 
 interface AdminCourseCardProps {
   course: Course;
   onDelete: (id: string) => void;
-  onEdit: (course: Course) => void; // New prop for edit action
+  onEdit: (course: Course) => void;
 }
 
 const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete, onEdit }) => {
@@ -30,7 +30,7 @@ const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete, onE
         <img
           src={course.image}
           alt={course.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-top"
         />
       </div>
       <div className="p-6 flex flex-col flex-grow">
@@ -45,19 +45,19 @@ const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete, onE
         </p>
         <div className="flex items-center gap-2 mt-auto">
           <Button
-            variant="outline" // Reverted to outline variant
+            variant="outline"
             size="sm"
-            className="flex-1 border-primary text-primary hover:bg-primary/10" // Reverted classes for outlined primary
-            onClick={() => onEdit(course)} // Call onEdit with the current course
+            className="flex-1 border-primary text-primary hover:bg-primary/10"
+            onClick={() => onEdit(course)}
           >
             <Pencil className="h-4 w-4 mr-2" /> Edit
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
-                variant="default" // Changed to default variant
+                variant="default"
                 size="sm"
-                className="flex-1 bg-primary hover:bg-primary/90 !text-white" // Updated classes for solid maroon background
+                className="flex-1 bg-primary hover:bg-primary/90 !text-white"
               >
                 <Trash2 className="h-4 w-4 mr-2" /> Delete
               </Button>

@@ -3,12 +3,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
-import { useCourses } from '@/context/CourseContext'; // Corrected import path
+import { useCourses } from '@/context/CourseContext';
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { courses } = useCourses(); // Use the hook to get courses
-  const course = courses.find(c => c.id === slug); // Find course from the hook's state
+  const { courses } = useCourses();
+  const course = courses.find(c => c.id === slug);
 
   if (!course) {
     return (
@@ -46,7 +46,7 @@ const CourseDetailsPage = () => {
       </AnimateOnScroll>
       {course.image && (
         <AnimateOnScroll isHero={true} delay={800} className="mt-8 w-full max-w-xl rounded-lg overflow-hidden shadow-lg">
-          <img src={course.image} alt={course.title} className="w-full h-auto object-cover" />
+          <img src={course.image} alt={course.title} className="w-full h-auto object-cover object-top" />
         </AnimateOnScroll>
       )}
     </div>

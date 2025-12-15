@@ -12,7 +12,7 @@ const FounderDirectorSection = () => {
           <img
             src="/images/founder-director.png"
             alt="Founder & Director"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
         </AnimateOnScroll>
 

@@ -8,7 +8,7 @@ const GalleryGridSection = () => {
     { src: '/images/img5.png', alt: 'Traditional attire model 3' },
     { src: '/images/img6.png', alt: 'Traditional attire model 4' },
     { src: '/images/img7.png', alt: 'Studio portrait model' },
-    { src: '/public/placeholder.svg', alt: 'Placeholder image' }, // Using a placeholder for the empty slots
+    { src: '/public/placeholder.svg', alt: 'Placeholder image' },
     { src: '/public/placeholder.svg', alt: 'Placeholder image' },
     { src: '/public/placeholder.svg', alt: 'Placeholder image' },
   ];
@@ -33,7 +33,7 @@ const GalleryGridSection = () => {
               <img
                 src={image.src}
                 alt={image.alt}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
             </div>
           </AnimateOnScroll>

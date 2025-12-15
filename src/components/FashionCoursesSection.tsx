@@ -16,12 +16,12 @@ const FashionCoursesSection = () => {
   return (
     <section className="py-10 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
-        <AnimateOnScroll isHero={true} delay={100}> {/* Reduced delay */}
+        <AnimateOnScroll isHero={true} delay={100}>
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground">
             Courses
           </h1>
         </AnimateOnScroll>
-        <AnimateOnScroll isHero={true} delay={200}> {/* Reduced delay */}
+        <AnimateOnScroll isHero={true} delay={200}>
           <p className="text-h4-mobile md:text-h4-desktop font-heading text-primary mb-8">
             Fashion Designing
           </p>
@@ -29,13 +29,13 @@ const FashionCoursesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {fashionCourses.map((course, index) => (
-            <AnimateOnScroll key={course.id} delay={300 + index * 75}> {/* Reduced delay increment */}
+            <AnimateOnScroll key={course.id} delay={300 + index * 75}>
               <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
                 <div className="w-full h-48 overflow-hidden">
                   <img
                     src={course.image}
                     alt={course.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">

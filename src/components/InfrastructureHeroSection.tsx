@@ -32,18 +32,18 @@ const InfrastructureHeroSection = () => {
   return (
     <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
-        <AnimateOnScroll isHero={true} delay={100}> {/* Reduced delay */}
+        <AnimateOnScroll isHero={true} delay={100}>
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">
             Infrastructure
           </h1>
         </AnimateOnScroll>
-        <AnimateOnScroll isHero={true} delay={200}> {/* Reduced delay */}
+        <AnimateOnScroll isHero={true} delay={200}>
           <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
             We have well enough infrastructure to enhance the life of students.
           </p>
         </AnimateOnScroll>
 
-        <AnimateOnScroll isHero={true} delay={300} className="w-full"> {/* Reduced delay */}
+        <AnimateOnScroll isHero={true} delay={300} className="w-full">
           <Carousel
             plugins={[plugin.current]}
             className="w-full"
@@ -60,7 +60,7 @@ const InfrastructureHeroSection = () => {
                         <img
                           src={image.src}
                           alt={image.alt}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-top"
                         />
                       </CardContent>
                     </Card>
