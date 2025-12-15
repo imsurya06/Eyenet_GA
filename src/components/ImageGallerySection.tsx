@@ -25,7 +25,7 @@ const ImageGallerySection = () => {
       </AnimateOnScroll>
       <AnimateOnScroll delay={200}>
         <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Explore a visual journey through our campus life, student projects, and memorable events.
         </p>
       </AnimateOnScroll>
 

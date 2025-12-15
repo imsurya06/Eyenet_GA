@@ -23,7 +23,7 @@ const ContactUsSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={200}>
             <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Have questions about our courses, admissions, or anything else? Reach out to us, and our team will be happy to assist you.
             </p>
           </AnimateOnScroll>
 
