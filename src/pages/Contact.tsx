@@ -93,7 +93,7 @@ const Contact = () => {
             <img
               src="/images/madurai-map.png"
               alt="Map of Eye Net Educational Academy in Madurai"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </a>
         </AnimateOnScroll>

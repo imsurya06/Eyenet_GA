@@ -70,7 +70,7 @@ const ImpactByNumbersSection = () => {
               loop
               // Removed autoPlay from here, as it's now controlled by IntersectionObserver
               // poster="/public/placeholder.svg"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               src="/videos/impact-video.mp4"
             >
               <source src="/videos/impact-video.mp4" type="video/mp4" />

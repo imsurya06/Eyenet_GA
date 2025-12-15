@@ -24,7 +24,7 @@ const MoreFashionCoursesSection = () => {
                   <img
                     src={course.image}
                     alt={course.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">

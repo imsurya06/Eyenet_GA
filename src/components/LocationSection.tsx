@@ -38,7 +38,7 @@ const LocationSection = () => {
             <img
               src="/images/madurai-map.png" // Updated to use the new image
               alt="Map of Eye Net Educational Academy in Madurai"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </a>
         </AnimateOnScroll>

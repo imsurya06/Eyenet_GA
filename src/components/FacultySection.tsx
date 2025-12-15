@@ -37,7 +37,7 @@ const FacultySection = () => {
                     <img
                       src={member.image || '/public/placeholder.svg'}
                       alt={member.name}
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-contain"
                     />
                     <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-text-tiny font-body px-2 py-1 rounded-full">
                       New Faculty

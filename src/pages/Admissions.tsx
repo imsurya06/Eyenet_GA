@@ -24,6 +24,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+
 } from '@/components/ui/form';
 import ConfettiOverlay from '@/components/ConfettiOverlay';
 import EnrollmentSuccessDialog from '@/components/EnrollmentSuccessDialog'; // Import the new dialog
@@ -68,7 +69,7 @@ const Admissions = () => {
             <img
               src="/images/poster-eyenet.png"
               alt="Photoshop Mastery Admission Open Poster"
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-contain"
             />
           </div>
         </AnimateOnScroll>
