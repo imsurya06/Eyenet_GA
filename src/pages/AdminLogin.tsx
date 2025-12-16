@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react'; // Import useState
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,18 +17,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { toast } from 'sonner'; // Using sonner for toasts
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { toast } from 'sonner';
+import { supabase } from '@/lib/supabaseClient';
+import { Eye, EyeOff } from 'lucide-react'; // Import Eye and EyeOff icons
 
 // Define the schema for the login form
 const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address.' }), // Changed from username to email
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
   password: z.string().min(1, { message: 'Password is required.' }),
-  // Removed mobile as it's not part of Supabase email/password auth
 });
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,7 +54,6 @@ const AdminLogin = () => {
 
       if (data.user) {
         toast.success("Login successful! Redirecting to admin dashboard...");
-        // Store the user's email for display purposes (or a derived username)
         localStorage.setItem('adminUsername', data.user.email || 'Admin User');
         setTimeout(() => {
           navigate('/admin-dashboard');
@@ -85,7 +85,7 @@ const AdminLogin = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="email" // Changed to email
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
@@ -94,7 +94,7 @@ const AdminLogin = () => {
                     <FormControl>
                       <Input
                         id="email"
-                        type="email" // Changed to email type
+                        type="email"
                         placeholder="admin@example.com"
                         className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
                         {...field}
@@ -112,15 +112,27 @@ const AdminLogin = () => {
                     <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
                       Password*
                     </FormLabel>
-                    <FormControl>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="••••••••"
-                        className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
-                        {...field}
-                      />
-                    </FormControl>
+                    <div className="relative"> {/* Added relative positioning for the icon */}
+                      <FormControl>
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"} // Toggle type based on state
+                          placeholder="••••••••"
+                          className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background pr-10" // Added pr-10 for icon spacing
+                          {...field}
+                        />
+                      </FormControl>
+                      <Button
+                        type="button" // Important: prevent form submission
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-gray-500 hover:bg-transparent"
+                        onClick={() => setShowPassword((prev) => !prev)} // Toggle visibility
+                      >
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                      </Button>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
