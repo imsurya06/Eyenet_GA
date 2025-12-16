@@ -41,6 +41,26 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     fetchCourses();
   }, []);
 
+  const addCourse = async (course: Course) => {
+    // Omit the 'icon' property before sending to Supabase
+    const { icon, ...coursePayload } = course;
+    // Ensure the ID is unique for Supabase
+    const courseToInsert = { ...coursePayload, id: course.id || `course-${Date.now()}` };
+
+    const { data, error } = await supabase
+      .from('courses')
+      .insert([courseToInsert])
+      .select(); // Select the inserted data to get any default values/timestamps
+
+    if (error) {
+      console.error('Error adding course:', error);
+      toast.error('Failed to add course.');
+    } else if (data && data.length > 0) {
+      setCourses(prevCourses => [...prevCourses, data[0] as Course]); // Cast back to Course for local state
+      toast.success('Course added successfully!');
+    }
+  };
+
   const deleteCourse = async (id: string) => {
     const { error } = await supabase
       .from('courses')
@@ -56,27 +76,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
-  const addCourse = async (course: Course) => {
-    // Ensure the ID is unique for Supabase
-    const courseToInsert = { ...course, id: course.id || `course-${Date.now()}` };
-    const { data, error } = await supabase
-      .from('courses')
-      .insert([courseToInsert])
-      .select(); // Select the inserted data to get any default values/timestamps
-
-    if (error) {
-      console.error('Error adding course:', error);
-      toast.error('Failed to add course.');
-    } else if (data && data.length > 0) {
-      setCourses(prevCourses => [...prevCourses, data[0]]);
-      toast.success('Course added successfully!');
-    }
-  };
-
   const updateCourse = async (updatedCourse: Course) => {
+    // Omit 'icon' property before sending to Supabase. 'created_at' is not part of the Course interface.
+    const { icon, ...coursePayload } = updatedCourse;
     const { data, error } = await supabase
       .from('courses')
-      .update(updatedCourse)
+      .update(coursePayload) // Send payload without icon
       .eq('id', updatedCourse.id)
       .select(); // Select the updated data
 
@@ -85,7 +90,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       toast.error('Failed to update course.');
     } else if (data && data.length > 0) {
       setCourses(prevCourses =>
-        prevCourses.map(course => (course.id === updatedCourse.id ? data[0] : course))
+        prevCourses.map(course => (course.id === updatedCourse.id ? data[0] as Course : course))
       );
       toast.success('Course updated successfully!');
     }
