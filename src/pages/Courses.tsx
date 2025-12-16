@@ -17,6 +17,13 @@ const Courses = () => {
     navigate(enrollLink);
   };
 
+  const truncateDescription = (description: string, maxLength: number) => {
+    if (description.length <= maxLength) {
+      return description;
+    }
+    return description.substring(0, maxLength) + '...';
+  };
+
   return (
     <div className="bg-background text-foreground">
       {/* Hero Section for All Courses */}
@@ -69,15 +76,13 @@ const Courses = () => {
                           {course.tag} / {course.category === 'fashion' ? 'Fashion' : 'Computer'}
                         </span>
                         <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden">
-                          {/* Removed inner Link, title is now part of the outer link */}
                           {course.title}
                         </h3>
                         <p className="text-text-regular font-body text-gray-600 mb-6 h-[6.4rem] overflow-hidden">
-                          {course.description.split(' Details...')[0]}
-                          {/* Keep this inner span for "Details..." if it's meant to be a separate clickable part within the description */}
-                          <span className="text-primary hover:underline ml-1">
-                            Details...
-                          </span>
+                          {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
+                          <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : 'computer-courses'}/${course.id}`} className="text-primary hover:underline ml-1" onClick={(e) => e.stopPropagation()}>
+                            more...
+                          </Link>
                         </p>
                         <div className="flex flex-col items-center gap-2 mt-auto md:flex-row md:justify-between">
                           {/* Download Brochure - this should work as is because it's a direct download */}
