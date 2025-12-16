@@ -10,8 +10,31 @@ import { CheckCircle, Clock, User, Briefcase, BookOpen, Download } from 'lucide-
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { courses } = useCourses();
+  const { courses, loading } = useCourses(); // Get loading state from context
   const course = courses.find(c => c.id === slug);
+
+  // Added console logs for debugging
+  console.log('CourseDetailsPage - Slug:', slug);
+  console.log('CourseDetailsPage - Courses (length):', courses.length);
+  console.log('CourseDetailsPage - Loading:', loading);
+  console.log('CourseDetailsPage - Found Course:', course);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+        <AnimateOnScroll isHero={true} delay={500}>
+          <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground text-center">
+            Loading Course Details...
+          </h1>
+        </AnimateOnScroll>
+        <AnimateOnScroll isHero={true} delay={600}>
+          <p className="text-text-medium font-body text-gray-600 text-center">
+            Please wait while we fetch the course information.
+          </p>
+        </AnimateOnScroll>
+      </div>
+    );
+  }
 
   if (!course) {
     return (
