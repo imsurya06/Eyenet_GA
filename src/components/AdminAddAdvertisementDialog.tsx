@@ -16,7 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ImagePlus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import *s z from 'zod';
 import {
   Form,
   FormControl,
@@ -109,7 +109,7 @@ const AdminAddAdvertisementDialog: React.FC<AdminAddAdvertisementDialogProps> = 
     }
 
     const adToSave: Advertisement = {
-      id: editingAdvertisement?.id || `ad-${Date.now()}`,
+      id: editingAdvertisement?.id || '', // Only provide ID if editing, otherwise leave empty for Supabase to generate
       title: values.title,
       description: values.description || undefined,
       image_url: imageUrl,
@@ -117,7 +117,14 @@ const AdminAddAdvertisementDialog: React.FC<AdminAddAdvertisementDialogProps> = 
       created_at: editingAdvertisement?.created_at || new Date().toISOString(),
     };
 
-    onSave(adToSave);
+    // If adding a new ad, omit the 'id' property so Supabase generates it
+    if (!editingAdvertisement) {
+      const { id, ...newAdWithoutId } = adToSave;
+      onSave(newAdWithoutId as Advertisement); // Cast back to Advertisement for context function
+    } else {
+      onSave(adToSave);
+    }
+    
     toast.success(`${editingAdvertisement ? 'Advertisement updated' : 'Advertisement added'} successfully!`);
     form.reset();
     setImagePreview(null);
