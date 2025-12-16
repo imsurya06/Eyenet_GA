@@ -1,17 +1,18 @@
 "use client";
 
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown } from 'lucide-react'; // Added Frown icon
+import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown, ArrowLeft } from 'lucide-react'; // Added ArrowLeft icon
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { courses, loading } = useCourses();
   const course = courses.find(c => c.id === slug);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   console.log('CourseDetailsPage - Slug:', slug);
   console.log('CourseDetailsPage - Courses (length):', courses.length);
@@ -61,6 +62,19 @@ const CourseDetailsPage = () => {
 
   return (
     <div className="bg-background text-foreground">
+      {/* Back Button */}
+      <div className="px-3 md:px-8 lg:px-[80px] pt-8">
+        <AnimateOnScroll delay={50}>
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)} // Use navigate(-1) to go back in history
+            className="text-text-regular font-body text-primary hover:bg-primary/10 flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Courses
+          </Button>
+        </AnimateOnScroll>
+      </div>
+
       {/* Hero Section */}
       <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] text-center">
         <div className="max-w-4xl mx-auto">
