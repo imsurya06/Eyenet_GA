@@ -65,7 +65,7 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
       courseDescription: '',
       type: 'Course',
       courseMode: 'Offline',
-      courseGenre: undefined,
+      courseGenre: undefined, // Keep as undefined to force selection for new courses
       brochureFile: undefined,
       courseImage: undefined,
       duration: '',
@@ -78,41 +78,35 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
 
   useEffect(() => {
     if (open && editingCourse) {
-      form.reset({
-        courseName: editingCourse.title,
-        courseDescription: editingCourse.description.replace(' Details...', ''),
-        type: editingCourse.tag as 'Course' | 'Others',
-        courseMode: editingCourse.enrollLink.includes('online') ? 'Online' : 'Offline',
-        courseGenre: editingCourse.category,
-        brochureFile: undefined,
-        courseImage: undefined,
-        duration: editingCourse.duration,
-        eligibility: editingCourse.eligibility,
-        learningOutcomesText: editingCourse.learningOutcomes.join('\n'),
-        careerProspectsText: editingCourse.careerProspects.join('\n'),
-        moduleTitlesText: editingCourse.modules.map(m => m.title).join('\n'),
-      });
-      setBrochureFileName(editingCourse.brochureLink !== '#' ? editingCourse.brochureLink.split('/').pop() || null : null);
-      setCourseImagePreview(editingCourse.image !== '/placeholder.svg' ? editingCourse.image : null);
+      try {
+        form.reset({
+          courseName: editingCourse.title,
+          courseDescription: editingCourse.description.replace(' Details...', ''),
+          type: editingCourse.tag as 'Course' | 'Others',
+          courseMode: editingCourse.enrollLink.includes('online') ? 'Online' : 'Offline',
+          courseGenre: editingCourse.category || 'fashion', // Provide a default if null/undefined
+          brochureFile: undefined,
+          courseImage: undefined,
+          duration: editingCourse.duration,
+          eligibility: editingCourse.eligibility,
+          learningOutcomesText: (editingCourse.learningOutcomes || []).join('\n'), // Fallback to empty array
+          careerProspectsText: (editingCourse.careerProspects || []).join('\n'), // Fallback to empty array
+          moduleTitlesText: (editingCourse.modules || []).map(m => m.title).join('\n'), // Fallback to empty array
+        });
+        setBrochureFileName(editingCourse.brochureLink !== '#' ? editingCourse.brochureLink.split('/').pop() || null : null);
+        setCourseImagePreview(editingCourse.image !== '/placeholder.svg' ? editingCourse.image : null);
+      } catch (e) {
+        console.error("Error resetting form for editing course:", e);
+        toast.error("Failed to load course for editing. Please check console for details.");
+        onOpenChange(false); // Close dialog to prevent being stuck
+      }
     } else if (open && !editingCourse) {
-      form.reset({
-        courseName: '',
-        courseDescription: '',
-        type: 'Course',
-        courseMode: 'Offline',
-        courseGenre: undefined,
-        brochureFile: undefined,
-        courseImage: undefined,
-        duration: '',
-        eligibility: '',
-        learningOutcomesText: '',
-        careerProspectsText: '',
-        moduleTitlesText: '',
-      });
+      // Reset to default values for adding a new course
+      form.reset();
       setBrochureFileName(null);
       setCourseImagePreview(null);
     }
-  }, [open, editingCourse, form]);
+  }, [open, editingCourse, form, onOpenChange]);
 
   const handleBrochureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
