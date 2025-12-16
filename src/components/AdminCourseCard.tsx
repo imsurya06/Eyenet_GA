@@ -24,24 +24,37 @@ interface AdminCourseCardProps {
 }
 
 const AdminCourseCard: React.FC<AdminCourseCardProps> = ({ course, onDelete, onEdit }) => {
+  const courseDetailPath = `/courses/${course.category === 'fashion' ? 'fashion-design' : 'computer-courses'}/${course.id}`;
+  const truncatedDescription = course.description.split(' Details...')[0];
+  const isDescriptionTruncated = truncatedDescription.length < course.description.length;
+
   return (
     <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
-      <div className="w-full h-48 overflow-hidden">
-        <img
-          src={course.image}
-          alt={course.title}
-          className="w-full h-full object-cover object-top"
-        />
-      </div>
+      <Link to={courseDetailPath} className="block group"> {/* Make the entire image area clickable */}
+        <div className="w-full h-48 overflow-hidden">
+          <img
+            src={course.image}
+            alt={course.title}
+            className="w-full h-full object-cover object-top"
+          />
+        </div>
+      </Link>
       <div className="p-6 flex flex-col flex-grow">
         <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-4 border border-input">
           {course.tag} / {course.category === 'fashion' ? 'Fashion' : 'Computer'}
         </span>
-        <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden">
-          {course.title}
-        </h3>
+        <Link to={courseDetailPath} className="block group"> {/* Make title clickable */}
+          <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden group-hover:text-primary transition-colors">
+            {course.title}
+          </h3>
+        </Link>
         <p className="text-text-regular font-body text-gray-600 mb-6 h-[6.4rem] overflow-hidden">
-          {course.description.split('Details...')[0]}
+          {truncatedDescription}
+          {isDescriptionTruncated && (
+            <Link to={courseDetailPath} className="text-primary hover:underline ml-1">
+              more...
+            </Link>
+          )}
         </p>
         <div className="flex items-center gap-2 mt-auto">
           <Button
