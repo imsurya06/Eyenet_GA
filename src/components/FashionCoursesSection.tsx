@@ -60,7 +60,7 @@ const FashionCoursesSection = () => {
                     <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden">
                       {course.title}
                     </h3>
-                    <p className="text-text-regular font-body text-gray-600 mb-6 h-[6.4rem] overflow-hidden">
+                    <p className="text-text-regular font-body text-gray-600 mb-6"> {/* Removed h-[6.4rem] overflow-hidden */}
                       {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
                       <Link to={`/courses/fashion-design/${course.id}`} className="text-primary hover:underline ml-1" onClick={(e) => e.stopPropagation()}>
                         more...
