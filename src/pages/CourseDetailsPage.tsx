@@ -1,18 +1,18 @@
 "use client";
 
 import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useParams, Link, useNavigate } from 'react-router-dom'; // Keep useNavigate for other potential uses, but won't use for this button
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown, ArrowLeft } from 'lucide-react'; // Added ArrowLeft icon
+import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown, ArrowLeft } from 'lucide-react';
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { courses, loading } = useCourses();
   const course = courses.find(c => c.id === slug);
-  const navigate = useNavigate(); // Initialize useNavigate
+  // const navigate = useNavigate(); // No longer needed for this specific button
 
   console.log('CourseDetailsPage - Slug:', slug);
   console.log('CourseDetailsPage - Courses (length):', courses.length);
@@ -37,11 +37,11 @@ const CourseDetailsPage = () => {
   }
 
   if (!course) {
-    console.error(`CourseDetailsPage: Course with slug "${slug}" not found.`); // Explicit error log
+    console.error(`CourseDetailsPage: Course with slug "${slug}" not found.`);
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 text-foreground">
         <AnimateOnScroll isHero={true} delay={500}>
-          <Frown className="h-20 w-20 text-destructive mb-6" /> {/* Prominent icon */}
+          <Frown className="h-20 w-20 text-destructive mb-6" />
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-center">
             Course Not Found
           </h1>
@@ -67,10 +67,12 @@ const CourseDetailsPage = () => {
         <AnimateOnScroll delay={50}>
           <Button
             variant="ghost"
-            onClick={() => navigate(-1)} // Use navigate(-1) to go back in history
+            asChild // Use asChild to render Link component inside Button
             className="text-text-regular font-body text-primary hover:bg-primary/10 flex items-center gap-2"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to Courses
+            <Link to="/courses"> {/* Direct link to the courses page */}
+              <ArrowLeft className="h-4 w-4" /> Back to Courses
+            </Link>
           </Button>
         </AnimateOnScroll>
       </div>
