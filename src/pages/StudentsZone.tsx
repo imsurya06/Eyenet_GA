@@ -5,6 +5,7 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 import BlogsDisplaySection from '@/components/BlogsDisplaySection';
 import WriteBlogButton from '@/components/WriteBlogButton'; // Import the new button component
 import StudentTestimonialForm from '@/components/StudentTestimonialForm'; // Import the new testimonial form
+import CallToActionSection from '@/components/CallToActionSection'; // Import CallToActionSection
 
 const StudentsZone = () => {
   return (
@@ -19,6 +20,7 @@ const StudentsZone = () => {
       <BlogsDisplaySection />
       <StudentTestimonialForm /> {/* Add the testimonial form here */}
       <WriteBlogButton /> {/* Add the new button here */}
+      <CallToActionSection /> {/* Add CallToActionSection here */}
     </div>
   );
 };
