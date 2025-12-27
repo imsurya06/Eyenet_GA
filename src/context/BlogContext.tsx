@@ -31,7 +31,7 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (error) {
         console.error('Error fetching blogs:', error);
         toast.error('Failed to load blogs.');
-        setBlogs(initialBlogs); // Fallback to initial data if Supabase fails
+        // Removed fallback to initialBlogs. If Supabase fails, blogs will remain empty.
       } else {
         setBlogs(data as Blog[]);
       }

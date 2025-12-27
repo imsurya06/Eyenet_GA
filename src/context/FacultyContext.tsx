@@ -30,7 +30,7 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
       if (error) {
         console.error('Error fetching faculty:', error);
         toast.error('Failed to load faculty information.');
-        setFaculty(initialFaculty); // Fallback to initial data
+        // Removed fallback to initialFaculty. If Supabase fails, faculty will remain empty.
       } else {
         setFaculty(data as Faculty[]);
       }

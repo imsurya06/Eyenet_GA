@@ -31,7 +31,7 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
       if (error) {
         console.error('Error fetching news events:', error);
         toast.error('Failed to load news and events.');
-        setNewsEvents(initialNewsEvents); // Fallback to initial data if Supabase fails
+        // Removed fallback to initialNewsEvents. If Supabase fails, newsEvents will remain empty.
       } else {
         setNewsEvents(data as NewsEvent[]);
       }
