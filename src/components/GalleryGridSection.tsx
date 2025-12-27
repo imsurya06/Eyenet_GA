@@ -8,9 +8,7 @@ const GalleryGridSection = () => {
     { src: '/images/img5.png', alt: 'Traditional attire model 3' },
     { src: '/images/img6.png', alt: 'Traditional attire model 4' },
     { src: '/images/img7.png', alt: 'Studio portrait model' },
-    { src: '/public/placeholder.svg', alt: 'Placeholder image' },
-    { src: '/public/placeholder.svg', alt: 'Placeholder image' },
-    { src: '/public/placeholder.svg', alt: 'Placeholder image' },
+    // Removed placeholder images
   ];
 
   return (
