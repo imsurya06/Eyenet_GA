@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { User, Star } from 'lucide-react'; // Import Star icon for ratings
+import { User2, Star } from 'lucide-react'; // Changed User to User2 for a more generic icon
 import AnimateOnScroll from './AnimateOnScroll';
 import { useTestimonials } from '@/context/TestimonialContext'; // Import useTestimonials
 
@@ -44,12 +44,8 @@ const StudentStoriesSection = () => {
                   ))}
                 </div>
                 <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-4 overflow-hidden">
-                  {/* Using dicebear for placeholder avatars based on name */}
-                  <img
-                    src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${testimonial.name}`}
-                    alt={testimonial.name}
-                    className="w-full h-full object-cover"
-                  />
+                  {/* Replaced dicebear avatars with a generic User2 icon */}
+                  <User2 className="h-10 w-10 text-gray-500" />
                 </div>
                 <p className="text-text-medium font-body font-semibold text-foreground mb-1">
                   {testimonial.name}
