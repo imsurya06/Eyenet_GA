@@ -22,7 +22,7 @@ const SecondaryNavbar = () => {
   ];
 
   return (
-    <div className="bg-background text-foreground py-3 px-3 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-2 text-text-small font-body border-b border-border">
+    <div className="bg-background text-foreground py-3 px-3 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-4 text-text-small font-body border-b border-border"> {/* Changed gap-2 to gap-4 */}
       {/* Left Section: Navigation Links */}
       <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
         {secondaryNavLinks.map((link) => (
@@ -42,15 +42,14 @@ const SecondaryNavbar = () => {
       </div>
 
       {/* Right Section: Contact Info and Social Icons */}
-      {/* On mobile, this will be a column (phone number then icons). On desktop, it will be a row. */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-end gap-y-2 sm:gap-y-0 sm:gap-x-8 flex-wrap justify-center sm:justify-end mt-2 sm:mt-0">
+      <div className="flex flex-col sm:flex-row items-center sm:items-end gap-y-4 sm:gap-y-0 sm:gap-x-8 flex-wrap justify-center sm:justify-end mt-2 sm:mt-0"> {/* Changed gap-y-2 to gap-y-4 */}
         {/* Phone Number */}
         <a href="tel:+919842173725" className="flex items-center gap-1 hover:underline">
           <Phone className="h-6 w-6" />
           <span>+91 9842173725</span>
         </a>
         {/* Social Icons Wrapper - ensures icons stay in a row with their own spacing */}
-        <div className="flex items-center gap-x-4"> {/* Added gap-x-4 for spacing between icons */}
+        <div className="flex items-center gap-x-4">
           {socialAndContactIcons.map((item) => (
             <a
               key={item.name}
