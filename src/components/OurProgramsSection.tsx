@@ -47,7 +47,7 @@ const OurProgramsSection = () => {
                   <img
                     src={program.image}
                     alt={program.title}
-                    className="w-full h-full object-contain object-center"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 group-hover:text-primary transition-colors">

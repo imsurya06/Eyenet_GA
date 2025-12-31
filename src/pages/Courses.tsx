@@ -68,7 +68,7 @@ const Courses = () => {
                         <img
                           src={course.image}
                           alt={course.title}
-                          className="w-full h-full object-contain object-center"
+                          className="w-full h-full object-cover object-top"
                         />
                       </div>
                       <div className="p-6 flex flex-col flex-grow">
