@@ -29,7 +29,7 @@ const AdminSidebar = () => {
       {/* Logo */}
       <div className="p-6 border-b border-border flex justify-center">
         <Link to="/">
-          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-10" />
+          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-15" /> {/* Increased logo height to h-15 (60px) */}
         </Link>
       </div>
 
