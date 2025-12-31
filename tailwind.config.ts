@@ -73,13 +73,13 @@ export default {
         body: ['Source Sans 3', 'sans-serif'],
       },
       fontSize: {
-        // Desktop Headings (Adjusted)
-        'h1-desktop': ['4rem', { lineHeight: '120%' }], // Reduced from 5.5rem
-        'h2-desktop': ['2.5rem', { lineHeight: '120%' }], // Reduced from 3.25rem
-        'h3-desktop': ['2.25rem', { lineHeight: '120%' }], // Reduced from 2.75rem
-        'h4-desktop': ['1.875rem', { lineHeight: '140%' }], // Reduced from 2.25rem
-        'h5-desktop': ['1.75rem', { lineHeight: '140%' }], // Kept same
-        'h6-desktop': ['1.375rem', { lineHeight: '140%' }], // Kept same
+        // Desktop Headings (Adjusted to be larger)
+        'h1-desktop': ['5.5rem', { lineHeight: '120%' }], // Increased from 4rem
+        'h2-desktop': ['3.25rem', { lineHeight: '120%' }], // Increased from 2.5rem
+        'h3-desktop': ['2.75rem', { lineHeight: '120%' }], // Increased from 2.25rem
+        'h4-desktop': ['2.25rem', { lineHeight: '140%' }], // Increased from 1.875rem
+        'h5-desktop': ['1.75rem', { lineHeight: '140%' }],
+        'h6-desktop': ['1.375rem', { lineHeight: '140%' }],
 
         // Mobile Headings (Kept same)
         'h1-mobile': ['3.25rem', { lineHeight: '120%' }],
@@ -89,9 +89,9 @@ export default {
         'h5-mobile': ['1.25rem', { lineHeight: '140%' }],
         'h6-mobile': ['1.125rem', { lineHeight: '140%' }],
 
-        // Body Text Sizes (Kept same)
-        'text-large': ['1.5rem', { lineHeight: '160%' }],
-        'text-medium': ['1.25rem', { lineHeight: '160%' }],
+        // Body Text Sizes (Adjusted to be larger)
+        'text-large': ['1.75rem', { lineHeight: '160%' }], // Increased from 1.5rem
+        'text-medium': ['1.5rem', { lineHeight: '160%' }], // Increased from 1.25rem
         'text-regular': ['1.125rem', { lineHeight: '160%' }],
         'text-small': ['1rem', { lineHeight: '160%' }],
         'text-tiny': ['0.875rem', { lineHeight: '160%' }],
