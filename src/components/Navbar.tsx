@@ -73,11 +73,11 @@ const Navbar = () => {
   const isExplorePathActive = exploreItem ? isDropdownPathActive(exploreItem.links) : false;
 
   return (
-    <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2">
-      <div className="flex h-16 md:h-20 items-center justify-between px-3 md:px-8 lg:px-[80px]">
+    <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-4 md:py-6"> {/* Increased vertical padding */}
+      <div className="flex h-auto items-center justify-between px-3 md:px-8 lg:px-[80px]"> {/* Removed fixed height to allow content to dictate height */}
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-[60px] md:h-[108px]" /> {/* Increased logo height by 150% */}
+          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-[60px] md:h-[108px]" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -182,9 +182,9 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-[250px] sm:w-[300px]">
               {/* Logo inside the SheetContent */}
-              <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white">
+              <div className="flex items-center justify-center py-6 border-b border-border mb-4 bg-white"> {/* Increased vertical padding */}
                 <Link to="/" onClick={() => setIsSheetOpen(false)} className="flex justify-center">
-                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="max-h-[60px] w-auto object-contain" /> {/* Increased logo height by 150% */}
+                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="max-h-[60px] w-auto object-contain" />
                 </Link>
               </div>
               <nav className="flex flex-col gap-4 pt-6">
