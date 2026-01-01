@@ -15,7 +15,7 @@ import CollaborationsSection from '@/components/CollaborationsSection';
 const Index = () => {
   return (
     <>
-      <div className="relative flex flex-col md:flex-row items-center justify-center px-3 md:px-8 lg:px-[80px] bg-background py-12 md:py-16 lg:py-20"> {/* Removed min-h-screen, added explicit vertical padding */}
+      <div className="relative flex flex-col md:flex-row items-center justify-center px-3 md:px-8 lg:px-[80px] bg-background min-h-screen py-12 md:py-16 lg:py-20"> {/* Reintroduced min-h-screen and adjusted padding */}
         {/* Mobile Background Image with Overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
@@ -49,7 +49,7 @@ const Index = () => {
           <img
             src="/images/hero-model.png"
             alt="Fashion model illustration"
-            className="max-w-full h-auto md:max-w-lg lg:max-w-xl object-contain object-center rounded-lg shadow-2xl animate-float" // Changed object-cover to object-contain, object-top to object-center
+            className="w-full h-auto max-h-[80vh] object-contain object-center rounded-lg shadow-2xl animate-float" // Adjusted image sizing for better responsiveness
           />
         </AnimateOnScroll>
       </div>
