@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -24,7 +24,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-
 } from '@/components/ui/form';
 import ConfettiOverlay from '@/components/ConfettiOverlay';
 import EnrollmentSuccessDialog from '@/components/EnrollmentSuccessDialog';
@@ -51,21 +50,60 @@ const Admissions = () => {
     },
   });
 
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [enrolledCourseName, setEnrolledCourseName] = useState('');
+  const [enrolledUserName, setEnrolledUserName] = useState('');
+
+  const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu&g_ep=EgoyMDI1MTAyNi4wIKXMDSoASAFQAw%3D%3D";
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // In a real application, you would send this data to your backend/Formspree
+    console.log("Form submitted:", values);
+
+    // Simulate successful submission
+    setEnrolledCourseName(values.program);
+    setEnrolledUserName(values.name);
+    setShowConfetti(true);
+    setShowSuccessDialog(true);
+    form.reset(); // Reset form after successful submission
+  };
+
+  const handleCloseSuccessDialog = () => {
+    setShowSuccessDialog(false);
+    setShowConfetti(false); // Ensure confetti also stops if dialog is closed early
+  };
+
   return (
-    <section
-      className="relative min-h-screen bg-cover bg-center py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] flex items-center justify-center"
-      style={{ backgroundImage: 'url(/images/admissions-background.jpg)' }}
-    >
-      <div className="absolute inset-0 bg-black/50"></div>
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8">
-        {/* Left Section: Poster */}
-        <AnimateOnScroll isHero={true} delay={500} className="w-full lg:w-1/2 flex justify-center">
-          <div className="bg-[#0a1930] rounded-lg shadow-xl overflow-hidden max-w-md lg:max-w-none">
-            <img
-              src="/images/poster-eyenet.png"
-              alt="Photoshop Mastery Admission Open Poster"
-              className="w-full h-auto object-cover object-top"
-            />
+    <section className="bg-background min-h-screen py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] flex items-center justify-center">
+      <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8">
+        {/* Left Section: Location Info */}
+        <AnimateOnScroll isHero={true} delay={500} className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+          <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground">
+            Find Us Here
+          </h2>
+          <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
+            Visit our academy or contact us directly.
+          </p>
+          <div className="w-full max-w-md p-6 bg-muted border-l-4 border-primary rounded-lg shadow-sm mb-8">
+            <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
+              Tamilnadu
+            </h3>
+            <p className="text-text-regular font-body text-gray-600 mb-4">
+              Anna Nagar, Madurai
+            </p>
+            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-regular font-body">
+              View Map
+            </a>
+          </div>
+          <div className="w-full max-w-md aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
+            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+              <img
+                src="/images/madurai-map.png"
+                alt="Map of Eye Net Educational Academy in Madurai"
+                className="w-full h-full object-contain"
+              />
+            </a>
           </div>
         </AnimateOnScroll>
 
@@ -79,8 +117,7 @@ const Admissions = () => {
               Let's Start your design journey
             </p>
             <Form {...form}>
-              <form action="https://formspree.io/f/xeqyqjkk" method="POST" className="space-y-6">
-                <input type="hidden" name="_next" value={`${window.location.origin}/`} />
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
                   name="name"
@@ -95,7 +132,6 @@ const Admissions = () => {
                           type="text"
                           placeholder=""
                           {...field}
-                          name="name"
                           required
                         />
                       </FormControl>
@@ -117,7 +153,6 @@ const Admissions = () => {
                           type="email"
                           placeholder=""
                           {...field}
-                          name="email"
                           required
                         />
                       </FormControl>
@@ -139,7 +174,6 @@ const Admissions = () => {
                           type="tel"
                           placeholder=""
                           {...field}
-                          name="mobile"
                           required
                         />
                       </FormControl>
@@ -179,9 +213,6 @@ const Admissions = () => {
                           <SelectItem value="Computer Application & Programming">Computer Application & Programming</SelectItem>
                         </SelectContent>
                       </Select>
-                      {field.value && (
-                        <input type="hidden" name="program" value={field.value} />
-                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -196,7 +227,6 @@ const Admissions = () => {
                           checked={field.value}
                           onCheckedChange={field.onChange}
                           id="terms"
-                          name="terms"
                           required
                           className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                         />
@@ -221,6 +251,13 @@ const Admissions = () => {
           </div>
         </AnimateOnScroll>
       </div>
+      <ConfettiOverlay show={showConfetti} />
+      <EnrollmentSuccessDialog
+        show={showSuccessDialog}
+        courseName={enrolledCourseName}
+        userName={enrolledUserName}
+        onClose={handleCloseSuccessDialog}
+      />
     </section>
   );
 };
