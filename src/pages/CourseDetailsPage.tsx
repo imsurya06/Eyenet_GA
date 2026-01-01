@@ -91,7 +91,7 @@ const CourseDetailsPage = () => {
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-8 text-center lg:text-justify">
+            <p className="text-text-medium font-body text-gray-600 mb-8 text-justify"> {/* Removed text-center */}
               {course.description.replace(' Details...', '')}
             </p>
           </AnimateOnScroll>
