@@ -57,7 +57,7 @@ const FashionCoursesSection = () => {
                     <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-4 border border-input">
                       {course.tag} / Offline
                     </span>
-                    <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden">
+                    <h3 className="text-h4-mobile md:text-h4-desktop font-heading mb-2 text-foreground h-[4.9rem] overflow-hidden">
                       {course.title}
                     </h3>
                     <p className="text-text-regular font-body text-gray-600 mb-4">
