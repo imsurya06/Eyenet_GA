@@ -81,15 +81,15 @@ const CourseDetailsPage = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] text-center lg:text-left">
+      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px]">
         <div className="max-w-4xl mx-auto">
           <AnimateOnScroll isHero={true} delay={100}>
-            <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground">
+            <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground text-center lg:text-left">
               {course.title}
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-8">
+            <p className="text-text-medium font-body text-gray-600 mb-8 text-center lg:text-justify">
               {course.description.replace(' Details...', '')}
             </p>
           </AnimateOnScroll>
@@ -182,7 +182,7 @@ const CourseDetailsPage = () => {
                   <AccordionTrigger className="text-h6-mobile md:text-h6-desktop font-heading text-foreground hover:no-underline py-4 text-left">
                     {module.title}
                   </AccordionTrigger>
-                  <AccordionContent className="text-text-regular font-body text-gray-700 pb-4 text-left">
+                  <AccordionContent className="text-text-regular font-body text-gray-700 pb-4 text-justify">
                     {module.description}
                   </AccordionContent>
                 </AccordionItem>
