@@ -55,7 +55,8 @@ const formSchema = z.object({
   eligibility: z.string().min(1, { message: 'Eligibility is required.' }),
   learningOutcomesText: z.string().optional(),
   careerProspectsText: z.string().optional(),
-  moduleTitlesText: z.string().optional(), // For simplicity, we'll just take titles and generate generic descriptions
+  moduleTitlesText: z.string().optional(),
+  moduleDescriptionsText: z.string().optional(), // New field for module descriptions
 });
 
 const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpenChange, editingCourse, onSave }) => {
@@ -77,6 +78,7 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
       learningOutcomesText: '',
       careerProspectsText: '',
       moduleTitlesText: '',
+      moduleDescriptionsText: '', // Default value for new field
     },
   });
 
@@ -96,6 +98,7 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
           learningOutcomesText: (editingCourse.learningOutcomes || []).join('\n'), // Fallback to empty array
           careerProspectsText: (editingCourse.careerProspects || []).join('\n'), // Fallback to empty array
           moduleTitlesText: (editingCourse.modules || []).map(m => m.title).join('\n'), // Fallback to empty array
+          moduleDescriptionsText: (editingCourse.modules || []).map(m => m.description).join('\n'), // Pre-fill module descriptions
         });
         setBrochureFileName(editingCourse.brochureLink !== '#' ? editingCourse.brochureLink.split('/').pop() || null : null);
         setCourseImagePreview(editingCourse.image !== '/public/placeholder.svg' ? editingCourse.image : null);
@@ -180,7 +183,14 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
 
     const learningOutcomes = values.learningOutcomesText ? values.learningOutcomesText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
     const careerProspects = values.careerProspectsText ? values.careerProspectsText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
-    const modules = values.moduleTitlesText ? values.moduleTitlesText.split('\n').map(s => s.trim()).filter(s => s.length > 0).map(title => ({ title, description: `Detailed content for ${title}.` })) : [];
+    
+    const moduleTitles = values.moduleTitlesText ? values.moduleTitlesText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+    const moduleDescriptions = values.moduleDescriptionsText ? values.moduleDescriptionsText.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+
+    const modules = moduleTitles.map((title, index) => ({
+      title,
+      description: moduleDescriptions[index] || `Detailed content for ${title}.`, // Fallback if description is missing
+    }));
 
     const courseToSave: Course = {
       id: editingCourse?.id || `new-course-${Date.now()}`,
@@ -416,6 +426,20 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
                   <FormLabel className="text-text-regular font-body text-foreground">Module Titles (each title on a new line):</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Module 1 Title\nModule 2 Title\nModule 3 Title" rows={5} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="moduleDescriptionsText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text-regular font-body text-foreground">Module Descriptions (each description on a new line, corresponding to titles):</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Description for Module 1\nDescription for Module 2\nDescription for Module 3" rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
