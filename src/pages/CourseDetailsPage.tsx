@@ -81,7 +81,7 @@ const CourseDetailsPage = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] text-center">
+      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] text-center lg:text-left">
         <div className="max-w-4xl mx-auto">
           <AnimateOnScroll isHero={true} delay={100}>
             <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground">
@@ -139,7 +139,7 @@ const CourseDetailsPage = () => {
                 What You'll Learn
               </h2>
             </AnimateOnScroll>
-            <ul className="space-y-3 text-text-regular font-body text-gray-700 list-none p-0">
+            <ul className="space-y-3 text-text-regular font-body text-gray-700 list-none p-0 text-left">
               {learningOutcomes.map((outcome, index) => (
                 <AnimateOnScroll key={index} delay={200 + index * 50} className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-1" />
@@ -155,7 +155,7 @@ const CourseDetailsPage = () => {
                 Career Prospects
               </h2>
             </AnimateOnScroll>
-            <ul className="space-y-3 text-text-regular font-body text-gray-700 list-none p-0">
+            <ul className="space-y-3 text-text-regular font-body text-gray-700 list-none p-0 text-left">
               {careerProspects.map((prospect, index) => (
                 <AnimateOnScroll key={index} delay={200 + index * 50} className="flex items-start gap-3">
                   <Briefcase className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
@@ -179,10 +179,10 @@ const CourseDetailsPage = () => {
             <Accordion type="single" collapsible className="w-full">
               {modules.map((module, index) => (
                 <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-300">
-                  <AccordionTrigger className="text-h6-mobile md:text-h6-desktop font-heading text-foreground hover:no-underline py-4">
+                  <AccordionTrigger className="text-h6-mobile md:text-h6-desktop font-heading text-foreground hover:no-underline py-4 text-left">
                     {module.title}
                   </AccordionTrigger>
-                  <AccordionContent className="text-text-regular font-body text-gray-700 pb-4">
+                  <AccordionContent className="text-text-regular font-body text-gray-700 pb-4 text-left">
                     {module.description}
                   </AccordionContent>
                 </AccordionItem>
