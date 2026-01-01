@@ -98,7 +98,7 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
           moduleTitlesText: (editingCourse.modules || []).map(m => m.title).join('\n'), // Fallback to empty array
         });
         setBrochureFileName(editingCourse.brochureLink !== '#' ? editingCourse.brochureLink.split('/').pop() || null : null);
-        setCourseImagePreview(editingCourse.image !== '/placeholder.svg' ? editingCourse.image : null);
+        setCourseImagePreview(editingCourse.image !== '/public/placeholder.svg' ? editingCourse.image : null);
       } catch (e) {
         console.error("Error resetting form for editing course:", e);
         toast.error("Failed to load course for editing. Please check console for details.");
@@ -385,9 +385,9 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
               name="learningOutcomesText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-text-regular font-body text-foreground">Learning Outcomes (one per line):</FormLabel>
+                  <FormLabel className="text-text-regular font-body text-foreground">Learning Outcomes (each outcome on a new line):</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Outcome 1\nOutcome 2\n..." rows={5} {...field} />
+                    <Textarea placeholder="Outcome 1\nOutcome 2\nOutcome 3" rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -399,9 +399,9 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
               name="careerProspectsText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-text-regular font-body text-foreground">Career Prospects (one per line):</FormLabel>
+                  <FormLabel className="text-text-regular font-body text-foreground">Career Prospects (each prospect on a new line):</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Prospect 1\nProspect 2\n..." rows={5} {...field} />
+                    <Textarea placeholder="Prospect 1\nProspect 2\nProspect 3" rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -413,9 +413,9 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
               name="moduleTitlesText"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-text-regular font-body text-foreground">Module Titles (one per line):</FormLabel>
+                  <FormLabel className="text-text-regular font-body text-foreground">Module Titles (each title on a new line):</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Module 1 Title\nModule 2 Title\n..." rows={5} {...field} />
+                    <Textarea placeholder="Module 1 Title\nModule 2 Title\nModule 3 Title" rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
