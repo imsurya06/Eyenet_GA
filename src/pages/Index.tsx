@@ -15,7 +15,7 @@ import CollaborationsSection from '@/components/CollaborationsSection';
 const Index = () => {
   return (
     <>
-      <div className="relative flex flex-col md:flex-row items-start justify-center px-3 md:px-8 lg:px-[80px] bg-background min-h-screen pt-12 pb-12 md:pt-16 md:pb-16 lg:pt-20 lg:pb-20 md:gap-x-12">
+      <div className="relative flex flex-col md:flex-row items-center justify-center px-3 md:px-8 lg:px-[80px] bg-background min-h-screen pt-12 pb-12 md:pt-16 md:pb-16 lg:pt-20 lg:pb-20 md:gap-x-12">
         {/* Mobile Background Image with Overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
