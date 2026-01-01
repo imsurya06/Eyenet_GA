@@ -49,7 +49,7 @@ const Index = () => {
           <img
             src="/images/hero-model.png"
             alt="Fashion model illustration"
-            className="w-full h-auto max-h-[80vh] object-contain object-center rounded-lg shadow-2xl animate-float" // Adjusted image sizing for better responsiveness
+            className="w-full h-auto max-h-[80vh] object-contain object-center rounded-lg animate-float" // Removed shadow-2xl
           />
         </AnimateOnScroll>
       </div>
