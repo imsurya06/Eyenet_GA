@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { UploadCloud, ImagePlus } from 'lucide-react';
-import { useForm } => 'react-hook-form';
+import { useForm } from 'react-hook-form'; // Fixed: Changed '=>' to 'from'
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
