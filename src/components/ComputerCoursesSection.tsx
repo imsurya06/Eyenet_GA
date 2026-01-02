@@ -57,7 +57,7 @@ const ComputerCoursesSection = () => {
                     <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-4 border border-input">
                       {course.tag} / Offline
                     </span>
-                    <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[7.5rem] line-clamp-3 overflow-hidden"> {/* Increased height to h-[7.5rem] */}
+                    <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-[7.5rem] line-clamp-3 overflow-hidden">
                       {course.title}
                     </h3>
                     <p className="text-text-regular font-body text-gray-600 mb-4">
@@ -66,7 +66,7 @@ const ComputerCoursesSection = () => {
                         more...
                       </Link>
                     </p>
-                    <div className="flex items-center gap-4 text-text-small font-body text-gray-700 mb-4">
+                    <div className="flex flex-col md:flex-row items-center gap-4 text-text-small font-body text-gray-700 mb-4">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4 text-primary" />
                         <span>{course.duration}</span>
