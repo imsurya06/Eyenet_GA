@@ -4,7 +4,7 @@ import React from 'react';
 import AboutHeroSection from '@/components/AboutHeroSection';
 import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 import FounderDirectorSection from '@/components/FounderDirectorSection';
-import ImageGallerySection from '@/components/ImageGallerySection';
+import DynamicGalleryCarouselSection from '@/components/DynamicGalleryCarouselSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import LocationSection from '@/components/LocationSection';
 import ContactUsSection from '@/components/ContactUsSection';
@@ -16,7 +16,7 @@ const About = () => {
       <AboutHeroSection />
       <WhyChooseUsSection />
       <FounderDirectorSection />
-      <ImageGallerySection />
+      <DynamicGalleryCarouselSection withButton={true} />
       <TestimonialsSection />
       <LocationSection />
       <ContactUsSection />

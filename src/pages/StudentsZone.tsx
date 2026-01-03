@@ -10,13 +10,13 @@ import CallToActionSection from '@/components/CallToActionSection'; // Import Ca
 const StudentsZone = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
-      <AnimateOnScroll isHero={true} delay={500} className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
+      <AnimateOnScroll isHero={true} delay={500} className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
         <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">Students Zone</h1>
         <p className="text-text-medium font-body text-gray-600">
           Welcome to your hub for resources, news, and community updates!
         </p>
       </AnimateOnScroll>
-      
+
       <BlogsDisplaySection />
       <StudentTestimonialForm /> {/* Add the testimonial form here */}
       <WriteBlogButton /> {/* Add the new button here */}

@@ -30,7 +30,7 @@ const InfrastructureHeroSection = () => {
   );
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
+    <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll isHero={true} delay={100}>
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">

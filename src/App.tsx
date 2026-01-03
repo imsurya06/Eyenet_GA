@@ -46,6 +46,17 @@ import { FacultyProvider } from "./context/FacultyContext";
 const queryClient = new QueryClient();
 
 // New component to conditionally render the Navbar
+const ConditionalSecondaryNavbar = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin-dashboard');
+
+  if (isAdminRoute) {
+    return null;
+  }
+
+  return <SecondaryNavbar />;
+};
+
 const ConditionalNavbar = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin-dashboard');
@@ -84,7 +95,7 @@ const App = () => {
                   <BlogProvider>
                     <TestimonialProvider>
                       <FacultyProvider>
-                        <SecondaryNavbar />
+                        <ConditionalSecondaryNavbar />
                         <ConditionalNavbar />
                         <Routes>
                           <Route path="/" element={<Index />} />
@@ -108,7 +119,7 @@ const App = () => {
                           <Route path="/our-services" element={<OurServices />} /> {/* New route for Our Services */}
                           <Route path="/contact" element={<Contact />} />
                           <Route path="/admin-login" element={<AdminLogin />} />
-                          
+
                           {/* Admin Dashboard with nested routes */}
                           <Route path="/admin-dashboard" element={<AdminDashboard />}>
                             <Route index element={<AdminCourses />} />

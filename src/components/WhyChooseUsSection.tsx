@@ -11,7 +11,7 @@ const WhyChooseUsSection = () => {
   ];
 
   return (
-    <section className="py-20 md:py-24 lg:py-32 px-3 md:px-8 lg:px-[80px] bg-background text-center"> {/* Increased vertical padding */}
+    <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-background text-center"> {/* Reduced vertical padding */}
       <AnimateOnScroll delay={100}>
         <p className="text-text-regular font-body text-primary mb-16">Why Choose Us?</p>
       </AnimateOnScroll>

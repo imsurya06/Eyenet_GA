@@ -13,7 +13,7 @@ const Contact = () => {
   const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu&g_ep=EgoyMDI1MTAyNi4wIKXMDSoASAFQAw%3D%3D";
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-6 md:px-8 lg:px-[80px] bg-background text-foreground min-h-[calc(100vh-12rem)] flex items-center">
+    <section className="py-8 md:py-12 lg:py-16 px-6 md:px-8 lg:px-[80px] bg-background text-foreground min-h-[calc(100vh-12rem)] flex items-center">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start w-full">
         {/* Left Section: Contact Form and Text */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">

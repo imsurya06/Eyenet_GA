@@ -69,7 +69,7 @@ const AdminLogin = () => {
 
   return (
     <section
-      className="relative min-h-screen bg-cover bg-center py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] flex items-center justify-center"
+      className="relative min-h-screen bg-cover bg-center py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] flex items-center justify-center"
       style={{ backgroundImage: 'url(/images/admin-login-background.jpg)' }}
     >
       <div className="absolute inset-0 bg-black/50"></div> {/* Overlay */}

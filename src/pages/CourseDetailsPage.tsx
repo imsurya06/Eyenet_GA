@@ -6,7 +6,8 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown, ArrowLeft } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown, ArrowLeft, GraduationCap, LayoutList } from 'lucide-react';
 import NCFTLogo from '@/components/NCFTLogo'; // Import NCFTLogo
 
 const CourseDetailsPage = () => {
@@ -75,15 +76,17 @@ const CourseDetailsPage = () => {
           <Button
             variant="ghost"
             className="text-text-regular font-body text-primary hover:bg-primary/10 flex items-center gap-2"
-            onClick={() => navigate(-1)} // Navigate back to the previous page
+            asChild
           >
-            <ArrowLeft className="h-4 w-4" /> Back to Courses
+            <Link to={`/courses?category=${course.category}`}>
+              <ArrowLeft className="h-4 w-4" /> Back to Courses
+            </Link>
           </Button>
         </AnimateOnScroll>
       </div>
 
       {/* Hero Section */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px]">
+      <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px]">
         <div className="max-w-4xl mx-auto">
           <AnimateOnScroll isHero={true} delay={100}>
             <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground text-center lg:text-left">
@@ -104,7 +107,7 @@ const CourseDetailsPage = () => {
       </section>
 
       {/* Key Information Section */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-muted">
+      <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-muted">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <AnimateOnScroll delay={100}>
             <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-sm border border-gray-200">
@@ -132,70 +135,91 @@ const CourseDetailsPage = () => {
         </div>
       </section>
 
-      {/* What You'll Learn & Career Prospects */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-            <AnimateOnScroll delay={100}>
-              <h2 className="text-h3-mobile md:text-h3-desktop font-heading mb-6">
-                What You'll Learn
-              </h2>
+      {/* Course Details Tabs */}
+      <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px]">
+        <div className="max-w-5xl mx-auto">
+          <Tabs defaultValue="overview" className="w-full">
+            <AnimateOnScroll delay={100} className="mb-10 flex justify-center">
+              <TabsList className="grid w-full max-w-[400px] grid-cols-2 h-12">
+                <TabsTrigger value="overview" className="text-base">Overview</TabsTrigger>
+                <TabsTrigger value="curriculum" className="text-base">Curriculum</TabsTrigger>
+              </TabsList>
             </AnimateOnScroll>
-            <ul className="space-y-3 text-text-regular font-body text-gray-700 list-none p-0 text-left">
-              {learningOutcomes.map((outcome, index) => (
-                <AnimateOnScroll key={index} delay={200 + index * 50} className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-1" />
-                  <span>{outcome}</span>
-                </AnimateOnScroll>
-              ))}
-            </ul>
-          </div>
 
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-            <AnimateOnScroll delay={100}>
-              <h2 className="text-h3-mobile md:text-h3-desktop font-heading mb-6">
-                Career Prospects
-              </h2>
-            </AnimateOnScroll>
-            <ul className="space-y-3 text-text-regular font-body text-gray-700 list-none p-0 text-left">
-              {careerProspects.map((prospect, index) => (
-                <AnimateOnScroll key={index} delay={200 + index * 50} className="flex items-start gap-3">
-                  <Briefcase className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
-                  <span>{prospect}</span>
-                </AnimateOnScroll>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+            <TabsContent value="overview" className="mt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-gray-50 p-8 rounded-2xl border border-gray-100">
+                <div className="flex flex-col items-start">
+                  <AnimateOnScroll delay={100}>
+                    <div className="flex items-center gap-3 mb-6">
+                      <GraduationCap className="h-6 w-6 text-primary" />
+                      <h2 className="text-h4-mobile md:text-h4-desktop font-heading">
+                        What You'll Learn
+                      </h2>
+                    </div>
+                  </AnimateOnScroll>
+                  <ul className="space-y-4 text-text-regular font-body text-gray-700 list-none p-0 w-full">
+                    {learningOutcomes.map((outcome, index) => (
+                      <AnimateOnScroll key={index} delay={200 + index * 50} className="flex items-start gap-3 p-3 bg-white rounded-lg shadow-sm w-full">
+                        <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span>{outcome}</span>
+                      </AnimateOnScroll>
+                    ))}
+                  </ul>
+                </div>
 
-      {/* Course Modules Section */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-muted">
-        <div className="max-w-4xl mx-auto">
-          <AnimateOnScroll delay={100}>
-            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-10 text-center">
-              Course Modules
-            </h2>
-          </AnimateOnScroll>
-          <AnimateOnScroll delay={200}>
-            <Accordion type="single" collapsible className="w-full">
-              {modules.map((module, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-300">
-                  <AccordionTrigger className="text-h6-mobile md:text-h6-desktop font-heading text-foreground hover:no-underline py-4 text-left">
-                    {module.title}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-text-regular font-body text-gray-700 pb-4 text-justify">
-                    {module.description}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </AnimateOnScroll>
+                <div className="flex flex-col items-start">
+                  <AnimateOnScroll delay={100}>
+                    <div className="flex items-center gap-3 mb-6">
+                      <Briefcase className="h-6 w-6 text-primary" />
+                      <h2 className="text-h4-mobile md:text-h4-desktop font-heading">
+                        Career Prospects
+                      </h2>
+                    </div>
+                  </AnimateOnScroll>
+                  <ul className="space-y-4 text-text-regular font-body text-gray-700 list-none p-0 w-full">
+                    {careerProspects.map((prospect, index) => (
+                      <AnimateOnScroll key={index} delay={200 + index * 50} className="flex items-start gap-3 p-3 bg-white rounded-lg shadow-sm w-full">
+                        <Briefcase className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span>{prospect}</span>
+                      </AnimateOnScroll>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="curriculum" className="mt-0">
+              <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100">
+                <AnimateOnScroll delay={100}>
+                  <div className="flex items-center gap-3 mb-8 justify-center">
+                    <LayoutList className="h-6 w-6 text-primary" />
+                    <h2 className="text-h3-mobile md:text-h3-desktop font-heading text-center">
+                      Course Modules
+                    </h2>
+                  </div>
+                </AnimateOnScroll>
+                <AnimateOnScroll delay={200}>
+                  <Accordion type="single" collapsible className="w-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+                    {modules.map((module, index) => (
+                      <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-100 last:border-0 px-4">
+                        <AccordionTrigger className="text-h6-mobile md:text-h6-desktop font-heading text-foreground hover:no-underline py-4 text-left hover:text-primary transition-colors">
+                          {module.title}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-text-regular font-body text-gray-700 pb-4 text-justify pl-4 border-l-2 border-primary/20 ml-2 mb-2">
+                          {module.description}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </AnimateOnScroll>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] text-center">
+      <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] text-center">
         <AnimateOnScroll delay={100}>
           <h2 className="text-h3-mobile md:text-h3-desktop font-heading mb-6">
             Ready to Start Your Journey?
@@ -211,7 +235,7 @@ const CourseDetailsPage = () => {
               </Button>
             )}
             <Button asChild className="px-6 py-3 text-text-regular bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link to={course.enrollLink}>Enroll Now</Link>
+              <Link to={`/admissions?course=${encodeURIComponent(course.title)}`}>Enroll Now</Link>
             </Button>
           </div>
         </AnimateOnScroll>

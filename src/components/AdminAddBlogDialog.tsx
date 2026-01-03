@@ -133,6 +133,7 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
       date: format(values.date, 'yyyy-MM-dd'),
       content: values.content,
       image: imageUrl,
+      status: 'approved',
     };
 
     onSave(blogToSave);

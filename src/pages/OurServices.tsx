@@ -3,9 +3,19 @@
 import React from 'react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import CallToActionSection from '@/components/CallToActionSection';
-import { Briefcase, Camera, Mic, Sparkles, Monitor } from 'lucide-react';
+import { Briefcase, Camera, Mic, Sparkles, Monitor, Scissors, Laptop } from 'lucide-react';
 
 const services = [
+  {
+    icon: Scissors,
+    title: 'Fashion Designing',
+    description: 'Comprehensive fashion design training including sketching, pattern making, and garment construction.',
+  },
+  {
+    icon: Laptop,
+    title: 'Computer Courses',
+    description: 'Professional computer courses covering office automation, graphic design, and programming.',
+  },
   {
     icon: Monitor,
     title: 'Multimedia Training',
@@ -31,7 +41,7 @@ const services = [
 const OurServices = () => {
   return (
     <>
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
+      <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
         <AnimateOnScroll isHero={true} delay={100}>
           <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">
             Our Services

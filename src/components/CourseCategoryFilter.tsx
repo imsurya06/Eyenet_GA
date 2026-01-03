@@ -25,10 +25,10 @@ const CourseCategoryFilter = () => {
         <NavLink
           key={item.name}
           to={item.category ? `/courses?category=${item.category}` : '/courses'}
-          className={({ isActive }) =>
+          className={() =>
             cn(
               "px-4 py-2 rounded-full text-text-small font-body transition-colors duration-200",
-              (isActive || (!currentCategory && !item.category))
+              (item.category === currentCategory || (item.category === null && !currentCategory))
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "bg-muted text-gray-700 hover:bg-accent hover:text-foreground"
             )

@@ -52,7 +52,7 @@ const StudentTestimonialForm = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground">
+    <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground">
       <div className="max-w-3xl mx-auto">
         <AnimateOnScroll delay={100}>
           <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-center">

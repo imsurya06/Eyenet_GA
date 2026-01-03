@@ -42,7 +42,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-muted text-foreground pt-12 md:pt-16 lg:pt-20">
-      <div className="container mx-auto px-3 md:px-8 lg:px-[80px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-x-20 pb-12 md:pb-16 lg:pb-20">
+      <div className="container mx-auto px-4 lg:px-[80px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-x-20 pb-12 md:pb-16 lg:pb-20">
         {/* Column 1: Logo */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <Link to="/" className="mb-6">

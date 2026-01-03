@@ -7,7 +7,7 @@ import FacultySection from '@/components/FacultySection'; // Reusing the existin
 const FacultyPage = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
-      <AnimateOnScroll isHero={true} delay={500} className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
+      <AnimateOnScroll isHero={true} delay={500} className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
         <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4">Our Faculty</h1>
         <p className="text-text-medium font-body text-gray-600">
           Meet the experienced educators and industry experts guiding our students.

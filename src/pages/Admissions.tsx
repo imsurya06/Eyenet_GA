@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,13 +41,16 @@ const formSchema = z.object({
 
 const Admissions = () => {
   const { courses, loading: coursesLoading } = useCourses(); // Fetch courses and loading state
+  const [searchParams] = useSearchParams();
+  const courseParam = searchParams.get('course');
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       email: '',
       mobile: '',
-      program: '',
+      program: courseParam || '', // Pre-select program from URL if available
       terms: false,
     },
   });
@@ -77,41 +80,11 @@ const Admissions = () => {
   };
 
   return (
-    <section className="bg-background min-h-screen py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] flex items-center justify-center">
-      <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-8">
-        {/* Left Section: Location Info */}
-        <AnimateOnScroll isHero={true} delay={500} className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
-          <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground">
-            Find Us Here
-          </h2>
-          <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
-            Visit our academy or contact us directly.
-          </p>
-          <div className="w-full max-w-md p-6 bg-muted border-l-4 border-primary rounded-lg shadow-sm mb-8">
-            <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
-              Tamilnadu
-            </h3>
-            <p className="text-text-regular font-body text-gray-600 mb-4">
-              Anna Nagar, Madurai
-            </p>
-            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-regular font-body">
-              View Map
-            </a>
-          </div>
-          <div className="w-full max-w-md aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
-            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-              <img
-                src="/images/madurai-map.png"
-                alt="Map of Eye Net Educational Academy in Madurai"
-                className="w-full h-full object-contain"
-              />
-            </a>
-          </div>
-        </AnimateOnScroll>
-
-        {/* Right Section: Enroll Now Form */}
-        <AnimateOnScroll isHero={true} delay={700} className="w-full lg:w-1/2 flex justify-center">
-          <div className="bg-white p-8 md:p-10 lg:p-12 rounded-lg shadow-xl w-full text-center">
+    <section className="bg-background min-h-screen py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] flex items-center justify-center">
+      <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8">
+        {/* Left Section: Enroll Now Form */}
+        <AnimateOnScroll isHero={true} delay={500} className="w-full lg:w-1/2 flex justify-center lg:justify-start">
+          <div className="bg-white p-6 md:p-8 lg:p-10 rounded-lg shadow-2xl border border-gray-200 w-full text-center relative z-10">
             <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-2 text-foreground">
               Enroll Now
             </h2>
@@ -248,6 +221,36 @@ const Admissions = () => {
                 </Button>
               </form>
             </Form>
+          </div>
+        </AnimateOnScroll>
+
+        {/* Right Section: Location Info */}
+        <AnimateOnScroll isHero={true} delay={700} className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
+          <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground">
+            Find Us Here
+          </h2>
+          <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
+            Visit our academy or contact us directly.
+          </p>
+          <div className="w-full max-w-md p-6 bg-muted border-l-4 border-primary rounded-lg shadow-sm mb-8">
+            <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
+              Tamilnadu
+            </h3>
+            <p className="text-text-regular font-body text-gray-600 mb-4">
+              Anna Nagar, Madurai
+            </p>
+            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-regular font-body">
+              View Map
+            </a>
+          </div>
+          <div className="w-full max-w-md aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
+            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+              <img
+                src="/images/madurai-map.png"
+                alt="Map of Eye Net Educational Academy in Madurai"
+                className="w-full h-full object-contain"
+              />
+            </a>
           </div>
         </AnimateOnScroll>
       </div>

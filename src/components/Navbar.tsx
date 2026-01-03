@@ -27,12 +27,12 @@ const navItems = [
     name: 'Courses',
     heading: 'courses',
     links: [
-      { name: 'Fashion design Courses', description: 'Professional certification for creative professionals', to: '/courses/fashion-design', icon: LucideIcons.Tablet },
-      { name: 'Computer courses', description: 'Digital and print design curriculum', to: '/courses/computer-courses', icon: LucideIcons.Laptop },
-      { name: 'Multimedia Training', description: 'Comprehensive training in video editing, animation, and digital content creation.', to: '/courses/other-courses/multimedia-training', icon: LucideIcons.MonitorPlay },
-      { name: 'Photography', description: 'Master the art of photography, from basic techniques to advanced studio setups.', to: '/courses/other-courses/photography', icon: LucideIcons.Camera },
-      { name: 'Spoken English', description: 'Improve your communication skills with our interactive spoken English courses.', to: '/courses/other-courses/spoken-english', icon: LucideIcons.MessageSquareText },
-      { name: 'Beautician Course', description: 'Learn professional beauty techniques, makeup artistry, and salon management.', to: '/courses/other-courses/beautician-course', icon: LucideIcons.Sparkles },
+      { name: 'Fashion design Courses', description: 'Professional certification for creative professionals', to: '/courses?category=fashion', icon: LucideIcons.Tablet },
+      { name: 'Computer courses', description: 'Digital and print design curriculum', to: '/courses?category=computer', icon: LucideIcons.Laptop },
+      { name: 'Multimedia Training', description: 'Comprehensive training in video editing, animation, and digital content creation.', to: '/courses?category=multimedia', icon: LucideIcons.MonitorPlay },
+      { name: 'Photography', description: 'Master the art of photography, from basic techniques to advanced studio setups.', to: '/courses?category=photography', icon: LucideIcons.Camera },
+      { name: 'Spoken English', description: 'Improve your communication skills with our interactive spoken English courses.', to: '/courses?category=spoken-english', icon: LucideIcons.MessageSquareText },
+      { name: 'Beautician Course', description: 'Learn professional beauty techniques, makeup artistry, and salon management.', to: '/courses?category=beautician', icon: LucideIcons.Sparkles },
     ],
     footer: {
       text: 'Start your design journey',
@@ -93,182 +93,178 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2 md:py-3">
-      <div className="flex h-auto items-center justify-between px-3 md:px-8 lg:px-[80px]">
+    <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2 lg:py-3">
+      <div className="flex h-auto items-center justify-between px-4 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-12 md:h-[60px] lg:h-[72px] w-auto object-contain" /> {/* Adjusted logo size */}
         </Link>
 
         {/* Desktop Navigation */}
-        {!isMobile && (
-          <>
-            {/* Nav Links - Centered */}
-            <div className="hidden md:flex flex-grow justify-center">
-              <div className="flex items-center space-x-6">
-                {navItems.map((item) => (
-                  item.type === 'link' ? (
-                    <NavLink
-                      key={item.name}
-                      to={item.to}
-                      className={({ isActive }) =>
-                        cn(
-                          "text-text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
-                          isActive && "text-primary"
-                        )
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
-                  ) : (
-                    <DropdownMenu
-                      key={item.name}
-                      open={item.name === 'Courses' ? coursesOpen : exploreOpen}
-                      onOpenChange={item.name === 'Courses' ? setCoursesOpen : setExploreOpen}
-                    >
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className={cn(
-                            "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                            "text-text-regular",
-                            (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
-                            (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
-                          )}
-                        >
-                          {item.name}
-                          <ChevronDown className="ml-1 h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        className="w-80 p-4 bg-muted data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-300"
-                        align="start"
-                      >
-                        {item.heading && (
-                          <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
-                            {item.heading}
-                          </DropdownMenuLabel>
-                        )}
-                        <div className="grid gap-1">
-                          {item.links.map((link) => (
-                            <CourseDropdownMenuItem
-                              key={link.name}
-                              to={link.to}
-                              title={link.name}
-                              description={link.description}
-                              icon={link.icon}
-                            />
-                          ))}
-                        </div>
-                        {item.footer && (
-                          <>
-                            <DropdownMenuSeparator className="my-2" />
-                            <div className="px-3 py-2 text-text-tiny">
-                              {item.footer.text}{' '}
-                              <Link to={item.footer.linkTo} className="text-primary hover:underline font-normal">
-                                {item.footer.linkText}
-                              </Link>
-                            </div>
-                          </>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )
-                ))}
-              </div>
-            </div>
-
-            {/* Buttons - Right aligned */}
-            <div className="hidden md:flex items-center space-x-4">
-              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <Link to="/contact">Contact</Link>
-              </Button>
-              <Button variant="default" asChild className="hover:animate-shake">
-                <Link to="/admissions">Apply</Link>
-              </Button>
-              <AdminMenu />
-            </div>
-          </>
-        )}
-
-        {/* Mobile Navigation */}
-        {isMobile && (
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] sm:w-[320px]"> {/* Adjusted width */}
-              {/* Logo inside the SheetContent */}
-              <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white">
-                <Link to="/" onClick={() => setIsSheetOpen(false)} className="flex justify-center">
-                  <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-[60px] w-auto object-contain" /> {/* Adjusted logo size for mobile sheet */}
-                </Link>
-              </div>
-              <nav className="flex flex-col gap-4 pt-6">
-                {navItems.map((item) => (
-                  item.type === 'link' ? (
-                    <NavLink
-                      key={item.name}
-                      to={item.to}
-                      onClick={() => setIsSheetOpen(false)}
-                      className={({ isActive }) =>
-                        cn(
-                          "text-text-regular font-normal hover:text-primary",
-                          isActive ? "text-primary" : "text-muted-foreground"
-                        )
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
-                  ) : (
-                    <div key={item.name}>
-                      <button
-                        onClick={() => toggleMobileDropdown(item.name)}
+        <>
+          {/* Nav Links - Centered */}
+          <div className="hidden lg:flex flex-grow justify-center">
+            <div className="flex items-center space-x-6">
+              {navItems.map((item) => (
+                item.type === 'link' ? (
+                  <NavLink
+                    key={item.name}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      cn(
+                        "text-text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
+                        isActive && "text-primary"
+                      )
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ) : (
+                  <DropdownMenu
+                    key={item.name}
+                    open={item.name === 'Courses' ? coursesOpen : exploreOpen}
+                    onOpenChange={item.name === 'Courses' ? setCoursesOpen : setExploreOpen}
+                  >
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
                         className={cn(
-                          "flex items-center justify-between w-full text-text-regular font-normal hover:text-primary py-2",
-                          (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
-                          (item.name === 'Explore' && isExplorePathActive) && "text-primary",
-                          !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
+                          "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
+                          "text-text-regular",
+                          (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
+                          (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
                         )}
                       >
                         {item.name}
-                        <ChevronDown className={cn("h-4 w-4 transition-transform", mobileDropdownOpen[item.name] && "rotate-180")} />
-                      </button>
-                      {mobileDropdownOpen[item.name] && (
-                        <div className="ml-4 flex flex-col gap-2 mt-2">
-                          {item.links.map((link) => (
-                            <NavLink
-                              key={link.name}
-                              to={link.to}
-                              onClick={() => setIsSheetOpen(false)}
-                              className={({ isActive }) =>
-                                cn(
-                                  "text-text-small hover:text-primary",
-                                  isActive ? "text-primary" : "text-muted-foreground"
-                                )
-                              }
-                            >
-                              {link.name}
-                            </NavLink>
-                          ))}
-                        </div>
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="w-80 p-4 bg-muted data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-300"
+                      align="start"
+                    >
+                      {item.heading && (
+                        <DropdownMenuLabel className="px-3 py-2 text-xs font-semibold uppercase text-muted-foreground">
+                          {item.heading}
+                        </DropdownMenuLabel>
                       )}
-                    </div>
-                  )
-                ))}
-                <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                  <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
-                </Button>
-                <Button variant="default" asChild className="mt-2 hover:animate-shake">
-                  <Link to="/admissions" onClick={() => setIsSheetOpen(false)}>Apply</Link>
-                </Button>
-              </nav>
-            </SheetContent>
-          </Sheet>
-        )}
+                      <div className="grid gap-1">
+                        {item.links.map((link) => (
+                          <CourseDropdownMenuItem
+                            key={link.name}
+                            to={link.to}
+                            title={link.name}
+                            description={link.description}
+                            icon={link.icon}
+                          />
+                        ))}
+                      </div>
+                      {item.footer && (
+                        <>
+                          <DropdownMenuSeparator className="my-2" />
+                          <div className="px-3 py-2 text-text-tiny">
+                            {item.footer.text}{' '}
+                            <Link to={item.footer.linkTo} className="text-primary hover:underline font-normal">
+                              {item.footer.linkText}
+                            </Link>
+                          </div>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )
+              ))}
+            </div>
+          </div>
+
+          {/* Buttons - Right aligned */}
+          <div className="hidden lg:flex items-center space-x-4">
+            <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <Link to="/contact">Contact</Link>
+            </Button>
+            <Button variant="default" asChild className="hover:animate-shake">
+              <Link to="/admissions">Apply</Link>
+            </Button>
+            <AdminMenu />
+          </div>
+        </>
+
+        {/* Mobile Navigation */}
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="lg:hidden">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[280px] sm:w-[320px]"> {/* Adjusted width */}
+            {/* Logo inside the SheetContent */}
+            <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white">
+              <Link to="/" onClick={() => setIsSheetOpen(false)} className="flex justify-center">
+                <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-[60px] w-auto object-contain" /> {/* Adjusted logo size for mobile sheet */}
+              </Link>
+            </div>
+            <nav className="flex flex-col gap-4 pt-6">
+              {navItems.map((item) => (
+                item.type === 'link' ? (
+                  <NavLink
+                    key={item.name}
+                    to={item.to}
+                    onClick={() => setIsSheetOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        "text-text-regular font-normal hover:text-primary",
+                        isActive ? "text-primary" : "text-muted-foreground"
+                      )
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ) : (
+                  <div key={item.name}>
+                    <button
+                      onClick={() => toggleMobileDropdown(item.name)}
+                      className={cn(
+                        "flex items-center justify-between w-full text-text-regular font-normal hover:text-primary py-2",
+                        (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
+                        (item.name === 'Explore' && isExplorePathActive) && "text-primary",
+                        !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
+                      )}
+                    >
+                      {item.name}
+                      <ChevronDown className={cn("h-4 w-4 transition-transform", mobileDropdownOpen[item.name] && "rotate-180")} />
+                    </button>
+                    {mobileDropdownOpen[item.name] && (
+                      <div className="ml-4 flex flex-col gap-2 mt-2">
+                        {item.links.map((link) => (
+                          <NavLink
+                            key={link.name}
+                            to={link.to}
+                            onClick={() => setIsSheetOpen(false)}
+                            className={({ isActive }) =>
+                              cn(
+                                "text-text-small hover:text-primary",
+                                isActive ? "text-primary" : "text-muted-foreground"
+                              )
+                            }
+                          >
+                            {link.name}
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              ))}
+              <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
+              </Button>
+              <Button variant="default" asChild className="mt-2 hover:animate-shake">
+                <Link to="/admissions" onClick={() => setIsSheetOpen(false)}>Apply</Link>
+              </Button>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </nav>
   );

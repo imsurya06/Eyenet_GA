@@ -125,6 +125,7 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
       date: format(values.date, 'yyyy-MM-dd'),
       content: values.content,
       image: imageUrl, // Use the uploaded image URL
+      status: 'pending',
     };
 
     addBlog(blogToSave);
@@ -167,7 +168,7 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
                 <FormItem>
                   <FormLabel className="text-text-regular font-body text-foreground">Your Name:</FormLabel>
                   <FormControl>
-                        <Input placeholder="e.g., Jane Doe" {...field} required />
+                    <Input placeholder="e.g., Jane Doe" {...field} required />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -5,6 +5,7 @@ export interface Blog {
   date: string; // Stored as a string (e.g., "YYYY-MM-DD")
   content: string;
   image?: string; // Optional image URL
+  status: 'pending' | 'approved' | 'rejected';
 }
 
 // The initialBlogs array has been removed.

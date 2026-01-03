@@ -9,7 +9,7 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 const Gallery = () => {
   return (
     <>
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
+      <section className="pt-12 md:pt-16 lg:pt-20 pb-2 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
         <div className="max-w-7xl mx-auto text-center lg:text-left">
           {/* Title and Subtitle */}
           <AnimateOnScroll isHero={true} delay={100}>

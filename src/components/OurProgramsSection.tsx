@@ -12,18 +12,42 @@ const OurProgramsSection = () => {
       image: '/images/fashion-design.png',
       title: 'Fashion design',
       description: 'Learn essential computer programs from basics to advanced.',
-      href: '/courses/fashion-design',
+      href: '/courses?category=fashion',
     },
     {
       image: '/images/computer-courses.png',
       title: 'Computer Courses',
       description: 'Create innovative spatial designs with advanced techniques.',
-      href: '/courses/computer-courses',
+      href: '/courses?category=computer',
+    },
+    {
+      image: '/images/photography.jpg',
+      title: 'Photography',
+      description: 'Master the art of capturing moments with professional photography techniques.',
+      href: '/courses?category=photography',
+    },
+    {
+      image: '/images/multimedia.png',
+      title: 'Multimedia Training',
+      description: 'Explore the world of digital media, video editing, and content creation.',
+      href: '/courses?category=multimedia',
+    },
+    {
+      image: '/images/spoken-english.jpg',
+      title: 'Spoken English',
+      description: 'Enhance your communication skills and speak English with confidence.',
+      href: '/courses?category=spoken-english',
+    },
+    {
+      image: '/images/beautician.jpg',
+      title: 'Beautician Course',
+      description: 'Learn professional beauty techniques, makeup mastery, and skincare.',
+      href: '/courses?category=beautician',
     },
   ];
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-[#fdfaf6] text-center">
+    <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-[#fdfaf6] text-center">
       <AnimateOnScroll delay={100}>
         <p className="text-text-regular font-body text-gray-600 mb-4">Our programs</p>
       </AnimateOnScroll>

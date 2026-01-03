@@ -5,7 +5,7 @@ import AnimateOnScroll from './AnimateOnScroll';
 
 const FounderDirectorSection = () => {
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
+    <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         {/* Left Section: Image */}
         <AnimateOnScroll delay={100} className="w-full h-[400px] md:h-[550px] overflow-hidden rounded-lg shadow-lg mx-auto lg:mx-0">
