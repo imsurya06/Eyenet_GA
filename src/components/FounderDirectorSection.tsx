@@ -24,7 +24,7 @@ const FounderDirectorSection = () => {
             </h2>
           </AnimateOnScroll>
           <AnimateOnScroll delay={300}>
-            <p className="text-text-regular font-body text-gray-600 max-w-xl">
+            <p className="text-text-regular font-body text-gray-600 max-w-xl text-justify">
               Guided by the vision of our Founder and Director, Eyenet is
               committed to shaping students into confident and skilled
               professionals. We go beyond theory by offering hands-on

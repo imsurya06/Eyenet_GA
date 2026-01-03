@@ -41,6 +41,7 @@ interface AdminAddImageDialogProps {
 const formSchema = z.object({
   imageAlt: z.string().min(2, { message: 'Image Alt Text must be at least 2 characters.' }),
   imageCategory: z.enum(['fashion', 'event', 'general'], { message: 'Please select an image category.' }),
+  tickerRow: z.enum(['1', '2']).optional().default('1'),
   imageFile: z.any()
     .refine((file) => !file || (file instanceof File && file.size <= 10 * 1024 * 1024), 'Image size must be less than 10MB.')
     .optional(),
@@ -54,6 +55,7 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
     defaultValues: {
       imageAlt: '',
       imageCategory: undefined,
+      tickerRow: '1',
       imageFile: undefined,
     },
   });
@@ -64,6 +66,7 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
       form.reset({
         imageAlt: editingImage.alt,
         imageCategory: editingImage.category,
+        tickerRow: editingImage.ticker_row || '1',
         imageFile: undefined, // Files cannot be pre-filled for security reasons
       });
       setImagePreview(editingImage.src !== '/public/placeholder.svg' ? editingImage.src : null);
@@ -72,6 +75,7 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
       form.reset({
         imageAlt: '',
         imageCategory: undefined,
+        tickerRow: '1',
         imageFile: undefined,
       });
       setImagePreview(null);
@@ -117,6 +121,7 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
       src: imageUrl,
       alt: values.imageAlt,
       category: values.imageCategory,
+      ticker_row: values.tickerRow as '1' | '2',
     };
 
     onSave(imageToSave); // Call the onSave prop
@@ -187,6 +192,41 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
                         </FormControl>
                         <FormLabel className="font-normal text-text-regular font-body text-foreground">
                           General
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tickerRow"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-text-regular font-body text-foreground">Ticker Row:</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-wrap gap-4"
+                    >
+                      <FormItem className="flex items-center space-x-2 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="1" />
+                        </FormControl>
+                        <FormLabel className="font-normal text-text-regular font-body text-foreground">
+                          Top Ticker (Row 1)
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="2" />
+                        </FormControl>
+                        <FormLabel className="font-normal text-text-regular font-body text-foreground">
+                          Bottom Ticker (Row 2)
                         </FormLabel>
                       </FormItem>
                     </RadioGroup>

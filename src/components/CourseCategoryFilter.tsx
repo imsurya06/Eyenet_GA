@@ -20,7 +20,7 @@ const CourseCategoryFilter = () => {
   const currentCategory = searchParams.get('category');
 
   return (
-    <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-3 md:px-8 lg:px-[80px] py-8 bg-background border-b border-border">
+    <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-3 md:px-8 lg:px-[80px] py-4 bg-background border-b border-border">
       {filterItems.map((item) => (
         <NavLink
           key={item.name}

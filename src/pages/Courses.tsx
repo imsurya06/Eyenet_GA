@@ -90,7 +90,7 @@ const Courses = () => {
     <div className="bg-background text-foreground">
       <NCFTLogo />
       {/* Hero Section for All Courses */}
-      <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] text-center">
+      <section className="py-4 md:py-6 lg:py-8 px-3 md:px-8 lg:px-[80px] text-center">
         <div className="max-w-4xl mx-auto">
           <AnimateOnScroll isHero={true} delay={100}>
             <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground">
@@ -105,10 +105,10 @@ const Courses = () => {
       <CourseCategoryFilter />
 
       {/* All Courses Grid */}
-      <section className="py-10 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground">
+      <section className="py-4 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground">
         <div className="max-w-7xl mx-auto">
           <AnimateOnScroll delay={100}>
-            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-10 text-center">
+            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-6 text-center">
               Discover Your Path
             </h2>
           </AnimateOnScroll>
@@ -132,25 +132,25 @@ const Courses = () => {
                           className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                         />
                       </Link>
-                      <div className="p-4 flex flex-col flex-grow">
-                        <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-2 border border-input w-fit">
+                      <div className="p-3.5 flex flex-col flex-grow">
+                        <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-1.5 border border-input w-fit">
                           {course.tag} / {course.category.charAt(0).toUpperCase() + course.category.slice(1)}
                         </span>
 
                         <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`}>
-                          <h3 className="text-h4-mobile md:text-h5-desktop font-heading mb-2 text-foreground h-auto md:h-[6rem] line-clamp-3 overflow-hidden hover:text-primary transition-colors">
+                          <h3 className="text-h4-mobile md:text-h5-desktop font-heading mb-1.5 text-foreground line-clamp-3 overflow-hidden hover:text-primary transition-colors">
                             {course.title}
                           </h3>
                         </Link>
 
-                        <p className="text-text-regular font-body text-gray-600 mb-3">
+                        <p className="text-text-regular font-body text-gray-600 mb-2">
                           {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
                           <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-primary hover:underline ml-1">
                             more...
                           </Link>
                         </p>
 
-                        <div className="flex flex-col md:flex-row items-center gap-4 text-text-small font-body text-gray-700 mb-4">
+                        <div className="flex flex-col md:flex-row items-center gap-4 text-text-small font-body text-gray-700 mb-3">
                           <div className="flex items-center gap-1">
                             <Clock className="h-4 w-4 text-primary" />
                             <span>{course.duration}</span>

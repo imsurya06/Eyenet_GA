@@ -19,6 +19,10 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
   // or just display all dynamic images. For now, we'll display all from context.
   const imagesToDisplay = galleryImages;
 
+  // Split images into two rows based on the 'ticker_row' property
+  const row1Images = imagesToDisplay.filter(img => img.ticker_row === '1' || !img.ticker_row);
+  const row2Images = imagesToDisplay.filter(img => img.ticker_row === '2');
+
   if (loading) {
     return (
       <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
@@ -65,43 +69,83 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
         </div>
       </div>
 
-      {/* Infinite Loop Ticker */}
+      {/* Infinite Loop Ticker Row 1 - Scrolls Left */}
       <div className="relative w-full">
         <div className="flex w-max animate-scroll hover:[animation-play-state:paused]">
           {/* First set of images */}
-          <div className="flex gap-4 px-2">
-            {imagesToDisplay.map((image, index) => (
-              <div key={`original-${image.id}-${index}`} className="w-[300px] md:w-[400px] flex-shrink-0">
-                <Card className="border-none shadow-lg h-full">
-                  <CardContent className="flex aspect-video items-center justify-center p-0 overflow-hidden rounded-lg">
+          <div className="flex">
+            {row1Images.map((image, index) => (
+              <div key={`row1-original-${image.id}-${index}`} className="w-[300px] md:w-[400px] flex-shrink-0">
+                <div className="w-full h-full">
+                  <div className="flex aspect-video items-center justify-center p-0 overflow-hidden">
                     <img
                       src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-top"
                     />
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
           {/* Duplicate set of images for seamless loop */}
-          <div className="flex gap-4 px-2">
-            {imagesToDisplay.map((image, index) => (
-              <div key={`duplicate-${image.id}-${index}`} className="w-[300px] md:w-[400px] flex-shrink-0">
-                <Card className="border-none shadow-lg h-full">
-                  <CardContent className="flex aspect-video items-center justify-center p-0 overflow-hidden rounded-lg">
+          <div className="flex">
+            {row1Images.map((image, index) => (
+              <div key={`row1-duplicate-${image.id}-${index}`} className="w-[300px] md:w-[400px] flex-shrink-0">
+                <div className="w-full h-full">
+                  <div className="flex aspect-video items-center justify-center p-0 overflow-hidden">
                     <img
                       src={image.src}
                       alt={image.alt}
-                      className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-top"
                     />
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Infinite Loop Ticker Row 2 - Scrolls Right (if any images exist) */}
+      {row2Images.length > 0 && (
+        <div className="relative w-full">
+          <div className="flex w-max animate-scroll-reverse hover:[animation-play-state:paused]">
+            {/* First set of images */}
+            <div className="flex">
+              {row2Images.map((image, index) => (
+                <div key={`row2-original-${image.id}-${index}`} className="w-[300px] md:w-[400px] flex-shrink-0">
+                  <div className="w-full h-full">
+                    <div className="flex aspect-video items-center justify-center p-0 overflow-hidden">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Duplicate set of images for seamless loop */}
+            <div className="flex">
+              {row2Images.map((image, index) => (
+                <div key={`row2-duplicate-${image.id}-${index}`} className="w-[300px] md:w-[400px] flex-shrink-0">
+                  <div className="w-full h-full">
+                    <div className="flex aspect-video items-center justify-center p-0 overflow-hidden">
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* View Gallery Button */}
       {withButton && (

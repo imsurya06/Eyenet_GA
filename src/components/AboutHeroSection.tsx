@@ -22,7 +22,7 @@ const AboutHeroSection = () => {
         </div>
 
         {/* Main Hero Image */}
-        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[300px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-xl mb-12 md:mb-16 lg:mb-20">
+        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[250px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-xl mb-12 md:mb-12 lg:mb-16">
           <img
             src="/images/about-image-1.png"
             alt="Fashion model in traditional attire"
@@ -40,7 +40,7 @@ const AboutHeroSection = () => {
               </h2>
             </AnimateOnScroll>
             <AnimateOnScroll delay={500}>
-              <p className="text-text-regular font-body text-gray-600 mb-6">
+              <p className="text-text-regular font-body text-gray-600 mb-6 text-justify">
                 For over 25 years, Eyenet Institute has been a beacon for creative minds,
                 providing unparalleled training in fashion design, graphic design, and
                 mastery of modern tools like Photoshop and Illustrator. Our commitment
@@ -49,7 +49,7 @@ const AboutHeroSection = () => {
               </p>
             </AnimateOnScroll>
             <AnimateOnScroll delay={600}>
-              <p className="text-text-regular font-body text-gray-600">
+              <p className="text-text-regular font-body text-gray-600 text-justify">
                 Guided by our Founder and Director's vision, we shape students into
                 confident and skilled professionals through hands-on training,
                 industry-relevant courses, and practical projects that mirror real-world

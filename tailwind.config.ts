@@ -97,11 +97,11 @@ export default {
         'text-tiny': ['0.675rem', { lineHeight: '160%' }], // Reduced from 0.75rem
 
         // Desktop overrides for body text (will be applied via globals.css)
-        'desktop-text-large': ['1.75rem', { lineHeight: '160%' }],
-        'desktop-text-medium': ['1.5rem', { lineHeight: '160%' }],
-        'desktop-text-regular': ['1.125rem', { lineHeight: '160%' }],
-        'desktop-text-small': ['1rem', { lineHeight: '160%' }],
-        'desktop-text-tiny': ['0.875rem', { lineHeight: '160%' }],
+        'desktop-text-large': ['2rem', { lineHeight: '160%' }],
+        'desktop-text-medium': ['1.75rem', { lineHeight: '160%' }],
+        'desktop-text-regular': ['1.25rem', { lineHeight: '160%' }],
+        'desktop-text-small': ['1.125rem', { lineHeight: '160%' }],
+        'desktop-text-tiny': ['1rem', { lineHeight: '160%' }],
       },
       boxShadow: {
         'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -150,6 +150,10 @@ export default {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        'scroll-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -157,6 +161,7 @@ export default {
         shake: "shake 0.8s infinite",
         float: 'float 3s ease-in-out infinite',
         scroll: 'scroll 40s linear infinite',
+        'scroll-reverse': 'scroll-reverse 40s linear infinite',
       },
     },
   },
