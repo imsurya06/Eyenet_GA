@@ -73,28 +73,28 @@ export default {
         body: ['Source Sans 3', 'sans-serif'],
       },
       fontSize: {
-        // Desktop Headings (Adjusted to be larger)
-        'h1-desktop': ['5.5rem', { lineHeight: '120%' }],
-        'h2-desktop': ['3.25rem', { lineHeight: '120%' }],
-        'h3-desktop': ['2.75rem', { lineHeight: '120%' }],
-        'h4-desktop': ['2.25rem', { lineHeight: '140%' }],
-        'h5-desktop': ['1.75rem', { lineHeight: '140%' }],
-        'h6-desktop': ['1.375rem', { lineHeight: '140%' }],
+        // Desktop Headings (Apple Design System Style)
+        'h1-desktop': ['4rem', { lineHeight: '110%', letterSpacing: '-0.02em' }],
+        'h2-desktop': ['3rem', { lineHeight: '110%', letterSpacing: '-0.01em' }],
+        'h3-desktop': ['2.25rem', { lineHeight: '120%', letterSpacing: '-0.01em' }],
+        'h4-desktop': ['1.75rem', { lineHeight: '120%' }],
+        'h5-desktop': ['1.5rem', { lineHeight: '120%' }],
+        'h6-desktop': ['1.25rem', { lineHeight: '120%' }],
 
-        // Mobile Headings (Kept same)
-        'h1-mobile': ['3.25rem', { lineHeight: '120%' }],
-        'h2-mobile': ['2.5rem', { lineHeight: '120%' }],
-        'h3-mobile': ['2rem', { lineHeight: '120%' }],
-        'h4-mobile': ['1.5rem', { lineHeight: '140%' }],
-        'h5-mobile': ['1.25rem', { lineHeight: '140%' }],
-        'h6-mobile': ['1.125rem', { lineHeight: '140%' }],
+        // Mobile Headings (Apple Design System Style)
+        'h1-mobile': ['2.5rem', { lineHeight: '110%', letterSpacing: '-0.02em' }],
+        'h2-mobile': ['1.75rem', { lineHeight: '120%', letterSpacing: '-0.01em' }],
+        'h3-mobile': ['1.5rem', { lineHeight: '120%' }],
+        'h4-mobile': ['1.25rem', { lineHeight: '130%' }],
+        'h5-mobile': ['1.125rem', { lineHeight: '140%' }],
+        'h6-mobile': ['1rem', { lineHeight: '140%' }],
 
         // Body Text Sizes (Mobile-first definitions)
-        'text-large': ['1.25rem', { lineHeight: '160%' }], // Reduced from 1.75rem
-        'text-medium': ['1.125rem', { lineHeight: '160%' }], // Reduced from 1.5rem
-        'text-regular': ['1rem', { lineHeight: '160%' }], // Reduced from 1.125rem
-        'text-small': ['0.875rem', { lineHeight: '160%' }], // Reduced from 1rem
-        'text-tiny': ['0.75rem', { lineHeight: '160%' }], // Reduced from 0.875rem
+        'text-large': ['1.125rem', { lineHeight: '160%' }], // Reduced from 1.25rem
+        'text-medium': ['1rem', { lineHeight: '160%' }], // Reduced from 1.125rem
+        'text-regular': ['0.875rem', { lineHeight: '160%' }], // Reduced from 1rem
+        'text-small': ['0.75rem', { lineHeight: '160%' }], // Reduced from 0.875rem
+        'text-tiny': ['0.675rem', { lineHeight: '160%' }], // Reduced from 0.75rem
 
         // Desktop overrides for body text (will be applied via globals.css)
         'desktop-text-large': ['1.75rem', { lineHeight: '160%' }],

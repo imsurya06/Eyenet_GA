@@ -97,11 +97,7 @@ const Courses = () => {
               {getCategoryTitle(categoryFilter)}
             </h1>
           </AnimateOnScroll>
-          <AnimateOnScroll isHero={true} delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-8">
-              Explore our diverse range of design and skill-building programs, crafted to ignite your creativity and build your professional skills.
-            </p>
-          </AnimateOnScroll>
+
         </div>
       </section>
 
