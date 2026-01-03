@@ -38,7 +38,7 @@ const FacultySection = () => {
 
               return (
                 <AnimateOnScroll key={member.id} delay={300 + index * 100}>
-                  <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col h-full">
+                  <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                     <div className="w-full h-64 overflow-hidden relative">
                       <img
                         src={member.image || '/public/placeholder.svg'}

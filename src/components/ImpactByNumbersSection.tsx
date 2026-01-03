@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Clock, UserCheck, Award, ArrowUpRight } from "lucide-react";
+import { Clock, UserCheck, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ImpactByNumbersSection = () => {
@@ -81,7 +81,7 @@ const ImpactByNumbersSection = () => {
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
               <span className="uppercase tracking-widest text-xs text-muted-foreground font-medium font-body">Our Impact</span>
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-4 text-foreground">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-medium leading-tight mb-4 text-foreground">
               Results that speak <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">louder than words.</span>
             </h2>
@@ -93,9 +93,7 @@ const ImpactByNumbersSection = () => {
           {/* Stat 1 */}
           <AnimateOnScroll delay={100} className="col-span-1 row-span-1">
             <div className="h-full bg-background border border-border/50 rounded-3xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden shadow-sm">
-              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <ArrowUpRight className="w-6 h-6 text-muted-foreground" />
-              </div>
+
               <div className="mb-6 w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary p-2.5">
                 <Clock strokeWidth={1.5} className="w-full h-full" />
               </div>
@@ -136,9 +134,7 @@ const ImpactByNumbersSection = () => {
           {/* Stat 2 */}
           <AnimateOnScroll delay={300} className="col-span-1 row-span-1">
             <div className="h-full bg-background border border-border/50 rounded-3xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden shadow-sm">
-              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <ArrowUpRight className="w-6 h-6 text-muted-foreground" />
-              </div>
+
               <div className="mb-6 w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary p-2.5">
                 <UserCheck strokeWidth={1.5} className="w-full h-full" />
               </div>
@@ -151,9 +147,7 @@ const ImpactByNumbersSection = () => {
           {/* Stat 3 */}
           <AnimateOnScroll delay={400} className="col-span-1 row-span-1">
             <div className="h-full bg-background border border-border/50 rounded-3xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden shadow-sm">
-              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <ArrowUpRight className="w-6 h-6 text-muted-foreground" />
-              </div>
+
               <div className="mb-6 w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center text-primary p-2.5">
                 <Award strokeWidth={1.5} className="w-full h-full" />
               </div>

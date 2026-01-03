@@ -39,9 +39,9 @@ const BlogsDisplaySection = () => {
 
               return (
                 <AnimateOnScroll key={blog.id} delay={200 + index * 50}>
-                  <article className="flex flex-col md:flex-row gap-8 items-start group border-b border-gray-100 pb-12 last:border-0">
+                  <article className="flex flex-col md:flex-row gap-8 items-start group border-b border-gray-100 pb-12 last:border-0 hover:bg-muted/30 p-4 -mx-4 rounded-xl transition-all duration-300">
                     {blog.image && (
-                      <div className="w-full md:w-1/3 aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-lg shadow-sm">
+                      <div className="w-full md:w-1/3 aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-lg shadow-sm transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
                         <img
                           src={blog.image}
                           alt={blog.title}

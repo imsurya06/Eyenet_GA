@@ -34,7 +34,7 @@ const TestimonialsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {approvedTestimonials.map((testimonial, index) => (
             <AnimateOnScroll key={testimonial.id} delay={150 + index * 75}>
-              <div className="flex flex-col items-center text-center p-4">
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-lg border border-transparent hover:border-gray-100">
                 <p className="text-text-medium font-body text-foreground mb-8 italic max-w-xs">
                   "{testimonial.quote}"
                 </p>

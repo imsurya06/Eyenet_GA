@@ -71,8 +71,8 @@ const NewsEventsDisplaySection = () => {
                 <h3 className="text-h4-mobile md:text-h4-desktop font-heading mb-8 border-l-4 border-primary pl-4">Recent Updates</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
                   {recentEvents.map((item, index) => (
-                    <AnimateOnScroll key={item.id} delay={100 + index * 50} className="flex flex-col group cursor-pointer">
-                      <div className="mb-4 overflow-hidden rounded-lg aspect-[3/2]">
+                    <AnimateOnScroll key={item.id} delay={100 + index * 50} className="flex flex-col group cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                      <div className="mb-4 overflow-hidden rounded-lg aspect-[3/2] shadow-sm group-hover:shadow-md transition-all duration-300">
                         {item.image && (
                           <img
                             src={item.image}

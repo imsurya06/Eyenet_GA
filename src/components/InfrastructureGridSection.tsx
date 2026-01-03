@@ -28,7 +28,7 @@ const InfrastructureGridSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {gridImages.map((image, index) => (
             <AnimateOnScroll key={index} delay={300 + index * 100}>
-              <div className="w-full aspect-square overflow-hidden rounded-lg shadow-md">
+              <div className="w-full aspect-square overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
                 <img
                   src={image.src}
                   alt={image.alt}
