@@ -69,7 +69,7 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
         tickerRow: editingImage.ticker_row || '1',
         imageFile: undefined, // Files cannot be pre-filled for security reasons
       });
-      setImagePreview(editingImage.src !== '/public/placeholder.svg' ? editingImage.src : null);
+      setImagePreview(editingImage.src !== '/placeholder.svg' ? editingImage.src : null);
     } else if (open && !editingImage) {
       // Reset form for adding a new image
       form.reset({
@@ -99,7 +99,7 @@ const AdminAddImageDialog: React.FC<AdminAddImageDialogProps> = ({ open, onOpenC
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    let imageUrl = editingImage?.src || '/public/placeholder.svg';
+    let imageUrl = editingImage?.src || '/placeholder.svg';
 
     // Upload image file if a new one is selected
     if (values.imageFile) {

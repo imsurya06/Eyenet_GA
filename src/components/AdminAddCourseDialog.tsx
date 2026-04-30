@@ -107,8 +107,8 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
           careerProspects: editingCourse.careerProspects || [],
           courseModules: editingCourse.modules || []
         });
-        setBrochureFileName(editingCourse.brochureLink !== '#' ? editingCourse.brochureLink.split('/').pop() || null : null);
-        setCourseImagePreview(editingCourse.image !== '/public/placeholder.svg' ? editingCourse.image : null);
+        setBrochureFileName(editingCourse.brochureLink && editingCourse.brochureLink !== '#' ? editingCourse.brochureLink.split('/').pop() || null : null);
+        setCourseImagePreview(editingCourse.image || null);
       } catch (e) {
         console.error("Error resetting form for editing course:", e);
         toast.error("Failed to load course for editing. Please check console for details.");

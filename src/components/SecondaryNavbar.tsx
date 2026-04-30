@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Phone, Mail, Facebook, Instagram, Youtube } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -27,32 +27,66 @@ const socialAndContactIcons = [
 ];
 
 const SecondaryNavbar = () => {
+  const location = useLocation();
+  const [isFaqInView, setIsFaqInView] = React.useState(false);
+
+  React.useEffect(() => {
+    // Only set up intersection observer if we're on the home page
+    if (location.pathname === '/') {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsFaqInView(entry.isIntersecting);
+        },
+        { threshold: 0.2 } // Section is active when 20% visible
+      );
+
+      const faqSection = document.getElementById('faq-section');
+      if (faqSection) {
+        observer.observe(faqSection);
+      }
+
+      return () => {
+        if (faqSection) {
+          observer.unobserve(faqSection);
+        }
+      };
+    } else {
+      setIsFaqInView(false);
+    }
+  }, [location.pathname]);
+
   const secondaryNavLinks = [
     { name: 'Faculty', to: '/faculty' },
     { name: 'Gallery', to: '/gallery' },
     { name: 'FAQ', to: '/#faq-section' },
     { name: '360° View', to: '/360-view' },
-    { name: 'Our Services', to: '/our-services' }, // New 'Our Services' link
+    { name: 'Our Services', to: '/our-services' },
   ];
 
   return (
     <div className="bg-background text-foreground py-3 px-3 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-4 text-text-small font-body border-b border-border">
       {/* Left Section: Navigation Links */}
       <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
-        {secondaryNavLinks.map((link) => (
-          <NavLink
-            key={link.name}
-            to={link.to}
-            className={({ isActive }) =>
-              cn(
-                "hover:text-primary transition-colors",
-                isActive && "text-primary font-semibold"
-              )
-            }
-          >
-            {link.name}
-          </NavLink>
-        ))}
+        {secondaryNavLinks.map((link) => {
+          const isFaqLink = link.name === 'FAQ';
+          
+          return (
+            <NavLink
+              key={link.name}
+              to={link.to}
+              className={({ isActive }) =>
+                cn(
+                  "hover:text-primary transition-colors",
+                  ((isActive && !isFaqLink) || (isFaqLink && isFaqInView)) && "text-primary font-semibold"
+                )
+              }
+              // Prevent NavLink from considering the base path active for the FAQ hash link
+              isActive={isFaqLink ? () => isFaqInView : undefined}
+            >
+              {link.name}
+            </NavLink>
+          );
+        })}
       </div>
 
       {/* Right Section: Contact Info and Social Icons */}

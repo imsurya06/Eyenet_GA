@@ -28,7 +28,7 @@ const ImpactByNumbersSection = () => {
   ];
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -37,14 +37,11 @@ const ImpactByNumbersSection = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Only play if not already playing to avoid interruption
           if (videoElement.paused) {
             videoElement.play().catch(error => console.log("Video play interrupted:", error));
-            setIsPlaying(true);
           }
         } else {
           videoElement.pause();
-          setIsPlaying(false);
         }
       },
       {
@@ -74,15 +71,6 @@ const ImpactByNumbersSection = () => {
           src="/videos/impact-video.mp4"
         />
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
-
-        {/* Play Button Overlay */}
-        <div onClick={() => {
-          if (videoRef.current?.paused) { videoRef.current.play(); setIsPlaying(true); }
-          else { videoRef.current?.pause(); setIsPlaying(false); }
-        }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-300 border border-white/30 z-20">
-          <div className={`w-0 h-0 border-t-[12px] border-t-transparent border-l-[22px] border-l-white border-b-[12px] border-b-transparent ml-1 transition-opacity duration-300 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}></div>
-        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[80px] relative z-10 -mt-20 md:-mt-32">

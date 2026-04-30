@@ -31,7 +31,7 @@ const AdminFacultyCard: React.FC<AdminFacultyCardProps> = ({ faculty, onDelete, 
     <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col">
       <div className="w-full h-48 overflow-hidden relative">
         <img
-          src={faculty.image || '/public/placeholder.svg'}
+          src={faculty.image || '/placeholder.svg'}
           alt={faculty.name}
           className="w-full h-full object-contain"
         />

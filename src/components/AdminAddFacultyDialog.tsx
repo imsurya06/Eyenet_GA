@@ -100,7 +100,7 @@ const AdminAddFacultyDialog: React.FC<AdminAddFacultyDialogProps> = ({ open, onO
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    let imageUrl = editingFaculty?.image || '/public/placeholder.svg';
+    let imageUrl = editingFaculty?.image || '/placeholder.svg';
 
     if (values.imageFile) {
       const file = values.imageFile;

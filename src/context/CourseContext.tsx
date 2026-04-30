@@ -55,9 +55,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     if (error) {
       console.error('Error adding course:', error);
       toast.error('Failed to add course.');
-    } else if (data && data.length > 0) {
-      setCourses(prevCourses => [...prevCourses, data[0] as Course]); // Cast back to Course for local state
+    } else {
       toast.success('Course added successfully!');
+      setTimeout(() => window.location.reload(), 1000); // Reload after toast
     }
   };
 
@@ -71,8 +71,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       console.error('Error deleting course:', error);
       toast.error('Failed to delete course.');
     } else {
-      setCourses(prevCourses => prevCourses.filter(course => course.id !== id));
       toast.success('Course deleted successfully!');
+      setTimeout(() => window.location.reload(), 1000);
     }
   };
 
@@ -82,18 +82,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const { data, error } = await supabase
       .from('courses')
       .update(coursePayload) // Send payload without icon
-      .eq('id', updatedCourse.id)
-      .select(); // Select the updated data
+      .eq('id', updatedCourse.id);
 
     if (error) {
       console.error('Error updating course:', error);
-      // Display the specific error message from Supabase
       toast.error(`Failed to update course: ${error.message}`);
-    } else if (data && data.length > 0) {
-      setCourses(prevCourses =>
-        prevCourses.map(course => (course.id === updatedCourse.id ? data[0] as Course : course))
-      );
+    } else {
       toast.success('Course updated successfully!');
+      setTimeout(() => window.location.reload(), 1000);
     }
   };
 
