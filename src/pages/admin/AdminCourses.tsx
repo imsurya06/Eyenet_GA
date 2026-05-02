@@ -8,6 +8,7 @@ import AdminCourseCard from '@/components/AdminCourseCard';
 import AdminAddCourseDialog from '@/components/AdminAddCourseDialog'; // Import the modified dialog
 import { useCourses } from '@/context/CourseContext';
 import { Course } from '@/data/courses'; // Import Course interface
+import { AdminActionOverlay } from '@/components/AdminActionOverlay';
 
 const AdminCourses = () => {
   const [searchParams] = useSearchParams();
@@ -15,6 +16,7 @@ const AdminCourses = () => {
   const { courses, deleteCourse, addCourse, updateCourse } = useCourses();
   const [isAddCourseDialogOpen, setIsAddCourseDialogOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null); // State to hold the course being edited
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const filteredCourses = React.useMemo(() => {
     if (!categoryFilter) {
@@ -33,18 +35,35 @@ const AdminCourses = () => {
     setIsAddCourseDialogOpen(true);
   };
 
-  const handleSaveCourse = (course: Course) => {
-    if (editingCourse) {
-      updateCourse(course); // Update existing course
-    } else {
-      addCourse(course); // Add new course
+  const handleSaveCourse = async (course: Course) => {
+    setIsProcessing(true);
+    try {
+      if (editingCourse) {
+        await updateCourse(course); // Update existing course
+      } else {
+        await addCourse(course); // Add new course
+      }
+      setIsAddCourseDialogOpen(false); // Close dialog after saving
+      setEditingCourse(null); // Reset editing state
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
     }
-    setIsAddCourseDialogOpen(false); // Close dialog after saving
-    setEditingCourse(null); // Reset editing state
+  };
+
+  const handleDeleteCourse = async (id: string) => {
+    setIsProcessing(true);
+    try {
+      await deleteCourse(id);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
+    }
   };
 
   return (
     <div className="flex-1 flex flex-col">
+      <AdminActionOverlay isProcessing={isProcessing} />
       <AdminHeader pageTitle="Courses" />
       <AdminCourseFilter />
       <div className="flex-1 p-6 md:p-8 lg:p-10 bg-gray-50">
@@ -58,7 +77,7 @@ const AdminCourses = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredCourses.map((course, index) => (
               <AnimateOnScroll key={course.id} delay={200 + index * 50}>
-                <AdminCourseCard course={course} onDelete={deleteCourse} onEdit={handleEditCourse} />
+                <AdminCourseCard course={course} onDelete={handleDeleteCourse} onEdit={handleEditCourse} />
               </AnimateOnScroll>
             ))}
           </div>

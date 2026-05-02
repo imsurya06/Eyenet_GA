@@ -8,13 +8,15 @@ import { useBlogs } from '@/context/BlogContext';
 import { Blog } from '@/data/blogs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { AdminActionOverlay } from '@/components/AdminActionOverlay';
 
 const AdminBlogs = () => {
-  const { blogs, addBlog, deleteBlog, updateBlog } = useBlogs();
+  const { blogs, addBlog, deleteBlog, updateBlog, loading } = useBlogs();
   const [isAddBlogDialogOpen, setIsAddBlogDialogOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const pendingBlogs = blogs.filter(blog => blog.status === 'pending');
   const publishedBlogs = blogs.filter(blog => blog.status === 'approved');
@@ -29,41 +31,61 @@ const AdminBlogs = () => {
     setIsAddBlogDialogOpen(true);
   };
 
-  const handleSaveBlog = (blog: Blog) => {
-    if (editingBlog) {
-      updateBlog(blog);
-    } else {
-      addBlog(blog);
+  const handleSaveBlog = async (blog: Blog) => {
+    setIsProcessing(true);
+    try {
+      if (editingBlog) {
+        await updateBlog(blog);
+      } else {
+        await addBlog(blog);
+      }
+      setIsAddBlogDialogOpen(false);
+      setEditingBlog(null);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
     }
-    setIsAddBlogDialogOpen(false);
-    setEditingBlog(null);
+  };
+
+  const handleDeleteBlog = async (id: string) => {
+    setIsProcessing(true);
+    try {
+      await deleteBlog(id);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
+    }
   };
 
   const handleApproveBlog = async (blog: Blog) => {
+    setIsProcessing(true);
     try {
       await updateBlog({ ...blog, status: 'approved' });
       toast.success(`Approved "${blog.title}"`);
+      setTimeout(() => window.location.reload(), 500);
     } catch (error) {
       console.error("Failed to approve blog", error);
       toast.error("Failed to approve blog");
+      setIsProcessing(false);
     }
   };
 
   const handleRejectBlog = async (blog: Blog) => {
-    // For now, rejection might just delete or set to rejected. Let's set to rejected.
-    // Or maybe delete? The prompt implies "approve it then only it should be displayed".
-    // Let's set status to 'rejected' so it's not deleted but hidden.
+    setIsProcessing(true);
     try {
       await updateBlog({ ...blog, status: 'rejected' });
       toast.success(`Rejected "${blog.title}"`);
+      setTimeout(() => window.location.reload(), 500);
     } catch (error) {
       console.error("Failed to reject blog", error);
       toast.error("Failed to reject blog");
+      setIsProcessing(false);
     }
   };
 
   return (
     <div className="flex-1 flex flex-col">
+      <AdminActionOverlay isProcessing={isProcessing} />
       <AdminHeader pageTitle="Blogs" />
       <div className="flex-1 p-6 md:p-8 lg:p-10 bg-gray-50">
         <AnimateOnScroll delay={100}>
@@ -77,10 +99,14 @@ const AdminBlogs = () => {
           </div>
         </AnimateOnScroll>
 
-        <Tabs defaultValue="pending" className="w-full">
+        <Tabs defaultValue="published" className="w-full">
           <TabsList className="grid w-full grid-cols-2 max-w-[400px] mb-8">
-            <TabsTrigger value="pending">Pending Review ({pendingBlogs.length})</TabsTrigger>
-            <TabsTrigger value="published">Published ({publishedBlogs.length})</TabsTrigger>
+            <TabsTrigger value="published">
+              Published ({loading ? <Loader2 className="inline-block h-3 w-3 animate-spin mx-1" /> : publishedBlogs.length})
+            </TabsTrigger>
+            <TabsTrigger value="pending">
+              Pending Review ({loading ? <Loader2 className="inline-block h-3 w-3 animate-spin mx-1" /> : pendingBlogs.length})
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="pending">
@@ -89,7 +115,7 @@ const AdminBlogs = () => {
                 {pendingBlogs.map((blog, index) => (
                   <AnimateOnScroll key={blog.id} delay={200 + index * 50}>
                     <div className="relative">
-                      <AdminBlogCard blog={blog} onDelete={deleteBlog} onEdit={handleEditBlog} />
+                      <AdminBlogCard blog={blog} onDelete={handleDeleteBlog} onEdit={handleEditBlog} />
                       <div className="absolute top-2 right-2 flex gap-2 z-10">
                         <Button size="sm" className="bg-green-600 hover:bg-green-700 h-8 w-8 p-0" onClick={() => handleApproveBlog(blog)} title="Approve">
                           <CheckCircle className="h-4 w-4 text-white" />
@@ -118,7 +144,7 @@ const AdminBlogs = () => {
                 {publishedBlogs.map((blog, index) => (
                   <AnimateOnScroll key={blog.id} delay={200 + index * 50}>
                     <div className="relative">
-                      <AdminBlogCard blog={blog} onDelete={deleteBlog} onEdit={handleEditBlog} />
+                      <AdminBlogCard blog={blog} onDelete={handleDeleteBlog} onEdit={handleEditBlog} />
                       <div className="absolute top-2 left-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-bold uppercase tracking-wider shadow-sm z-10">
                         Published
                       </div>

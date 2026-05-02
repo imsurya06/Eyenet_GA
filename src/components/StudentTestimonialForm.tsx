@@ -5,6 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Loader2, CheckCircle2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -30,6 +39,8 @@ const formSchema = z.object({
 
 const StudentTestimonialForm = () => {
   const { addTestimonial } = useTestimonials();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,13 +52,17 @@ const StudentTestimonialForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
     try {
       // Explicitly cast values to ensure type compatibility, excluding 'approved' as it's set in context
       await addTestimonial(values as Omit<Testimonial, 'id' | 'created_at' | 'approved'>);
       form.reset(); // Reset form after successful submission
+      setIsSuccess(true);
     } catch (error) {
       // Error handling is already in context, but can add more specific here if needed
       console.error("Error submitting testimonial from component:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,13 +129,39 @@ const StudentTestimonialForm = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 !text-white text-text-regular">
-                Submit Testimonial
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90 !text-white text-text-regular">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Testimonial"
+                )}
               </Button>
             </form>
           </Form>
         </AnimateOnScroll>
       </div>
+
+      <Dialog open={isSuccess} onOpenChange={setIsSuccess}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex flex-col items-center gap-4">
+              <CheckCircle2 className="w-12 h-12 text-green-500" />
+              Success!
+            </DialogTitle>
+            <DialogDescription className="text-center pt-2">
+              Your review has been submitted successfully and is pending approval.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setIsSuccess(false)} className="w-full">
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

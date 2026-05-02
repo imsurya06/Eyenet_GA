@@ -5,9 +5,10 @@ import { useBlogs } from '@/context/BlogContext';
 import AnimateOnScroll from './AnimateOnScroll';
 import { BookOpen, User2, CalendarDays } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BlogsDisplaySection = () => {
-  const { blogs } = useBlogs();
+  const { blogs, loading } = useBlogs();
 
   // Filter approved blogs and sort by date, newest first
   const sortedBlogs = [...blogs]
@@ -29,7 +30,27 @@ const BlogsDisplaySection = () => {
   return (
     <section className="pb-16 px-4 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
-        {sortedBlogs.length > 0 ? (
+        {loading ? (
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            {[1, 2, 3, 4, 5, 6].map((index) => (
+              <div key={index} className="break-inside-avoid mb-6">
+                <article className="bg-card border border-border/50 rounded-2xl overflow-hidden">
+                  <Skeleton className={cn("w-full", getAspectRatio(index))} />
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 mb-3">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                    <Skeleton className="h-8 w-3/4 mb-3" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                </article>
+              </div>
+            ))}
+          </div>
+        ) : sortedBlogs.length > 0 ? (
           <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
             {sortedBlogs.map((blog, index) => {
               const formattedDate = new Date(blog.date).toLocaleDateString('en-US', {

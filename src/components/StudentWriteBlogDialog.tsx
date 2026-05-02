@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ImagePlus, CalendarIcon } from 'lucide-react';
+import { ImagePlus, CalendarIcon, Loader2, CheckCircle2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -53,6 +53,8 @@ const formSchema = z.object({
 const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, onOpenChange }) => {
   const { addBlog } = useBlogs();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,6 +78,8 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
         imageFile: undefined,
       });
       setImagePreview(null);
+      setIsSuccess(false);
+      setIsSubmitting(false);
     }
   }, [open, form]);
 
@@ -96,6 +100,7 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
     let imageUrl: string | undefined = undefined;
 
     // Upload image file if a new one is selected
@@ -107,6 +112,7 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
         if (uploadError) {
           console.error("Supabase upload error:", uploadError);
           toast.error(`Failed to upload image: ${uploadError.message}`);
+          setIsSubmitting(false);
           return;
         }
         const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(filePath);
@@ -114,6 +120,7 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
       } catch (error: any) {
         console.error("Caught upload error in StudentWriteBlogDialog:", error);
         toast.error(`An unexpected error occurred during image upload: ${error.message || 'Please try again.'}`);
+        setIsSubmitting(false);
         return;
       }
     }
@@ -128,24 +135,31 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
       status: 'pending',
     };
 
-    addBlog(blogToSave);
-    toast.success("Blog post submitted for review!");
-    form.reset();
-    setImagePreview(null);
-    onOpenChange(false); // Close the dialog after submission
+    await addBlog(blogToSave);
+    setIsSubmitting(false);
+    setIsSuccess(true);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] p-6 md:p-8 max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
-            Write Your Blog
-          </DialogTitle>
-          <DialogDescription className="text-text-regular font-body text-gray-600">
-            Share your thoughts, experiences, and creative insights with the Eyenet community!
-          </DialogDescription>
-        </DialogHeader>
+        {isSuccess ? (
+          <div className="flex flex-col items-center justify-center py-10 space-y-4">
+            <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
+            <h2 className="text-2xl font-bold text-center">Successfully Submitted!</h2>
+            <p className="text-center text-gray-500 mb-6">Your blog has been submitted for review. It will appear once approved.</p>
+            <Button onClick={() => onOpenChange(false)} className="w-full">Close</Button>
+          </div>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-h4-mobile md:text-h4-desktop font-heading text-foreground">
+                Write Your Blog
+              </DialogTitle>
+              <DialogDescription className="text-text-regular font-body text-gray-600">
+                Share your thoughts, experiences, and creative insights with the Eyenet community!
+              </DialogDescription>
+            </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6 py-4">
             <FormField
@@ -251,12 +265,21 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
             </FormItem>
 
             <DialogFooter className="mt-4">
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90 !text-white text-text-regular mt-4">
-                Submit Blog Post
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90 !text-white text-text-regular mt-4">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Blog Post"
+                )}
               </Button>
             </DialogFooter>
           </form>
         </Form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

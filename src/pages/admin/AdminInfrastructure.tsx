@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Filter, LayoutGrid, Monitor, BookOpen, Building2, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { InfrastructureImage } from '@/data/infrastructureImages';
+import { AdminActionOverlay } from '@/components/AdminActionOverlay';
 
 const filterItems = [
   { name: 'All Images', category: null, icon: LayoutGrid },
@@ -27,6 +28,7 @@ const AdminInfrastructure = () => {
   const { infrastructureImages, deleteInfrastructureImage, addInfrastructureImage, updateInfrastructureImage } = useInfrastructureImages();
   const [isAddImageDialogOpen, setIsAddImageDialogOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<InfrastructureImage | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const filteredImages = React.useMemo(() => {
     if (!categoryFilter) {
@@ -45,14 +47,30 @@ const AdminInfrastructure = () => {
     setIsAddImageDialogOpen(true);
   };
 
-  const handleSaveImage = (image: InfrastructureImage) => {
-    if (editingImage) {
-      updateInfrastructureImage(image);
-    } else {
-      addInfrastructureImage(image);
+  const handleSaveImage = async (image: InfrastructureImage) => {
+    setIsProcessing(true);
+    try {
+      if (editingImage) {
+        await updateInfrastructureImage(image);
+      } else {
+        await addInfrastructureImage(image);
+      }
+      setIsAddImageDialogOpen(false);
+      setEditingImage(null);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
     }
-    setIsAddImageDialogOpen(false);
-    setEditingImage(null);
+  };
+
+  const handleDeleteImage = async (id: string) => {
+    setIsProcessing(true);
+    try {
+      await deleteInfrastructureImage(id);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
+    }
   };
 
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
@@ -60,6 +78,7 @@ const AdminInfrastructure = () => {
 
   return (
     <div className="flex-1 flex flex-col">
+      <AdminActionOverlay isProcessing={isProcessing} />
       <AdminHeader pageTitle="Infrastructure" />
       
       <div className="bg-background border-b border-border p-6 md:p-8 lg:p-10 flex items-center justify-between">
@@ -123,7 +142,7 @@ const AdminInfrastructure = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredImages.map((image, index) => (
               <AnimateOnScroll key={image.id} delay={200 + index * 50}>
-                <AdminInfrastructureImageCard image={image} onDelete={deleteInfrastructureImage} onEdit={handleEditImage} />
+                <AdminInfrastructureImageCard image={image} onDelete={handleDeleteImage} onEdit={handleEditImage} />
               </AnimateOnScroll>
             ))}
           </div>

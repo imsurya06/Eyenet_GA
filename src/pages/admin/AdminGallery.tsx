@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Filter, Image, LayoutGrid, CalendarDays } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GalleryImage } from '@/data/galleryImages';
+import { AdminActionOverlay } from '@/components/AdminActionOverlay';
 
 const filterItems = [
   { name: 'All Images', category: null, icon: LayoutGrid },
@@ -25,6 +26,7 @@ const AdminGallery = () => {
   const { galleryImages, deleteGalleryImage, addGalleryImage, updateGalleryImage } = useGalleryImages();
   const [isAddImageDialogOpen, setIsAddImageDialogOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const filteredImages = React.useMemo(() => {
     if (!categoryFilter) {
@@ -43,14 +45,30 @@ const AdminGallery = () => {
     setIsAddImageDialogOpen(true);
   };
 
-  const handleSaveImage = (image: GalleryImage) => {
-    if (editingImage) {
-      updateGalleryImage(image);
-    } else {
-      addGalleryImage(image);
+  const handleSaveImage = async (image: GalleryImage) => {
+    setIsProcessing(true);
+    try {
+      if (editingImage) {
+        await updateGalleryImage(image);
+      } else {
+        await addGalleryImage(image);
+      }
+      setIsAddImageDialogOpen(false);
+      setEditingImage(null);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
     }
-    setIsAddImageDialogOpen(false);
-    setEditingImage(null);
+  };
+
+  const handleDeleteImage = async (id: string) => {
+    setIsProcessing(true);
+    try {
+      await deleteGalleryImage(id);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
+    }
   };
 
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
@@ -58,6 +76,7 @@ const AdminGallery = () => {
 
   return (
     <div className="flex-1 flex flex-col">
+      <AdminActionOverlay isProcessing={isProcessing} />
       <AdminHeader pageTitle="Image Gallery" />
       
       <div className="bg-background border-b border-border p-6 md:p-8 lg:p-10 flex items-center justify-between">
@@ -121,7 +140,7 @@ const AdminGallery = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredImages.map((image, index) => (
               <AnimateOnScroll key={image.id} delay={200 + index * 50}>
-                <AdminGalleryImageCard image={image} onDelete={deleteGalleryImage} onEdit={handleEditImage} />
+                <AdminGalleryImageCard image={image} onDelete={handleDeleteImage} onEdit={handleEditImage} />
               </AnimateOnScroll>
             ))}
           </div>

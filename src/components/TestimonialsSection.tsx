@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Star, User2 } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
 import AnimateOnScroll from './AnimateOnScroll';
 import { useTestimonials } from '@/context/TestimonialContext'; // Import useTestimonials
 
@@ -27,9 +28,22 @@ const TestimonialsSection = () => {
       </AnimateOnScroll>
 
       {loading ? (
-        <AnimateOnScroll delay={300} className="col-span-full text-center text-text-medium text-gray-600">
-          Loading student stories...
-        </AnimateOnScroll>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[1, 2, 3].map((index) => (
+            <div key={index} className="flex flex-col items-center text-center p-6 rounded-2xl border border-gray-100 shadow-sm">
+              <Skeleton className="h-4 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-5/6 mb-8" />
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Skeleton key={i} className="h-5 w-5 rounded-full" />
+                ))}
+              </div>
+              <Skeleton className="w-16 h-16 rounded-full mb-4" />
+              <Skeleton className="h-4 w-32 mb-1" />
+              <Skeleton className="h-3 w-20" />
+            </div>
+          ))}
+        </div>
       ) : approvedTestimonials.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {approvedTestimonials.map((testimonial, index) => (

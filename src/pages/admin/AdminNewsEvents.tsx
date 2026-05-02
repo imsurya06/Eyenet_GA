@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Filter, Newspaper, CalendarDays, LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NewsEvent } from '@/data/newsEvents';
+import { AdminActionOverlay } from '@/components/AdminActionOverlay';
 
 const filterItems = [
   { name: 'All Items', category: null, icon: LayoutGrid },
@@ -24,6 +25,7 @@ const AdminNewsEvents = () => {
   const { newsEvents, deleteNewsEvent, addNewsEvent, updateNewsEvent } = useNewsEvents();
   const [isAddNewsEventDialogOpen, setIsAddNewsEventDialogOpen] = useState(false);
   const [editingNewsEvent, setEditingNewsEvent] = useState<NewsEvent | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const filteredNewsEvents = React.useMemo(() => {
     if (!categoryFilter) {
@@ -42,14 +44,30 @@ const AdminNewsEvents = () => {
     setIsAddNewsEventDialogOpen(true);
   };
 
-  const handleSaveNewsEvent = (newsEvent: NewsEvent) => {
-    if (editingNewsEvent) {
-      updateNewsEvent(newsEvent);
-    } else {
-      addNewsEvent(newsEvent);
+  const handleSaveNewsEvent = async (newsEvent: NewsEvent) => {
+    setIsProcessing(true);
+    try {
+      if (editingNewsEvent) {
+        await updateNewsEvent(newsEvent);
+      } else {
+        await addNewsEvent(newsEvent);
+      }
+      setIsAddNewsEventDialogOpen(false);
+      setEditingNewsEvent(null);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
     }
-    setIsAddNewsEventDialogOpen(false);
-    setEditingNewsEvent(null);
+  };
+
+  const handleDeleteNewsEvent = async (id: string) => {
+    setIsProcessing(true);
+    try {
+      await deleteNewsEvent(id);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
+    }
   };
 
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = React.useState(false);
@@ -57,6 +75,7 @@ const AdminNewsEvents = () => {
 
   return (
     <div className="flex-1 flex flex-col">
+      <AdminActionOverlay isProcessing={isProcessing} />
       <AdminHeader pageTitle="News & Events" />
       
       <div className="bg-background border-b border-border p-6 md:p-8 lg:p-10 flex items-center justify-between">
@@ -120,7 +139,7 @@ const AdminNewsEvents = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredNewsEvents.map((item, index) => (
               <AnimateOnScroll key={item.id} delay={200 + index * 50}>
-                <AdminNewsEventCard newsEvent={item} onDelete={deleteNewsEvent} onEdit={handleEditNewsEvent} />
+                <AdminNewsEventCard newsEvent={item} onDelete={handleDeleteNewsEvent} onEdit={handleEditNewsEvent} />
               </AnimateOnScroll>
             ))}
           </div>

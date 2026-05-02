@@ -5,23 +5,41 @@ import AdminHeader from '@/components/AdminHeader';
 import AdminTestimonialCard from '@/components/AdminTestimonialCard';
 import { useTestimonials } from '@/context/TestimonialContext';
 import { Testimonial } from '@/context/TestimonialContext';
+import { AdminActionOverlay } from '@/components/AdminActionOverlay';
+import { useState } from 'react';
 
 const AdminTestimonials = () => {
   const { testimonials, updateTestimonial, deleteTestimonial, loading } = useTestimonials();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleApproveToggle = async (id: string, currentStatus: boolean) => {
+    setIsProcessing(true);
     const testimonialToUpdate = testimonials.find(t => t.id === id);
     if (testimonialToUpdate) {
-      await updateTestimonial({ ...testimonialToUpdate, approved: !currentStatus });
+      try {
+        await updateTestimonial({ ...testimonialToUpdate, approved: !currentStatus });
+        setTimeout(() => window.location.reload(), 500);
+      } catch (error) {
+        setIsProcessing(false);
+      }
+    } else {
+      setIsProcessing(false);
     }
   };
 
   const handleDeleteTestimonial = async (id: string) => {
-    await deleteTestimonial(id);
+    setIsProcessing(true);
+    try {
+      await deleteTestimonial(id);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      setIsProcessing(false);
+    }
   };
 
   return (
     <div className="flex-1 flex flex-col">
+      <AdminActionOverlay isProcessing={isProcessing} />
       <AdminHeader pageTitle="Testimonials" />
       <div className="flex-1 p-6 md:p-8 lg:p-10 bg-gray-50">
         <AnimateOnScroll delay={100}>
