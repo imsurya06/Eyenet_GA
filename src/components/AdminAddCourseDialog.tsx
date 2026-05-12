@@ -29,7 +29,7 @@ import {
 import { useCourses } from '@/context/CourseContext';
 import { toast } from 'sonner';
 import { Course } from '@/data/courses';
-import { supabase } from '@/lib/supabaseClient';
+import { googleClient } from '@/lib/googleClient';
 import DynamicListInput from '@/components/ui/DynamicListInput';
 import ModuleListInput, { ModuleItem } from '@/components/ui/ModuleListInput';
 
@@ -168,9 +168,9 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
       const file = values.brochureFile;
       const filePath = `brochures/${Date.now()}-${file.name}`;
       try {
-        const { data, error } = await supabase.storage.from('brochures').upload(filePath, file);
+        const { data, error } = await googleClient.storage.from('brochures').upload(filePath, file);
         if (error) throw error;
-        const { data: publicUrlData } = supabase.storage.from('brochures').getPublicUrl(filePath);
+        const { data: publicUrlData } = googleClient.storage.from('brochures').getPublicUrl(filePath);
         brochureLink = publicUrlData.publicUrl;
       } catch (error: any) {
         toast.error(`Failed to upload brochure: ${error.message}`);
@@ -182,9 +182,9 @@ const AdminAddCourseDialog: React.FC<AdminAddCourseDialogProps> = ({ open, onOpe
       const file = values.courseImage;
       const filePath = `images/${Date.now()}-${file.name}`;
       try {
-        const { data, error } = await supabase.storage.from('images').upload(filePath, file);
+        const { data, error } = await googleClient.storage.from('images').upload(filePath, file);
         if (error) throw error;
-        const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(filePath);
+        const { data: publicUrlData } = googleClient.storage.from('images').getPublicUrl(filePath);
         imageUrl = publicUrlData.publicUrl;
       } catch (error: any) {
         toast.error(`Failed to upload course image: ${error.message}`);

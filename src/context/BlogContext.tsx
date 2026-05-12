@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { initialBlogs, Blog } from '@/data/blogs';
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 import { toast } from 'sonner'; // Import toast for notifications
 
 interface BlogContextType {
@@ -23,7 +23,7 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('blogs')
         .select('*')
         .order('date', { ascending: false }); // Order by date, newest first
@@ -44,7 +44,7 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const addBlog = async (blog: Blog) => {
     // Ensure the ID is unique for Supabase
     const blogToInsert = { ...blog, id: blog.id || `blog-${Date.now()}` };
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('blogs')
       .insert([blogToInsert])
       .select(); // Select the inserted data to get any default values/timestamps
@@ -59,7 +59,7 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const deleteBlog = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await googleClient
       .from('blogs')
       .delete()
       .eq('id', id);
@@ -74,7 +74,7 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const updateBlog = async (updatedBlog: Blog) => {
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('blogs')
       .update(updatedBlog)
       .eq('id', updatedBlog.id)

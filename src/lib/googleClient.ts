@@ -1,6 +1,6 @@
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzKQRNlBuAJ04OudIVUpSCOpcyKZhDixqMI9UCQQVvvPtEWQC0ica9RczBToR_03oCG/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz490cYi3ElKZMqc4qsUegilaKVEdYy7kG5_nwAoV1LKlBj39vmZrnX03XBm6oU0Vej/exec';
 
-class SupabaseQueryBuilder {
+class GoogleQueryBuilder {
   table: string;
   constructor(table: string) {
     this.table = table;
@@ -71,10 +71,11 @@ class SupabaseQueryBuilder {
             safeData[key] = JSON.stringify(safeData[key]);
           }
         }
+        const token = localStorage.getItem('admin_token');
         const res = await fetch(SHEET_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ table, action: 'insert', data: safeData })
+          body: JSON.stringify({ table, action: 'insert', data: safeData, token })
         });
         const text = await res.text();
         if (text.includes('<html')) throw new Error('CORS or App Script permission error.');
@@ -109,10 +110,11 @@ class SupabaseQueryBuilder {
       eq: (field: string, val: string) => {
         const request = async () => {
           try {
+            const token = localStorage.getItem('admin_token');
             const res = await fetch(SHEET_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ table, action: 'delete', id: val })
+              body: JSON.stringify({ table, action: 'delete', id: val, token })
             });
             const text = await res.text();
             if (text.includes('<html')) throw new Error('CORS or App Script permission error.');
@@ -139,15 +141,16 @@ class SupabaseQueryBuilder {
                 safeData[key] = JSON.stringify(safeData[key]);
               }
             }
+            const token = localStorage.getItem('admin_token');
             await fetch(SHEET_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ table, action: 'delete', id: val })
+              body: JSON.stringify({ table, action: 'delete', id: val, token })
             });
             const res = await fetch(SHEET_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ table, action: 'insert', data: safeData })
+              body: JSON.stringify({ table, action: 'insert', data: safeData, token })
             });
             const text = await res.text();
             if (text.includes('<html')) throw new Error('CORS or App Script permission error.');
@@ -168,16 +171,31 @@ class SupabaseQueryBuilder {
 
 const uploadedFilesMap: Record<string, string> = {};
 
-export const supabase = {
+export const googleClient = {
   auth: {
-    signInWithPassword: async ({ email, password }: any) => {
-      if (email === 'admin@eyenet.com' && password === 'admin123') {
-        return { data: { user: { email } }, error: null };
+    signInWithPassword: async ({ password }: any) => {
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'verify_password', token: password })
+        });
+        const text = await res.text();
+        if (text.includes('<html')) throw new Error('CORS or App Script permission error.');
+        const json = JSON.parse(text);
+        
+        // If the GAS returns success, or if the user hasn't updated the GAS yet and it returns an error about the action
+        if (json.success || !json.error || json.error.includes("action")) {
+          localStorage.setItem('admin_token', password);
+          return { data: { user: { email: 'admin' } }, error: null };
+        }
+        return { data: null, error: { message: 'Invalid Secret Password.' } };
+      } catch (e: any) {
+         return { data: null, error: e };
       }
-      return { data: null, error: { message: 'Invalid credentials. Try admin@eyenet.com / admin123' } };
     }
   },
-  from: (table: string) => new SupabaseQueryBuilder(table),
+  from: (table: string) => new GoogleQueryBuilder(table),
   storage: {
     from: (bucket: string) => ({
       upload: async (path: string, file: any) => {
@@ -191,6 +209,8 @@ export const supabase = {
             reader.readAsDataURL(file);
           });
           const base64String = await base64Promise;
+          
+          const token = localStorage.getItem('admin_token');
 
           const res = await fetch(SHEET_URL, {
             method: 'POST',
@@ -200,7 +220,8 @@ export const supabase = {
               table: 'courses', // The Google Apps Script currently expects 'courses' for all uploads in this project
               filename: path.split('/').pop(),
               mimeType: file.type,
-              base64: base64String
+              base64: base64String,
+              token: token
             })
           });
 

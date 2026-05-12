@@ -18,13 +18,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { supabase } from '@/lib/supabaseClient';
+import { googleClient } from '@/lib/googleClient';
 import { Eye, EyeOff } from 'lucide-react'; // Import Eye and EyeOff icons
 
 // Define the schema for the login form
 const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
-  password: z.string().min(1, { message: 'Password is required.' }),
+  password: z.string().min(1, { message: 'Secret Password is required.' }),
 });
 
 const AdminLogin = () => {
@@ -34,27 +33,24 @@ const AdminLogin = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
       password: '',
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: values.email,
+      const { data, error } = await googleClient.auth.signInWithPassword({
         password: values.password,
       });
 
       if (error) {
-        console.error("Supabase login error:", error);
+        console.error("Login error:", error);
         toast.error(`Login failed: ${error.message}`);
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
         toast.success("Login successful! Redirecting to admin dashboard...");
-        localStorage.setItem('adminUsername', data.user.email || 'Admin User');
         setTimeout(() => {
           navigate('/admin-dashboard');
         }, 1500);
@@ -83,27 +79,6 @@ const AdminLogin = () => {
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-text-regular font-body text-foreground mb-2 block text-left">
-                      Email*
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="admin@example.com"
-                        className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="password"

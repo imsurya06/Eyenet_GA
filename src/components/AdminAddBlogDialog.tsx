@@ -32,7 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 
 interface AdminAddBlogDialogProps {
   open: boolean;
@@ -112,12 +112,12 @@ const AdminAddBlogDialog: React.FC<AdminAddBlogDialogProps> = ({ open, onOpenCha
       const file = values.imageFile;
       const filePath = `images/${Date.now()}-${file.name}`;
       try {
-        const { data, error } = await supabase.storage.from('images').upload(filePath, file);
+        const { data, error } = await googleClient.storage.from('images').upload(filePath, file);
         if (error) {
           console.error("Supabase upload error:", error); // Log the full error object
           throw error;
         }
-        const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(filePath);
+        const { data: publicUrlData } = googleClient.storage.from('images').getPublicUrl(filePath);
         imageUrl = publicUrlData.publicUrl;
       } catch (error: any) {
         console.error("Caught upload error in AdminAddBlogDialog:", error); // Log the full caught error

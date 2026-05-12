@@ -28,7 +28,7 @@ import {
 import { useInfrastructureImages } from '@/context/InfrastructureImageContext';
 import { toast } from 'sonner';
 import { InfrastructureImage } from '@/data/infrastructureImages';
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 
 interface AdminAddInfrastructureImageDialogProps {
   open: boolean;
@@ -102,9 +102,9 @@ const AdminAddInfrastructureImageDialog: React.FC<AdminAddInfrastructureImageDia
       const file = values.imageFile;
       const filePath = `images/${Date.now()}-${file.name}`;
       try {
-        const { data, error } = await supabase.storage.from('images').upload(filePath, file);
+        const { data, error } = await googleClient.storage.from('images').upload(filePath, file);
         if (error) throw error;
-        const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(filePath);
+        const { data: publicUrlData } = googleClient.storage.from('images').getPublicUrl(filePath);
         imageUrl = publicUrlData.publicUrl;
       } catch (error: any) {
         toast.error(`Failed to upload image: ${error.message}`);

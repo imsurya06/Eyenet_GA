@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { initialGalleryImages, GalleryImage } from '@/data/galleryImages';
-import { supabase } from '@/lib/supabaseClient';
+import { googleClient } from '@/lib/googleClient';
 import { toast } from 'sonner';
 
 interface GalleryImageContextType {
@@ -23,7 +23,7 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('gallery_images')
         .select('*')
         .order('created_at', { ascending: false });
@@ -59,7 +59,7 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
         id: id || `gallery-${Date.now()}` // Ensure ID is present for Google Sheet mock
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('gallery_images')
         .insert([galleryImageToInsert])
         .select();
@@ -77,7 +77,7 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
 
   const deleteGalleryImage = async (id: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await googleClient
         .from('gallery_images')
         .delete()
         .eq('id', id);
@@ -94,7 +94,7 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
 
   const updateGalleryImage = async (updatedImage: GalleryImage) => {
     try {
-      const { error } = await supabase
+      const { error } = await googleClient
         .from('gallery_images')
         .update({
           src: updatedImage.src,

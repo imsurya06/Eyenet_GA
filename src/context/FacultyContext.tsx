@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { initialFaculty, Faculty } from '@/data/faculty';
-import { supabase } from '@/lib/supabaseClient';
+import { googleClient } from '@/lib/googleClient';
 import { toast } from 'sonner';
 
 interface FacultyContextType {
@@ -22,7 +22,7 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
   useEffect(() => {
     const fetchFaculty = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('faculty')
         .select('*')
         .order('name', { ascending: true });
@@ -42,7 +42,7 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const addFaculty = async (newFaculty: Omit<Faculty, 'id' | 'created_at'>) => {
     const facultyToInsert = { ...newFaculty, id: `faculty-${Date.now()}` }; // Generate a client-side ID for immediate UI update
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('faculty')
       .insert([facultyToInsert])
       .select();
@@ -57,7 +57,7 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const updateFaculty = async (updatedFaculty: Faculty) => {
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('faculty')
       .update(updatedFaculty)
       .eq('id', updatedFaculty.id)
@@ -75,7 +75,7 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const deleteFaculty = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await googleClient
       .from('faculty')
       .delete()
       .eq('id', id);

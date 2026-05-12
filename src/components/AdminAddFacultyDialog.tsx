@@ -28,7 +28,7 @@ import {
 import { useFaculty } from '@/context/FacultyContext';
 import { toast } from 'sonner';
 import { Faculty } from '@/data/faculty';
-import { supabase } from '@/lib/supabaseClient';
+import { googleClient } from '@/lib/googleClient';
 
 interface AdminAddFacultyDialogProps {
   open: boolean;
@@ -106,9 +106,9 @@ const AdminAddFacultyDialog: React.FC<AdminAddFacultyDialogProps> = ({ open, onO
       const file = values.imageFile;
       const filePath = `faculty_images/${Date.now()}-${file.name}`;
       try {
-        const { data, error } = await supabase.storage.from('images').upload(filePath, file);
+        const { data, error } = await googleClient.storage.from('images').upload(filePath, file);
         if (error) throw error;
-        const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(filePath);
+        const { data: publicUrlData } = googleClient.storage.from('images').getPublicUrl(filePath);
         imageUrl = publicUrlData.publicUrl;
       } catch (error: any) {
         toast.error(`Failed to upload image: ${error.message}`);

@@ -19,7 +19,7 @@ const Index = () => {
         {/* Mobile Background Image with Overlay */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat lg:hidden"
-          style={{ backgroundImage: 'url(/images/hero-model.png)' }}
+          style={{ backgroundImage: 'url(/images/hero-model.jpg)' }}
         >
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
@@ -47,7 +47,7 @@ const Index = () => {
         {/* Right Section: Image (Desktop Only) */}
         <AnimateOnScroll isHero={true} delay={200} className="hidden lg:flex lg:w-1/2 h-full justify-end items-center relative z-10">
           <img
-            src="/images/hero-model.png"
+            src="/images/hero-model.jpg"
             alt="Fashion model illustration"
             className="max-h-full w-auto object-contain object-right rounded-lg animate-float"
           />

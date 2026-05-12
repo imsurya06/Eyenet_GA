@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { googleClient } from '@/lib/googleClient';
 import { toast } from 'sonner';
 
 export interface Testimonial {
@@ -30,7 +30,7 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
   useEffect(() => {
     const fetchTestimonials = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('testimonials')
         .select('*')
         .order('created_at', { ascending: false });
@@ -49,7 +49,7 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const addTestimonial = async (newTestimonial: Omit<Testimonial, 'id' | 'created_at' | 'approved'>) => {
     const testimonialToInsert = { ...newTestimonial, approved: false }; // Default to not approved
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('testimonials')
       .insert([testimonialToInsert])
       .select();
@@ -64,7 +64,7 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
   };
 
   const updateTestimonial = async (updatedTestimonial: Testimonial) => {
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('testimonials')
       .update(updatedTestimonial)
       .eq('id', updatedTestimonial.id)
@@ -82,7 +82,7 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
   };
 
   const deleteTestimonial = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await googleClient
       .from('testimonials')
       .delete()
       .eq('id', id);

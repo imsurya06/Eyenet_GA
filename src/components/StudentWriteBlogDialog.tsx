@@ -32,7 +32,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Blog } from '@/data/blogs';
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 
 interface StudentWriteBlogDialogProps {
   open: boolean;
@@ -108,14 +108,14 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
       const file = values.imageFile;
       const filePath = `blogs/${Date.now()}-${file.name}`; // Store in a 'blogs' subfolder
       try {
-        const { error: uploadError } = await supabase.storage.from('images').upload(filePath, file);
+        const { error: uploadError } = await googleClient.storage.from('images').upload(filePath, file);
         if (uploadError) {
           console.error("Supabase upload error:", uploadError);
           toast.error(`Failed to upload image: ${uploadError.message}`);
           setIsSubmitting(false);
           return;
         }
-        const { data: publicUrlData } = supabase.storage.from('images').getPublicUrl(filePath);
+        const { data: publicUrlData } = googleClient.storage.from('images').getPublicUrl(filePath);
         imageUrl = publicUrlData.publicUrl;
       } catch (error: any) {
         console.error("Caught upload error in StudentWriteBlogDialog:", error);

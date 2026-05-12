@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { Course } from '@/data/courses'; // Keep Course interface, but initialCourses is no longer imported
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 import { toast } from 'sonner'; // Import toast for notifications
 
 interface CourseContextType {
@@ -23,7 +23,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   useEffect(() => {
     const fetchCourses = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('courses')
         .select('*')
         .order('title', { ascending: true }); // Order by title for consistent display
@@ -47,7 +47,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     // Ensure the ID is unique for Supabase
     const courseToInsert = { ...coursePayload, id: course.id || `course-${Date.now()}` };
 
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('courses')
       .insert([courseToInsert])
       .select(); // Select the inserted data to get any default values/timestamps
@@ -62,7 +62,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   };
 
   const deleteCourse = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await googleClient
       .from('courses')
       .delete()
       .eq('id', id);
@@ -79,7 +79,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const updateCourse = async (updatedCourse: Course) => {
     // Omit 'icon' property before sending to Supabase. 'created_at' is not part of the Course interface.
     const { icon, ...coursePayload } = updatedCourse;
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('courses')
       .update(coursePayload) // Send payload without icon
       .eq('id', updatedCourse.id);

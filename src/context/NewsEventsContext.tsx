@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { initialNewsEvents, NewsEvent } from '@/data/newsEvents';
-import { supabase } from '@/lib/supabaseClient'; // Import Supabase client
+import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 import { toast } from 'sonner'; // Import toast for notifications
 
 interface NewsEventsContextType {
@@ -23,7 +23,7 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
   useEffect(() => {
     const fetchNewsEvents = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await googleClient
         .from('news_events') // Changed table name to 'news_events'
         .select('*')
         .order('date', { ascending: false }); // Order by date, newest first
@@ -44,7 +44,7 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
   const addNewsEvent = async (newsEvent: NewsEvent) => {
     // Ensure the ID is unique for Supabase
     const newsEventToInsert = { ...newsEvent, id: newsEvent.id || `news-event-${Date.now()}` };
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('news_events') // Changed table name to 'news_events'
       .insert([newsEventToInsert])
       .select(); // Select the inserted data to get any default values/timestamps
@@ -59,7 +59,7 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   const deleteNewsEvent = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await googleClient
       .from('news_events') // Changed table name to 'news_events'
       .delete()
       .eq('id', id);
@@ -74,7 +74,7 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   const updateNewsEvent = async (updatedNewsEvent: NewsEvent) => {
-    const { data, error } = await supabase
+    const { data, error } = await googleClient
       .from('news_events') // Changed table name to 'news_events'
       .update(updatedNewsEvent)
       .eq('id', updatedNewsEvent.id)
