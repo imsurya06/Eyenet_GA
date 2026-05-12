@@ -97,11 +97,11 @@ export default {
         'text-tiny': ['0.675rem', { lineHeight: '160%' }], // Reduced from 0.75rem
 
         // Desktop overrides for body text (will be applied via globals.css)
-        'desktop-text-large': ['2rem', { lineHeight: '160%' }],
-        'desktop-text-medium': ['1.75rem', { lineHeight: '160%' }],
-        'desktop-text-regular': ['1.25rem', { lineHeight: '160%' }],
-        'desktop-text-small': ['1.125rem', { lineHeight: '160%' }],
-        'desktop-text-tiny': ['1rem', { lineHeight: '160%' }],
+        'desktop-text-large': ['1.25rem', { lineHeight: '1.6' }], // 20px
+        'desktop-text-medium': ['1.125rem', { lineHeight: '1.6' }], // 18px
+        'desktop-text-regular': ['1rem', { lineHeight: '1.6' }], // 16px
+        'desktop-text-small': ['0.875rem', { lineHeight: '1.6' }], // 14px
+        'desktop-text-tiny': ['0.75rem', { lineHeight: '1.6' }], // 12px
       },
       boxShadow: {
         'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',

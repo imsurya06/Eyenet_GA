@@ -26,10 +26,10 @@ const Index = () => {
 
         {/* Left Section: Text Content */}
         <AnimateOnScroll isHero={true} delay={100} className="relative z-10 text-center lg:text-left max-w-2xl lg:w-1/2 lg:mb-0">
-          <h1 className="text-h1-mobile lg:text-h1-desktop font-heading mb-4 text-white lg:text-foreground">
+          <h1 className="text-h1-mobile lg:text-[3rem] xl:text-h1-desktop font-heading mb-4 text-white lg:text-foreground leading-tight">
             Design your <br className="hidden lg:block" /> future with creative excellence
           </h1>
-          <p className="text-text-regular lg:text-text-large font-body mb-8 text-white lg:text-gray-600">
+          <p className="text-text-regular lg:text-text-medium xl:text-text-large font-body mb-8 text-white lg:text-gray-600">
             Transform your passion into a professional career. Our institute offers
             comprehensive design education that bridges creativity with industry
             expertise.
@@ -49,7 +49,7 @@ const Index = () => {
           <img
             src="/images/hero-model.png"
             alt="Fashion model illustration"
-            className="max-h-[85vh] lg:max-h-[850px] w-auto object-contain object-right rounded-lg animate-float"
+            className="max-h-[60vh] lg:max-h-[500px] xl:max-h-[700px] 2xl:max-h-[850px] w-auto object-contain object-right rounded-lg animate-float"
           />
         </AnimateOnScroll>
       </div>
