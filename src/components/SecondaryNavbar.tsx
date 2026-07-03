@@ -81,7 +81,7 @@ const SecondaryNavbar = () => {
                 )
               }
               // Prevent NavLink from considering the base path active for the FAQ hash link
-              isActive={isFaqLink ? () => isFaqInView : undefined}
+              end={isFaqLink ? true : false}
             >
               {link.name}
             </NavLink>

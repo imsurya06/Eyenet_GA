@@ -1,16 +1,13 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { Course } from '@/data/courses'; // Keep Course interface, but initialCourses is no longer imported
-import { googleClient } from '@/lib/googleClient'; // Import Supabase client
-import { toast } from 'sonner'; // Import toast for notifications
+import { Course } from '@/data/courses';
+import { sanityClient, urlFor } from '@/lib/sanityClient';
+import { toast } from 'sonner';
 
 interface CourseContextType {
   courses: Course[];
-  deleteCourse: (id: string) => Promise<void>;
-  addCourse: (course: Course) => Promise<void>;
-  updateCourse: (updatedCourse: Course) => Promise<void>;
-  loading: boolean; // Add loading state
+  loading: boolean;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -19,82 +16,34 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch courses from Supabase on initial load
   useEffect(() => {
     const fetchCourses = async () => {
       setLoading(true);
-      const { data, error } = await googleClient
-        .from('courses')
-        .select('*')
-        .order('title', { ascending: true }); // Order by title for consistent display
+      try {
+        const query = '*[_type == "course"] | order(title asc)';
+        const data = await sanityClient.fetch(query);
+        
+        // Map Sanity data to our Course interface
+        const mappedCourses: Course[] = data.map((doc: any) => ({
+          ...doc,
+          id: doc._id,
+          image: doc.image ? urlFor(doc.image).url() : '',
+        }));
 
-      if (error) {
-        console.error('Error fetching courses:', error);
+        setCourses(mappedCourses);
+      } catch (error) {
+        console.error('Error fetching courses from Sanity:', error);
         toast.error('Failed to load courses.');
-        // Removed fallback to initialCourses. If Supabase fails, courses will remain empty.
-      } else {
-        setCourses(data as Course[]);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchCourses();
   }, []);
 
-  const addCourse = async (course: Course) => {
-    // Omit the 'icon' property before sending to Supabase
-    const { icon, ...coursePayload } = course;
-    // Ensure the ID is unique for Supabase
-    const courseToInsert = { ...coursePayload, id: course.id || `course-${Date.now()}` };
-
-    const { data, error } = await googleClient
-      .from('courses')
-      .insert([courseToInsert])
-      .select(); // Select the inserted data to get any default values/timestamps
-
-    if (error) {
-      console.error('Error adding course:', error);
-      toast.error('Failed to add course.');
-    } else {
-      toast.success('Course added successfully!');
-      setTimeout(() => window.location.reload(), 1000); // Reload after toast
-    }
-  };
-
-  const deleteCourse = async (id: string) => {
-    const { error } = await googleClient
-      .from('courses')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      console.error('Error deleting course:', error);
-      toast.error('Failed to delete course.');
-    } else {
-      toast.success('Course deleted successfully!');
-      setTimeout(() => window.location.reload(), 1000);
-    }
-  };
-
-  const updateCourse = async (updatedCourse: Course) => {
-    // Omit 'icon' property before sending to Supabase. 'created_at' is not part of the Course interface.
-    const { icon, ...coursePayload } = updatedCourse;
-    const { data, error } = await googleClient
-      .from('courses')
-      .update(coursePayload) // Send payload without icon
-      .eq('id', updatedCourse.id);
-
-    if (error) {
-      console.error('Error updating course:', error);
-      toast.error(`Failed to update course: ${error.message}`);
-    } else {
-      toast.success('Course updated successfully!');
-      setTimeout(() => window.location.reload(), 1000);
-    }
-  };
-
   return (
-    <CourseContext.Provider value={{ courses, deleteCourse, addCourse, updateCourse, loading }}>
+    <CourseContext.Provider value={{ courses, loading }}>
       {children}
     </CourseContext.Provider>
   );

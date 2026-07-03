@@ -32,7 +32,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Blog } from '@/data/blogs';
-import { googleClient } from '@/lib/googleClient'; // Import Supabase client
 
 interface StudentWriteBlogDialogProps {
   open: boolean;
@@ -51,7 +50,6 @@ const formSchema = z.object({
 });
 
 const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, onOpenChange }) => {
-  const { addBlog } = useBlogs();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -101,43 +99,36 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    let imageUrl: string | undefined = undefined;
+    try {
+      const payload = {
+        title: values.title,
+        author: values.author,
+        date: format(values.date, 'yyyy-MM-dd'),
+        content: values.content,
+        imageBase64: imagePreview,
+        imageName: values.imageFile?.name
+      };
 
-    // Upload image file if a new one is selected
-    if (values.imageFile) {
-      const file = values.imageFile;
-      const filePath = `blogs/${Date.now()}-${file.name}`; // Store in a 'blogs' subfolder
-      try {
-        const { error: uploadError } = await googleClient.storage.from('images').upload(filePath, file);
-        if (uploadError) {
-          console.error("Supabase upload error:", uploadError);
-          toast.error(`Failed to upload image: ${uploadError.message}`);
-          setIsSubmitting(false);
-          return;
-        }
-        const { data: publicUrlData } = googleClient.storage.from('images').getPublicUrl(filePath);
-        imageUrl = publicUrlData.publicUrl;
-      } catch (error: any) {
-        console.error("Caught upload error in StudentWriteBlogDialog:", error);
-        toast.error(`An unexpected error occurred during image upload: ${error.message || 'Please try again.'}`);
-        setIsSubmitting(false);
-        return;
+      const response = await fetch('/api/blogs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || 'Failed to submit blog');
       }
+
+      setIsSuccess(true);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || 'An error occurred while submitting your blog. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const blogToSave: Blog = {
-      id: `student-blog-${Date.now()}`, // Unique ID for student blogs
-      title: values.title,
-      author: values.author,
-      date: format(values.date, 'yyyy-MM-dd'),
-      content: values.content,
-      image: imageUrl, // Use the uploaded image URL
-      status: 'pending',
-    };
-
-    await addBlog(blogToSave);
-    setIsSubmitting(false);
-    setIsSuccess(true);
   };
 
   return (

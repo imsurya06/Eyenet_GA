@@ -13,7 +13,7 @@ interface DynamicGalleryCarouselSectionProps {
 }
 
 const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps> = ({ withButton = false }) => {
-  const { galleryImages, loading } = useGalleryImages(); // Use the context to get images
+  const { images: galleryImages = [], loading } = useGalleryImages(); // Use the context to get images
 
   // Filter out images that are already used in the static GalleryCarouselSection if needed,
   // or just display all dynamic images. For now, we'll display all from context.

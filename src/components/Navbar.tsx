@@ -15,7 +15,6 @@ import { Menu, ChevronDown } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import CourseDropdownMenuItem from './CourseDropdownMenuItem.tsx';
-import AdminMenu from './AdminMenu';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -185,7 +184,6 @@ const Navbar = () => {
             <Button variant="default" asChild className="hover:animate-shake">
               <Link to="/admissions">Apply</Link>
             </Button>
-            <AdminMenu />
           </div>
         </>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { googleClient } from '@/lib/googleClient';
+import { sanityClient } from '@/lib/sanityClient';
 import { toast } from 'sonner';
 
 export interface Testimonial {
@@ -9,15 +9,13 @@ export interface Testimonial {
   name: string;
   rating: number;
   quote: string;
-  approved: boolean; // Added approved status
+  approved: boolean;
   created_at: string;
 }
 
 interface TestimonialContextType {
   testimonials: Testimonial[];
   addTestimonial: (testimonial: Omit<Testimonial, 'id' | 'created_at' | 'approved'>) => Promise<void>;
-  updateTestimonial: (updatedTestimonial: Testimonial) => Promise<void>; // Added update function
-  deleteTestimonial: (id: string) => Promise<void>; // Added delete function
   loading: boolean;
 }
 
@@ -30,74 +28,37 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
   useEffect(() => {
     const fetchTestimonials = async () => {
       setLoading(true);
-      const { data, error } = await googleClient
-        .from('testimonials')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        // Only fetch approved testimonials for the frontend
+        const query = '*[_type == "testimonial" && approved == true] | order(_createdAt desc)';
+        const data = await sanityClient.fetch(query);
+        
+        const mappedTestimonials: Testimonial[] = data.map((doc: any) => ({
+          ...doc,
+          id: doc._id,
+          created_at: doc._createdAt,
+        }));
 
-      if (error) {
-        console.error('Error fetching testimonials:', error);
+        setTestimonials(mappedTestimonials);
+      } catch (error) {
+        console.error('Error fetching testimonials from Sanity:', error);
         toast.error('Failed to load testimonials.');
-      } else {
-        setTestimonials(data as Testimonial[]);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchTestimonials();
   }, []);
 
   const addTestimonial = async (newTestimonial: Omit<Testimonial, 'id' | 'created_at' | 'approved'>) => {
-    const testimonialToInsert = { ...newTestimonial, approved: false }; // Default to not approved
-    const { data, error } = await googleClient
-      .from('testimonials')
-      .insert([testimonialToInsert])
-      .select();
-
-    if (error) {
-      console.error('Error adding testimonial:', error);
-      toast.error(`Failed to submit testimonial: ${error.message}`);
-    } else if (data && data.length > 0) {
-      setTestimonials(prev => [data[0], ...prev]);
-      toast.success('Testimonial submitted successfully!');
-    }
-  };
-
-  const updateTestimonial = async (updatedTestimonial: Testimonial) => {
-    const { data, error } = await googleClient
-      .from('testimonials')
-      .update(updatedTestimonial)
-      .eq('id', updatedTestimonial.id)
-      .select();
-
-    if (error) {
-      console.error('Error updating testimonial:', error);
-      toast.error(`Failed to update testimonial: ${error.message}`);
-    } else if (data && data.length > 0) {
-      setTestimonials(prev =>
-        prev.map(t => (t.id === updatedTestimonial.id ? data[0] : t))
-      );
-      toast.success('Testimonial updated successfully!');
-    }
-  };
-
-  const deleteTestimonial = async (id: string) => {
-    const { error } = await googleClient
-      .from('testimonials')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      console.error('Error deleting testimonial:', error);
-      toast.error(`Failed to delete testimonial: ${error.message}`);
-    } else {
-      setTestimonials(prev => prev.filter(t => t.id !== id));
-      toast.success('Testimonial deleted successfully!');
-    }
+    // Currently, submitting testimonials from frontend to Sanity is disabled
+    // because doing so securely requires a backend server/function with a write token.
+    toast.error('Testimonial submissions are temporarily disabled while the backend is being migrated.');
   };
 
   return (
-    <TestimonialContext.Provider value={{ testimonials, addTestimonial, updateTestimonial, deleteTestimonial, loading }}>
+    <TestimonialContext.Provider value={{ testimonials, addTestimonial, loading }}>
       {children}
     </TestimonialContext.Provider>
   );

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
@@ -19,20 +19,10 @@ import NewsEvents from "./pages/NewsEvents";
 import FashionDesignCourses from "./pages/FashionDesignCourses";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
 import ComputerCourses from "./pages/ComputerCourses";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminCourses from "./pages/admin/AdminCourses";
-import AdminGallery from "./pages/admin/AdminGallery";
-import AdminInfrastructure from "./pages/admin/AdminInfrastructure";
-import AdminNewsEvents from "./pages/admin/AdminNewsEvents";
-import AdminBlogs from "./pages/admin/AdminBlogs";
-import AdminImages from "./pages/admin/AdminImages";
-import AdminTestimonials from "./pages/admin/AdminTestimonials";
-import AdminFaculty from "./pages/admin/AdminFaculty";
 import Blogs from "./pages/Blogs";
-import FacultyPage from "./pages/FacultyPage"; // Import new FacultyPage
-import ThreeSixtyView from "./pages/ThreeSixtyView"; // Import new ThreeSixtyView
-import OurServices from "./pages/OurServices"; // Import new OurServices page
+import FacultyPage from "./pages/FacultyPage";
+import ThreeSixtyView from "./pages/ThreeSixtyView";
+import OurServices from "./pages/OurServices";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { CourseProvider } from "./context/CourseContext";
@@ -44,41 +34,6 @@ import { TestimonialProvider } from "./context/TestimonialContext";
 import { FacultyProvider } from "./context/FacultyContext";
 
 const queryClient = new QueryClient();
-
-// New component to conditionally render the Navbar
-const ConditionalSecondaryNavbar = () => {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin-dashboard');
-
-  if (isAdminRoute) {
-    return null;
-  }
-
-  return <SecondaryNavbar />;
-};
-
-const ConditionalNavbar = () => {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin-dashboard');
-
-  if (isAdminRoute) {
-    return null; // Don't render Navbar on admin dashboard routes
-  }
-
-  return <Navbar />;
-};
-
-// Existing component to conditionally render the Footer
-const ConditionalFooter = () => {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin-dashboard');
-
-  if (isAdminRoute) {
-    return null; // Don't render footer on admin dashboard routes
-  }
-
-  return <Footer />;
-};
 
 const App = () => {
   return (
@@ -95,8 +50,8 @@ const App = () => {
                   <BlogProvider>
                     <TestimonialProvider>
                       <FacultyProvider>
-                        <ConditionalSecondaryNavbar />
-                        <ConditionalNavbar />
+                        <SecondaryNavbar />
+                        <Navbar />
                         <Routes>
                           <Route path="/" element={<Index />} />
                           <Route path="/about" element={<About />} />
@@ -106,7 +61,7 @@ const App = () => {
                           <Route path="/courses/fashion-design/:slug" element={<CourseDetailsPage />} />
                           <Route path="/courses/computer-courses" element={<ComputerCourses />} />
                           <Route path="/courses/computer-courses/:slug" element={<CourseDetailsPage />} />
-                          <Route path="/courses/other-courses/:slug" element={<CourseDetailsPage />} /> {/* New route for other courses */}
+                          <Route path="/courses/other-courses/:slug" element={<CourseDetailsPage />} />
                           <Route path="/gallery" element={<Gallery />} />
                           <Route path="/explore" element={<Explore />} />
                           <Route path="/explore/students-zone" element={<StudentsZone />} />
@@ -114,29 +69,14 @@ const App = () => {
                           <Route path="/explore/gallery" element={<Gallery />} />
                           <Route path="/explore/news-events" element={<NewsEvents />} />
                           <Route path="/blogs" element={<Blogs />} />
-                          <Route path="/faculty" element={<FacultyPage />} /> {/* New route for Faculty */}
-                          <Route path="/360-view" element={<ThreeSixtyView />} /> {/* New route for 360 View */}
-                          <Route path="/our-services" element={<OurServices />} /> {/* New route for Our Services */}
+                          <Route path="/faculty" element={<FacultyPage />} />
+                          <Route path="/360-view" element={<ThreeSixtyView />} />
+                          <Route path="/our-services" element={<OurServices />} />
                           <Route path="/contact" element={<Contact />} />
-                          <Route path="/admin-login" element={<AdminLogin />} />
-
-                          {/* Admin Dashboard with nested routes */}
-                          <Route path="/admin-dashboard" element={<AdminDashboard />}>
-                            <Route index element={<AdminCourses />} />
-                            <Route path="courses" element={<AdminCourses />} />
-                            <Route path="gallery" element={<AdminGallery />} />
-                            <Route path="infrastructure" element={<AdminInfrastructure />} />
-                            <Route path="news-events" element={<AdminNewsEvents />} />
-                            <Route path="blogs" element={<AdminBlogs />} />
-                            <Route path="images" element={<AdminImages />} />
-                            <Route path="testimonials" element={<AdminTestimonials />} />
-                            <Route path="faculty" element={<AdminFaculty />} />
-                          </Route>
-
-                          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                          
                           <Route path="*" element={<NotFound />} />
                         </Routes>
-                        <ConditionalFooter />
+                        <Footer />
                       </FacultyProvider>
                     </TestimonialProvider>
                   </BlogProvider>

@@ -1,36 +1,48 @@
 "use client";
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { initialInfrastructureImages, InfrastructureImage } from '@/data/infrastructureImages';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { InfrastructureImage } from '@/data/infrastructureImages';
+import { sanityClient, urlFor } from '@/lib/sanityClient';
+import { toast } from 'sonner';
 
 interface InfrastructureImageContextType {
-  infrastructureImages: InfrastructureImage[];
-  addInfrastructureImage: (image: InfrastructureImage) => void;
-  deleteInfrastructureImage: (id: string) => void;
-  updateInfrastructureImage: (updatedImage: InfrastructureImage) => void; // Added updateInfrastructureImage function
+  images: InfrastructureImage[];
+  loading: boolean;
 }
 
 const InfrastructureImageContext = createContext<InfrastructureImageContextType | undefined>(undefined);
 
 export const InfrastructureImageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [infrastructureImages, setInfrastructureImages] = useState<InfrastructureImage[]>(initialInfrastructureImages);
+  const [images, setImages] = useState<InfrastructureImage[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const addInfrastructureImage = (image: InfrastructureImage) => {
-    setInfrastructureImages(prevImages => [...prevImages, image]);
-  };
+  useEffect(() => {
+    const fetchImages = async () => {
+      setLoading(true);
+      try {
+        const query = '*[_type == "infrastructureImage"] | order(_createdAt desc)';
+        const data = await sanityClient.fetch(query);
+        
+        const mappedImages: InfrastructureImage[] = data.map((doc: any) => ({
+          ...doc,
+          id: doc._id,
+          src: doc.image ? urlFor(doc.image).url() : '',
+        }));
 
-  const deleteInfrastructureImage = (id: string) => {
-    setInfrastructureImages(prevImages => prevImages.filter(image => image.id !== id));
-  };
+        setImages(mappedImages);
+      } catch (error) {
+        console.error('Error fetching infrastructure images from Sanity:', error);
+        toast.error('Failed to load infrastructure images.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const updateInfrastructureImage = (updatedImage: InfrastructureImage) => {
-    setInfrastructureImages(prevImages =>
-      prevImages.map(image => (image.id === updatedImage.id ? updatedImage : image))
-    );
-  };
+    fetchImages();
+  }, []);
 
   return (
-    <InfrastructureImageContext.Provider value={{ infrastructureImages, addInfrastructureImage, deleteInfrastructureImage, updateInfrastructureImage }}>
+    <InfrastructureImageContext.Provider value={{ images, loading }}>
       {children}
     </InfrastructureImageContext.Provider>
   );
@@ -39,7 +51,7 @@ export const InfrastructureImageProvider: React.FC<{ children: ReactNode }> = ({
 export const useInfrastructureImages = () => {
   const context = useContext(InfrastructureImageContext);
   if (context === undefined) {
-    throw new Error('useInfrastructureImages must be used within an InfrastructureImageProvider');
+    throw new Error('useInfrastructureImages must be used within a InfrastructureImageProvider');
   }
   return context;
 };

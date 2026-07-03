@@ -27,9 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import AnimateOnScroll from './AnimateOnScroll';
 import StarRating from './StarRating'; // Import the new StarRating component
-import { useTestimonials } from '@/context/TestimonialContext';
 import { toast } from 'sonner';
-import { Testimonial } from '@/context/TestimonialContext'; // Import Testimonial interface
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -38,7 +36,6 @@ const formSchema = z.object({
 });
 
 const StudentTestimonialForm = () => {
-  const { addTestimonial } = useTestimonials();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -54,13 +51,28 @@ const StudentTestimonialForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      // Explicitly cast values to ensure type compatibility, excluding 'approved' as it's set in context
-      await addTestimonial(values as Omit<Testimonial, 'id' | 'created_at' | 'approved'>);
+      const response = await fetch('/api/testimonials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: values.name,
+          rating: values.rating,
+          quote: values.quote
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || 'Failed to submit testimonial');
+      }
+
       form.reset(); // Reset form after successful submission
       setIsSuccess(true);
-    } catch (error) {
-      // Error handling is already in context, but can add more specific here if needed
-      console.error("Error submitting testimonial from component:", error);
+    } catch (error: any) {
+      console.error("Error submitting testimonial:", error);
+      toast.error(error.message || 'An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
