@@ -17,10 +17,11 @@ export const InfrastructureImageProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      setLoading(true);
+    const query = '*[_type == "infrastructureImage"] | order(_createdAt desc)';
+
+    const fetchImages = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
-        const query = '*[_type == "infrastructureImage"] | order(_createdAt desc)';
         const data = await sanityClient.fetch(query);
         
         const mappedImages: InfrastructureImage[] = data.map((doc: any) => ({
@@ -34,11 +35,17 @@ export const InfrastructureImageProvider: React.FC<{ children: ReactNode }> = ({
         console.error('Error fetching infrastructure images from Sanity:', error);
         toast.error('Failed to load infrastructure images.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchImages();
+
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchImages(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

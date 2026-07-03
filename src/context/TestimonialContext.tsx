@@ -26,11 +26,12 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
-      setLoading(true);
+    const query = '*[_type == "testimonial" && approved == true] | order(_createdAt desc)';
+
+    const fetchTestimonials = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
         // Only fetch approved testimonials for the frontend
-        const query = '*[_type == "testimonial" && approved == true] | order(_createdAt desc)';
         const data = await sanityClient.fetch(query);
         
         const mappedTestimonials: Testimonial[] = data.map((doc: any) => ({
@@ -44,11 +45,17 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
         console.error('Error fetching testimonials from Sanity:', error);
         toast.error('Failed to load testimonials.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchTestimonials();
+
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchTestimonials(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const addTestimonial = async (newTestimonial: Omit<Testimonial, 'id' | 'created_at' | 'approved'>) => {

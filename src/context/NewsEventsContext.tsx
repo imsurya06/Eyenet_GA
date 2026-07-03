@@ -17,10 +17,11 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchNewsEvents = async () => {
-      setLoading(true);
+    const query = '*[_type == "newsEvent"] | order(date desc)';
+
+    const fetchNewsEvents = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
-        const query = '*[_type == "newsEvent"] | order(date desc)';
         const data = await sanityClient.fetch(query);
         
         const mappedEvents: NewsEvent[] = data.map((doc: any) => ({
@@ -34,11 +35,17 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
         console.error('Error fetching news/events from Sanity:', error);
         toast.error('Failed to load news/events.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchNewsEvents();
+
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchNewsEvents(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

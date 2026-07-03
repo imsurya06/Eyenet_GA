@@ -17,10 +17,11 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      setLoading(true);
+    const query = '*[_type == "galleryImage"] | order(_createdAt desc)';
+
+    const fetchImages = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
-        const query = '*[_type == "galleryImage"] | order(_createdAt desc)';
         const data = await sanityClient.fetch(query);
         
         const mappedImages: GalleryImage[] = data.map((doc: any) => ({
@@ -34,11 +35,17 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
         console.error('Error fetching gallery images from Sanity:', error);
         toast.error('Failed to load gallery images.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchImages();
+
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchImages(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

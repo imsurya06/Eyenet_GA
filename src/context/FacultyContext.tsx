@@ -17,10 +17,11 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFaculty = async () => {
-      setLoading(true);
+    const query = '*[_type == "faculty"] | order(_createdAt asc)';
+
+    const fetchFaculty = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
-        const query = '*[_type == "faculty"] | order(_createdAt asc)';
         const data = await sanityClient.fetch(query);
         
         const mappedFaculty: Faculty[] = data.map((doc: any) => ({
@@ -35,11 +36,17 @@ export const FacultyProvider: React.FC<{ children: ReactNode }> = ({ children })
         console.error('Error fetching faculty from Sanity:', error);
         toast.error('Failed to load faculty.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchFaculty();
+
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchFaculty(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

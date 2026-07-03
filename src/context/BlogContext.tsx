@@ -17,10 +17,11 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      setLoading(true);
+    const query = '*[_type == "blog"] | order(date desc)';
+
+    const fetchBlogs = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
-        const query = '*[_type == "blog"] | order(date desc)';
         const data = await sanityClient.fetch(query);
         
         const mappedBlogs: Blog[] = data.map((doc: any) => ({
@@ -34,11 +35,18 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.error('Error fetching blogs from Sanity:', error);
         toast.error('Failed to load blogs.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchBlogs();
+
+    // Listen for real-time updates
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchBlogs(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

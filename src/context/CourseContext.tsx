@@ -17,10 +17,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      setLoading(true);
+    const query = '*[_type == "course"] | order(title asc)';
+
+    const fetchCourses = async (showLoading = true) => {
+      if (showLoading) setLoading(true);
       try {
-        const query = '*[_type == "course"] | order(title asc)';
         const data = await sanityClient.fetch(query);
         
         // Map Sanity data to our Course interface
@@ -35,11 +36,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         console.error('Error fetching courses from Sanity:', error);
         toast.error('Failed to load courses.');
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     fetchCourses();
+
+    const subscription = sanityClient.listen(query).subscribe(() => {
+      fetchCourses(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
