@@ -83,7 +83,7 @@ const FashionCoursesSection = () => {
                       <h3 className="text-h4-mobile md:text-h4-desktop font-heading mb-2 text-foreground line-clamp-3 overflow-hidden">
                         {course.title}
                       </h3>
-                      <p className="text-text-regular font-body text-gray-600 mb-4">
+                      <p className="text-text-regular font-body text-gray-600 mb-4 break-words">
                         {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
                         <Link to={`/courses/fashion-design/${course.id}`} className="text-primary hover:underline ml-1" onClick={(e) => e.stopPropagation()}>
                           more...

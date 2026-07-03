@@ -143,7 +143,7 @@ const Courses = () => {
                           </h3>
                         </Link>
 
-                        <p className="text-text-regular font-body text-gray-600 mb-2">
+                        <p className="text-text-regular font-body text-gray-600 mb-2 break-words">
                           {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
                           <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-primary hover:underline ml-1">
                             more...
