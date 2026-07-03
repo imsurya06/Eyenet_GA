@@ -1,23 +1,25 @@
 "use client";
 
 import React from 'react';
-import { User2, Star } from 'lucide-react'; // Changed User to User2 for a more generic icon
+import { User2, Star, Quote } from 'lucide-react'; 
 import AnimateOnScroll from './AnimateOnScroll';
-import { useTestimonials } from '@/context/TestimonialContext'; // Import useTestimonials
+import { useTestimonials } from '@/context/TestimonialContext';
 
 const StudentStoriesSection = () => {
-  const { testimonials, loading } = useTestimonials(); // Use the context
-  const approvedTestimonials = testimonials.filter(t => t.approved); // Filter for approved testimonials
+  const { testimonials, loading } = useTestimonials();
+  const approvedTestimonials = testimonials.filter(t => t.approved);
 
   return (
-    <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-center">
+    <section className="py-12 md:py-20 lg:py-24 px-4 md:px-8 lg:px-[80px] bg-slate-50 text-center relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+      
       <AnimateOnScroll delay={100}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
+        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground">
           Student stories
         </h2>
       </AnimateOnScroll>
       <AnimateOnScroll delay={200}>
-        <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
+        <p className="text-text-medium font-body text-gray-600 mb-12 md:mb-16 max-w-2xl mx-auto">
           Hear from our talented design graduates and current students.
         </p>
       </AnimateOnScroll>
@@ -27,32 +29,39 @@ const StudentStoriesSection = () => {
           Loading student stories...
         </AnimateOnScroll>
       ) : approvedTestimonials.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
           {approvedTestimonials.map((testimonial, index) => (
             <AnimateOnScroll key={testimonial.id} delay={150 + index * 75}>
-              <div className="flex flex-col items-center text-center p-4">
-                <p className="text-text-medium font-body text-foreground mb-8 italic max-w-xs">
-                  "{testimonial.quote}"
-                </p>
+              <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-gray-100 group">
+                <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors duration-300" />
+                
                 {/* Display star rating */}
-                <div className="flex items-center gap-1 mb-4">
+                <div className="flex items-center gap-1 mb-6">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 ${testimonial.rating > i ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-300 text-gray-300'}`}
+                      className={`h-4 w-4 ${testimonial.rating > i ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
                     />
                   ))}
                 </div>
-                <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-4 overflow-hidden">
-                  {/* Replaced dicebear avatars with a generic User2 icon */}
-                  <User2 className="h-10 w-10 text-gray-500" />
+                
+                <p className="text-text-regular font-body text-gray-700 mb-8 italic flex-grow leading-relaxed">
+                  "{testimonial.quote}"
+                </p>
+                
+                <div className="flex items-center gap-4 mt-auto">
+                  <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 flex-shrink-0">
+                    <User2 className="h-6 w-6 text-gray-400" />
+                  </div>
+                  <div>
+                    <p className="text-text-medium font-body font-semibold text-foreground">
+                      {testimonial.name}
+                    </p>
+                    <p className="text-text-small font-body text-gray-500">
+                      Student
+                    </p>
+                  </div>
                 </div>
-                <p className="text-text-medium font-body font-semibold text-foreground mb-1">
-                  {testimonial.name}
-                </p>
-                <p className="text-text-small font-body text-gray-600">
-                  Student
-                </p>
               </div>
             </AnimateOnScroll>
           ))}

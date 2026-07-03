@@ -68,12 +68,12 @@ const FashionCoursesSection = () => {
               <AnimateOnScroll key={course.id} delay={300 + index * 75}>
                 {/* Wrap the entire card with Link */}
                 <Link to={`/courses/fashion-design/${course.id}`} className="block group h-full">
-                  <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col h-full">
+                  <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
                     <div className="w-full h-48 overflow-hidden">
                       <img
                         src={course.image}
                         alt={course.title}
-                        className="w-full h-full object-cover object-top"
+                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
                     <div className="p-6 flex flex-col flex-grow">

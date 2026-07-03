@@ -124,7 +124,7 @@ const Courses = () => {
               {filteredCourses.map((course, index) => (
                 <AnimateOnScroll key={course.id} delay={200 + index * 75}>
                   <div className={`block group h-full ${course.id === highlight ? 'ring-2 ring-primary ring-offset-4 rounded-lg' : ''}`}>
-                    <div className="bg-white rounded-lg shadow-md drop-shadow-lg overflow-hidden border border-gray-200 flex flex-col h-full">
+                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
                       <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="w-full h-48 overflow-hidden block">
                         <img
                           src={course.image}
