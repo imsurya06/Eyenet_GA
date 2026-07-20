@@ -1,47 +1,118 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { MapPin, Phone, Mail, Clock, Navigation, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import AnimateOnScroll from './AnimateOnScroll';
 
 const LocationSection = () => {
-  const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu&g_ep=EgoyMDI1MTAyNi4wIKXMDSoASAFQAw%3D%3D";
+  const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu";
+  const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.1558223405787!2d78.14633887586524!3d9.921563490180477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5072a46551f%3A0x3feb0d2a94af46bb!2sEye-Net%20Educational%20Academy!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
 
   return (
-    <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-background text-center lg:text-left">
-      <AnimateOnScroll delay={100}>
-        <p className="text-text-regular font-body text-gray-600 mb-4">Our location</p>
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-16 max-w-3xl mx-auto lg:mx-0">
-          We are Madurai based institute
-        </h2>
-      </AnimateOnScroll>
+    <section className="py-14 md:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center lg:text-left mb-12">
+          <AnimateOnScroll delay={100}>
+            <p className="text-xs font-semibold font-body text-gray-500 uppercase tracking-widest mb-3">Our Location</p>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={200}>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground">
+              We are Madurai based <span className="text-primary font-heading">design institute</span>
+            </h2>
+          </AnimateOnScroll>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
-        {/* Left Section: Address Card */}
-        <AnimateOnScroll delay={300} className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <div className="w-full max-w-md p-6 bg-muted border-l-4 border-primary rounded-lg shadow-sm">
-            <h3 className="text-h5-mobile md:text-h5-desktop font-heading mb-2 text-foreground">
-              Tamilnadu
-            </h3>
-            <p className="text-text-regular font-body text-gray-600 mb-4">
-              Anna Nagar, Madurai
-            </p>
-            <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-regular font-body">
-              View Map
-            </a>
-          </div>
-        </AnimateOnScroll>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Left Column: Detailed Address & Campus Info Card */}
+          <AnimateOnScroll delay={300} className="lg:col-span-5 flex flex-col justify-between">
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl h-full flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full pointer-events-none"></div>
 
-        {/* Right Section: Map Image */}
-        <AnimateOnScroll delay={400} className="w-full aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
-          <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-            <img
-              src="/images/madurai-map.png" // Updated to use the new image
-              alt="Map of Eye Net Educational Academy in Madurai"
-              className="w-full h-full object-contain"
-            />
-          </a>
-        </AnimateOnScroll>
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6">
+                  <MapPin className="w-3.5 h-3.5" /> Main Campus & Atelier
+                </div>
+
+                <h3 className="text-2xl font-heading font-bold mb-2 text-foreground">
+                  Eye-Net Educational Academy
+                </h3>
+                <p className="text-sm font-body text-gray-500 mb-6">
+                  Hamdhiya Towers, 2nd Floor, 80 Feet Road Jn, Anna Nagar, Madurai, Tamil Nadu 625020
+                </p>
+
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Landmark</p>
+                      <p className="text-sm font-body text-gray-700">Near Suguna Store, Anna Nagar 80 Feet Rd</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5">
+                      <Clock className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Working Hours</p>
+                      <p className="text-sm font-body text-gray-700">Mon - Sat: 9:00 AM - 7:00 PM</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Contact</p>
+                      <p className="text-sm font-body text-gray-700">+91 98421 73725 / +91 98421 73726</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
+                <Button asChild className="w-full bg-primary hover:bg-primary/90 text-white rounded-full py-5 text-sm font-semibold shadow-md">
+                  <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                    <Navigation className="w-4 h-4" /> Get Directions
+                  </a>
+                </Button>
+                <Button asChild variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-white rounded-full py-5 text-sm font-semibold">
+                  <Link to="/contact">
+                    Contact Us
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </AnimateOnScroll>
+
+          {/* Right Column: Interactive Map Frame */}
+          <AnimateOnScroll delay={400} className="lg:col-span-7">
+            <div className="relative w-full h-[400px] lg:h-full min-h-[380px] rounded-3xl overflow-hidden border border-gray-200 shadow-xl group">
+              <iframe
+                title="Eye Net Educational Academy Madurai Map"
+                src={mapEmbedUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+              ></iframe>
+
+              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full border border-gray-200 shadow-md flex items-center gap-2 text-xs font-semibold text-gray-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>Open in Google Maps</span>
+                <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline ml-1">
+                  <ExternalLink className="w-3.5 h-3.5 inline-block" />
+                </a>
+              </div>
+            </div>
+          </AnimateOnScroll>
+        </div>
       </div>
     </section>
   );

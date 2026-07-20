@@ -10,8 +10,8 @@ const AboutHeroSection = () => {
         {/* Main Title and Subtitle - Centered */}
         <div className="text-center mb-8 md:mb-10 lg:mb-12">
           <AnimateOnScroll isHero={true} delay={100}>
-            <h1 className="text-h1-mobile md:text-h1-desktop font-heading text-foreground leading-tight mb-4">
-              Eyenet: A Creative Educational Academy
+            <h1 className="text-h1-mobile md:text-h1-desktop font-heading text-foreground font-bold leading-tight mb-4">
+              Eyenet: A Creative <span className="text-primary font-heading">Educational Academy</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
@@ -22,11 +22,11 @@ const AboutHeroSection = () => {
         </div>
 
         {/* Main Hero Image */}
-        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[250px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-xl mb-12 md:mb-12 lg:mb-16">
+        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[250px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-3xl mb-12 md:mb-12 lg:mb-16 shadow-lg border border-gray-100">
           <img
-            src="/images/about-image-1.png"
-            alt="Fashion model in traditional attire"
-            className="w-full h-full object-cover object-top"
+            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200"
+            alt="Fashion atelier sketching"
+            className="w-full h-full object-cover"
           />
         </AnimateOnScroll>
 
@@ -35,8 +35,8 @@ const AboutHeroSection = () => {
           {/* Left Section: Detailed Text */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <AnimateOnScroll delay={400}>
-              <h2 className="text-h3-mobile md:text-h3-desktop font-heading mb-6">
-                Shaping Confident & Skilled Designers
+              <h2 className="text-h3-mobile md:text-h3-desktop font-heading mb-6 font-bold">
+                Shaping Confident & <span className="text-primary font-heading">Skilled Designers</span>
               </h2>
             </AnimateOnScroll>
             <AnimateOnScroll delay={500}>

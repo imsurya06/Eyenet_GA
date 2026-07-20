@@ -14,8 +14,8 @@ const StudentStoriesSection = () => {
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
       
       <AnimateOnScroll delay={100}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground">
-          Student stories
+        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
+          Student <span className="text-primary font-heading">stories</span>
         </h2>
       </AnimateOnScroll>
       <AnimateOnScroll delay={200}>

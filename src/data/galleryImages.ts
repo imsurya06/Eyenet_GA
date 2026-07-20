@@ -7,24 +7,10 @@ export interface GalleryImage {
 }
 
 export const initialGalleryImages: GalleryImage[] = [
-  // Images from GalleryCarouselSection
-  { id: 'carousel-1', src: '/images/img1.png', alt: 'South Indian Designer Concert 1', category: 'event' },
-  { id: 'carousel-2', src: '/images/img2.png', alt: 'South Indian Designer Concert 2', category: 'event' },
-  { id: 'carousel-3', src: '/images/img3.png', alt: 'South Indian Designer Concert 3', category: 'event' },
-  { id: 'carousel-4', src: '/images/img4.png', alt: 'South Indian Designer Concert 4', category: 'event' },
-
-  // Images from GalleryGridSection
-  { id: 'grid-1', src: '/images/img5.png', alt: 'Traditional attire model 3', category: 'fashion' },
-  { id: 'grid-2', src: '/images/img6.png', alt: 'Traditional attire model 4', category: 'fashion' },
-  { id: 'grid-3', src: '/images/img7.png', alt: 'Studio portrait model', category: 'fashion' },
-  // Removed placeholder images: grid-4, grid-5, grid-6
-
-  // Images from ImageGallerySection (Home page)
-  { id: 'home-gallery-1', src: '/images/img1.png', alt: 'Traditional attire model 1', category: 'fashion' },
-  { id: 'home-gallery-2', src: '/images/img2.png', alt: 'Fashion show model 1', category: 'fashion' },
-  { id: 'home-gallery-3', src: '/images/img3.png', alt: 'Traditional attire model 2', category: 'fashion' },
-  { id: 'home-gallery-4', src: '/images/img4.png', alt: 'Fashion show model 2', category: 'fashion' },
-  { id: 'home-gallery-5', src: '/images/img5.png', alt: 'Traditional attire model 3', category: 'fashion' },
-  { id: 'home-gallery-6', src: '/images/img6.png', alt: 'Traditional attire model 4', category: 'fashion' },
-  { id: 'home-gallery-7', src: '/images/img7.png', alt: 'Studio portrait model', category: 'fashion' },
+  { id: 'dummy-1', src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800', alt: 'Fashion Runway Showcase', category: 'event', ticker_row: '1' },
+  { id: 'dummy-2', src: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800', alt: 'Design Atelier Sketching', category: 'fashion', ticker_row: '1' },
+  { id: 'dummy-3', src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800', alt: 'Haute Couture Studio', category: 'fashion', ticker_row: '1' },
+  { id: 'dummy-4', src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800', alt: 'Digital CAD Lab Workstation', category: 'general', ticker_row: '2' },
+  { id: 'dummy-5', src: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=800', alt: 'Studio Photography Session', category: 'general', ticker_row: '2' },
+  { id: 'dummy-6', src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=800', alt: 'Fashion Exhibition', category: 'event', ticker_row: '2' },
 ];

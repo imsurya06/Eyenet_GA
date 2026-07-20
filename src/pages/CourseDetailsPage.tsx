@@ -7,8 +7,9 @@ import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle, Clock, User, Briefcase, BookOpen, Download, Frown, ArrowLeft, GraduationCap, LayoutList } from 'lucide-react';
-import NCFTLogo from '@/components/NCFTLogo'; // Import NCFTLogo
+import { CheckCircle, Clock, User, Briefcase, Download, Frown, ArrowLeft, GraduationCap, LayoutList, BookOpen } from 'lucide-react';
+import NCFTLogo from '@/components/NCFTLogo';
+import CallToActionSection from '@/components/CallToActionSection';
 
 const CourseDetailsPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -67,15 +68,30 @@ const CourseDetailsPage = () => {
   const careerProspects = course.careerProspects || [];
   const modules = course.modules || [];
 
+  const getFallbackImage = (category: string) => {
+    switch (category) {
+      case 'fashion': return 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200';
+      case 'computer': return 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200';
+      case 'multimedia': return 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200';
+      case 'photography': return 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200';
+      case 'beautician': return 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1200';
+      default: return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200';
+    }
+  };
+
+  const validImage = course.image && !course.image.includes('/images/img') && !course.image.includes('placeholder')
+    ? course.image
+    : getFallbackImage(course.category);
+
   return (
     <div className="bg-background text-foreground">
-      <NCFTLogo /> {/* Added NCFTLogo here */}
+      <NCFTLogo />
       {/* Back Button */}
       <div className="px-3 md:px-8 lg:px-[80px] pt-8">
         <AnimateOnScroll delay={50}>
           <Button
             variant="ghost"
-            className="text-text-regular font-body text-primary hover:bg-primary/10 flex items-center gap-2"
+            className="text-text-regular font-body text-primary hover:bg-primary/10 flex items-center gap-2 rounded-full"
             asChild
           >
             <Link to={`/courses?category=${course.category}`}>
@@ -89,20 +105,21 @@ const CourseDetailsPage = () => {
       <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px]">
         <div className="max-w-4xl mx-auto">
           <AnimateOnScroll isHero={true} delay={100}>
-            <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground text-center lg:text-left">
-              {course.title}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4 text-foreground text-center lg:text-left">
+              {course.title.split(' ').slice(0, -1).join(' ')}{' '}
+              <span className="text-primary font-heading">
+                {course.title.split(' ').slice(-1)}
+              </span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-8 text-justify"> {/* Removed text-center */}
+            <p className="text-text-medium font-body text-gray-600 mb-8 leading-relaxed">
               {course.description.replace(' Details...', '')}
             </p>
           </AnimateOnScroll>
-          {course.image && (
-            <AnimateOnScroll isHero={true} delay={300} className="mt-8 w-full rounded-lg overflow-hidden shadow-lg mx-auto">
-              <img src={course.image} alt={course.title} className="w-full h-auto object-cover object-top" />
-            </AnimateOnScroll>
-          )}
+          <AnimateOnScroll isHero={true} delay={300} className="mt-8 w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100 mx-auto max-h-[450px]">
+            <img src={validImage} alt={course.title} className="w-full h-full object-cover" />
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -219,27 +236,7 @@ const CourseDetailsPage = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] text-center">
-        <AnimateOnScroll delay={100}>
-          <h2 className="text-h3-mobile md:text-h3-desktop font-heading mb-6">
-            Ready to Start Your Journey?
-          </h2>
-        </AnimateOnScroll>
-        <AnimateOnScroll delay={200}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {course.brochureLink !== '#' && (
-              <Button asChild variant="outline" className="px-6 py-3 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <a href={course.brochureLink} download>
-                  <Download className="mr-2 h-4 w-4" /> Download Brochure
-                </a>
-              </Button>
-            )}
-            <Button asChild className="px-6 py-3 text-text-regular bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link to={`/admissions?course=${encodeURIComponent(course.title)}`}>Enroll Now</Link>
-            </Button>
-          </div>
-        </AnimateOnScroll>
-      </section>
+      <CallToActionSection />
     </div>
   );
 };

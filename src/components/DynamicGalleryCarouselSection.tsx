@@ -8,6 +8,8 @@ import { ArrowRight } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useGalleryImages } from '@/context/GalleryImageContext'; // Import useGalleryImages
 
+import { initialGalleryImages } from '@/data/galleryImages';
+
 interface DynamicGalleryCarouselSectionProps {
   withButton?: boolean;
 }
@@ -15,53 +17,28 @@ interface DynamicGalleryCarouselSectionProps {
 const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps> = ({ withButton = false }) => {
   const { images: galleryImages = [], loading } = useGalleryImages(); // Use the context to get images
 
-  // Filter out images that are already used in the static GalleryCarouselSection if needed,
-  // or just display all dynamic images. For now, we'll display all from context.
-  const imagesToDisplay = galleryImages;
+  // Combine gallery images from Sanity (or fallback to dummy real-world Unsplash images)
+  const imagesToDisplay = galleryImages.length > 0 ? galleryImages : initialGalleryImages;
 
   // Split images into two rows based on the 'ticker_row' property
   const row1Images = imagesToDisplay.filter(img => img.ticker_row === '1' || !img.ticker_row);
   const row2Images = imagesToDisplay.filter(img => img.ticker_row === '2');
 
-  if (loading) {
-    return (
-      <section className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
-        <AnimateOnScroll delay={100}>
-          <p className="text-text-medium font-body text-gray-600">Loading gallery images...</p>
-        </AnimateOnScroll>
-      </section>
-    );
-  }
-
-  if (imagesToDisplay.length === 0) {
-    return (
-      <section className="py-12 md:py-16 lg:py-20 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
-        <AnimateOnScroll delay={100}>
-          <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
-            Our Gallery
-          </h2>
-        </AnimateOnScroll>
-        <AnimateOnScroll delay={200}>
-          <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
-            No gallery images to display at the moment.
-          </p>
-        </AnimateOnScroll>
-      </section>
-    );
-  }
+  const defaultRow1 = row1Images.length > 0 ? row1Images : initialGalleryImages.slice(0, 3);
+  const defaultRow2 = row2Images.length > 0 ? row2Images : initialGalleryImages.slice(3, 6);
 
   return (
-    <section className="py-8 md:py-10 lg:py-12 bg-background text-foreground overflow-hidden">
-      <div className="px-3 md:px-8 lg:px-[80px] mb-8">
+    <section className="py-12 md:py-16 bg-background text-foreground overflow-hidden">
+      <div className="px-4 md:px-8 lg:px-[80px] mb-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <AnimateOnScroll delay={100}>
-              <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
-                Our Creative Works
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-3">
+                Our <span className="text-primary font-heading">Creative Works</span>
               </h2>
             </AnimateOnScroll>
             <AnimateOnScroll delay={200}>
-              <p className="text-text-medium font-body text-gray-600 max-w-md">
+              <p className="text-base font-body text-gray-600 max-w-md">
                 A collection of projects, events, and campus highlights.
               </p>
             </AnimateOnScroll>

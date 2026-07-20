@@ -86,18 +86,38 @@ const Courses = () => {
     }
   };
 
+  const getFallbackImage = (category: string) => {
+    switch (category) {
+      case 'fashion': return 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800';
+      case 'computer': return 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800';
+      case 'multimedia': return 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=800';
+      case 'photography': return 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=800';
+      case 'beautician': return 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=800';
+      default: return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800';
+    }
+  };
+
+  const getValidImage = (course: any) => {
+    if (!course.image || course.image.includes('/images/img') || course.image.includes('placeholder')) {
+      return getFallbackImage(course.category);
+    }
+    return course.image;
+  };
+
   return (
     <div className="bg-background text-foreground">
       <NCFTLogo />
       {/* Hero Section for All Courses */}
-      <section className="py-4 md:py-6 lg:py-8 px-3 md:px-8 lg:px-[80px] text-center">
+      <section className="py-8 md:py-12 px-3 md:px-8 lg:px-[80px] text-center">
         <div className="max-w-4xl mx-auto">
           <AnimateOnScroll isHero={true} delay={100}>
-            <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground">
-              {getCategoryTitle(categoryFilter)}
+            <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-4 text-foreground font-bold">
+              {getCategoryTitle(categoryFilter).split(' ').slice(0, -1).join(' ')}{' '}
+              <span className="text-primary font-heading">
+                {getCategoryTitle(categoryFilter).split(' ').slice(-1)}
+              </span>
             </h1>
           </AnimateOnScroll>
-
         </div>
       </section>
 
@@ -105,75 +125,80 @@ const Courses = () => {
       <CourseCategoryFilter />
 
       {/* All Courses Grid */}
-      <section className="py-4 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground">
+      <section className="py-8 md:py-12 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground">
         <div className="max-w-7xl mx-auto">
           <AnimateOnScroll delay={100}>
-            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-6 text-center">
-              Discover Your Path
+            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-8 text-center font-bold">
+              Discover Your <span className="text-primary font-heading">Path</span>
             </h2>
           </AnimateOnScroll>
 
           {loading ? (
             <AnimateOnScroll delay={200}>
-              <p className="text-text-medium font-body text-gray-600 text-center">
+              <p className="text-text-medium font-body text-gray-600 text-center py-10">
                 Loading courses...
               </p>
             </AnimateOnScroll>
           ) : filteredCourses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredCourses.map((course, index) => (
-                <AnimateOnScroll key={course.id} delay={200 + index * 75}>
-                  <div className={`block group h-full ${course.id === highlight ? 'ring-2 ring-primary ring-offset-4 rounded-lg' : ''}`}>
-                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-                      <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="w-full h-48 overflow-hidden block">
+                <AnimateOnScroll key={course.id} delay={150 + index * 75}>
+                  <div className={`block group h-full ${course.id === highlight ? 'ring-2 ring-primary ring-offset-4 rounded-3xl' : ''}`}>
+                    <div className="bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 border border-gray-100 flex flex-col h-full max-w-full overflow-hidden">
+                      <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0">
                         <img
-                          src={course.image}
+                          src={getValidImage(course)}
                           alt={course.title}
-                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </Link>
-                      <div className="p-3.5 flex flex-col flex-grow">
-                        <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-1.5 border border-input w-fit">
-                          {course.tag} / {course.category.charAt(0).toUpperCase() + course.category.slice(1)}
-                        </span>
+                      <div className="flex flex-col flex-grow justify-between min-w-0">
+                        <div>
+                          <span className="inline-block bg-muted text-xs font-semibold font-body text-gray-600 px-3 py-1 rounded-full mb-3 border border-gray-200 max-w-full truncate">
+                            {course.tag} / {course.category.charAt(0).toUpperCase() + course.category.slice(1)}
+                          </span>
 
-                        <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`}>
-                          <h3 className="text-h4-mobile md:text-h5-desktop font-heading mb-1.5 text-foreground line-clamp-3 overflow-hidden hover:text-primary transition-colors">
-                            {course.title}
-                          </h3>
-                        </Link>
-
-                        <p className="text-text-regular font-body text-gray-600 mb-2 break-words">
-                          {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
-                          <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-primary hover:underline ml-1">
-                            more...
+                          <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`}>
+                            <h3 className="text-xl font-heading font-bold mb-2 text-foreground line-clamp-2 hover:text-primary transition-colors break-words [overflow-wrap:anywhere]">
+                              {course.title}
+                            </h3>
                           </Link>
-                        </p>
 
-                        <div className="flex flex-col md:flex-row items-center gap-4 text-text-small font-body text-gray-700 mb-3">
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4 text-primary" />
-                            <span>{course.duration}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <User className="h-4 w-4 text-primary" />
-                            <span>{course.eligibility}</span>
-                          </div>
+                          <p className="text-sm font-body text-gray-600 mb-4 leading-relaxed flex-grow break-words [overflow-wrap:anywhere]">
+                            {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
+                            <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-primary hover:underline ml-1 font-semibold">
+                              more...
+                            </Link>
+                          </p>
                         </div>
-                        <div className="flex flex-col items-center gap-2 mt-auto md:flex-row md:justify-between">
-                          <a href={course.brochureLink} download className="text-text-small font-body text-primary hover:underline whitespace-nowrap w-full text-center md:w-auto md:text-left">
-                            Download Brochure
-                          </a>
-                          <Button
-                            className="bg-primary hover:bg-primary/90 px-4 py-2 text-text-small flex-shrink-0 w-full md:w-auto transition-all duration-300 ease-in-out hover:scale-[1.02] text-white z-20 relative"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              navigate(`/admissions?course=${encodeURIComponent(course.title)}`);
-                            }}
-                          >
-                            Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
-                          </Button>
+
+                        <div>
+                          <div className="flex items-center gap-4 text-xs font-body text-gray-600 mb-4 pt-3 border-t border-gray-100 flex-wrap">
+                            <div className="flex items-center gap-1 min-w-0">
+                              <Clock className="h-4 w-4 text-primary flex-shrink-0" />
+                              <span className="truncate">{course.duration}</span>
+                            </div>
+                            <div className="flex items-center gap-1 min-w-0">
+                              <User className="h-4 w-4 text-primary flex-shrink-0" />
+                              <span className="truncate">{course.eligibility}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+                            <a href={course.brochureLink} download className="text-xs font-semibold text-primary hover:underline truncate">
+                              Download Brochure
+                            </a>
+                            <Button
+                              className="bg-primary hover:bg-primary/90 text-white rounded-full px-4 py-2 text-xs font-semibold shadow-sm flex-shrink-0"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                navigate(`/admissions?course=${encodeURIComponent(course.title)}`);
+                              }}
+                            >
+                              Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -183,13 +208,13 @@ const Courses = () => {
             </div>
           ) : (
             <AnimateOnScroll delay={200}>
-              <p className="text-text-medium font-body text-gray-600 text-center">
+              <p className="text-text-medium font-body text-gray-600 text-center py-10">
                 No courses available for this category at the moment.
               </p>
             </AnimateOnScroll>
           )}
-        </div >
-      </section >
+        </div>
+      </section>
 
       <CallToActionSection />
     </div >

@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -7,107 +5,155 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 
 const ContactUsSection = () => {
   return (
-    <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-        {/* Left Section: Contact Information */}
-        <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <AnimateOnScroll delay={100}>
-            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4">
-              Contact us
-            </h2>
-          </AnimateOnScroll>
-          <AnimateOnScroll delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-10 max-w-md">
-              Have questions about our courses, admissions, or anything else? Reach out to us, and our team will be happy to assist you.
-            </p>
-          </AnimateOnScroll>
+    <section className="py-14 md:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-white to-[#fdfaf6] text-foreground">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        {/* Left Section: Contact Information Card */}
+        <AnimateOnScroll delay={100} className="lg:col-span-5 flex flex-col justify-between">
+          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl h-full flex flex-col justify-between relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full pointer-events-none"></div>
 
-          <div className="space-y-6 w-full flex flex-col items-center lg:items-start"> {/* Added flex-col items-center for mobile centering */}
-            <AnimateOnScroll delay={300}>
-              <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
-                <Mail className="h-6 w-6 text-primary" />
-                <a href="mailto:eyenetfashion@gmail.com" className="text-text-regular font-body text-foreground hover:underline">
-                  eyenetfashion@gmail.com
-                </a>
+            <div>
+              <span className="inline-block uppercase tracking-widest text-xs font-semibold text-gray-500 mb-3">
+                ✦ Reach Out
+              </span>
+              <h2 className="text-3xl font-heading font-bold mb-4 text-foreground">
+                Get In <span className="text-primary font-heading">Touch</span>
+              </h2>
+              <p className="text-sm font-body text-gray-600 mb-8 leading-relaxed">
+                Have questions about our courses, admissions, or campus visits? Our team is always here to assist you.
+              </p>
+
+              <div className="space-y-5 pt-4 border-t border-gray-100">
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5 flex-shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Main Campus</p>
+                    <p className="text-sm font-body text-gray-700 leading-relaxed">
+                      Hamdhiya Towers, 2nd Floor, 80 Feet Road Jn, Anna Nagar, Madurai, TN 625020
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5 flex-shrink-0">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Phone</p>
+                    <a href="tel:+919842173725" className="text-sm font-body text-primary font-semibold hover:underline">
+                      +91 98421 73725 / +91 98421 73726
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5 flex-shrink-0">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email</p>
+                    <a href="mailto:eyenetfashion@gmail.com" className="text-sm font-body text-primary font-semibold hover:underline">
+                      eyenetfashion@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5 flex-shrink-0">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Hours</p>
+                    <p className="text-sm font-body text-gray-700">Mon - Sat: 9:00 AM - 7:00 PM</p>
+                  </div>
+                </div>
               </div>
-            </AnimateOnScroll>
-            <AnimateOnScroll delay={400}>
-              <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
-                <Phone className="h-6 w-6 text-primary" />
-                <a href="tel:+919842173725" className="text-text-regular font-body text-foreground hover:underline">
-                  +91 9842173725
-                </a>
-              </div>
-            </AnimateOnScroll>
-            <AnimateOnScroll delay={500}>
-              <div className="flex items-center gap-4 justify-center lg:justify-start"> {/* Added justify-center for mobile centering */}
-                <MapPin className="h-6 w-6 text-primary" />
-                <p className="text-text-regular font-body text-foreground">
-                  123 Sample St, Sydney NSW 2000 AU
-                </p>
-              </div>
-            </AnimateOnScroll>
+            </div>
+
+            <div className="mt-6 pt-4 text-xs text-gray-400 text-center">
+              ✦ Eye-Net Educational Academy • Madurai
+            </div>
           </div>
-        </div>
-
-        {/* Right Section: Contact Form */}
-        <AnimateOnScroll delay={600} className="w-full max-w-lg mx-auto lg:mx-0">
-          <form action="https://formspree.io/f/xeqyqjkk" method="POST" className="space-y-6">
-            <div>
-              <Label htmlFor="name" className="text-text-regular font-body text-foreground mb-2 block">
-                Name
-              </Label>
-              <Input
-                id="name"
-                type="text"
-                name="name" // Added name attribute
-                placeholder=""
-                className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
-              />
-            </div>
-            <div>
-              <Label htmlFor="email" className="text-text-regular font-body text-foreground mb-2 block">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                name="email" // Added name attribute
-                placeholder=""
-                className="h-12 px-4 py-2 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background"
-              />
-            </div>
-            <div>
-              <Label htmlFor="message" className="text-text-regular font-body text-foreground mb-2 block">
-                Message
-              </Label>
-              <Textarea
-                id="message"
-                name="message" // Added name attribute
-                placeholder="Type your message..."
-                rows={6}
-                className="px-4 py-3 text-text-regular border border-input bg-muted focus-visible:ring-ring focus-visible:ring-offset-background resize-y"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" name="terms" className="border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground" /> {/* Added name attribute */}
-              <Label htmlFor="terms" className="text-text-regular font-body text-gray-600">
-                I accept the{' '}
-                <Link to="/terms-of-service" className="underline hover:text-primary">
-                  Terms
-                </Link>
-              </Label>
-            </div>
-            <Button type="submit" className="w-full h-12 px-6 py-2 text-text-regular bg-primary hover:bg-primary/90 text-primary-foreground">
-              Submit
-            </Button>
-          </form>
         </AnimateOnScroll>
+
+        {/* Right Section: Modern Form Card */}
+        <AnimateOnScroll delay={200} className="lg:col-span-7 flex">
+          <div className="bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-xl w-full">
+            <h3 className="text-2xl font-heading font-bold mb-2 text-foreground">
+              Send A Message
+            </h3>
+            <p className="text-sm font-body text-gray-500 mb-6">
+              Drop us a message and we'll get back to you promptly.
+            </p>
+
+            <form action="https://formspree.io/f/xeqyqjkk" method="POST" className="space-y-5">
+              <div>
+                <Label htmlFor="contact-name" className="text-sm font-semibold text-foreground mb-1.5 block text-left">
+                  Full Name*
+                </Label>
+                <Input
+                  id="contact-name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="contact-email" className="text-sm font-semibold text-foreground mb-1.5 block text-left">
+                  Email Address*
+                </Label>
+                <Input
+                  id="contact-email"
+                  type="email"
+                  name="email"
+                  placeholder="name@example.com"
+                  className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="contact-message" className="text-sm font-semibold text-foreground mb-1.5 block text-left">
+                  Your Message*
+                </Label>
+                <Textarea
+                  id="contact-message"
+                  name="message"
+                  placeholder="Type your message here..."
+                  rows={4}
+                  className="px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary resize-none"
+                  required
+                />
+              </div>
+
+              <div className="flex items-center space-x-3 rounded-xl p-3 bg-gray-50 border border-gray-100">
+                <Checkbox id="contact-terms" name="terms" required className="border-primary data-[state=checked]:bg-primary text-white" />
+                <Label htmlFor="contact-terms" className="text-xs font-body text-gray-600">
+                  I accept the{' '}
+                  <Link to="/terms-of-service" className="underline hover:text-primary font-semibold">
+                    Terms & Conditions
+                  </Link>
+                </Label>
+              </div>
+
+              <Button type="submit" className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-md transition-all duration-300">
+                Send Message <Send className="w-4 h-4 ml-2 inline-block" />
+              </Button>
+            </form>
+          </div>
+        </AnimateOnScroll>
+
       </div>
     </section>
   );

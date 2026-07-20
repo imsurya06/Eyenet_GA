@@ -8,9 +8,9 @@ const FounderDirectorSection = () => {
     <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
         {/* Left Section: Image */}
-        <AnimateOnScroll delay={100} className="w-full h-[400px] md:h-[550px] overflow-hidden rounded-lg shadow-lg mx-auto lg:mx-0">
+        <AnimateOnScroll delay={100} className="w-full h-[400px] md:h-[550px] overflow-hidden rounded-3xl shadow-xl border border-gray-100 mx-auto lg:mx-0">
           <img
-            src="/images/founder-director.png"
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800"
             alt="Founder & Director"
             className="w-full h-full object-cover object-top"
           />
@@ -19,8 +19,8 @@ const FounderDirectorSection = () => {
         {/* Right Section: Text Content */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
           <AnimateOnScroll delay={200}>
-            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-6">
-              Meet Our Founder <br /> & Director
+            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-6 font-bold text-foreground">
+              Meet Our Founder <br /> & <span className="text-primary font-heading">Director</span>
             </h2>
           </AnimateOnScroll>
           <AnimateOnScroll delay={300}>

@@ -16,8 +16,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 350 70% 30%; /* Maroon */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 350 70% 30%;
+    /* Maroon */
+    --primary-foreground: 0 0% 100%;
+    /* White */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -25,17 +27,20 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 30% 90%; /* Slightly darker grey for hover effect */
+    --accent: 210 30% 90%;
+    /* Slightly darker grey for hover effect */
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 100% 50%; /* Pure Red for danger */
+    --destructive: 0 100% 50%;
+    /* Pure Red for danger */
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 4px; /* Changed from 0.5rem to 4px to make rounded-md resolve to 2px */
+    --radius: 4px;
+    /* Changed from 0.5rem to 4px to make rounded-md resolve to 2px */
 
     --sidebar-background: 0 0% 98%;
 
@@ -64,8 +69,10 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 350 70% 40%; /* Darker Maroon for dark mode */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 350 70% 40%;
+    /* Darker Maroon for dark mode */
+    --primary-foreground: 0 0% 100%;
+    /* White */
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -73,10 +80,12 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 25% 25%; /* Slightly lighter grey for hover effect in dark mode */
+    --accent: 217.2 25% 25%;
+    /* Slightly lighter grey for hover effect in dark mode */
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 100% 50%; /* Pure Red for danger */
+    --destructive: 0 100% 50%;
+    /* Pure Red for danger */
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
@@ -102,25 +111,35 @@
     @apply bg-background text-foreground font-body;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 
   h1 {
     @apply text-h1-mobile md:text-h1-desktop;
   }
+
   h2 {
     @apply text-h2-mobile md:text-h2-desktop;
   }
+
   h3 {
     @apply text-h3-mobile md:text-h3-desktop;
   }
+
   h4 {
     @apply text-h4-mobile md:text-h4-desktop;
   }
+
   h5 {
     @apply text-h5-mobile md:text-h5-desktop;
   }
+
   h6 {
     @apply text-h6-mobile md:text-h6-desktop;
   }
@@ -130,15 +149,19 @@
     .text-text-large {
       @apply text-desktop-text-large;
     }
+
     .text-text-medium {
       @apply text-desktop-text-medium;
     }
+
     .text-text-regular {
       @apply text-desktop-text-regular;
     }
+
     .text-text-small {
       @apply text-desktop-text-small;
     }
+
     .text-text-tiny {
       @apply text-desktop-text-tiny;
     }
@@ -146,16 +169,47 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0) rotate(0deg); }
-  10% { transform: translateX(-5px) rotate(-4deg); }
-  20% { transform: translateX(5px) rotate(4deg); }
-  30% { transform: translateX(-5px) rotate(-4deg); }
-  40% { transform: translateX(5px) rotate(4deg); }
-  50% { transform: translateX(-5px) rotate(-4deg); }
-  60% { transform: translateX(5px) rotate(4deg); }
-  70% { transform: translateX(-5px) rotate(-4deg); }
-  80% { transform: translateX(5px) rotate(4deg); }
-  90% { transform: translateX(-5px) rotate(-4deg); }
+
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  10% {
+    transform: translateX(-5px) rotate(-4deg);
+  }
+
+  20% {
+    transform: translateX(5px) rotate(4deg);
+  }
+
+  30% {
+    transform: translateX(-5px) rotate(-4deg);
+  }
+
+  40% {
+    transform: translateX(5px) rotate(4deg);
+  }
+
+  50% {
+    transform: translateX(-5px) rotate(-4deg);
+  }
+
+  60% {
+    transform: translateX(5px) rotate(4deg);
+  }
+
+  70% {
+    transform: translateX(-5px) rotate(-4deg);
+  }
+
+  80% {
+    transform: translateX(5px) rotate(4deg);
+  }
+
+  90% {
+    transform: translateX(-5px) rotate(-4deg);
+  }
 }
 
 @keyframes fall {
@@ -163,9 +217,11 @@
     transform: translateY(-100vh) rotate(0deg) scale(0.5);
     opacity: 0;
   }
+
   10% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(100vh) rotate(720deg) scale(1);
     opacity: 0;

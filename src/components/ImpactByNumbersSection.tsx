@@ -34,18 +34,17 @@ const ImpactByNumbersSection = () => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
 
+    videoElement.muted = true;
+    videoElement.play().catch((error) => console.log("Initial autoplay attempt:", error));
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (videoElement.paused) {
-            videoElement.play().catch(error => console.log("Video play interrupted:", error));
-          }
-        } else {
-          videoElement.pause();
+          videoElement.play().catch((error) => console.log("Video play interrupted:", error));
         }
       },
       {
-        threshold: 0.5,
+        threshold: 0.1,
       }
     );
 
@@ -61,16 +60,21 @@ const ImpactByNumbersSection = () => {
   return (
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
       {/* Full Width Video Section */}
-      <div className="w-full h-[60vh] md:h-[80vh] relative group overflow-hidden">
+      <div className="w-full h-[50vh] md:h-[70vh] relative group overflow-hidden bg-black">
         <video
           ref={videoRef}
+          autoPlay
           muted
           loop
           playsInline
+          preload="auto"
+          poster="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=1600"
           className="absolute inset-0 w-full h-full object-cover"
-          src="/videos/impact-video.mp4"
-        />
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
+        >
+          <source src="/videos/impact-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[80px] relative z-10 -mt-20 md:-mt-32">
@@ -85,7 +89,7 @@ const ImpactByNumbersSection = () => {
               </div>
               <h2 className="text-4xl md:text-5xl font-heading font-bold leading-tight mb-4 text-foreground">
                 Results that speak <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">louder than words.</span>
+                <span className="text-primary font-heading">louder than words</span>
               </h2>
             </AnimateOnScroll>
             <AnimateOnScroll delay={100} className="flex items-center">

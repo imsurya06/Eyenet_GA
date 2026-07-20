@@ -66,51 +66,53 @@ const FashionCoursesSection = () => {
             // Actual Course Cards
             fashionCourses.map((course, index) => (
               <AnimateOnScroll key={course.id} delay={300 + index * 75}>
-                {/* Wrap the entire card with Link */}
                 <Link to={`/courses/fashion-design/${course.id}`} className="block group h-full">
-                  <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-                    <div className="w-full h-48 overflow-hidden">
+                  <div className="bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 border border-gray-100 flex flex-col h-full max-w-full overflow-hidden">
+                    <div className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0">
                       <img
-                        src={course.image}
+                        src={course.image && !course.image.includes('/images/img') && !course.image.includes('placeholder') ? course.image : 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800'}
                         alt={course.title}
-                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                      <span className="inline-block bg-muted text-text-small font-body text-gray-600 px-3 py-1 rounded-full mb-4 border border-input">
-                        {course.tag} / Offline
-                      </span>
-                      <h3 className="text-h4-mobile md:text-h4-desktop font-heading mb-2 text-foreground line-clamp-3 overflow-hidden">
-                        {course.title}
-                      </h3>
-                      <p className="text-text-regular font-body text-gray-600 mb-4 break-words">
-                        {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
-                        <Link to={`/courses/fashion-design/${course.id}`} className="text-primary hover:underline ml-1" onClick={(e) => e.stopPropagation()}>
-                          more...
-                        </Link>
-                      </p>
-                      <div className="flex flex-col md:flex-row items-center gap-4 text-text-small font-body text-gray-700 mb-4">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4 text-primary" />
-                          <span>{course.duration}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4 text-primary" />
-                          <span>{course.eligibility}</span>
-                        </div>
+                    <div className="flex flex-col flex-grow justify-between min-w-0">
+                      <div>
+                        <span className="inline-block bg-muted text-xs font-semibold font-body text-gray-600 px-3 py-1 rounded-full mb-3 border border-gray-200 max-w-full truncate">
+                          {course.tag} / Offline
+                        </span>
+                        <h3 className="text-xl font-heading font-bold mb-2 text-foreground line-clamp-2 hover:text-primary transition-colors break-words [overflow-wrap:anywhere]">
+                          {course.title}
+                        </h3>
+                        <p className="text-sm font-body text-gray-600 mb-4 leading-relaxed flex-grow break-words [overflow-wrap:anywhere]">
+                          {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
+                          <span className="text-primary hover:underline ml-1 font-semibold">
+                            more...
+                          </span>
+                        </p>
                       </div>
-                      <div className="flex flex-col items-center gap-2 mt-auto md:flex-row md:justify-between">
-                        {/* Download Brochure - this should work as is because it's a direct download */}
-                        <a href={course.brochureLink} download onClick={(e) => e.stopPropagation()} className="text-text-small font-body text-primary hover:underline whitespace-nowrap w-full text-center md:w-auto md:text-left">
-                          Download Brochure
-                        </a>
-                        {/* Enroll Button - use onClick to navigate and stop propagation */}
-                        <Button
-                          className="bg-primary hover:bg-primary/90 px-4 py-2 text-text-small flex-shrink-0 w-full md:w-auto transition-all duration-300 ease-in-out hover:scale-[1.02] text-white"
-                          onClick={(e) => handleEnrollClick(e, course.enrollLink)}
-                        >
-                          Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
-                        </Button>
+
+                      <div>
+                        <div className="flex items-center gap-4 text-xs font-body text-gray-600 mb-4 pt-3 border-t border-gray-100 flex-wrap">
+                          <div className="flex items-center gap-1 min-w-0">
+                            <Clock className="h-4 w-4 text-primary flex-shrink-0" />
+                            <span className="truncate">{course.duration}</span>
+                          </div>
+                          <div className="flex items-center gap-1 min-w-0">
+                            <User className="h-4 w-4 text-primary flex-shrink-0" />
+                            <span className="truncate">{course.eligibility}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+                          <a href={course.brochureLink} download onClick={(e) => e.stopPropagation()} className="text-xs font-semibold text-primary hover:underline truncate">
+                            Download Brochure
+                          </a>
+                          <Button
+                            className="bg-primary hover:bg-primary/90 text-white rounded-full px-4 py-2 text-xs font-semibold shadow-sm flex-shrink-0"
+                            onClick={(e) => handleEnrollClick(e, course.enrollLink)}
+                          >
+                            Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

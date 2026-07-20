@@ -14,8 +14,8 @@ const TestimonialsSection = () => {
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
       
       <AnimateOnScroll delay={100}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground">
-          Student stories
+        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
+          Student <span className="text-primary font-heading">stories</span>
         </h2>
       </AnimateOnScroll>
       <AnimateOnScroll delay={200}>
@@ -32,7 +32,7 @@ const TestimonialsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
           {approvedTestimonials.map((testimonial, index) => (
             <AnimateOnScroll key={testimonial.id} delay={150 + index * 75}>
-              <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-gray-100 group">
+              <div className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-gray-100 group">
                 <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors duration-300" />
                 
                 {/* Display star rating */}

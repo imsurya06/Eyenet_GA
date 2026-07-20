@@ -18,27 +18,27 @@ const Index = () => {
       <div className="relative flex flex-col lg:flex-row items-center justify-center px-4 lg:px-[80px] bg-background min-h-[calc(100vh-140px)] lg:h-[calc(100vh-140px)] py-8 lg:py-4 xl:py-12 lg:gap-x-12 overflow-hidden">
         {/* Mobile Background Image with Overlay */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat lg:hidden"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat lg:hidden opacity-30"
           style={{ backgroundImage: 'url(/images/hero-model.jpg)' }}
         >
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
         {/* Left Section: Text Content */}
         <AnimateOnScroll isHero={true} delay={100} className="relative z-10 text-center lg:text-left max-w-2xl lg:w-1/2 lg:mb-0 flex flex-col justify-center h-full">
-          <h1 className="text-h1-mobile lg:text-4xl xl:text-h1-desktop font-heading mb-3 xl:mb-4 text-white lg:text-foreground leading-tight">
-            Design your <br className="hidden lg:block" /> future with creative excellence
+          <h1 className="text-h1-mobile lg:text-4xl xl:text-h1-desktop font-heading mb-3 xl:mb-4 text-foreground font-bold leading-tight">
+            Design your <br className="hidden lg:block" /> future with <span className="text-primary font-heading">creative excellence</span>
           </h1>
-          <p className="text-text-regular lg:text-sm xl:text-text-large font-body mb-6 xl:mb-8 text-white lg:text-gray-600">
+          <p className="text-text-regular lg:text-sm xl:text-text-large font-body mb-6 xl:mb-8 text-gray-600">
             Transform your passion into a professional career. Our institute offers
             comprehensive design education that bridges creativity with industry
             expertise.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 xl:gap-4 justify-center lg:justify-start">
-            <Button asChild className="px-6 py-3 text-sm xl:text-text-regular text-white">
+            <Button asChild className="px-6 py-3 text-sm xl:text-text-regular text-white bg-primary hover:bg-primary/90 rounded-full shadow-md">
               <Link to="/courses">Explore courses</Link>
             </Button>
-            <Button variant="outline" asChild className="px-6 py-3 text-sm xl:text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+            <Button variant="outline" asChild className="px-6 py-3 text-sm xl:text-text-regular border-primary text-primary hover:bg-primary hover:text-white rounded-full">
               <Link to="/contact">Request info</Link>
             </Button>
           </div>
@@ -48,7 +48,7 @@ const Index = () => {
         <AnimateOnScroll isHero={true} delay={200} className="hidden lg:flex lg:w-1/2 h-full justify-end items-center relative z-10">
           <img
             src="/images/hero-model.jpg"
-            alt="Fashion model illustration"
+            alt="Fashion model"
             className="max-h-full w-auto object-contain object-right rounded-lg animate-float"
           />
         </AnimateOnScroll>

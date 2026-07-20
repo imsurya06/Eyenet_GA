@@ -14,10 +14,10 @@ import AnimateOnScroll from './AnimateOnScroll';
 
 const GalleryCarouselSection = () => {
   const carouselImages = [
-    { src: '/images/img1.png', alt: 'South Indian Designer Concert 1' },
-    { src: '/images/img2.png', alt: 'South Indian Designer Concert 2' },
-    { src: '/images/img3.png', alt: 'South Indian Designer Concert 3' },
-    { src: '/images/img4.png', alt: 'South Indian Designer Concert 4' },
+    { src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=1200', alt: 'Fashion Runway Showcase' },
+    { src: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200', alt: 'Couture Pattern Atelier' },
+    { src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=1200', alt: 'Fashion Studio Exhibition' },
+    { src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=1200', alt: 'Graduate Fashion Concert' },
   ];
 
   const plugin = React.useRef(

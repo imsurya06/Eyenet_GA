@@ -14,8 +14,8 @@ const CollaborationsSection = () => {
     <section id="collaborations-section" className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-muted text-foreground text-center">
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll delay={100}>
-          <h2 className="text-h4-mobile md:text-h4-desktop font-heading mb-6 text-foreground">
-            Our Collaborations
+          <h2 className="text-h3-mobile md:text-h3-desktop font-heading font-bold mb-4 text-foreground">
+            Our <span className="text-primary font-heading">Collaborations</span>
           </h2>
         </AnimateOnScroll>
         <AnimateOnScroll delay={200}>
