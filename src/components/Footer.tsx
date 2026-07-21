@@ -61,11 +61,15 @@ const Footer = () => {
   return (
     <footer className="bg-muted text-foreground pt-12 md:pt-16 lg:pt-20">
       <div className="container mx-auto px-4 lg:px-[80px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-x-20 pb-12 md:pb-16 lg:pb-20">
-        {/* Column 1: Logo */}
+        {/* Column 1: Logo & QR Code */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <Link to="/" className="mb-6">
+          <Link to="/" className="mb-4">
             <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-[60px]" />
           </Link>
+          <div className="bg-white p-3 rounded-2xl border border-gray-200/80 shadow-sm flex flex-col items-center gap-2 transition-transform duration-300 hover:scale-[1.02]">
+            <img src="/images/eyenet-qr.png" alt="Scan QR Code" className="w-28 h-28 object-contain rounded-lg" />
+            <span className="text-[11px] font-semibold text-gray-600 tracking-wider uppercase text-center">Scan QR Code</span>
+          </div>
         </div>
 
         {/* Column 2 & 3: Links */}
