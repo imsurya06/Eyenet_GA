@@ -102,9 +102,9 @@ const CourseDetailsPage = () => {
 
       {/* Hero Section */}
       <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px]">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
           <AnimateOnScroll isHero={true} delay={100}>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4 text-foreground text-center lg:text-left">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4 text-foreground text-center">
               {course.title.split(' ').slice(0, -1).join(' ')}{' '}
               <span className="text-primary font-heading">
                 {course.title.split(' ').slice(-1)}
@@ -112,31 +112,12 @@ const CourseDetailsPage = () => {
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-6 leading-relaxed">
+            <p className="text-text-medium font-body text-gray-600 mb-8 leading-relaxed text-center max-w-3xl mx-auto">
               {course.description.replace(' Details...', '')}
             </p>
           </AnimateOnScroll>
 
-          {/* Action Buttons: Enroll Now & Download Brochure */}
-          <AnimateOnScroll isHero={true} delay={250}>
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8">
-              <Button
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 py-3 text-base font-bold shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
-                onClick={() => navigate(`/admissions?course=${encodeURIComponent(course.title)}`)}
-              >
-                Enroll Now <ArrowRight className="h-4 w-4" />
-              </Button>
-              <a
-                href="/brochures/Course-details-v1.pdf"
-                download
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/10 transition-all text-sm shadow-sm"
-              >
-                Download Brochure <Download className="h-4 w-4" />
-              </a>
-            </div>
-          </AnimateOnScroll>
-
-          <AnimateOnScroll isHero={true} delay={300} className="mt-4 w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100 mx-auto max-h-[450px]">
+          <AnimateOnScroll isHero={true} delay={300} className="w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100 mx-auto max-h-[450px]">
             <img src={validImage} alt={course.title} className="w-full h-full object-cover" />
           </AnimateOnScroll>
         </div>
@@ -261,6 +242,25 @@ const CourseDetailsPage = () => {
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+      </section>
+
+      {/* Action Buttons: Enroll Now & Download Brochure */}
+      <section className="py-6 px-3 md:px-8 lg:px-[80px] bg-background">
+        <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-4">
+          <Button
+            className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 py-3.5 text-base font-bold shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
+            onClick={() => navigate(`/admissions?course=${encodeURIComponent(course.title)}`)}
+          >
+            Enroll Now <ArrowRight className="h-4 w-4" />
+          </Button>
+          <a
+            href="/brochures/Course-details-v1.pdf"
+            download
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/10 transition-all text-base shadow-sm"
+          >
+            Download Brochure <Download className="h-4 w-4" />
+          </a>
         </div>
       </section>
 
