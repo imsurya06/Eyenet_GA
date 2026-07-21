@@ -49,6 +49,7 @@ const Contact = () => {
 
                 <form action="https://formspree.io/f/xeqyqjkk" method="POST" className="space-y-5">
                   <input type="hidden" name="_next" value={`${window.location.origin}/`} />
+                  <input type="text" name="_gotcha" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
                   
                   <div>
                     <Label htmlFor="name" className="text-sm font-semibold text-foreground mb-1.5 block text-left">
