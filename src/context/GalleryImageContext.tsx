@@ -24,10 +24,24 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
       try {
         const data = await sanityClient.fetch(query);
         
+        const getImageUrl = (doc: any): string => {
+          if (!doc) return '';
+          if (typeof doc.image === 'string' && doc.image) return doc.image;
+          if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
+          if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
+            try {
+              return urlFor(doc.image).url();
+            } catch {
+              return '';
+            }
+          }
+          return '';
+        };
+
         const mappedImages: GalleryImage[] = data.map((doc: any) => ({
           ...doc,
           id: doc._id,
-          src: doc.image ? urlFor(doc.image).url() : '',
+          src: getImageUrl(doc),
         }));
 
         setImages(mappedImages);

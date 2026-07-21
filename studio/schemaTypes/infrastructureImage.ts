@@ -7,9 +7,8 @@ export default defineType({
   fields: [
     defineField({
       name: 'image',
-      title: 'Image',
-      type: 'image',
-      options: { hotspot: true },
+      title: 'Image URL',
+      type: 'string',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
