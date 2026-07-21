@@ -30,9 +30,9 @@ const Courses = () => {
     });
   };
 
-  const handleEnrollClick = (e: React.MouseEvent, enrollLink: string) => {
+  const handleEnrollClick = (e: React.MouseEvent, courseTitle: string) => {
     e.stopPropagation();
-    navigate(enrollLink);
+    navigate(`/admissions?course=${encodeURIComponent(courseTitle)}`);
   };
 
   const truncateDescription = (description: string, maxLength: number) => {
@@ -185,16 +185,12 @@ const Courses = () => {
                           </div>
 
                           <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
-                            <a href={course.brochureLink || '/brochures/Course-details-v1.pdf'} download className="text-xs font-semibold text-primary hover:underline truncate">
+                            <a href="/brochures/Course-details-v1.pdf" download onClick={(e) => e.stopPropagation()} className="text-xs font-semibold text-primary hover:underline truncate">
                               Download Brochure
                             </a>
                             <Button
                               className="bg-primary hover:bg-primary/90 text-white rounded-full px-4 py-2 text-xs font-semibold shadow-sm flex-shrink-0"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                navigate(`/admissions?course=${encodeURIComponent(course.title)}`);
-                              }}
+                              onClick={(e) => handleEnrollClick(e, course.title)}
                             >
                               Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
                             </Button>

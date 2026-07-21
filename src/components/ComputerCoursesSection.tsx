@@ -15,9 +15,9 @@ const ComputerCoursesSection = () => {
   // Filter to display all computer courses
   const computerCourses = courses.filter(course => course.category === 'computer');
 
-  const handleEnrollClick = (e: React.MouseEvent, enrollLink: string) => {
+  const handleEnrollClick = (e: React.MouseEvent, courseTitle: string) => {
     e.stopPropagation(); // Prevent the parent Link from being triggered
-    navigate(enrollLink);
+    navigate(`/admissions?course=${encodeURIComponent(courseTitle)}`);
   };
 
   const truncateDescription = (description: string, maxLength: number) => {
@@ -101,13 +101,13 @@ const ComputerCoursesSection = () => {
                       </div>
                       <div className="flex flex-col items-center gap-2 mt-auto md:flex-row md:justify-between">
                         {/* Download Brochure - this should work as is because it's a direct download */}
-                        <a href={course.brochureLink || '/brochures/Course-details-v1.pdf'} download onClick={(e) => e.stopPropagation()} className="text-text-small font-body text-primary hover:underline whitespace-nowrap w-full text-center md:w-auto md:text-left">
+                        <a href="/brochures/Course-details-v1.pdf" download onClick={(e) => e.stopPropagation()} className="text-text-small font-body text-primary hover:underline whitespace-nowrap w-full text-center md:w-auto md:text-left">
                           Download Brochure
                         </a>
                         {/* Enroll Button - use onClick to navigate and stop propagation */}
                         <Button
                           className="bg-primary hover:bg-primary/90 px-4 py-2 text-text-small flex-shrink-0 w-full md:w-auto transition-all duration-300 ease-in-out hover:scale-[1.02] text-white"
-                          onClick={(e) => handleEnrollClick(e, course.enrollLink)}
+                          onClick={(e) => handleEnrollClick(e, course.title)}
                         >
                           Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
                         </Button>

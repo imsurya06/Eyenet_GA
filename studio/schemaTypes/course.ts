@@ -37,16 +37,6 @@ export default defineType({
       type: 'text',
     }),
     defineField({
-      name: 'brochureLink',
-      title: 'Brochure Link',
-      type: 'url',
-    }),
-    defineField({
-      name: 'enrollLink',
-      title: 'Enroll Link',
-      type: 'url',
-    }),
-    defineField({
       name: 'category',
       title: 'Category',
       type: 'string',

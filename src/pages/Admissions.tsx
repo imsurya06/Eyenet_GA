@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,6 +54,19 @@ const Admissions = () => {
       terms: false,
     },
   });
+
+  useEffect(() => {
+    if (courseParam) {
+      const matched = courses.find(
+        (c) => c.title.toLowerCase() === courseParam.toLowerCase()
+      );
+      if (matched) {
+        form.setValue('program', matched.title);
+      } else {
+        form.setValue('program', courseParam);
+      }
+    }
+  }, [courseParam, courses, form]);
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
@@ -173,7 +186,7 @@ const Admissions = () => {
                         <FormLabel className="text-sm font-semibold text-foreground mb-1 block text-left">
                           Select Program*
                         </FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={coursesLoading}>
+                        <Select onValueChange={field.onChange} value={field.value || ''} disabled={coursesLoading}>
                           <FormControl>
                             <SelectTrigger className="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary text-sm">
                               <SelectValue placeholder={coursesLoading ? "Loading programs..." : "Select a program"} />
