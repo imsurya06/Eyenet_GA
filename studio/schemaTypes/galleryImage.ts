@@ -24,6 +24,7 @@ export default defineType({
       type: 'string',
       options: {
         list: [
+          {title: 'Carousel', value: 'carousel'},
           {title: 'Fashion', value: 'fashion'},
           {title: 'Event', value: 'event'},
           {title: 'General', value: 'general'}
@@ -35,6 +36,7 @@ export default defineType({
       name: 'ticker_row',
       title: 'Ticker Row',
       type: 'string',
+      hidden: ({ document }) => document?.category === 'carousel',
       options: {
         list: [
           {title: 'Top Ticker (1)', value: '1'},

@@ -24,6 +24,7 @@ export default defineType({
       type: 'string',
       options: {
         list: [
+          {title: 'Carousel', value: 'carousel'},
           {title: 'Lab', value: 'lab'},
           {title: 'Classroom', value: 'classroom'},
           {title: 'Library', value: 'library'},

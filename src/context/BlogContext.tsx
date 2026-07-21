@@ -42,8 +42,9 @@ export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     fetchBlogs();
 
     // Listen for real-time updates
-    const subscription = sanityClient.listen(query).subscribe(() => {
-      fetchBlogs(false);
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchBlogs(false),
+      error: (err) => console.warn('Sanity blog subscription error:', err),
     });
 
     return () => subscription.unsubscribe();

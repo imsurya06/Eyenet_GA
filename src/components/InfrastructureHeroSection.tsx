@@ -9,21 +9,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import Autoplay from "embla-carousel-autoplay";
 import AnimateOnScroll from './AnimateOnScroll';
+import { useInfrastructureImages } from '@/context/InfrastructureImageContext';
 
 const InfrastructureHeroSection = () => {
-  const infrastructureImages = [
-    { src: '/images/pexels-pixabay-256491.jpg', alt: 'Computer Lab' },
-    { src: '/images/pexels-tima-miroshnichenko-6550407.jpg', alt: 'Classroom' },
-    { src: '/images/pexels-meruyert-gonullu-7317589.jpg', alt: 'Lecture Hall' },
-    { src: '/images/pexels-george-pak-7972494.jpg', alt: 'Students studying outdoors' },
-    { src: '/images/pexels-yankrukov-8197513.jpg', alt: 'Professor in lecture hall' },
-    { src: '/images/pexels-rdne-8499580.jpg', alt: 'Campus Building' },
-    { src: '/images/pexels-pixabay-356065.jpg', alt: 'Library' },
-    { src: '/images/pexels-gabriel-manjarres-119584478-19064143.jpg', alt: 'Student in classroom' },
-    { src: '/images/pexels-pixabay-256395.jpg', alt: 'Empty classroom' },
-  ];
+  const { images, loading } = useInfrastructureImages();
+  const carouselImages = images.filter(
+    (img) => img.category === 'carousel' || img.category === 'carousal'
+  );
 
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
@@ -44,33 +39,43 @@ const InfrastructureHeroSection = () => {
         </AnimateOnScroll>
 
         <AnimateOnScroll isHero={true} delay={300} className="w-full">
-          <Carousel
-            plugins={[plugin.current]}
-            className="w-full"
-            opts={{
-              loop: true,
-            }}
-          >
-            <CarouselContent>
-              {infrastructureImages.map((image, index) => (
-                <CarouselItem key={index}>
-                  <div className="p-1">
-                    <Card className="border-none shadow-lg">
-                      <CardContent className="flex aspect-video items-center justify-center p-0 overflow-hidden rounded-lg">
-                        <img
-                          src={image.src}
-                          alt={image.alt}
-                          className="w-full h-full object-cover object-top"
-                        />
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
-            <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
-          </Carousel>
+          {loading ? (
+            <Skeleton className="w-full aspect-video rounded-lg" />
+          ) : carouselImages.length > 0 ? (
+            <Carousel
+              plugins={[plugin.current]}
+              className="w-full"
+              opts={{
+                loop: true,
+              }}
+            >
+              <CarouselContent>
+                {carouselImages.map((image, index) => (
+                  <CarouselItem key={image.id || index}>
+                    <div className="p-1">
+                      <Card className="border-none shadow-lg">
+                        <CardContent className="flex aspect-video items-center justify-center p-0 overflow-hidden rounded-lg">
+                          <img
+                            src={image.src}
+                            alt={image.alt || 'Infrastructure Carousel Image'}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
+            </Carousel>
+          ) : (
+            <div className="flex aspect-video items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-gray-500">
+              <p className="font-body text-text-medium">
+                No carousel images added yet. Add images with category &ldquo;Carousel&rdquo; in Sanity Studio.
+              </p>
+            </div>
+          )}
         </AnimateOnScroll>
       </div>
     </section>

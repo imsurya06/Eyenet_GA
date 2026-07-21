@@ -41,8 +41,9 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
 
     fetchNewsEvents();
 
-    const subscription = sanityClient.listen(query).subscribe(() => {
-      fetchNewsEvents(false);
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchNewsEvents(false),
+      error: (err) => console.warn('Sanity news/events subscription error:', err),
     });
 
     return () => subscription.unsubscribe();

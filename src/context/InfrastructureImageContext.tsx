@@ -41,8 +41,9 @@ export const InfrastructureImageProvider: React.FC<{ children: ReactNode }> = ({
 
     fetchImages();
 
-    const subscription = sanityClient.listen(query).subscribe(() => {
-      fetchImages(false);
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchImages(false),
+      error: (err) => console.warn('Sanity infrastructure images subscription error:', err),
     });
 
     return () => subscription.unsubscribe();

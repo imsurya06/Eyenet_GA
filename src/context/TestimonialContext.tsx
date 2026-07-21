@@ -51,8 +51,9 @@ export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     fetchTestimonials();
 
-    const subscription = sanityClient.listen(query).subscribe(() => {
-      fetchTestimonials(false);
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchTestimonials(false),
+      error: (err) => console.warn('Sanity testimonial subscription error:', err),
     });
 
     return () => subscription.unsubscribe();

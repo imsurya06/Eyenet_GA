@@ -42,8 +42,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     fetchCourses();
 
-    const subscription = sanityClient.listen(query).subscribe(() => {
-      fetchCourses(false);
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchCourses(false),
+      error: (err) => console.warn('Sanity course subscription error:', err),
     });
 
     return () => subscription.unsubscribe();

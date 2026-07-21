@@ -41,8 +41,9 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
 
     fetchImages();
 
-    const subscription = sanityClient.listen(query).subscribe(() => {
-      fetchImages(false);
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchImages(false),
+      error: (err) => console.warn('Sanity gallery images subscription error:', err),
     });
 
     return () => subscription.unsubscribe();
