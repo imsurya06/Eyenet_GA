@@ -128,11 +128,13 @@ const Courses = () => {
         </div>
       </section>
 
-      {/* Interactive Search Bar */}
-      <div className="max-w-xl mx-auto px-4 mb-6 relative z-30" ref={searchContainerRef}>
+      {/* Premium Interactive Search Bar */}
+      <div className="max-w-3xl mx-auto px-4 mb-10 relative z-30" ref={searchContainerRef}>
         <AnimateOnScroll delay={150}>
-          <div className="relative flex items-center">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+          <div className="relative flex items-center bg-white rounded-full p-2 border-2 border-gray-200/90 shadow-lg hover:shadow-xl focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15 transition-all duration-300">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 ml-1">
+              <Search className="h-5 w-5 stroke-[2.5]" />
+            </div>
             <input
               type="text"
               value={searchQuery}
@@ -142,26 +144,33 @@ const Courses = () => {
               }}
               onFocus={() => setShowSuggestions(true)}
               placeholder="Search courses (e.g., Fashion, Aari, Python, Beautician)..."
-              className="w-full h-13 pl-12 pr-10 rounded-full border-2 border-gray-200 bg-white text-base text-foreground placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 shadow-sm transition-all duration-200"
+              className="w-full h-12 px-4 bg-transparent text-base md:text-lg font-body text-foreground placeholder:text-gray-400 focus:outline-none"
             />
-            {searchQuery && (
+            {searchQuery ? (
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setShowSuggestions(false);
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors mr-1"
                 aria-label="Clear search"
               >
                 <X className="h-5 w-5" />
               </button>
+            ) : (
+              <Button
+                className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 text-sm font-bold shadow-md hidden sm:flex items-center gap-1.5 flex-shrink-0 mr-1"
+                onClick={() => setShowSuggestions(true)}
+              >
+                Search
+              </Button>
             )}
           </div>
         </AnimateOnScroll>
 
         {/* Live Word Autocomplete Suggestions Dropdown */}
         {showSuggestions && searchQuery.trim().length > 0 && (
-          <div className="absolute left-4 right-4 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden max-h-80 overflow-y-auto divide-y divide-gray-100 z-50">
+          <div className="absolute left-4 right-4 top-full mt-3 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-100 overflow-hidden max-h-80 overflow-y-auto divide-y divide-gray-100 z-50 p-2">
             {suggestions.length > 0 ? (
               suggestions.map((course) => (
                 <div
@@ -171,12 +180,14 @@ const Courses = () => {
                     setShowSuggestions(false);
                     navigate(`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`);
                   }}
-                  className="p-3.5 hover:bg-primary/5 cursor-pointer flex items-center justify-between transition-colors group"
+                  className="p-3.5 rounded-2xl hover:bg-primary/5 cursor-pointer flex items-center justify-between transition-all group"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <BookOpen className="h-4 w-4 text-primary flex-shrink-0" />
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                      <BookOpen className="h-4 w-4" />
+                    </div>
                     <div className="min-w-0">
-                      <p className="font-heading font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                      <p className="font-heading font-bold text-base text-foreground group-hover:text-primary transition-colors truncate">
                         {course.title}
                       </p>
                       <p className="text-xs text-gray-500 font-body line-clamp-1">
@@ -184,13 +195,13 @@ const Courses = () => {
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 bg-muted rounded-full text-gray-600 border border-gray-200 flex-shrink-0 ml-2 capitalize">
+                  <span className="text-xs font-semibold px-3 py-1 bg-muted rounded-full text-gray-700 border border-gray-200 flex-shrink-0 ml-3 capitalize">
                     {course.category}
                   </span>
                 </div>
               ))
             ) : (
-              <div className="p-4 text-center text-sm text-gray-500 font-body">
+              <div className="p-5 text-center text-sm text-gray-500 font-body">
                 No suggestions matching "<span className="font-semibold text-primary">{searchQuery}</span>"
               </div>
             )}
