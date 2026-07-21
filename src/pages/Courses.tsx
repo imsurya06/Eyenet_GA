@@ -1,14 +1,12 @@
-"use client";
-
 import React from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'; // Import useNavigate and useSearchParams
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Clock, User } from 'lucide-react'; // Import Clock and User icons
+import { ArrowRight, Clock, User, Search, SearchX, X, BookOpen, Frown } from 'lucide-react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import CallToActionSection from '@/components/CallToActionSection';
 import { useCourses } from '@/context/CourseContext';
 import NCFTLogo from '@/components/NCFTLogo';
-import CourseCategoryFilter from '@/components/CourseCategoryFilter'; // Import new filter component
+import CourseCategoryFilter from '@/components/CourseCategoryFilter';
 
 const Courses = () => {
   const { courses, loading } = useCourses();
@@ -16,19 +14,20 @@ const Courses = () => {
   const [searchParams] = useSearchParams();
   const categoryFilter = searchParams.get('category');
   const highlight = searchParams.get('highlight');
-  const [expandedCourses, setExpandedCourses] = React.useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
+  const searchContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const toggleExpand = (id: string) => {
-    setExpandedCourses(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
+  // Close suggestions when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
       }
-      return next;
-    });
-  };
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleEnrollClick = (e: React.MouseEvent, courseTitle: string) => {
     e.stopPropagation();
@@ -42,37 +41,45 @@ const Courses = () => {
     return description.substring(0, maxLength) + '...';
   };
 
+  // Compute autocomplete suggestions for the typed word
+  const suggestions = React.useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const q = searchQuery.toLowerCase().trim();
+    return courses.filter(course =>
+      course.title.toLowerCase().includes(q) ||
+      course.category.toLowerCase().includes(q) ||
+      (course.tag && course.tag.toLowerCase().includes(q)) ||
+      course.description.toLowerCase().includes(q)
+    );
+  }, [searchQuery, courses]);
+
   const filteredCourses = React.useMemo(() => {
     let result = courses;
 
     if (categoryFilter) {
-      result = courses.filter(course => course.category === categoryFilter);
+      result = result.filter(course => course.category === categoryFilter);
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(course =>
+        course.title.toLowerCase().includes(q) ||
+        course.category.toLowerCase().includes(q) ||
+        (course.tag && course.tag.toLowerCase().includes(q)) ||
+        course.description.toLowerCase().includes(q)
+      );
     }
 
     if (highlight) {
       const highlightedCourse = result.find(c => c.id === highlight);
-      // If highlighted course is found (even if outside current filter, though Navbar implies global search), we might want to ensure it's included.
-      // But for now, assuming highlight comes without category filter or within it.
-      // Actually, if Navbar user click sends NO category, result is all courses.
       if (highlightedCourse) {
         const others = result.filter(c => c.id !== highlight);
         return [highlightedCourse, ...others];
       }
-      // If highlighted course is NOT in the filtered list (e.g. user manually set incompatible params), we could force-fetch it from main list, but let's stick to simple reorder of current set.
-      // Actually, standard behavior: Find in GLOBAL list if highlight is set?
-      // "redirected to a page where all our courses are visible".
-      // So if highlight is present, we likely want ALL courses irrespective of category, unless category is strictly enforced.
-      // Navbar links start clean (no category). So `result` is `courses`.
-      // Reordering works.
-      const globalHighlight = courses.find(c => c.id === highlight);
-      if (globalHighlight && !result.includes(globalHighlight)) {
-        // If we want to force show it even if filtered out (edge case), add it.
-        // But simpler: Navbar doesn't set category.
-      }
     }
 
     return result;
-  }, [categoryFilter, courses, highlight]);
+  }, [categoryFilter, courses, highlight, searchQuery]);
 
   const getCategoryTitle = (category: string | null) => {
     switch (category) {
@@ -120,6 +127,76 @@ const Courses = () => {
           </AnimateOnScroll>
         </div>
       </section>
+
+      {/* Interactive Search Bar */}
+      <div className="max-w-xl mx-auto px-4 mb-6 relative z-30" ref={searchContainerRef}>
+        <AnimateOnScroll delay={150}>
+          <div className="relative flex items-center">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              placeholder="Search courses (e.g., Fashion, Aari, Python, Beautician)..."
+              className="w-full h-13 pl-12 pr-10 rounded-full border-2 border-gray-200 bg-white text-base text-foreground placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 shadow-sm transition-all duration-200"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setShowSuggestions(false);
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+        </AnimateOnScroll>
+
+        {/* Live Word Autocomplete Suggestions Dropdown */}
+        {showSuggestions && searchQuery.trim().length > 0 && (
+          <div className="absolute left-4 right-4 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden max-h-80 overflow-y-auto divide-y divide-gray-100 z-50">
+            {suggestions.length > 0 ? (
+              suggestions.map((course) => (
+                <div
+                  key={course.id}
+                  onClick={() => {
+                    setSearchQuery(course.title);
+                    setShowSuggestions(false);
+                    navigate(`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`);
+                  }}
+                  className="p-3.5 hover:bg-primary/5 cursor-pointer flex items-center justify-between transition-colors group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <BookOpen className="h-4 w-4 text-primary flex-shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-heading font-semibold text-sm text-foreground group-hover:text-primary transition-colors truncate">
+                        {course.title}
+                      </p>
+                      <p className="text-xs text-gray-500 font-body line-clamp-1">
+                        {course.description}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 bg-muted rounded-full text-gray-600 border border-gray-200 flex-shrink-0 ml-2 capitalize">
+                    {course.category}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="p-4 text-center text-sm text-gray-500 font-body">
+                No suggestions matching "<span className="font-semibold text-primary">{searchQuery}</span>"
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Course Category Filter */}
       <CourseCategoryFilter />
@@ -211,16 +288,30 @@ const Courses = () => {
             </div>
           ) : (
             <AnimateOnScroll delay={200}>
-              <p className="text-text-medium font-body text-gray-600 text-center py-10">
-                No courses available for this category at the moment.
-              </p>
+              <div className="text-center py-14 px-6 bg-white rounded-3xl border border-gray-100 shadow-md max-w-2xl mx-auto my-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <SearchX className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-heading font-bold mb-2 text-foreground">
+                  No Matching Courses Found
+                </h3>
+                <p className="text-gray-600 font-body max-w-md mx-auto mb-6 leading-relaxed text-sm md:text-base">
+                  We couldn't find any courses matching "<span className="font-semibold text-primary">{searchQuery}</span>". Try searching for terms like <span className="font-medium text-foreground">"Fashion"</span>, <span className="font-medium text-foreground">"Aari"</span>, <span className="font-medium text-foreground">"Python"</span>, or clear the search to view all options.
+                </p>
+                <Button
+                  onClick={() => setSearchQuery('')}
+                  className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 font-bold shadow-md text-sm"
+                >
+                  Clear Search & View All Courses
+                </Button>
+              </div>
             </AnimateOnScroll>
           )}
         </div>
       </section>
 
       <CallToActionSection />
-    </div >
+    </div>
   );
 };
 
