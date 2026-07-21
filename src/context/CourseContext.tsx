@@ -24,11 +24,24 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       try {
         const data = await sanityClient.fetch(query);
         
-        // Map Sanity data to our Course interface
+        const getImageUrl = (doc: any): string => {
+          if (!doc) return '';
+          if (typeof doc.image === 'string' && doc.image) return doc.image;
+          if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
+          if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
+            try {
+              return urlFor(doc.image).url();
+            } catch {
+              return '';
+            }
+          }
+          return '';
+        };
+
         const mappedCourses: Course[] = data.map((doc: any) => ({
           ...doc,
           id: doc._id,
-          image: doc.image ? urlFor(doc.image).url() : '',
+          image: getImageUrl(doc),
         }));
 
         setCourses(mappedCourses);
