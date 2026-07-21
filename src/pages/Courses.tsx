@@ -149,6 +149,10 @@ const Courses = () => {
                         <img
                           src={getValidImage(course)}
                           alt={course.title}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = getFallbackImage(course.category);
+                          }}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </Link>
