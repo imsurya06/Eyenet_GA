@@ -101,7 +101,7 @@ const ComputerCoursesSection = () => {
                       </div>
                       <div className="flex flex-col items-center gap-2 mt-auto md:flex-row md:justify-between">
                         {/* Download Brochure - this should work as is because it's a direct download */}
-                        <a href={course.brochureLink} download onClick={(e) => e.stopPropagation()} className="text-text-small font-body text-primary hover:underline whitespace-nowrap w-full text-center md:w-auto md:text-left">
+                        <a href={course.brochureLink || '/brochures/Course-details-v1.pdf'} download onClick={(e) => e.stopPropagation()} className="text-text-small font-body text-primary hover:underline whitespace-nowrap w-full text-center md:w-auto md:text-left">
                           Download Brochure
                         </a>
                         {/* Enroll Button - use onClick to navigate and stop propagation */}

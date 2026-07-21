@@ -185,7 +185,7 @@ const Courses = () => {
                           </div>
 
                           <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
-                            <a href={course.brochureLink} download className="text-xs font-semibold text-primary hover:underline truncate">
+                            <a href={course.brochureLink || '/brochures/Course-details-v1.pdf'} download className="text-xs font-semibold text-primary hover:underline truncate">
                               Download Brochure
                             </a>
                             <Button
