@@ -7,7 +7,7 @@ import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle, Clock, User, Briefcase, Download, Frown, ArrowLeft, GraduationCap, LayoutList, BookOpen } from 'lucide-react';
+import { CheckCircle, Clock, User, Briefcase, Download, Frown, ArrowLeft, GraduationCap, LayoutList, BookOpen, ArrowRight } from 'lucide-react';
 import NCFTLogo from '@/components/NCFTLogo';
 import CallToActionSection from '@/components/CallToActionSection';
 
@@ -90,12 +90,11 @@ const CourseDetailsPage = () => {
       <div className="px-3 md:px-8 lg:px-[80px] pt-8">
         <AnimateOnScroll delay={50}>
           <Button
-            variant="ghost"
-            className="text-text-regular font-body text-primary hover:bg-primary/10 flex items-center gap-2 rounded-full"
             asChild
+            className="bg-white hover:bg-primary hover:text-white border-2 border-primary text-primary font-bold px-6 py-2.5 rounded-full shadow-md transition-all duration-300 gap-2 inline-flex items-center"
           >
-            <Link to={`/courses?category=${course.category}`}>
-              <ArrowLeft className="h-4 w-4" /> Back to Courses
+            <Link to="/courses">
+              <ArrowLeft className="h-5 w-5 stroke-[2.5]" /> Back to Courses
             </Link>
           </Button>
         </AnimateOnScroll>
@@ -113,11 +112,31 @@ const CourseDetailsPage = () => {
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
-            <p className="text-text-medium font-body text-gray-600 mb-8 leading-relaxed">
+            <p className="text-text-medium font-body text-gray-600 mb-6 leading-relaxed">
               {course.description.replace(' Details...', '')}
             </p>
           </AnimateOnScroll>
-          <AnimateOnScroll isHero={true} delay={300} className="mt-8 w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100 mx-auto max-h-[450px]">
+
+          {/* Action Buttons: Enroll Now & Download Brochure */}
+          <AnimateOnScroll isHero={true} delay={250}>
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8">
+              <Button
+                className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 py-3 text-base font-bold shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
+                onClick={() => navigate(`/admissions?course=${encodeURIComponent(course.title)}`)}
+              >
+                Enroll Now <ArrowRight className="h-4 w-4" />
+              </Button>
+              <a
+                href="/brochures/Course-details-v1.pdf"
+                download
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/10 transition-all text-sm shadow-sm"
+              >
+                Download Brochure <Download className="h-4 w-4" />
+              </a>
+            </div>
+          </AnimateOnScroll>
+
+          <AnimateOnScroll isHero={true} delay={300} className="mt-4 w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100 mx-auto max-h-[450px]">
             <img src={validImage} alt={course.title} className="w-full h-full object-cover" />
           </AnimateOnScroll>
         </div>
@@ -157,9 +176,19 @@ const CourseDetailsPage = () => {
         <div className="max-w-5xl mx-auto">
           <Tabs defaultValue="overview" className="w-full">
             <AnimateOnScroll delay={100} className="mb-10 flex justify-center">
-              <TabsList className="grid w-full max-w-[400px] grid-cols-2 h-12">
-                <TabsTrigger value="overview" className="text-base">Overview</TabsTrigger>
-                <TabsTrigger value="curriculum" className="text-base">Curriculum</TabsTrigger>
+              <TabsList className="grid w-full max-w-[480px] grid-cols-2 h-14 bg-gray-200/90 p-1.5 rounded-2xl shadow-inner border border-gray-300/60">
+                <TabsTrigger
+                  value="overview"
+                  className="h-full rounded-xl text-base font-bold transition-all duration-300 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-gray-700 data-[state=inactive]:hover:bg-gray-300/70"
+                >
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="curriculum"
+                  className="h-full rounded-xl text-base font-bold transition-all duration-300 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=inactive]:text-gray-700 data-[state=inactive]:hover:bg-gray-300/70"
+                >
+                  Curriculum
+                </TabsTrigger>
               </TabsList>
             </AnimateOnScroll>
 
@@ -236,7 +265,7 @@ const CourseDetailsPage = () => {
       </section>
 
       {/* Call to Action */}
-      <CallToActionSection />
+      <CallToActionSection courseTitle={course.title} />
     </div>
   );
 };

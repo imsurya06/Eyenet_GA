@@ -144,7 +144,10 @@ const Courses = () => {
               {filteredCourses.map((course, index) => (
                 <AnimateOnScroll key={course.id} delay={150 + index * 75}>
                   <div className={`block group h-full ${course.id === highlight ? 'ring-2 ring-primary ring-offset-4 rounded-3xl' : ''}`}>
-                    <div className="bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 border border-gray-100 flex flex-col h-full max-w-full overflow-hidden">
+                    <div
+                      className="bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 border border-gray-100 flex flex-col h-full max-w-full overflow-hidden cursor-pointer"
+                      onClick={() => navigate(`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`)}
+                    >
                       <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0">
                         <img
                           src={getValidImage(course)}

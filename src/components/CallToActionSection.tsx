@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AnimateOnScroll from './AnimateOnScroll';
 
-const CallToActionSection = () => {
+interface CallToActionSectionProps {
+  courseTitle?: string;
+}
+
+const CallToActionSection: React.FC<CallToActionSectionProps> = ({ courseTitle }) => {
+  const applyLink = courseTitle ? `/admissions?course=${encodeURIComponent(courseTitle)}` : '/admissions';
+
   return (
     <section className="py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-[#f8f6f0]">
       <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8 md:p-14 lg:p-16 border border-gray-100 shadow-xl text-center relative overflow-hidden">
@@ -26,7 +32,7 @@ const CallToActionSection = () => {
           <AnimateOnScroll delay={300}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild className="px-8 py-6 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-lg transition-all duration-300">
-                <Link to="/admissions">Apply Now</Link>
+                <Link to={applyLink}>Apply Now</Link>
               </Button>
               <Button asChild variant="outline" className="px-8 py-6 text-base font-semibold border-primary text-primary hover:bg-primary hover:text-white rounded-full transition-all duration-300">
                 <Link to="/contact">Request Info</Link>
