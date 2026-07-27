@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PencilRuler, Clock, Monitor, ClipboardList, Briefcase, DollarSign } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface FAQSectionProps {
   id?: string; // Added id prop
@@ -43,37 +49,43 @@ const FAQSection: React.FC<FAQSectionProps> = ({ id }) => {
   ];
 
   return (
-    <section id={id} className="py-8 md:py-12 lg:py-16 px-3 md:px-8 lg:px-[80px] bg-background text-center">
-      <AnimateOnScroll delay={100}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
-          Frequently Asked <span className="text-primary font-heading">Questions</span>
-        </h2>
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={200}>
-        <p className="text-text-medium font-body text-gray-600 mb-16 max-w-2xl mx-auto">
-          Common questions about our design programs and admission process.
-        </p>
-      </AnimateOnScroll>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mb-16 max-w-6xl mx-auto">
-        {faqs.map((faq, index) => (
-          <AnimateOnScroll key={index} delay={300 + index * 100}>
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted text-primary">
-                <faq.icon className="h-6 w-6" />
-              </div>
-              <h3 className="text-h6-mobile md:text-h6-desktop font-heading mb-2 text-foreground">
-                {faq.question}
-              </h3>
-              <p className="text-text-regular font-body text-gray-600 max-w-xs">
-                {faq.answer}
-              </p>
-            </div>
-          </AnimateOnScroll>
-        ))}
+    <section id={id} className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-background">
+      <div className="max-w-4xl mx-auto text-center mb-10 md:mb-12">
+        <AnimateOnScroll delay={100}>
+          <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
+            Frequently Asked <span className="text-primary font-heading">Questions</span>
+          </h2>
+        </AnimateOnScroll>
+        <AnimateOnScroll delay={200}>
+          <p className="text-text-medium font-body text-gray-600 max-w-2xl mx-auto">
+            Common questions about our design programs and admission process.
+          </p>
+        </AnimateOnScroll>
       </div>
 
-      <div className="mt-16">
+      <div className="max-w-3xl mx-auto text-left mb-12 md:mb-16">
+        <AnimateOnScroll delay={300}>
+          <Accordion type="single" collapsible className="w-full divide-y divide-gray-100 border-t border-b border-gray-100">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`faq-${index}`} className="border-b-0 py-1">
+                <AccordionTrigger className="text-base md:text-lg font-heading font-bold text-foreground hover:text-primary hover:no-underline py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-left">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-primary flex-shrink-0">
+                      <faq.icon className="h-4 w-4" />
+                    </span>
+                    <span>{faq.question}</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="text-text-regular font-body text-gray-600 pl-12 pb-4 leading-relaxed pr-4">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </AnimateOnScroll>
+      </div>
+
+      <div className="text-center">
         <AnimateOnScroll delay={100}>
           <h3 className="text-h3-mobile md:text-h3-desktop font-heading mb-4 text-foreground">
             Need more information?
@@ -85,7 +97,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ id }) => {
           </p>
         </AnimateOnScroll>
         <AnimateOnScroll delay={300}>
-          <Button asChild variant="outline" className="px-6 py-3 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Button asChild variant="outline" className="px-6 py-3 text-text-regular border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-full">
             <Link to="/contact">Contact</Link>
           </Button>
         </AnimateOnScroll>

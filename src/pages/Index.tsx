@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import WhyChooseUsSection from '@/components/WhyChooseUsSection';
-import HomeWhyChooseUsSection from '@/components/HomeWhyChooseUsSection';
 import OurProgramsSection from '@/components/OurProgramsSection';
 import ImpactByNumbersSection from '@/components/ImpactByNumbersSection';
 import StudentStoriesSection from '@/components/StudentStoriesSection';
-import CallToActionSection from '@/components/CallToActionSection';
 import FAQSection from '@/components/FAQSection';
 import LocationSection from '@/components/LocationSection';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
@@ -15,7 +13,7 @@ import CollaborationsSection from '@/components/CollaborationsSection';
 const Index = () => {
   return (
     <>
-      <div className="relative flex flex-col lg:flex-row items-center justify-center px-4 lg:px-[80px] bg-background min-h-[calc(100vh-140px)] lg:h-[calc(100vh-140px)] py-12 lg:py-4 xl:py-12 lg:gap-x-12 overflow-hidden">
+      <div className="relative flex flex-col lg:flex-row items-center justify-center px-4 lg:px-[80px] bg-background min-h-[calc(100dvh-170px)] lg:h-[calc(100dvh-170px)] py-12 lg:py-4 xl:py-8 lg:gap-x-12 overflow-hidden">
         {/* Mobile Background Image (Original Crisp Image with Dark Gradient Overlay) */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat lg:hidden opacity-100"
@@ -26,13 +24,13 @@ const Index = () => {
 
         {/* Left Section: Text Content */}
         <AnimateOnScroll isHero={true} delay={100} className="relative z-10 text-center lg:text-left max-w-2xl lg:w-1/2 lg:mb-0 flex flex-col justify-center h-full">
-          <h1 className="text-h1-mobile lg:text-4xl xl:text-h1-desktop font-heading mb-3 xl:mb-4 text-white lg:text-foreground font-bold leading-tight drop-shadow-md lg:drop-shadow-none">
+          <h1 className="text-h1-mobile lg:text-4xl xl:text-h1-desktop font-heading mb-2 xl:mb-3 text-white lg:text-foreground font-bold leading-tight drop-shadow-md lg:drop-shadow-none">
             Design your <br className="hidden lg:block" /> future with{' '}
             <span className="text-white lg:text-primary font-heading underline decoration-primary decoration-2 underline-offset-4 lg:no-underline">
               creative excellence
             </span>
           </h1>
-          <p className="text-text-regular lg:text-sm xl:text-text-large font-body mb-6 xl:mb-8 text-gray-100 lg:text-gray-600 drop-shadow-sm lg:drop-shadow-none leading-relaxed">
+          <p className="text-text-regular lg:text-sm xl:text-text-large font-body mb-4 xl:mb-6 text-gray-100 lg:text-gray-600 drop-shadow-sm lg:drop-shadow-none leading-relaxed">
             Transform your passion into a professional career. Our institute offers
             comprehensive design education that bridges creativity with industry
             expertise.
@@ -63,17 +61,11 @@ const Index = () => {
       {/* Collaborations Section */}
       <CollaborationsSection />
 
-      {/* Why Choose Us Section (Home Page Specific) */}
-      <HomeWhyChooseUsSection />
-
       {/* Impact By Numbers Section */}
       <ImpactByNumbersSection />
 
       {/* Student Stories Section */}
       <StudentStoriesSection />
-
-      {/* Call To Action Section */}
-      <CallToActionSection />
 
       {/* FAQ Section */}
       <FAQSection id="faq-section" />

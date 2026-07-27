@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
+import NCFTLogo from './NCFTLogo';
 
 const OurProgramsSection = () => {
   const programs = [
@@ -47,26 +48,22 @@ const OurProgramsSection = () => {
   ];
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-[#fdfaf6] text-center">
+    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-slate-50/50 text-center">
+      <NCFTLogo className="bg-transparent py-0 md:py-0 lg:py-0 mb-2" />
       <AnimateOnScroll delay={100}>
-        <p className="text-text-regular font-body text-gray-500 uppercase tracking-widest text-xs font-semibold mb-3">Our Programs</p>
+        <p className="font-heading text-primary uppercase tracking-widest text-lg md:text-xl lg:text-2xl font-bold mb-4">Our Programs</p>
       </AnimateOnScroll>
       <AnimateOnScroll delay={200}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-6 max-w-3xl mx-auto text-foreground font-bold">
+        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-12 max-w-5xl mx-auto text-foreground font-bold">
           Comprehensive design courses for <span className="text-primary font-heading">aspiring creatives</span>
         </h2>
-      </AnimateOnScroll>
-      <AnimateOnScroll delay={300}>
-        <p className="text-text-medium font-body text-gray-600 mb-14 max-w-2xl mx-auto">
-          Discover our range of specialized design programs tailored to modern industry demands.
-        </p>
       </AnimateOnScroll>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-14">
         {programs.map((program, index) => (
           <AnimateOnScroll key={index} delay={150 + index * 75}>
             <Link to={program.href} className="block group h-full">
-              <div className="flex flex-col h-full bg-white rounded-3xl p-5 border border-gray-100 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 text-center">
+              <div className="flex flex-col h-full bg-white rounded-3xl p-5 border border-gray-100/80 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 text-center">
                 <div className="w-full h-52 md:h-60 overflow-hidden rounded-2xl mb-5">
                   <img
                     src={program.image}

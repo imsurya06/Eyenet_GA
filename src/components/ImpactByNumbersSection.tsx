@@ -1,87 +1,78 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Clock, UserCheck, Award, ArrowUpRight } from "lucide-react";
+import { CheckCircle, Trophy, Presentation, Target, Award, Building, Scissors, Factory, Cpu } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ImpactByNumbersSection = () => {
-  const stats = [
+  const highlights = [
     {
-      value: '25+',
-      label: 'Years of Experience',
-      icon: Clock,
-      description: "Dedicated to excellence in design.",
+      title: '25+ Years of Excellence',
+      subtitle: 'in Fashion Education',
+      icon: CheckCircle,
     },
     {
-      value: '85%',
-      label: 'Student satisfaction',
-      icon: UserCheck,
-      description: "Graduates love their journey.",
+      title: 'Winners of 10+ Awards',
+      subtitle: 'in Inter-College Fashion Meets',
+      icon: Trophy,
     },
     {
-      value: '75%',
-      label: 'Industry recognition',
+      title: 'Conducted Seminars & Workshops',
+      subtitle: 'on Fashion Trends & Techniques',
+      icon: Presentation,
+    },
+    {
+      title: '100% Placement & Business Opportunities',
+      subtitle: 'for Every Student',
+      icon: Target,
+    },
+    {
+      title: 'Government-Recognized Certification',
+      subtitle: 'Valid and accredited credentials',
       icon: Award,
-      description: "Award-winning curriculum.",
+    },
+    {
+      title: 'MSME Registration',
+      subtitle: 'Provided to Graduates',
+      icon: Building,
+    },
+    {
+      title: 'Hands-On Practical Training',
+      subtitle: 'with Live Projects',
+      icon: Scissors,
+    },
+    {
+      title: 'Industrial Visits',
+      subtitle: 'for Real-Time Fashion Industry Exposure',
+      icon: Factory,
+    },
+    {
+      title: 'Fashion CAD (AI-Powered)',
+      subtitle: 'Learn the Future of Fashion Design',
+      icon: Cpu,
     },
   ];
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
-
-    videoElement.muted = true;
-    videoElement.play().catch((error) => console.log("Initial autoplay attempt:", error));
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          videoElement.play().catch((error) => console.log("Video play interrupted:", error));
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(videoElement);
-
-    return () => {
-      if (videoElement) {
-        observer.unobserve(videoElement);
-      }
-    };
-  }, []);
 
   return (
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
       {/* Full Width Video Section */}
       <div className="w-full h-[50vh] md:h-[70vh] relative group overflow-hidden bg-black">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=1600"
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/videos/impact-video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <iframe
+          src="https://player.vimeo.com/video/1213216123?autoplay=1&loop=1&muted=1&background=1"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[177.77vh] min-w-full h-[56.25vw] min-h-full pointer-events-none"
+          title="Vimeo Background Video"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+        />
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-[80px] relative z-10 -mt-20 md:-mt-32">
+      <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12 relative z-10 -mt-20 md:-mt-32">
 
         {/* Statistics & Intro Card - Overlapping Video */}
-        <div className="bg-background rounded-3xl shadow-2xl p-8 md:p-12 lg:p-16 border border-border/50">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div className="bg-background rounded-3xl shadow-2xl p-6 md:p-10 lg:p-12 border border-border/50">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
             <AnimateOnScroll className="text-left">
               <div className="inline-flex items-center gap-2 mb-4">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
@@ -99,16 +90,23 @@ const ImpactByNumbersSection = () => {
             </AnimateOnScroll>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <AnimateOnScroll key={index} delay={200 + (index * 100)} className="group">
-                <div className="p-6 rounded-2xl bg-secondary/30 hover:bg-secondary/50 transition-colors duration-300">
-                  <div className="mb-4 w-12 h-12 rounded-xl bg-background flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform duration-300">
-                    <stat.icon strokeWidth={1.5} className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {highlights.map((item, index) => (
+              <AnimateOnScroll key={index} delay={200 + (index * 75)} className="group h-full">
+                <div className="p-5 md:p-6 rounded-2xl bg-secondary/30 hover:bg-primary/5 hover:border-primary/20 border border-transparent transition-all duration-300 flex items-start gap-4 h-full text-left">
+                  <div className="mb-0 w-12 h-12 rounded-xl bg-background flex items-center justify-center text-primary shadow-sm group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300 flex-shrink-0">
+                    <item.icon strokeWidth={1.5} className="w-6 h-6" />
                   </div>
-                  <div className="text-4xl md:text-5xl font-heading font-bold mb-2 tracking-tight text-foreground">{stat.value}</div>
-                  <div className="text-lg font-medium text-foreground/90 mb-1 font-body">{stat.label}</div>
-                  <div className="text-sm text-muted-foreground font-body">{stat.description}</div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-heading font-bold text-primary mb-1 group-hover:text-primary transition-colors leading-tight">
+                      {item.title}
+                    </h3>
+                    {item.subtitle && (
+                      <p className="text-sm md:text-base font-body text-muted-foreground leading-normal">
+                        {item.subtitle}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </AnimateOnScroll>
             ))}

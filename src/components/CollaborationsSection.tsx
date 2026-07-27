@@ -6,6 +6,13 @@ import { Handshake } from 'lucide-react';
 
 const collaborationPartners = [
   {
+    name: 'SBS Studio',
+    tagline: 'Creative & Media Partner',
+    description: 'Offering hands-on practical training, portfolio mentoring, and industry placement assistance.',
+    src: '/images/sbs-logo.png',
+    category: 'Media & Production',
+  },
+  {
     name: 'Thugil Couture',
     tagline: 'Fashion & Apparel Partner',
     description: 'Providing exclusive internship opportunities, garment construction workshops, and runway showcases.',
@@ -18,13 +25,6 @@ const collaborationPartners = [
     description: 'Collaborating on live student design projects, trend forecasting, and fashion exhibition events.',
     src: '/images/fashion-dazzling.png',
     category: 'Design Studio',
-  },
-  {
-    name: 'SBS Studio',
-    tagline: 'Creative & Media Partner',
-    description: 'Offering hands-on practical training, portfolio mentoring, and industry placement assistance.',
-    src: '/images/sbs-logo.png',
-    category: 'Media & Production',
   },
 ];
 

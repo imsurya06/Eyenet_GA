@@ -10,9 +10,9 @@ const FounderDirectorSection = () => {
         {/* Left Section: Image */}
         <AnimateOnScroll delay={100} className="w-full h-[400px] md:h-[550px] overflow-hidden rounded-3xl shadow-xl border border-gray-100 mx-auto lg:mx-0">
           <img
-            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800"
+            src="/images/Founder Image.JPEG"
             alt="Founder & Director"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-center"
           />
         </AnimateOnScroll>
 

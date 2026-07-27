@@ -4,10 +4,22 @@ import React from 'react';
 import { User2, Star, Quote } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useTestimonials } from '@/context/TestimonialContext';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const TestimonialsSection = () => {
   const { testimonials, loading } = useTestimonials();
   const approvedTestimonials = testimonials.filter(t => t.approved);
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: false })
+  );
 
   return (
     <section className="py-12 md:py-20 lg:py-24 px-4 md:px-8 lg:px-[80px] bg-slate-50 text-center relative overflow-hidden">
@@ -29,42 +41,60 @@ const TestimonialsSection = () => {
           Loading student stories...
         </AnimateOnScroll>
       ) : approvedTestimonials.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
-          {approvedTestimonials.map((testimonial, index) => (
-            <AnimateOnScroll key={testimonial.id} delay={150 + index * 75}>
-              <div className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-gray-100 group">
-                <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors duration-300" />
-                
-                {/* Display star rating */}
-                <div className="flex items-center gap-1 mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${testimonial.rating > i ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
-                    />
-                  ))}
-                </div>
-                
-                <p className="text-text-regular font-body text-gray-700 mb-8 italic flex-grow leading-relaxed">
-                  "{testimonial.quote}"
-                </p>
-                
-                <div className="flex items-center gap-4 mt-auto">
-                  <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 flex-shrink-0">
-                    <User2 className="h-6 w-6 text-gray-400" />
-                  </div>
-                  <div>
-                    <p className="text-text-medium font-body font-semibold text-foreground">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-text-small font-body text-gray-500">
-                      Student
-                    </p>
-                  </div>
-                </div>
+        <div className="max-w-7xl mx-auto px-4">
+          <AnimateOnScroll delay={300}>
+            <Carousel
+              plugins={[plugin.current]}
+              className="w-full"
+              opts={{
+                loop: true,
+                align: "start",
+              }}
+            >
+              <CarouselContent className="-ml-4 flex">
+                {approvedTestimonials.map((testimonial) => (
+                  <CarouselItem key={testimonial.id} className="pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex">
+                    <div className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-gray-100 group w-full">
+                      <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors duration-300" />
+                      
+                      {/* Display star rating */}
+                      <div className="flex items-center gap-1 mb-6">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${testimonial.rating > i ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'}`}
+                          />
+                        ))}
+                      </div>
+                      
+                      <p className="text-text-regular font-body text-gray-700 mb-8 italic flex-grow leading-relaxed">
+                        "{testimonial.quote}"
+                      </p>
+                      
+                      <div className="flex items-center gap-4 mt-auto">
+                        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 flex-shrink-0">
+                          <User2 className="h-6 w-6 text-gray-400" />
+                        </div>
+                        <div>
+                          <p className="text-text-medium font-body font-semibold text-foreground">
+                            {testimonial.name}
+                          </p>
+                          <p className="text-text-small font-body text-gray-500">
+                            Student
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {/* Optional Navigation arrows */}
+              <div className="flex justify-center gap-4 mt-8">
+                <CarouselPrevious className="static translate-y-0" />
+                <CarouselNext className="static translate-y-0" />
               </div>
-            </AnimateOnScroll>
-          ))}
+            </Carousel>
+          </AnimateOnScroll>
         </div>
       ) : (
         <AnimateOnScroll delay={300} className="col-span-full text-center text-text-medium text-gray-600">

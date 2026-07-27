@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Clock, User } from 'lucide-react'; // Import Clock and User icons
+import { ArrowRight, Clock, User, CheckCircle2 } from 'lucide-react'; // Import Clock, User, and CheckCircle2 icons
 import AnimateOnScroll from './AnimateOnScroll';
 import { useCourses } from '@/context/CourseContext';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -18,6 +18,33 @@ const FashionCoursesSection = () => {
   const handleEnrollClick = (e: React.MouseEvent, courseTitle: string) => {
     e.stopPropagation(); // Prevent the parent Link from being triggered
     navigate(`/admissions?course=${encodeURIComponent(courseTitle)}`);
+  };
+
+  const getCourseSubtitle = (title: string) => {
+    if (title === "Diploma in Fashion Designing") {
+      return "Part Time - 2Hrs/Day";
+    }
+    if (title.toLowerCase().includes("diploma")) {
+      return "Part Time - 2Hrs/Day";
+    }
+    return "Flexible Batches - 1.5Hrs/Day";
+  };
+
+  const getFormattedDuration = (duration: string) => {
+    if (duration.toLowerCase().startsWith("duration")) {
+      return duration;
+    }
+    return `Duration ${duration}.`;
+  };
+
+  const getFormattedEligibility = (eligibility: string) => {
+    if (eligibility.toLowerCase().startsWith("eligibility")) {
+      return eligibility;
+    }
+    if (eligibility === "10th / 12th Pass" || eligibility === "10th Pass / Open to All") {
+      return "Eligibility: 10th-Pass/Fail. No Age Limit";
+    }
+    return `Eligibility: ${eligibility}`;
   };
 
   const truncateDescription = (description: string, maxLength: number) => {
@@ -79,44 +106,55 @@ const FashionCoursesSection = () => {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
-                    <div className="flex flex-col flex-grow justify-between min-w-0">
+                     <div className="flex flex-col flex-grow justify-between min-w-0">
                       <div>
                         <span className="inline-block bg-muted text-xs font-semibold font-body text-gray-600 px-3 py-1 rounded-full mb-3 border border-gray-200 max-w-full truncate">
                           {course.tag} / Offline
                         </span>
-                        <h3 className="text-xl font-heading font-bold mb-2 text-foreground line-clamp-2 hover:text-primary transition-colors break-words [overflow-wrap:anywhere]">
+                        
+                        <h3 className="text-xl font-heading font-bold mb-1 text-primary hover:text-primary/80 transition-colors break-words [overflow-wrap:anywhere]">
                           {course.title}
                         </h3>
-                        <p className="text-sm font-body text-gray-600 mb-4 leading-relaxed flex-grow break-words [overflow-wrap:anywhere]">
-                          {truncateDescription(course.description.replace(' Details...', ''), 120)}{' '}
-                          <span className="text-primary hover:underline ml-1 font-semibold">
-                            more...
+
+                        <p className="text-xs font-semibold font-body text-blue-600 mb-3 uppercase tracking-wider">
+                          {getCourseSubtitle(course.title)}
+                        </p>
+
+                        <div className="flex flex-col gap-2 mb-4 text-sm font-body text-gray-700">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                            <span>{getFormattedDuration(course.duration)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                            <span>{getFormattedEligibility(course.eligibility)}</span>
+                          </div>
+                        </div>
+
+                        <p className="text-sm font-body text-gray-600 mb-5 leading-relaxed break-words [overflow-wrap:anywhere]">
+                          {truncateDescription(course.description.replace(' Details...', ''), 140)}{' '}
+                          <span className="text-blue-600 underline font-semibold hover:text-blue-800 transition-colors">
+                            Read More...
                           </span>
                         </p>
                       </div>
 
-                      <div>
-                        <div className="flex items-center gap-4 text-xs font-body text-gray-600 mb-4 pt-3 border-t border-gray-100 flex-wrap">
-                          <div className="flex items-center gap-1 min-w-0">
-                            <Clock className="h-4 w-4 text-primary flex-shrink-0" />
-                            <span className="truncate">{course.duration}</span>
-                          </div>
-                          <div className="flex items-center gap-1 min-w-0">
-                            <User className="h-4 w-4 text-primary flex-shrink-0" />
-                            <span className="truncate">{course.eligibility}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
-                          <a href="/brochures/Course-details-v1.pdf" download onClick={(e) => e.stopPropagation()} className="text-xs font-semibold text-primary hover:underline truncate">
+                      <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
+                        <Button
+                          className="flex-1 bg-primary hover:bg-primary/95 text-white rounded-xl py-2.5 text-xs font-semibold shadow-sm transition-all"
+                          onClick={(e) => handleEnrollClick(e, course.title)}
+                        >
+                          Book Now
+                        </Button>
+                        <Button
+                          variant="outline"
+                          asChild
+                          className="flex-1 border-primary text-primary hover:bg-primary hover:text-white rounded-xl py-2.5 text-xs font-semibold shadow-sm transition-all"
+                        >
+                          <a href="/brochures/Course-details-v1.pdf" download onClick={(e) => e.stopPropagation()}>
                             Download Brochure
                           </a>
-                          <Button
-                            className="bg-primary hover:bg-primary/90 text-white rounded-full px-4 py-2 text-xs font-semibold shadow-sm flex-shrink-0"
-                            onClick={(e) => handleEnrollClick(e, course.title)}
-                          >
-                            Enroll <ArrowRight className="ml-1 h-3 w-3 inline-block" />
-                          </Button>
-                        </div>
+                        </Button>
                       </div>
                     </div>
                   </div>
