@@ -89,15 +89,15 @@ const SecondaryNavbar = () => {
         })}
       </div>
 
-      {/* Right Section: Contact Info and Social Icons */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-end gap-y-4 sm:gap-y-0 sm:gap-x-8 flex-wrap justify-center sm:justify-end mt-2 sm:mt-0">
+      {/* Right Section: Contact Info and Social Icons in Single Line */}
+      <div className="flex flex-row items-center justify-center sm:justify-end gap-x-3.5 sm:gap-x-6 flex-wrap mt-1 sm:mt-0">
         {/* Phone Number */}
-        <a href="tel:+919842173725" className="flex items-center gap-1 hover:underline text-primary">
-          <Phone className="h-6 w-6" />
+        <a href="tel:+919842173725" className="flex items-center gap-1.5 hover:underline text-primary font-medium text-xs sm:text-sm">
+          <Phone className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
           <span>+91 9842173725</span>
         </a>
-        {/* Social Icons Wrapper - ensures icons stay in a row with their own spacing */}
-        <div className="flex items-center gap-x-4">
+        {/* Social Icons */}
+        <div className="flex items-center gap-x-2.5 sm:gap-x-3.5">
           {socialAndContactIcons.map((item) => (
             <a
               key={item.name}
@@ -107,7 +107,7 @@ const SecondaryNavbar = () => {
               aria-label={item.name}
               className="hover:text-primary transition-colors text-primary"
             >
-              <item.icon className="h-6 w-6" />
+              <item.icon className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
           ))}
         </div>

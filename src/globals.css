@@ -212,6 +212,7 @@
   }
 }
 
+
 @keyframes fall {
   0% {
     transform: translateY(-100vh) rotate(0deg) scale(0.5);
@@ -226,4 +227,13 @@
     transform: translateY(100vh) rotate(720deg) scale(1);
     opacity: 0;
   }
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
