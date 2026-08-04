@@ -59,7 +59,7 @@ const ImpactByNumbersSection = () => {
       {/* Full Width Video Section */}
       <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-black">
         <iframe
-          src="https://player.vimeo.com/video/1213216123?autoplay=1&loop=1&muted=1&background=1"
+          src="https://player.vimeo.com/video/1213216123?autoplay=1&loop=1&autopause=0&muted=1&playsinline=1&controls=0"
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
           title="Vimeo Background Video"
           allow="autoplay; fullscreen; picture-in-picture"
