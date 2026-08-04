@@ -4,7 +4,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Award } from 'lucide-react';
-import AnimateOnScroll from './AnimateOnScroll';
 import NCFTLogo from './NCFTLogo';
 
 const programs = [
@@ -70,24 +69,20 @@ const OurProgramsSection = () => {
     <section className="py-14 md:py-20 lg:py-24 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50 via-slate-100/40 to-slate-50 text-center overflow-hidden">
       <NCFTLogo className="bg-transparent py-0 md:py-0 lg:py-0 mb-2" />
       
-      <AnimateOnScroll delay={100}>
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
-          <span>Our Programs</span>
-        </div>
-      </AnimateOnScroll>
+      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
+        <span>Our Programs</span>
+      </div>
 
-      <AnimateOnScroll delay={200}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading font-normal mb-4 max-w-4xl mx-auto text-slate-900 tracking-tight">
-          Comprehensive design courses for <span className="text-primary font-heading italic">aspiring creatives</span>
-        </h2>
-        <p className="text-slate-600 font-body text-base md:text-lg max-w-2xl mx-auto mb-10 md:mb-14">
-          Industry-aligned vocational and professional programs crafted to transform passion into successful creative careers.
-        </p>
-      </AnimateOnScroll>
+      <h2 className="text-h2-mobile md:text-h2-desktop font-heading font-normal mb-4 max-w-4xl mx-auto text-slate-900 tracking-tight">
+        Comprehensive design courses for <span className="text-primary font-heading italic">aspiring creatives</span>
+      </h2>
+      <p className="text-slate-600 font-body text-base md:text-lg max-w-2xl mx-auto mb-10 md:mb-14">
+        Industry-aligned vocational and professional programs crafted to transform passion into successful creative careers.
+      </p>
 
       {/* Mobile View: Infinite Continuous Carousel (Hidden on Desktop) */}
       <div className="md:hidden overflow-hidden w-full relative py-4 mb-8 -mx-4 px-4">
-        <div className="flex gap-5 w-max animate-scroll hover:[animation-play-state:paused]">
+        <div className="flex gap-5 w-max animate-scroll">
           {[...programs, ...programs, ...programs, ...programs].map((program, index) => (
             <div
               key={`program-mobile-${index}`}
@@ -147,7 +142,7 @@ const OurProgramsSection = () => {
       {/* Desktop View: 3-Column Grid (Hidden on Mobile) */}
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto mb-10 md:mb-16">
         {programs.map((program, index) => (
-          <AnimateOnScroll key={index} delay={150 + index * 75}>
+          <div key={index} className="h-full">
             <Link to={program.href} className="block group h-full">
               <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-2xl hover:border-primary/40 hover:-translate-y-2 transition-all duration-500 text-left">
                 
@@ -194,22 +189,20 @@ const OurProgramsSection = () => {
 
               </div>
             </Link>
-          </AnimateOnScroll>
+          </div>
         ))}
       </div>
 
-      <AnimateOnScroll delay={100}>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="px-8 py-3.5 text-base font-semibold bg-primary text-white hover:bg-primary/90 rounded-full shadow-lg shadow-primary/20 transition-all hover:scale-105">
-            <Link to="/courses">View All Courses</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="px-8 py-3.5 text-base font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-full transition-all">
-            <Link to="/contact">
-              Request Details <ArrowRight className="ml-2 h-4 w-4 inline-block" />
-            </Link>
-          </Button>
-        </div>
-      </AnimateOnScroll>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button asChild size="lg" className="px-8 py-3.5 text-base font-semibold bg-primary text-white hover:bg-primary/90 rounded-full shadow-lg shadow-primary/20 transition-all hover:scale-105">
+          <Link to="/courses">View All Courses</Link>
+        </Button>
+        <Button asChild variant="outline" size="lg" className="px-8 py-3.5 text-base font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-full transition-all">
+          <Link to="/contact">
+            Request Details <ArrowRight className="ml-2 h-4 w-4 inline-block" />
+          </Link>
+        </Button>
+      </div>
     </section>
   );
 };

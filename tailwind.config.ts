@@ -144,9 +144,13 @@ export default {
           "90%": { transform: "translateX(-5px) rotate(-4deg)" },
         },
         float: {
-          '0%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
-          '100%': { transform: 'translateY(0px)' },
+          '0%': { transform: 'translate3d(0, 0px, 0)' },
+          '50%': { transform: 'translate3d(0, -10px, 0)' },
+          '100%': { transform: 'translate3d(0, 0px, 0)' },
+        },
+        'float-smooth': {
+          '0%, 100%': { transform: 'translate3d(0, 0px, 0)' },
+          '50%': { transform: 'translate3d(0, -8px, 0)' },
         },
         scroll: {
           '0%': { transform: 'translateX(0)' },
@@ -162,6 +166,7 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         shake: "shake 0.8s infinite",
         float: 'float 3s ease-in-out infinite',
+        'float-smooth': 'float-smooth 4.5s ease-in-out infinite',
         scroll: 'scroll 40s linear infinite',
         'scroll-reverse': 'scroll-reverse 40s linear infinite',
       },
