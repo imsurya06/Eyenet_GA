@@ -13,44 +13,45 @@ import CollaborationsSection from '@/components/CollaborationsSection';
 const Index = () => {
   return (
     <>
-      <div className="relative flex flex-col lg:flex-row items-center justify-center px-4 lg:px-[80px] bg-background min-h-[calc(100dvh-170px)] lg:h-[calc(100dvh-170px)] py-12 lg:py-4 xl:py-8 lg:gap-x-12 overflow-hidden">
-        {/* Mobile Background Image (Original Crisp Image with Dark Gradient Overlay) */}
+      <div className="relative flex flex-col lg:flex-row items-center justify-between px-6 sm:px-8 lg:px-[80px] bg-background min-h-[72dvh] lg:h-[calc(100vh-125px)] lg:min-h-[calc(100vh-125px)] lg:max-h-none py-8 lg:py-4 xl:py-8 lg:gap-x-12 overflow-hidden">
+        {/* Mobile Background Image (Bright, Vibrant Original Image) */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat lg:hidden opacity-100"
+          className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat lg:hidden opacity-100"
           style={{ backgroundImage: 'url(/images/hero-model.jpg)' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/85"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/40"></div>
         </div>
 
         {/* Left Section: Text Content */}
-        <AnimateOnScroll isHero={true} delay={100} className="relative z-10 text-center lg:text-left max-w-2xl lg:w-1/2 lg:mb-0 flex flex-col justify-center h-full">
-          <h1 className="text-h1-mobile lg:text-4xl xl:text-h1-desktop font-heading mb-2 xl:mb-3 text-white lg:text-foreground font-bold leading-tight drop-shadow-md lg:drop-shadow-none">
-            Design your <br className="hidden lg:block" /> future with{' '}
+        <AnimateOnScroll isHero={true} delay={100} className="relative z-10 text-center lg:text-left max-w-xl lg:max-w-2xl lg:w-1/2 flex flex-col justify-center items-center lg:items-start my-auto h-full w-full">
+          <h1 className="text-[36px] xs:text-[42px] sm:text-5xl lg:text-5xl xl:text-[68px] font-heading font-normal mb-4 xl:mb-6 text-white lg:text-foreground leading-[1.12] xl:leading-[1.08] tracking-normal drop-shadow-sm lg:drop-shadow-none text-center lg:text-left">
+            Design your future <br className="hidden sm:block lg:hidden" />
+            with creative <br className="hidden sm:block lg:hidden" />
             <span className="text-white lg:text-primary font-heading">
-              creative excellence
+              excellence
             </span>
           </h1>
-          <p className="text-text-regular lg:text-sm xl:text-text-large font-body mb-4 xl:mb-6 text-gray-100 lg:text-gray-600 drop-shadow-sm lg:drop-shadow-none leading-relaxed">
+          <p className="text-base sm:text-lg xl:text-text-large font-body mb-6 xl:mb-8 text-gray-100/95 lg:text-gray-600 drop-shadow-sm lg:drop-shadow-none leading-relaxed max-w-md lg:max-w-lg text-center lg:text-left mx-auto lg:mx-0">
             Transform your passion into a professional career. Our institute offers
             comprehensive design education that bridges creativity with industry
             expertise.
           </p>
-          <div className="flex flex-row items-center gap-3 justify-center lg:justify-start">
-            <Button asChild size="sm" className="px-5 py-2.5 text-xs sm:text-sm text-white bg-primary hover:bg-primary/90 rounded-full shadow-md font-semibold border border-primary transition-all">
+          <div className="flex flex-row items-center gap-3.5 sm:gap-4 justify-center lg:justify-start w-full">
+            <Button asChild className="px-5 sm:px-6 py-3 sm:py-3.5 h-auto text-sm sm:text-base text-white bg-[#b91c1c] hover:bg-[#991b1b] lg:bg-primary lg:hover:bg-primary/90 rounded-none shadow-none font-medium transition-all">
               <Link to="/courses">Explore courses</Link>
             </Button>
-            <Button variant="outline" asChild size="sm" className="px-5 py-2.5 text-xs sm:text-sm text-white lg:text-primary border border-white lg:border-primary bg-white/10 lg:bg-transparent hover:bg-white hover:text-gray-900 rounded-full font-semibold backdrop-blur-sm shadow-sm transition-all">
+            <Button variant="outline" asChild className="px-5 sm:px-6 py-3 sm:py-3.5 h-auto text-sm sm:text-base text-white lg:text-primary border border-white lg:border-primary bg-transparent hover:bg-white/10 lg:hover:bg-primary/10 rounded-none font-medium shadow-none transition-all">
               <Link to="/contact">Request info</Link>
             </Button>
           </div>
         </AnimateOnScroll>
 
-        {/* Right Section: Image (Desktop Only) */}
-        <AnimateOnScroll isHero={true} delay={200} className="hidden lg:flex lg:w-1/2 h-full justify-end items-center relative z-10">
+        {/* Right Section: Image (Desktop Only - Bigger Size) */}
+        <AnimateOnScroll isHero={true} delay={200} className="hidden lg:flex lg:w-1/2 h-full justify-end items-center relative z-10 overflow-hidden">
           <img
             src="/images/hero-model.jpg"
             alt="Fashion model"
-            className="max-h-full w-auto object-contain object-right rounded-lg animate-float"
+            className="h-full max-h-[calc(100vh-120px)] xl:max-h-[720px] w-auto object-contain object-right rounded-lg animate-float"
           />
         </AnimateOnScroll>
       </div>

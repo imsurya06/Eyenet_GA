@@ -22,11 +22,11 @@ const AboutHeroSection = () => {
         </div>
 
         {/* Main Hero Image */}
-        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[250px] md:h-[400px] lg:h-[500px] overflow-hidden rounded-3xl mb-12 md:mb-12 lg:mb-16 shadow-lg border border-gray-100">
+        <AnimateOnScroll isHero={true} delay={300} className="w-full h-[280px] md:h-[450px] lg:h-[520px] overflow-hidden rounded-3xl mb-12 md:mb-12 lg:mb-16 shadow-xl border border-gray-100 relative group">
           <img
-            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200"
-            alt="Fashion atelier sketching"
-            className="w-full h-full object-cover"
+            src="https://i.pinimg.com/1200x/2d/53/0a/2d530a0fe0031327fb20c99d8b30dadb.jpg"
+            alt="Eyenet Creative Fashion Design"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         </AnimateOnScroll>
 
@@ -62,11 +62,11 @@ const AboutHeroSection = () => {
           </div>
 
           {/* Right Section: Secondary Image */}
-          <AnimateOnScroll delay={700} className="w-full h-[350px] md:h-[450px] overflow-hidden rounded-xl mx-auto lg:mx-0">
+          <AnimateOnScroll delay={700} className="w-full h-[380px] md:h-[480px] overflow-hidden rounded-2xl mx-auto lg:mx-0 shadow-lg border border-gray-100">
             <img
-              src="/images/about-image-2.png"
-              alt="Fashion model in light green attire"
-              className="w-full h-full object-cover object-top"
+              src="https://i.pinimg.com/736x/fe/4b/0f/fe4b0f20b80ccdfdcb0dc1803242d3a5.jpg"
+              alt="Eyenet Fashion & Design Studio Model"
+              className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
             />
           </AnimateOnScroll>
         </div>

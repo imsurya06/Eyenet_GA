@@ -70,7 +70,9 @@ export default {
       },
       fontFamily: {
         heading: ['Cormorant Garamond', 'serif'],
+        subheading: ['Cormorant Garamond', 'serif'],
         body: ['Source Sans 3', 'sans-serif'],
+        sans: ['Source Sans 3', 'sans-serif'],
       },
       fontSize: {
         // Desktop Headings (Apple Design System Style)

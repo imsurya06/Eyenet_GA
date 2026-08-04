@@ -90,7 +90,63 @@ const ImpactByNumbersSection = () => {
             </AnimateOnScroll>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+          {/* Mobile 2-Row Infinite Carousel View */}
+          <div className="lg:hidden flex flex-col gap-4 overflow-hidden py-4 -mx-6 px-6">
+            {/* Row 1 Carousel */}
+            <div className="overflow-hidden w-full relative">
+              <div className="flex gap-4 w-max animate-scroll">
+                {[...highlights.slice(0, 5), ...highlights.slice(0, 5), ...highlights.slice(0, 5)].map((item, index) => (
+                  <div
+                    key={`row1-${index}`}
+                    className="w-[300px] sm:w-[340px] p-6 rounded-2xl bg-gradient-to-br from-white via-slate-50 to-slate-100/60 border border-slate-200/90 shadow-md flex flex-col justify-between text-left shrink-0"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-xs mb-4 shrink-0">
+                      <item.icon strokeWidth={1.5} className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-heading font-normal text-primary mb-1.5 leading-snug">
+                        {item.title}
+                      </h3>
+                      {item.subtitle && (
+                        <p className="text-xs sm:text-sm font-body text-slate-600 leading-snug">
+                          {item.subtitle}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Row 2 Carousel */}
+            <div className="overflow-hidden w-full relative">
+              <div className="flex gap-4 w-max animate-scroll-reverse">
+                {[...highlights.slice(5), ...highlights.slice(5), ...highlights.slice(5), ...highlights.slice(5)].map((item, index) => (
+                  <div
+                    key={`row2-${index}`}
+                    className="w-[300px] sm:w-[340px] p-6 rounded-2xl bg-gradient-to-br from-white via-slate-50 to-slate-100/60 border border-slate-200/90 shadow-md flex flex-col justify-between text-left shrink-0"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-xs mb-4 shrink-0">
+                      <item.icon strokeWidth={1.5} className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-heading font-normal text-primary mb-1.5 leading-snug">
+                        {item.title}
+                      </h3>
+                      {item.subtitle && (
+                        <p className="text-xs sm:text-sm font-body text-slate-600 leading-snug">
+                          {item.subtitle}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Grid Layout */}
+          <div className="hidden lg:grid grid-cols-3 gap-4 md:gap-6">
             {highlights.map((item, index) => (
               <AnimateOnScroll key={index} delay={200 + (index * 75)} className="group h-full">
                 <div className="p-3.5 sm:p-5 md:p-6 rounded-2xl bg-secondary/30 hover:bg-primary/5 hover:border-primary/20 border border-transparent transition-all duration-300 flex flex-col sm:flex-row items-start gap-2.5 sm:gap-4 h-full text-left">
@@ -98,7 +154,7 @@ const ImpactByNumbersSection = () => {
                     <item.icon strokeWidth={1.5} className="w-4 h-4 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <h3 className="text-sm sm:text-lg md:text-2xl font-heading font-bold text-primary mb-0.5 sm:mb-1 group-hover:text-primary transition-colors leading-tight">
+                    <h3 className="text-sm sm:text-lg md:text-2xl font-heading font-normal text-primary mb-0.5 sm:mb-1 group-hover:text-primary transition-colors leading-tight">
                       {item.title}
                     </h3>
                     {item.subtitle && (

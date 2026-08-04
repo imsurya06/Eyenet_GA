@@ -64,7 +64,7 @@ const SecondaryNavbar = () => {
   ];
 
   return (
-    <div className="bg-background text-foreground py-3 px-3 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-4 text-text-small font-body border-b border-border">
+    <div className="bg-background text-foreground py-2 px-3 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-4 text-text-small font-body border-b border-border">
       {/* Left Section: Navigation Links */}
       <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
         {secondaryNavLinks.map((link) => {
