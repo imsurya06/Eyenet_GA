@@ -28,8 +28,11 @@ export default defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Image URL',
-      type: 'string',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
     }),
     defineField({
       name: 'status',
