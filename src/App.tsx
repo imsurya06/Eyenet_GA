@@ -80,8 +80,11 @@ const App = () => {
                             <Route path="/explore" element={<Explore />} />
                             <Route path="/explore/students-zone" element={<StudentsZone />} />
                             <Route path="/explore/infrastructure" element={<Infrastructure />} />
+                            <Route path="/infrastructure" element={<Infrastructure />} />
                             <Route path="/explore/gallery" element={<Gallery />} />
                             <Route path="/explore/news-events" element={<NewsEvents />} />
+                            <Route path="/news-events" element={<NewsEvents />} />
+                            <Route path="/students-zone" element={<StudentsZone />} />
                             <Route path="/blogs" element={<Blogs />} />
                             <Route path="/faculty" element={<FacultyPage />} />
                             <Route path="/360-view" element={<ThreeSixtyView />} />
