@@ -58,14 +58,18 @@ const ImpactByNumbersSection = () => {
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
       {/* Full Width Video Section */}
       <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-black">
-        <iframe
-          src="https://player.vimeo.com/video/376460561?autoplay=1&loop=1&autopause=0&muted=1&playsinline=1&background=1"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
-          title="Vimeo Background Video"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-        />
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover min-w-full min-h-full pointer-events-none"
+          poster="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1600"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-a-runway-show-34396-large.mp4" type="video/mp4" />
+          <source src="https://cdn.coverr.co/videos/coverr-fashion-model-on-runway-5246/1080p.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-500"></div>
       </div>
 
       <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12 relative z-10 -mt-10 sm:-mt-16 md:-mt-32">
