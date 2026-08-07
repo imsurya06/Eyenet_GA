@@ -64,12 +64,10 @@ const ImpactByNumbersSection = () => {
           muted
           playsInline
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover min-w-full min-h-full pointer-events-none"
-          poster="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1600"
         >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-a-runway-show-34396-large.mp4" type="video/mp4" />
-          <source src="https://cdn.coverr.co/videos/coverr-fashion-model-on-runway-5246/1080p.mp4" type="video/mp4" />
+          <source src="/videos/impact-video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-500"></div>
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
       </div>
 
       <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12 relative z-10 -mt-10 sm:-mt-16 md:-mt-32">
