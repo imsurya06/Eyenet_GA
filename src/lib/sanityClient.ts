@@ -4,7 +4,7 @@ import imageUrlBuilder from '@sanity/image-url';
 export const sanityClient = createClient({
   projectId: 'kxgkc60l', // project ID
   dataset: 'production', // dataset
-  useCdn: true, // CDN enabled for fast, cached queries & CORS resilience
+  useCdn: false, // `false` ensures live fresh data when editing in Sanity Studio
   apiVersion: '2024-01-01', // date of setup
 });
 
