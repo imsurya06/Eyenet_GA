@@ -58,15 +58,13 @@ const ImpactByNumbersSection = () => {
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
       {/* Full Width Video Section */}
       <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-black">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover min-w-full min-h-full pointer-events-none"
-        >
-          <source src="/videos/impact-video.mp4" type="video/mp4" />
-        </video>
+        <iframe
+          src="https://player.vimeo.com/video/1213216123?autoplay=1&loop=1&muted=1&autopause=0"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
+          title="Vimeo Background Video"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+        />
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"></div>
       </div>
 
