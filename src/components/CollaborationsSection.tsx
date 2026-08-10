@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { Handshake } from 'lucide-react';
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 const collaborationPartners = [
   {
@@ -29,58 +35,9 @@ const collaborationPartners = [
 ];
 
 const CollaborationsSection = () => {
-  const mobileScrollRef = useRef<HTMLDivElement>(null);
-  const isInteracting = useRef(false);
-
-  useEffect(() => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-
-    let animationId: number;
-
-    const autoScroll = () => {
-      if (el && !isInteracting.current) {
-        el.scrollLeft += 0.7;
-        if (el.scrollLeft >= (el.scrollWidth / 2)) {
-          el.scrollLeft = 0;
-        }
-      }
-      animationId = requestAnimationFrame(autoScroll);
-    };
-
-    animationId = requestAnimationFrame(autoScroll);
-
-    let pauseTimer: NodeJS.Timeout;
-    const handleTouchStart = () => {
-      isInteracting.current = true;
-      clearTimeout(pauseTimer);
-    };
-
-    const handleTouchEnd = () => {
-      clearTimeout(pauseTimer);
-      pauseTimer = setTimeout(() => {
-        isInteracting.current = false;
-      }, 2500);
-    };
-
-    el.addEventListener('touchstart', handleTouchStart, { passive: true });
-    el.addEventListener('touchend', handleTouchEnd, { passive: true });
-    el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
-    el.addEventListener('mousedown', handleTouchStart);
-    el.addEventListener('mouseup', handleTouchEnd);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      clearTimeout(pauseTimer);
-      if (el) {
-        el.removeEventListener('touchstart', handleTouchStart);
-        el.removeEventListener('touchend', handleTouchEnd);
-        el.removeEventListener('touchcancel', handleTouchEnd);
-        el.removeEventListener('mousedown', handleTouchStart);
-        el.removeEventListener('mouseup', handleTouchEnd);
-      }
-    };
-  }, []);
+  const plugin = useRef(
+    Autoplay({ delay: 2800, stopOnInteraction: false, stopOnMouseEnter: false })
+  );
 
   return (
     <section
@@ -151,44 +108,49 @@ const CollaborationsSection = () => {
           ))}
         </div>
 
-        {/* Mobile View: Auto-Scroll + Manual Swipe Horizontal Carousel (Hidden on Desktop) */}
-        <div
-          ref={mobileScrollRef}
-          className="lg:hidden w-full relative py-4 -mx-4 px-4 overflow-x-auto no-scrollbar scroll-smooth touch-pan-x flex gap-4"
-        >
-          {[...collaborationPartners, ...collaborationPartners, ...collaborationPartners].map((partner, index) => (
-            <div
-              key={`${partner.name}-${index}`}
-              className="w-[280px] sm:w-[310px] shrink-0"
-            >
-              <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border/60 shadow-md flex flex-col items-center text-center">
-                {/* Logo Frame */}
-                <div className="relative mb-5">
-                  <div className="w-24 h-24 rounded-full p-2 bg-white shadow-md border border-gray-100 flex items-center justify-center">
-                    <img
-                      src={partner.src}
-                      alt={partner.name}
-                      className="max-w-full max-h-full object-contain p-1 rounded-full"
-                    />
-                  </div>
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap">
-                    {partner.category}
-                  </span>
-                </div>
+        {/* Mobile View: Embla Carousel with Autoplay + Touch Swipe (Hidden on Desktop) */}
+        <div className="lg:hidden w-full relative py-4">
+          <Carousel
+            plugins={[plugin.current]}
+            opts={{
+              loop: true,
+              align: "start",
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-3">
+              {collaborationPartners.map((partner, index) => (
+                <CarouselItem key={`${partner.name}-${index}`} className="pl-3 basis-[82%] sm:basis-[300px]">
+                  <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border/60 shadow-md flex flex-col items-center text-center">
+                    {/* Logo Frame */}
+                    <div className="relative mb-5">
+                      <div className="w-24 h-24 rounded-full p-2 bg-white shadow-md border border-gray-100 flex items-center justify-center">
+                        <img
+                          src={partner.src}
+                          alt={partner.name}
+                          className="max-w-full max-h-full object-contain p-1 rounded-full"
+                        />
+                      </div>
+                      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap">
+                        {partner.category}
+                      </span>
+                    </div>
 
-                {/* Partner Details */}
-                <h3 className="text-lg font-heading font-normal text-foreground mb-1">
-                  {partner.name}
-                </h3>
-                <p className="text-xs font-semibold text-primary/80 uppercase tracking-wide mb-2 font-body">
-                  {partner.tagline}
-                </p>
-                <p className="text-xs font-body text-gray-600 dark:text-gray-300 leading-relaxed">
-                  {partner.description}
-                </p>
-              </div>
-            </div>
-          ))}
+                    {/* Partner Details */}
+                    <h3 className="text-lg font-heading font-normal text-foreground mb-1">
+                      {partner.name}
+                    </h3>
+                    <p className="text-xs font-semibold text-primary/80 uppercase tracking-wide mb-2 font-body">
+                      {partner.tagline}
+                    </p>
+                    <p className="text-xs font-body text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {partner.description}
+                    </p>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       </div>
     </section>
