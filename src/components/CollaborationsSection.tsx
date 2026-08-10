@@ -98,43 +98,41 @@ const CollaborationsSection = () => {
           ))}
         </div>
 
-        {/* Mobile Full Infinite Continuous Carousel Animation */}
-        <div className="lg:hidden overflow-hidden w-full relative py-4 -mx-4 px-4">
-          <div className="flex gap-5 w-max animate-scroll">
-            {[...collaborationPartners, ...collaborationPartners, ...collaborationPartners, ...collaborationPartners].map((partner, index) => (
-              <div
-                key={`${partner.name}-${index}`}
-                className="w-[280px] sm:w-[320px] shrink-0"
-              >
-                <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border/60 shadow-md flex flex-col items-center text-center">
-                  {/* Logo Frame */}
-                  <div className="relative mb-5">
-                    <div className="w-24 h-24 rounded-full p-2 bg-white shadow-md border border-gray-100 flex items-center justify-center">
-                      <img
-                        src={partner.src}
-                        alt={partner.name}
-                        className="max-w-full max-h-full object-contain p-1 rounded-full"
-                      />
-                    </div>
-                    <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap">
-                      {partner.category}
-                    </span>
+        {/* Mobile View: Touch-Scrollable Horizontal Cards (Hidden on Desktop) */}
+        <div className="lg:hidden w-full relative py-4 -mx-4 px-4 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth touch-pan-x flex gap-4">
+          {collaborationPartners.map((partner, index) => (
+            <div
+              key={`${partner.name}-${index}`}
+              className="w-[82vw] max-w-[310px] shrink-0 snap-center"
+            >
+              <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border/60 shadow-md flex flex-col items-center text-center">
+                {/* Logo Frame */}
+                <div className="relative mb-5">
+                  <div className="w-24 h-24 rounded-full p-2 bg-white shadow-md border border-gray-100 flex items-center justify-center">
+                    <img
+                      src={partner.src}
+                      alt={partner.name}
+                      className="max-w-full max-h-full object-contain p-1 rounded-full"
+                    />
                   </div>
-
-                  {/* Partner Details */}
-                  <h3 className="text-lg font-heading font-normal text-foreground mb-1">
-                    {partner.name}
-                  </h3>
-                  <p className="text-xs font-semibold text-primary/80 uppercase tracking-wide mb-2 font-body">
-                    {partner.tagline}
-                  </p>
-                  <p className="text-xs font-body text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {partner.description}
-                  </p>
+                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap">
+                    {partner.category}
+                  </span>
                 </div>
+
+                {/* Partner Details */}
+                <h3 className="text-lg font-heading font-normal text-foreground mb-1">
+                  {partner.name}
+                </h3>
+                <p className="text-xs font-semibold text-primary/80 uppercase tracking-wide mb-2 font-body">
+                  {partner.tagline}
+                </p>
+                <p className="text-xs font-body text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {partner.description}
+                </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

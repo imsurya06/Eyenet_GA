@@ -80,63 +80,61 @@ const OurProgramsSection = () => {
         Industry-aligned vocational and professional programs crafted to transform passion into successful creative careers.
       </p>
 
-      {/* Mobile View: Infinite Continuous Carousel (Hidden on Desktop) */}
-      <div className="md:hidden overflow-hidden w-full relative py-4 mb-8 -mx-4 px-4">
-        <div className="flex gap-5 w-max animate-scroll">
-          {[...programs, ...programs, ...programs, ...programs].map((program, index) => (
-            <div
-              key={`program-mobile-${index}`}
-              className="w-[280px] sm:w-[320px] shrink-0 text-left"
-            >
-              <Link to={program.href} className="block group h-full">
-                <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-md hover:shadow-xl transition-all duration-300">
-                  {/* Image Container */}
-                  <div className="relative w-full h-48 overflow-hidden bg-slate-900">
-                    <img
-                      src={program.image}
-                      alt={program.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent z-10 opacity-70" />
-                    
-                    <span className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-md text-slate-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-xs uppercase">
-                      {program.category}
-                    </span>
+      {/* Mobile View: Touch-Scrollable Horizontal Cards (Hidden on Desktop) */}
+      <div className="md:hidden w-full relative py-4 mb-8 -mx-4 px-4 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth touch-pan-x flex gap-4">
+        {programs.map((program, index) => (
+          <div
+            key={`program-mobile-${index}`}
+            className="w-[82vw] max-w-[310px] shrink-0 text-left snap-center"
+          >
+            <Link to={program.href} className="block group h-full">
+              <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-md hover:shadow-xl transition-all duration-300">
+                {/* Image Container */}
+                <div className="relative w-full h-48 overflow-hidden bg-slate-900">
+                  <img
+                    src={program.image}
+                    alt={program.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent z-10 opacity-70" />
+                  
+                  <span className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-md text-slate-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-xs uppercase">
+                    {program.category}
+                  </span>
 
-                    <span className="absolute top-3 right-3 z-20 bg-primary/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded-md shadow-xs">
-                      {program.badge}
-                    </span>
+                  <span className="absolute top-3 right-3 z-20 bg-primary/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded-md shadow-xs">
+                    {program.badge}
+                  </span>
 
-                    <div className="absolute bottom-3 left-3 right-3 z-20">
-                      <span className="text-white/90 text-xs flex items-center gap-1 font-medium">
-                        <Award className="w-3.5 h-3.5 text-primary-foreground" />
-                        {program.duration}
-                      </span>
-                    </div>
+                  <div className="absolute bottom-3 left-3 right-3 z-20">
+                    <span className="text-white/90 text-xs flex items-center gap-1 font-medium">
+                      <Award className="w-3.5 h-3.5 text-primary-foreground" />
+                      {program.duration}
+                    </span>
                   </div>
+                </div>
 
-                  {/* Content */}
-                  <div className="p-5 flex flex-col flex-grow bg-white">
-                    <h3 className="text-lg font-heading font-normal text-slate-900 group-hover:text-primary transition-colors mb-1.5">
-                      {program.title}
-                    </h3>
-                    
-                    <p className="text-xs font-body text-slate-600 leading-relaxed mb-4 flex-grow line-clamp-2">
-                      {program.description}
-                    </p>
+                {/* Content */}
+                <div className="p-5 flex flex-col flex-grow bg-white">
+                  <h3 className="text-lg font-heading font-normal text-slate-900 group-hover:text-primary transition-colors mb-1.5">
+                    {program.title}
+                  </h3>
+                  
+                  <p className="text-xs font-body text-slate-600 leading-relaxed mb-4 flex-grow line-clamp-2">
+                    {program.description}
+                  </p>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-primary">
-                      <span>Explore Program</span>
-                      <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </div>
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-primary">
+                    <span>Explore Program</span>
+                    <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
-              </Link>
-            </div>
-          ))}
-        </div>
+              </div>
+            </Link>
+          </div>
+        ))}
       </div>
 
       {/* Desktop View: 3-Column Grid (Hidden on Mobile) */}
