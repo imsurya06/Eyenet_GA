@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Award } from 'lucide-react';
@@ -64,6 +64,58 @@ const programs = [
 ];
 
 const OurProgramsSection = () => {
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const isInteracting = useRef(false);
+
+  useEffect(() => {
+    const el = mobileScrollRef.current;
+    if (!el) return;
+
+    let animationId: number;
+
+    const autoScroll = () => {
+      if (el && !isInteracting.current) {
+        el.scrollLeft += 0.7;
+        if (el.scrollLeft >= (el.scrollWidth / 2)) {
+          el.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(autoScroll);
+    };
+
+    animationId = requestAnimationFrame(autoScroll);
+
+    let pauseTimer: NodeJS.Timeout;
+    const handleTouchStart = () => {
+      isInteracting.current = true;
+      clearTimeout(pauseTimer);
+    };
+
+    const handleTouchEnd = () => {
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => {
+        isInteracting.current = false;
+      }, 2500);
+    };
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+    el.addEventListener('mousedown', handleTouchStart);
+    el.addEventListener('mouseup', handleTouchEnd);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      clearTimeout(pauseTimer);
+      if (el) {
+        el.removeEventListener('touchstart', handleTouchStart);
+        el.removeEventListener('touchend', handleTouchEnd);
+        el.removeEventListener('touchcancel', handleTouchEnd);
+        el.removeEventListener('mousedown', handleTouchStart);
+        el.removeEventListener('mouseup', handleTouchEnd);
+      }
+    };
+  }, []);
 
   return (
     <section className="py-14 md:py-20 lg:py-24 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50 via-slate-100/40 to-slate-50 text-center overflow-hidden">
@@ -80,12 +132,15 @@ const OurProgramsSection = () => {
         Industry-aligned vocational and professional programs crafted to transform passion into successful creative careers.
       </p>
 
-      {/* Mobile View: Touch-Scrollable Horizontal Cards (Hidden on Desktop) */}
-      <div className="md:hidden w-full relative py-4 mb-8 -mx-4 px-4 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth touch-pan-x flex gap-4">
-        {programs.map((program, index) => (
+      {/* Mobile View: Auto-Scroll + Manual Swipe Horizontal Carousel (Hidden on Desktop) */}
+      <div
+        ref={mobileScrollRef}
+        className="md:hidden w-full relative py-4 mb-8 -mx-4 px-4 overflow-x-auto no-scrollbar scroll-smooth touch-pan-x flex gap-4"
+      >
+        {[...programs, ...programs].map((program, index) => (
           <div
             key={`program-mobile-${index}`}
-            className="w-[82vw] max-w-[310px] shrink-0 text-left snap-center"
+            className="w-[280px] sm:w-[310px] shrink-0 text-left"
           >
             <Link to={program.href} className="block group h-full">
               <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-md hover:shadow-xl transition-all duration-300">

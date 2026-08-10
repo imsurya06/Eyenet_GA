@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { Handshake } from 'lucide-react';
 
@@ -29,6 +29,59 @@ const collaborationPartners = [
 ];
 
 const CollaborationsSection = () => {
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const isInteracting = useRef(false);
+
+  useEffect(() => {
+    const el = mobileScrollRef.current;
+    if (!el) return;
+
+    let animationId: number;
+
+    const autoScroll = () => {
+      if (el && !isInteracting.current) {
+        el.scrollLeft += 0.7;
+        if (el.scrollLeft >= (el.scrollWidth / 2)) {
+          el.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(autoScroll);
+    };
+
+    animationId = requestAnimationFrame(autoScroll);
+
+    let pauseTimer: NodeJS.Timeout;
+    const handleTouchStart = () => {
+      isInteracting.current = true;
+      clearTimeout(pauseTimer);
+    };
+
+    const handleTouchEnd = () => {
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => {
+        isInteracting.current = false;
+      }, 2500);
+    };
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchend', handleTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+    el.addEventListener('mousedown', handleTouchStart);
+    el.addEventListener('mouseup', handleTouchEnd);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      clearTimeout(pauseTimer);
+      if (el) {
+        el.removeEventListener('touchstart', handleTouchStart);
+        el.removeEventListener('touchend', handleTouchEnd);
+        el.removeEventListener('touchcancel', handleTouchEnd);
+        el.removeEventListener('mousedown', handleTouchStart);
+        el.removeEventListener('mouseup', handleTouchEnd);
+      }
+    };
+  }, []);
+
   return (
     <section
       id="collaborations-section"
@@ -98,12 +151,15 @@ const CollaborationsSection = () => {
           ))}
         </div>
 
-        {/* Mobile View: Touch-Scrollable Horizontal Cards (Hidden on Desktop) */}
-        <div className="lg:hidden w-full relative py-4 -mx-4 px-4 overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth touch-pan-x flex gap-4">
-          {collaborationPartners.map((partner, index) => (
+        {/* Mobile View: Auto-Scroll + Manual Swipe Horizontal Carousel (Hidden on Desktop) */}
+        <div
+          ref={mobileScrollRef}
+          className="lg:hidden w-full relative py-4 -mx-4 px-4 overflow-x-auto no-scrollbar scroll-smooth touch-pan-x flex gap-4"
+        >
+          {[...collaborationPartners, ...collaborationPartners, ...collaborationPartners].map((partner, index) => (
             <div
               key={`${partner.name}-${index}`}
-              className="w-[82vw] max-w-[310px] shrink-0 snap-center"
+              className="w-[280px] sm:w-[310px] shrink-0"
             >
               <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border/60 shadow-md flex flex-col items-center text-center">
                 {/* Logo Frame */}
