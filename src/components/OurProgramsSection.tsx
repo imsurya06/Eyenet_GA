@@ -60,7 +60,7 @@ const programs = [
   },
   {
     image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1000',
-    title: 'Beautician & Cosmetology',
+    title: 'Beautician Course',
     category: 'Personal Care',
     duration: 'Certified Program',
     description: 'Learn professional makeup artistry, hair styling, bridal aesthetics, skin therapy, and cosmetology.',
