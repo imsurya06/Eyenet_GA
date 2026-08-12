@@ -108,24 +108,28 @@ const Courses = () => {
     };
 
     const sorted = [...result].sort((a, b) => {
+      // 1. Primary Flagship Course: Diploma in Fashion Designing
       const isAFashionDesigning = a.title && a.title.toLowerCase().includes('fashion designing');
       const isBFashionDesigning = b.title && b.title.toLowerCase().includes('fashion designing');
 
       if (isAFashionDesigning && !isBFashionDesigning) return -1;
       if (!isAFashionDesigning && isBFashionDesigning) return 1;
 
-      const isADiploma = a.tag && a.tag.toLowerCase().includes('diploma');
-      const isBDiploma = b.tag && b.tag.toLowerCase().includes('diploma');
-      
-      if (isADiploma && !isBDiploma) return -1;
-      if (!isADiploma && isBDiploma) return 1;
-
+      // 2. Strict Category Grouping: Fashion courses first, then Computer, Multimedia, Photography, Beautician, Spoken English
       const catA = categoryOrder[a.category] || 99;
       const catB = categoryOrder[b.category] || 99;
       if (catA !== catB) {
         return catA - catB;
       }
 
+      // 3. Within the same category, prioritize Diplomas
+      const isADiploma = a.tag && a.tag.toLowerCase().includes('diploma');
+      const isBDiploma = b.tag && b.tag.toLowerCase().includes('diploma');
+      
+      if (isADiploma && !isBDiploma) return -1;
+      if (!isADiploma && isBDiploma) return 1;
+
+      // 4. Alphabetical by title
       return (a.title || '').localeCompare(b.title || '');
     });
 
