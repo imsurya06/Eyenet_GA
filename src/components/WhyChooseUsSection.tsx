@@ -33,7 +33,7 @@ const WhyChooseUsSection = () => {
   ];
 
   const plugin = useRef(
-    Autoplay({ delay: 2800, stopOnInteraction: false, stopOnMouseEnter: false })
+    Autoplay({ delay: 1600, stopOnInteraction: false, stopOnMouseEnter: false })
   );
 
   return (
