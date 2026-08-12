@@ -95,13 +95,15 @@ const FashionCoursesSection = () => {
               <AnimateOnScroll key={course.id} delay={300 + index * 75}>
                 <Link to={`/courses/fashion-design/${course.id}`} className="block group h-full">
                   <div className="bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 border border-gray-100 flex flex-col h-full max-w-full overflow-hidden">
-                    <div className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0">
+                    <div className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0 bg-slate-100">
                       <img
-                        src={course.image && !course.image.includes('/images/img') && !course.image.includes('placeholder') ? course.image : 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800'}
+                        src={course.image && !course.image.includes('/images/img') && !course.image.includes('placeholder') ? course.image : 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=75&fm=webp'}
                         alt={course.title}
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800';
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=75&fm=webp';
                         }}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />

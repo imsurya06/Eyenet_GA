@@ -14,7 +14,7 @@ import {
 
 const programs = [
   {
-    image: 'https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&w=600&q=75&fm=webp',
     title: 'Fashion Design',
     category: 'Creative Arts',
     duration: 'Diploma / Certificate',
@@ -23,7 +23,7 @@ const programs = [
     badge: 'Popular'
   },
   {
-    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=75&fm=webp',
     title: 'Computer Courses',
     category: 'Information Tech',
     duration: 'Short & Advanced Terms',
@@ -32,7 +32,7 @@ const programs = [
     badge: 'High Demand'
   },
   {
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=75&fm=webp',
     title: 'Photography',
     category: 'Visual Media',
     duration: 'Practical Hands-on',
@@ -41,7 +41,7 @@ const programs = [
     badge: 'Professional'
   },
   {
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=75&fm=webp',
     title: 'Multimedia Training',
     category: 'Digital Production',
     duration: 'Studio Oriented',
@@ -50,7 +50,7 @@ const programs = [
     badge: 'Industry Standard'
   },
   {
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=75&fm=webp',
     title: 'Communication Skills',
     category: 'Skill Enhancement',
     duration: 'Interactive Batches',
@@ -59,7 +59,7 @@ const programs = [
     badge: 'Career Boost'
   },
   {
-    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=75&fm=webp',
     title: 'Beautician Course',
     category: 'Personal Care',
     duration: 'Certified Program',
@@ -161,10 +161,12 @@ const OurProgramsSection = () => {
             <Link to={program.href} className="block group h-full">
               <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-2xl hover:border-primary/40 hover:-translate-y-2 transition-all duration-500 text-left">
                 
-                <div className="relative w-full h-52 sm:h-56 overflow-hidden bg-slate-900">
+                <div className="relative w-full h-52 sm:h-56 overflow-hidden bg-slate-100">
                   <img
                     src={program.image}
                     alt={program.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent z-10 opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
