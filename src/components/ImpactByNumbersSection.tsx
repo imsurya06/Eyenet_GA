@@ -1,11 +1,34 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { CheckCircle, Trophy, Presentation, Target, Award, Building, Scissors, Factory, Cpu } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ImpactByNumbersSection = () => {
+  const videoRef = useRef<HTMLDivElement>(null);
+  const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setShouldPlayVideo(true);
+        }
+      },
+      { rootMargin: '200px', threshold: 0.1 }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const highlights = [
     {
       title: '25+ Years of Excellence',
@@ -57,7 +80,7 @@ const ImpactByNumbersSection = () => {
   return (
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
       {/* Full Width Video Section */}
-      <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-slate-900">
+      <div ref={videoRef} className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-slate-900">
         {/* Instant First-Frame Video Thumbnail (Eliminates blank screen at 0ms) */}
         <img
           src="https://vumbnail.com/1213216123.jpg"
@@ -65,14 +88,15 @@ const ImpactByNumbersSection = () => {
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
         />
         
-        <iframe
-          src="https://player.vimeo.com/video/1213216123?background=1&autoplay=1&loop=1&muted=1&playsinline=1&autopause=0&quality=720p"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
-          title="Vimeo Background Video"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-          loading="eager"
-        />
+        {shouldPlayVideo && (
+          <iframe
+            src="https://player.vimeo.com/video/1213216123?background=1&autoplay=1&loop=1&muted=1&playsinline=1&autopause=0&quality=720p"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
+            title="Vimeo Background Video"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        )}
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500 pointer-events-none" />
       </div>
 
