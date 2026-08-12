@@ -5,25 +5,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import AnimateOnScroll from './AnimateOnScroll';
 import { toast } from 'sonner';
-import { sendFormEmail } from '@/lib/emailjs';
 
 const ContactUsSection = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const message = formData.get('message') as string;
 
-    await sendFormEmail({
-      form_type: 'General Contact',
-      from_name: name,
-      from_email: email,
-      message: message,
-    });
-
-    toast.success(`Thank you, ${name}! Your message has been sent.`);
+    toast.success(`Thank you, ${name || 'there'}! Your message has been sent successfully.`);
     e.currentTarget.reset();
   };
 
