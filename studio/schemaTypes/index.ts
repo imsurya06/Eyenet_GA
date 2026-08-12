@@ -5,9 +5,13 @@ import galleryImage from './galleryImage'
 import infrastructureImage from './infrastructureImage'
 import newsEvent from './newsEvent'
 import testimonial from './testimonial'
+import batch from './batch'
+import admissionAd from './admissionAd'
 
 export const schemaTypes = [
   course,
+  batch,
+  admissionAd,
   blog,
   faculty,
   galleryImage,

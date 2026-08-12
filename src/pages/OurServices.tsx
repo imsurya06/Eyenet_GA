@@ -6,25 +6,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Scissors, Laptop, Building2, MessageSquare, Send, CheckCircle2, Sparkles } from 'lucide-react';
+import { Scissors, Laptop, Building2, Camera, Sparkles, MessageSquare, Send, CheckCircle2 } from 'lucide-react';
 import { toast } from "sonner";
+
+import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
 
 const services = [
   {
     id: 'couture-boutique',
     icon: Scissors,
-    title: 'Couture Boutique',
-    badge: 'Boutique & Tailoring',
-    description: 'Custom bridal couture, bespoke designer outfits, specialized Aari embroidery, and tailored fashion consultations crafted by expert fashion artisans at Eyenet Studio.',
+    title: 'Couture & Designer Boutique',
+    badge: 'Fashion & Tailoring Services',
+    description: 'Custom bridal wear, haute couture dressmaking, pattern drafting, alteration, embroidery, and boutique fashion design services.',
     image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200',
   },
   {
-    id: 'web-design-dev',
+    id: 'it-solutions',
     icon: Laptop,
-    title: 'Web Design & Development',
-    badge: 'Digital & Web',
-    description: 'Custom responsive website creation, e-commerce platforms, UI/UX design, digital branding, and software solutions tailored for modern businesses and creative portfolios.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200',
+    title: 'IT Solutions & Graphic Design',
+    badge: 'Digital & Software Services',
+    description: 'Custom website development, branding collateral, logo design, digital marketing assets, software setup, and corporate IT consulting.',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200',
   },
   {
     id: 'architectural-design',
@@ -34,6 +36,22 @@ const services = [
     description: '2D CAD drafting, 3D interior & exterior elevation rendering, blueprint planning, and spatial design consulting for residential and commercial spaces.',
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200',
   },
+  {
+    id: 'fashion-photography',
+    icon: Camera,
+    title: 'Fashion & Product Photography',
+    badge: 'Studio & Media Services',
+    description: 'High-definition lookbook shoots, commercial garment photography, model portfolio sessions, catalog styling, and e-commerce product imagery.',
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    id: 'makeup-styling',
+    icon: Sparkles,
+    title: 'Professional Makeup & Bridal Styling',
+    badge: 'Beauty & Grooming',
+    description: 'Bridal makeover, HD photoshoot styling, hair design, fashion show makeup, cosmetic consultations, and special event beauty artistry.',
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1200',
+  },
 ];
 
 const OurServices = () => {
@@ -41,7 +59,7 @@ const OurServices = () => {
     name: '',
     phone: '',
     email: '',
-    service: 'Couture Boutique',
+    service: 'Couture & Designer Boutique',
     description: '',
   });
 
@@ -55,12 +73,21 @@ const OurServices = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) {
       toast.error('Please fill in your name and contact number.');
       return;
     }
+
+    await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.SERVICES, {
+      from_name: formData.name,
+      contact_number: formData.phone,
+      from_email: formData.email,
+      service_requested: formData.service,
+      requirement_details: formData.description,
+      form_type: 'Our Services Quotation',
+    });
 
     toast.success(`Thank you, ${formData.name}! Your inquiry for "${formData.service}" has been received.`);
     setIsSubmitted(true);
@@ -86,13 +113,13 @@ const OurServices = () => {
             </AnimateOnScroll>
             <AnimateOnScroll isHero={true} delay={300}>
               <p className="text-base md:text-lg font-body text-slate-600 leading-relaxed">
-                Beyond educational training, Eyenet delivers bespoke studio solutions ranging from custom couture fashion crafting to web engineering and architectural elevation design.
+                Beyond educational training, Eyenet delivers bespoke studio solutions ranging from custom couture fashion crafting to photography, makeup styling, web engineering, and architectural design.
               </p>
             </AnimateOnScroll>
           </div>
 
-          {/* 3 Services Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 md:mb-24">
+          {/* 5 Services Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 md:mb-24">
             {services.map((service, index) => {
               const IconComponent = service.icon;
               return (
@@ -125,14 +152,14 @@ const OurServices = () => {
                         </p>
                       </div>
 
-                      {/* Direct Contact Button */}
+                      {/* Enquire Now Button */}
                       <div className="pt-4 border-t border-slate-100 mt-auto">
                         <Button
                           onClick={() => handleServiceSelect(service.title)}
                           className="w-full bg-primary hover:bg-primary/90 text-white rounded-2xl py-2.5 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-all duration-300 hover:shadow-md"
                         >
                           <MessageSquare className="w-4 h-4" />
-                          <span>Contact for {service.title.split(' ')[0]}</span>
+                          <span>Enquire Now</span>
                         </Button>
                       </div>
                     </div>
@@ -149,7 +176,7 @@ const OurServices = () => {
               <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200/90 shadow-lg relative overflow-hidden">
                 <div className="text-center mb-8">
                   <span className="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
-                    ✦ Service Inquiry
+                    SERVICE INQUIRY
                   </span>
                   <h2 className="text-2xl md:text-3xl font-heading font-normal text-slate-900 mb-2">
                     Request a <span className="text-primary font-heading italic">service quotation</span>

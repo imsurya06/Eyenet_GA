@@ -31,17 +31,17 @@ const AboutHeroSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center mb-12 md:mb-16">
           <AnimateOnScroll isHero={true} delay={400} className="w-full h-[300px] sm:h-[380px] md:h-[440px] overflow-hidden rounded-2xl shadow-md border border-slate-200/80">
             <img
-              src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=1200"
-              alt="Eyenet Creative Fashion Design"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200"
+              alt="Eyenet Creative Design Studio Lab"
+              className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
             />
           </AnimateOnScroll>
 
           <AnimateOnScroll isHero={true} delay={500} className="w-full h-[300px] sm:h-[380px] md:h-[440px] overflow-hidden rounded-2xl shadow-md border border-slate-200/80">
             <img
-              src="https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=1200"
-              alt="Eyenet Fashion & Design Studio"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200"
+              alt="Eyenet Fashion Atelier Workspace"
+              className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
             />
           </AnimateOnScroll>
         </div>

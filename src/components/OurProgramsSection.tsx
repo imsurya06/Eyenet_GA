@@ -14,7 +14,7 @@ import {
 
 const programs = [
   {
-    image: 'https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1000',
     title: 'Fashion Design',
     category: 'Creative Arts',
     duration: 'Diploma / Certificate',
@@ -23,7 +23,7 @@ const programs = [
     badge: 'Popular'
   },
   {
-    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000',
     title: 'Computer Courses',
     category: 'Information Tech',
     duration: 'Short & Advanced Terms',
@@ -32,7 +32,7 @@ const programs = [
     badge: 'High Demand'
   },
   {
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000',
     title: 'Photography',
     category: 'Visual Media',
     duration: 'Practical Hands-on',
@@ -41,8 +41,8 @@ const programs = [
     badge: 'Professional'
   },
   {
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=800',
-    title: 'Multimedia Training',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1000',
+    title: 'Visual Media Training',
     category: 'Digital Production',
     duration: 'Studio Oriented',
     description: 'Explore video editing suite, motion graphics timeline, 2D/3D animation, and digital post-production.',
@@ -50,7 +50,7 @@ const programs = [
     badge: 'Industry Standard'
   },
   {
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1000',
     title: 'Communication Skills',
     category: 'Skill Enhancement',
     duration: 'Interactive Batches',
@@ -59,7 +59,7 @@ const programs = [
     badge: 'Career Boost'
   },
   {
-    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1000',
     title: 'Beautician Course',
     category: 'Personal Care',
     duration: 'Certified Program',

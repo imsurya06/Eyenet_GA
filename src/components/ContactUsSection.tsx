@@ -9,11 +9,22 @@ import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { toast } from 'sonner';
 
+import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
+
 const ContactUsSection = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
+
+    await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.CONTACT, {
+      from_name: name,
+      from_email: email,
+      message_content: message,
+      form_type: 'Contact Us Inquiry',
+    });
 
     toast.success(`Thank you, ${name || 'there'}! Your message has been sent successfully.`);
     e.currentTarget.reset();
@@ -30,7 +41,7 @@ const ContactUsSection = () => {
 
             <div>
               <span className="inline-block uppercase tracking-widest text-xs font-semibold text-gray-500 mb-3">
-                ✦ Reach Out
+                REACH OUT
               </span>
               <h2 className="text-3xl font-heading font-bold mb-4 text-foreground">
                 Get In <span className="text-primary font-heading">Touch</span>
@@ -89,7 +100,7 @@ const ContactUsSection = () => {
             </div>
 
             <div className="mt-6 pt-4 text-xs text-gray-400 text-center">
-              ✦ Eye-Net Educational Academy • Madurai
+              Eye-Net Educational Academy • Madurai
             </div>
           </div>
         </AnimateOnScroll>

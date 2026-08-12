@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
@@ -17,6 +16,8 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
+import { sanityClient, urlFor } from '@/lib/sanityClient';
 import {
   Form,
   FormControl,
@@ -27,7 +28,20 @@ import {
 } from '@/components/ui/form';
 import ConfettiOverlay from '@/components/ConfettiOverlay';
 import EnrollmentSuccessDialog from '@/components/EnrollmentSuccessDialog';
-import { useCourses } from '@/context/CourseContext'; // Import useCourses
+import { useCourses } from '@/context/CourseContext';
+import { 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  Users, 
+  ArrowRight, 
+  ChevronLeft,
+  ChevronRight,
+  Phone,
+  Mail,
+  Sparkles,
+  Image as ImageIcon
+} from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -39,10 +53,159 @@ const formSchema = z.object({
   }),
 });
 
+interface BatchItem {
+  id: string;
+  title: string;
+  category?: string;
+  tag: string;
+  tagBg: string;
+  startDate: string;
+  duration: string;
+  mode: string;
+  timing: string;
+  seatsLeft: number;
+  courseTitleToSelect: string;
+}
+
+interface AdmissionAdItem {
+  id: string;
+  title: string;
+  imageUrl: string;
+  link?: string;
+}
+
+// Fallback Batches if Sanity CMS has 0 entries
+const defaultUpcomingBatches: BatchItem[] = [
+  {
+    id: 'batch-fullstack',
+    title: 'Full Stack Development',
+    category: 'Computer Courses',
+    tag: 'Seats filling fast',
+    tagBg: 'bg-amber-100 text-amber-800 border-amber-200',
+    startDate: '5 September 2026',
+    duration: '6 months',
+    mode: 'Online + Offline',
+    timing: '6:00 PM - 8:00 PM',
+    seatsLeft: 12,
+    courseTitleToSelect: 'Computer Courses',
+  },
+  {
+    id: 'batch-uiux',
+    title: 'UI/UX Design',
+    category: 'Digital Production',
+    tag: 'New batch',
+    tagBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    startDate: '12 September 2026',
+    duration: '4 months',
+    mode: 'Online',
+    timing: '7:00 PM - 9:00 PM',
+    seatsLeft: 18,
+    courseTitleToSelect: 'Computer Courses',
+  },
+  {
+    id: 'batch-fashion-diploma',
+    title: 'Diploma in Fashion Designing',
+    category: 'Creative Arts',
+    tag: 'Most Popular',
+    tagBg: 'bg-rose-100 text-rose-800 border-rose-200',
+    startDate: '1 September 2026',
+    duration: '1 Year / 6 Months',
+    mode: 'Offline Practical Studio',
+    timing: '10:00 AM - 1:00 PM',
+    seatsLeft: 8,
+    courseTitleToSelect: 'Diploma in Fashion Designing',
+  },
+];
+
 const Admissions = () => {
   const { courses, loading: coursesLoading } = useCourses();
   const [searchParams] = useSearchParams();
   const courseParam = searchParams.get('course');
+
+  const [batches, setBatches] = useState<BatchItem[]>(defaultUpcomingBatches);
+  const [batchesLoading, setBatchesLoading] = useState(true);
+
+  const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>([]);
+  const [adsLoading, setAdsLoading] = useState(true);
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
+
+  // Fetch Upcoming Batches dynamically from Sanity CMS Studio
+  useEffect(() => {
+    const fetchSanityBatches = async () => {
+      try {
+        const query = '*[_type == "batch" || _type == "upcomingBatch"] | order(_createdAt desc)';
+        const data = await sanityClient.fetch(query);
+        if (data && data.length > 0) {
+          const mapped: BatchItem[] = data.map((doc: any, index: number) => ({
+            id: doc._id || `sanity-batch-${index}`,
+            title: doc.title || doc.name || 'Upcoming Batch',
+            category: doc.category || 'Specialized Program',
+            tag: doc.tag || (index === 0 ? 'Seats filling fast' : 'New batch'),
+            tagBg: doc.tagBg || 'bg-amber-100 text-amber-800 border-amber-200',
+            startDate: doc.startDate || doc.date || 'Coming Soon',
+            duration: doc.duration || 'Flexible',
+            mode: doc.mode || 'Online + Offline',
+            timing: doc.timing || 'Flexible Hours',
+            seatsLeft: doc.seatsLeft || doc.seats || 10,
+            courseTitleToSelect: doc.courseTitleToSelect || doc.title || 'Diploma in Fashion Designing',
+          }));
+          setBatches(mapped);
+        }
+      } catch (err) {
+        console.warn('Sanity CMS upcoming batch fetch fallback to defaults:', err);
+      } finally {
+        setBatchesLoading(false);
+      }
+    };
+
+    fetchSanityBatches();
+  }, []);
+
+  // Fetch Admission Ads dynamically from Sanity CMS Studio (Admission Ads)
+  useEffect(() => {
+    const fetchSanityAds = async () => {
+      try {
+        const query = '*[_type == "admissionAd" && active != false] | order(_createdAt desc)';
+        const data = await sanityClient.fetch(query);
+        if (data && data.length > 0) {
+          const mapped: AdmissionAdItem[] = data
+            .map((doc: any, index: number) => {
+              let imgUrl = '';
+              if (doc.image) {
+                try {
+                  imgUrl = urlFor(doc.image).url();
+                } catch {
+                  imgUrl = '';
+                }
+              }
+              return {
+                id: doc._id || `ad-${index}`,
+                title: doc.title || 'Admission Showcase',
+                imageUrl: imgUrl,
+                link: doc.link || '#enrollment-form',
+              };
+            })
+            .filter((item: AdmissionAdItem) => item.imageUrl !== '');
+          setAdmissionAds(mapped);
+        }
+      } catch (err) {
+        console.warn('Sanity CMS Admission Ads fetch error:', err);
+      } finally {
+        setAdsLoading(false);
+      }
+    };
+
+    fetchSanityAds();
+  }, []);
+
+  // Auto-looping for Admission Ads Carousel (every 4 seconds)
+  useEffect(() => {
+    if (admissionAds.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentAdIndex((prev) => (prev + 1) % admissionAds.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [admissionAds.length]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,6 +229,16 @@ const Admissions = () => {
         form.setValue('program', courseParam);
       }
     }
+
+    if (window.location.hash) {
+      const targetId = window.location.hash.replace('#', '');
+      setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
   }, [courseParam, courses, form]);
 
   const [showConfetti, setShowConfetti] = useState(false);
@@ -76,8 +249,48 @@ const Admissions = () => {
   const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu";
   const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.1558223405787!2d78.14633887586524!3d9.921563490180477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5072a46551f%3A0x3feb0d2a94af46bb!2sEye-Net%20Educational%20Academy!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
 
+  const scrollToElement = (elementId: string) => {
+    const el = document.getElementById(elementId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleSelectBatchAndEnroll = (courseTitle: string) => {
+    const matched = courses.find(
+      (c) => c.title.toLowerCase() === courseTitle.toLowerCase()
+    );
+    if (matched) {
+      form.setValue('program', matched.title);
+    } else {
+      form.setValue('program', courseTitle);
+    }
+    scrollToElement('enrollment-form');
+  };
+
+  const handleNextAd = () => {
+    if (admissionAds.length > 0) {
+      setCurrentAdIndex((prev) => (prev + 1) % admissionAds.length);
+    }
+  };
+
+  const handlePrevAd = () => {
+    if (admissionAds.length > 0) {
+      setCurrentAdIndex((prev) => (prev === 0 ? admissionAds.length - 1 : prev - 1));
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Form submitted:", values);
+
+    // Send email notification via EmailJS
+    await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.ADMISSIONS, {
+      from_name: values.name,
+      from_email: values.email,
+      mobile_number: values.mobile,
+      program_selected: values.program,
+      form_type: 'Admissions & Course Enrollment',
+    });
     
     setEnrolledCourseName(values.program);
     setEnrolledUserName(values.name);
@@ -92,212 +305,327 @@ const Admissions = () => {
   };
 
   return (
-    <section className="bg-gradient-to-b from-[#fdfaf6] via-white to-background min-h-screen py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px]">
-      <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-10">
-        
-        {/* Left Section: Enroll Now Form Card */}
-        <AnimateOnScroll isHero={true} delay={100} className="w-full lg:w-1/2 flex">
-          <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 w-full flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-36 h-36 bg-primary/5 rounded-bl-full pointer-events-none"></div>
+    <div className="bg-gradient-to-b from-[#fdfaf6] via-white to-background min-h-screen">
+      
+      {/* 1. HERO SECTION: UPCOMING BATCHES (SANITY CMS COMPATIBLE) */}
+      <section id="upcoming-batches" className="relative pt-12 md:pt-16 pb-14 md:pb-20 px-4 md:px-8 lg:px-[80px] overflow-hidden border-b border-slate-200/80 scroll-mt-10">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-            <div>
-              <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                ✦ Online Application Form
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-2 text-foreground">
-                Enroll <span className="text-primary font-heading">Now</span>
-              </h2>
-              <p className="text-sm font-body text-gray-600 mb-8">
-                Let's start your professional design journey today.
-              </p>
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <AnimateOnScroll isHero={true} delay={100}>
+            <span className="uppercase tracking-widest text-xs font-bold text-primary mb-2 block">
+              LIVE COHORTS
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-4 tracking-tight">
+              Upcoming Batches
+            </h1>
+            <p className="text-base md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-12">
+              Select your preferred batch schedule and register early before seats are filled.
+            </p>
+          </AnimateOnScroll>
 
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-semibold text-foreground mb-1 block text-left">
-                          Full Name*
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="name"
-                            type="text"
-                            placeholder="Enter your full name"
-                            className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-semibold text-foreground mb-1 block text-left">
-                          Email Address*
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="email"
-                            type="email"
-                            placeholder="name@example.com"
-                            className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="mobile"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-semibold text-foreground mb-1 block text-left">
-                          Mobile Number*
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="mobile"
-                            type="tel"
-                            placeholder="10-digit mobile number"
-                            className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary"
-                            {...field}
-                            required
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="program"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-semibold text-foreground mb-1 block text-left">
-                          Select Program*
-                        </FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value || ''} disabled={coursesLoading}>
-                          <FormControl>
-                            <SelectTrigger className="w-full h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary text-sm">
-                              <SelectValue placeholder={coursesLoading ? "Loading programs..." : "Select a program"} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="rounded-xl">
-                            {courses.length > 0 ? (
-                              courses.map((course) => (
-                                <SelectItem key={course.id} value={course.title}>
-                                  {course.title}
-                                </SelectItem>
-                              ))
-                            ) : (
-                              <SelectItem value="no-programs" disabled>
-                                No programs available
-                              </SelectItem>
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="terms"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xl p-3 bg-gray-50 border border-gray-100">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="terms"
-                            required
-                            className="border-primary data-[state=checked]:bg-primary text-white mt-0.5"
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel htmlFor="terms" className="text-xs font-body text-gray-600 text-left">
-                            I accept the{' '}
-                            <Link to="/terms-of-service" className="underline hover:text-primary font-semibold">
-                              Terms & Conditions
-                            </Link>
-                          </FormLabel>
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full h-12 px-6 py-2 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-md transition-all duration-300">
-                    Submit Application Now →
+          {/* Batch Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-left">
+            {batches.map((batch, index) => (
+              <AnimateOnScroll key={batch.id} delay={200 + index * 100} className="flex">
+                <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-md hover:shadow-xl hover:border-primary/40 transition-all duration-300 flex flex-col justify-between w-full relative overflow-hidden group">
+                  
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full border ${batch.tagBg}`}>
+                        {batch.tag}
+                      </span>
+                      <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100">
+                        {batch.seatsLeft} seats left
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-heading font-bold text-slate-900 mb-4 group-hover:text-primary transition-colors">
+                      {batch.title}
+                    </h3>
+
+                    <div className="space-y-3 text-xs md:text-sm font-body text-slate-600 mb-6">
+                      <div className="flex items-center gap-2.5">
+                        <Calendar className="w-4 h-4 text-primary shrink-0" />
+                        <span><strong>Starts:</strong> {batch.startDate}</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <Clock className="w-4 h-4 text-primary shrink-0" />
+                        <span><strong>Timing:</strong> {batch.timing}</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <Users className="w-4 h-4 text-primary shrink-0" />
+                        <span><strong>Duration & Mode:</strong> {batch.duration} ({batch.mode})</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => handleSelectBatchAndEnroll(batch.courseTitleToSelect)}
+                    className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-3 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <span>Enroll Now</span>
+                    <ArrowRight className="w-4 h-4" />
                   </Button>
-                </form>
-              </Form>
+
+                </div>
+              </AnimateOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. CONTINUOUS RUNNING TICKER SHOWCASE (PURE AD IMAGES, NO BACKGROUND) */}
+      <section className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80">
+        <div className="w-full text-center mb-8 px-4">
+          <AnimateOnScroll delay={100}>
+            <span className="uppercase tracking-widest text-xs font-bold text-primary mb-2 block">
+              ADVERTISEMENT SHOWCASE
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900">
+              Special Announcements & Highlights
+            </h2>
+          </AnimateOnScroll>
+        </div>
+
+        {admissionAds.length > 0 ? (
+          <div className="w-full overflow-hidden py-4">
+            <div className="animate-ticker flex items-center gap-6 md:gap-8 px-4">
+              {/* Multiply the ads list to ensure an infinite seamless marquee ticker */}
+              {[...admissionAds, ...admissionAds, ...admissionAds, ...admissionAds].map((ad, idx) => (
+                <div
+                  key={`${ad.id}-${idx}`}
+                  onClick={() => scrollToElement('enrollment-form')}
+                  className="shrink-0 cursor-pointer rounded-2xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 group bg-white"
+                >
+                  <img
+                    src={ad.imageUrl}
+                    alt={ad.title || `Admission Ad ${idx + 1}`}
+                    className="h-[360px] sm:h-[440px] md:h-[480px] w-auto object-contain rounded-2xl"
+                  />
+                </div>
+              ))}
             </div>
           </div>
-        </AnimateOnScroll>
-
-        {/* Right Section: Location & Campus Visit Info */}
-        <AnimateOnScroll isHero={true} delay={300} className="w-full lg:w-1/2 flex flex-col justify-between">
-          <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 h-full flex flex-col justify-between">
-            <div>
-              <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
-                ✦ Campus & Contact
+        ) : (
+          /* Guidance Container when 0 images are uploaded in Sanity CMS yet */
+          <AnimateOnScroll delay={150}>
+            <div className="max-w-xl mx-auto p-8 rounded-3xl bg-slate-50 border border-slate-200 text-center shadow-sm">
+              <div className="w-14 h-14 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center mb-4">
+                <ImageIcon className="w-7 h-7" />
               </div>
-              <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-2 text-foreground">
-                Find Us <span className="text-primary font-heading">Here</span>
-              </h2>
-              <p className="text-sm font-body text-gray-600 mb-6">
-                Visit our campus in Madurai or connect with our admission counselors.
+              <h3 className="text-xl font-heading font-bold text-slate-900 mb-2">
+                Admission Ads Ticker
+              </h3>
+              <p className="text-xs sm:text-sm font-body text-slate-600 mb-6 leading-relaxed">
+                Upload your vertical ad images in Sanity CMS Studio under the <strong>"Admission Ads"</strong> document menu to display them live in this continuous running ticker loop.
               </p>
+              <Button
+                onClick={() => window.open('https://eyenet-cms-studio.sanity.studio/', '_blank')}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-white rounded-full text-xs font-bold"
+              >
+                Open Sanity Studio
+              </Button>
+            </div>
+          </AnimateOnScroll>
+        )}
+      </section>
 
-              <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100 mb-6 space-y-2">
-                <h3 className="text-lg font-heading font-bold text-foreground">
-                  Eye-Net Educational Academy
-                </h3>
-                <p className="text-xs font-body text-gray-600 leading-relaxed">
-                  Hamdhiya Towers 2nd Floor, 80 Feet Road Jn, Anna Nagar, Madurai, Tamil Nadu 625020
+      {/* 3. ENROLL NOW FORM SECTION (AT THE BOTTOM OF THE PAGE) */}
+      <section id="enrollment-form" className="py-16 md:py-24 px-4 md:px-8 lg:px-[80px] scroll-mt-10">
+        <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-10">
+          
+          {/* Left Section: Enroll Now Form Card */}
+          <AnimateOnScroll delay={100} className="w-full lg:w-1/2 flex">
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 w-full flex flex-col justify-between relative overflow-hidden">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                  <span className="uppercase tracking-widest text-xs font-bold text-primary">
+                    ONLINE APPLICATION FORM
+                  </span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-3 text-foreground">
+                  Enroll <span className="text-primary font-heading italic">Now</span>
+                </h2>
+                <p className="text-sm font-body text-gray-600 mb-8">
+                  Let's start your professional design journey today.
                 </p>
-                <div className="pt-2 flex items-center justify-between text-xs">
-                  <span className="text-gray-500">Mon - Sat: 9:00 AM - 7:00 PM</span>
-                  <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="text-primary font-semibold hover:underline">
-                    View on Maps →
+
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-left">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-semibold text-gray-700">Full Name*</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your full name" className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-semibold text-gray-700">Email Address*</FormLabel>
+                          <FormControl>
+                            <Input placeholder="name@example.com" type="email" className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="mobile"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-semibold text-gray-700">Mobile Number*</FormLabel>
+                          <FormControl>
+                            <Input placeholder="10-digit mobile number" type="tel" className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="program"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-semibold text-gray-700">Select Program*</FormLabel>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary">
+                                <SelectValue placeholder="Select a program" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-h-60 overflow-y-auto">
+                              {coursesLoading ? (
+                                <SelectItem value="loading" disabled>Loading programs...</SelectItem>
+                              ) : (
+                                courses.map((course) => (
+                                  <SelectItem key={course.id} value={course.title}>
+                                    {course.title}
+                                  </SelectItem>
+                                ))
+                              )}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="terms"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xl p-3 bg-gray-50 border border-gray-100">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              className="border-primary data-[state=checked]:bg-primary text-white"
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="text-xs font-body text-gray-600 cursor-pointer">
+                              I accept the <a href="/terms-of-service" className="underline hover:text-primary font-semibold">Terms & Conditions</a>
+                            </FormLabel>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button type="submit" className="w-full h-14 text-base font-bold bg-primary hover:bg-primary/95 text-white rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
+                      <span>Submit Application Now</span>
+                      <ArrowRight className="w-5 h-5" />
+                    </Button>
+                  </form>
+                </Form>
+              </div>
+            </div>
+          </AnimateOnScroll>
+
+          {/* Right Section: Campus & Location Info Card */}
+          <AnimateOnScroll delay={200} className="w-full lg:w-1/2 flex">
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 w-full flex flex-col justify-between relative overflow-hidden">
+              
+              <div>
+                <span className="uppercase tracking-widest text-xs font-bold text-primary mb-2 block">
+                  CAMPUS & CONTACT
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-3 text-foreground">
+                  Find Us <span className="text-primary font-heading italic">Here</span>
+                </h2>
+                <p className="text-sm font-body text-gray-600 mb-8">
+                  Visit our Madurai campus or connect with our admission counselors.
+                </p>
+
+                {/* Campus Information Box */}
+                <div className="space-y-4 mb-8 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 text-left">
+                  <h3 className="font-heading font-bold text-slate-900 text-lg">Eye-Net Educational Academy</h3>
+                  <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    <span>Hamdhiya Towers, 2nd Floor, 80 Feet Road Jn, Anna Nagar, Madurai, Tamil Nadu 625020</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-700">
+                    <Phone className="w-4 h-4 text-primary shrink-0" />
+                    <span>+91 98421 73725 / +91 98421 73726</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-700">
+                    <Mail className="w-4 h-4 text-primary shrink-0" />
+                    <span>eyenetfashion@gmail.com</span>
+                  </div>
+
+                  <a 
+                    href={googleMapsUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline pt-2"
+                  >
+                    <span>View on Google Maps</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </a>
+                </div>
+
+                {/* Google Map Embed */}
+                <div className="w-full h-56 rounded-2xl overflow-hidden shadow-inner border border-gray-200">
+                  <iframe
+                    src={mapEmbedUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                    title="Eye-Net Campus Location"
+                  ></iframe>
                 </div>
               </div>
 
-              {/* Interactive Live Map Embed */}
-              <div className="w-full h-[240px] rounded-2xl overflow-hidden border border-gray-200 shadow-md">
-                <iframe
-                  title="Academy Location Map"
-                  src={mapEmbedUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen={true}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="w-full h-full"
-                ></iframe>
+              <div className="mt-8 pt-4 border-t border-gray-100 text-xs text-gray-500 text-center">
+                Need immediate admission guidance? Call <a href="tel:+919842173725" className="font-bold text-primary hover:underline">+91 98421 73725</a>
               </div>
-            </div>
 
-            <div className="mt-6 pt-6 border-t border-gray-100 text-center text-xs text-gray-500">
-              Need immediate admission guidance? Call <span className="font-semibold text-primary">+91 98421 73725</span>
             </div>
-          </div>
-        </AnimateOnScroll>
-      </div>
+          </AnimateOnScroll>
 
+        </div>
+      </section>
+
+      {/* Confetti and Success Dialog */}
       <ConfettiOverlay show={showConfetti} />
       <EnrollmentSuccessDialog
         show={showSuccessDialog}
@@ -305,7 +633,7 @@ const Admissions = () => {
         userName={enrolledUserName}
         onClose={handleCloseSuccessDialog}
       />
-    </section>
+    </div>
   );
 };
 

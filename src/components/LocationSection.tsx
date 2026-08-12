@@ -11,13 +11,10 @@ const LocationSection = () => {
   return (
     <section className="py-14 md:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center lg:text-left mb-12">
+        <div className="text-center mb-12">
           <AnimateOnScroll delay={100}>
-            <p className="text-xs font-semibold font-body text-gray-500 uppercase tracking-widest mb-3">Our Location</p>
-          </AnimateOnScroll>
-          <AnimateOnScroll delay={200}>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground">
-              We are Madurai based <span className="text-primary font-heading">design institute</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground tracking-tight">
+              Our <span className="text-primary font-heading italic">Location</span>
             </h2>
           </AnimateOnScroll>
         </div>

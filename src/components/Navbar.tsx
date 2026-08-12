@@ -28,7 +28,7 @@ const navItems = [
     links: [
       { name: 'Fashion design Courses', description: 'Professional certification for creative professionals', to: '/courses?category=fashion', icon: LucideIcons.Tablet },
       { name: 'Computer courses', description: 'Digital and print design curriculum', to: '/courses?category=computer', icon: LucideIcons.Laptop },
-      { name: 'Multimedia Training', description: 'Comprehensive training in video editing, animation, and digital content creation.', to: '/courses?category=multimedia', icon: LucideIcons.MonitorPlay },
+      { name: 'Visual Media Training', description: 'Comprehensive training in video editing, animation, and digital content creation.', to: '/courses?category=multimedia', icon: LucideIcons.MonitorPlay },
       { name: 'Photography', description: 'Master the art of photography, from basic techniques to advanced studio setups.', to: '/courses?category=photography', icon: LucideIcons.Camera },
       { name: 'Spoken English', description: 'Improve your communication skills with our interactive spoken English courses.', to: '/courses?category=spoken-english', icon: LucideIcons.MessageSquareText },
       { name: 'Beautician Course', description: 'Learn professional beauty techniques, makeup artistry, and salon management.', to: '/courses?category=beautician', icon: LucideIcons.Sparkles },
@@ -182,7 +182,7 @@ const Navbar = () => {
               <Link to="/contact">Contact</Link>
             </Button>
             <Button variant="default" asChild className="hover:animate-shake">
-              <Link to="/admissions">Apply</Link>
+              <Link to="/admissions#enrollment-form">Apply</Link>
             </Button>
           </div>
         </>
@@ -258,7 +258,7 @@ const Navbar = () => {
                 <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
               </Button>
               <Button variant="default" asChild className="mt-2 hover:animate-shake">
-                <Link to="/admissions" onClick={() => setIsSheetOpen(false)}>Apply</Link>
+                <Link to="/admissions#enrollment-form" onClick={() => setIsSheetOpen(false)}>Apply</Link>
               </Button>
             </nav>
           </SheetContent>

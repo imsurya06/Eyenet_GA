@@ -20,7 +20,7 @@ const Contact = () => {
         <div className="text-center mb-12">
           <AnimateOnScroll isHero={true} delay={100}>
             <span className="inline-block uppercase tracking-widest text-xs font-semibold text-gray-500 mb-3">
-              ✦ Connect With Us
+              CONNECT WITH US
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4 text-foreground">
               Contact <span className="text-primary font-heading">Us</span>
