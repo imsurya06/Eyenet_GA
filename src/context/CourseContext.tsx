@@ -62,6 +62,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         };
 
         const sortedCourses = [...mappedCourses].sort((a, b) => {
+          const isAFashionDesigning = a.title && a.title.toLowerCase().includes('fashion designing');
+          const isBFashionDesigning = b.title && b.title.toLowerCase().includes('fashion designing');
+
+          if (isAFashionDesigning && !isBFashionDesigning) return -1;
+          if (!isAFashionDesigning && isBFashionDesigning) return 1;
+
           const isADiploma = a.tag && a.tag.toLowerCase().includes('diploma');
           const isBDiploma = b.tag && b.tag.toLowerCase().includes('diploma');
           
