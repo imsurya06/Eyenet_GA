@@ -70,6 +70,20 @@ const SecondaryNavbar = () => {
         {secondaryNavLinks.map((link) => {
           const isFaqLink = link.name === 'FAQ';
           
+          if (link.name === '360° View') {
+            return (
+              <a
+                key={link.name}
+                href="https://www.eyenetfashion.com/virtualtour/index.htm"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary transition-colors text-foreground"
+              >
+                {link.name}
+              </a>
+            );
+          }
+
           return (
             <NavLink
               key={link.name}
