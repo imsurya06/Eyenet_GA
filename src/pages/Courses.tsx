@@ -158,24 +158,20 @@ const Courses = () => {
 
   const getFallbackImage = (category: string) => {
     switch (category) {
-      case 'fashion': return 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=75&fm=webp';
-      case 'computer': return 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=75&fm=webp';
-      case 'multimedia': return 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=75&fm=webp';
-      case 'photography': return 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=600&q=75&fm=webp';
-      case 'beautician': return 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=75&fm=webp';
-      default: return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=75&fm=webp';
+      case 'fashion': return 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800';
+      case 'computer': return 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800';
+      case 'multimedia': return 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=800';
+      case 'photography': return 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=800';
+      case 'beautician': return 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=800';
+      default: return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800';
     }
   };
 
   const getValidImage = (course: any) => {
-    let imgUrl = course.image;
-    if (!imgUrl || imgUrl.includes('/images/img') || imgUrl.includes('placeholder')) {
-      imgUrl = getFallbackImage(course.category);
+    if (!course.image || course.image.includes('/images/img') || course.image.includes('placeholder')) {
+      return getFallbackImage(course.category);
     }
-    if (imgUrl && imgUrl.includes('images.unsplash.com') && !imgUrl.includes('fm=webp')) {
-      imgUrl = imgUrl.replace(/w=\d+/, 'w=600').replace(/q=\d+/, 'q=75') + '&fm=webp';
-    }
-    return imgUrl;
+    return course.image;
   };
 
   return (
@@ -303,12 +299,10 @@ const Courses = () => {
                       className="bg-white rounded-3xl p-5 shadow-md hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300 border border-gray-100 flex flex-col h-full max-w-full overflow-hidden cursor-pointer"
                       onClick={() => navigate(`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`)}
                     >
-                      <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0 bg-slate-100">
+                      <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="w-full h-52 overflow-hidden rounded-2xl block mb-4 flex-shrink-0">
                         <img
                           src={getValidImage(course)}
                           alt={course.title}
-                          loading="lazy"
-                          decoding="async"
                           onError={(e) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.src = getFallbackImage(course.category);

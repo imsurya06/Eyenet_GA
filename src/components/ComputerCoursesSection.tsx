@@ -96,15 +96,13 @@ const ComputerCoursesSection = () => {
                 {/* Wrap the entire card with Link */}
                 <Link to={`/courses/computer-courses/${course.id}`} className="block group h-full">
                   <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-                    <div className="w-full h-48 overflow-hidden bg-slate-100">
+                    <div className="w-full h-48 overflow-hidden">
                       <img
-                        src={course.image && course.image.includes('images.unsplash.com') && !course.image.includes('fm=webp') ? course.image.replace(/w=\d+/, 'w=600').replace(/q=\d+/, 'q=75') + '&fm=webp' : course.image}
+                        src={course.image}
                         alt={course.title}
-                        loading="lazy"
-                        decoding="async"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=75&fm=webp';
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800';
                         }}
                         className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       />
