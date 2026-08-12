@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Facebook, Instagram, X, Linkedin, Youtube, Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { Facebook, Instagram, Youtube, Phone, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
 import PrivacyPolicyDialog from './PrivacyPolicyDialog';
 import TermsAndConditionsDialog from './TermsAndConditionsDialog';
 import CookieSettingsDialog from './CookieSettingsDialog';
@@ -46,8 +46,6 @@ const Footer = () => {
   const socialLinks = [
     { icon: Facebook, href: 'https://www.facebook.com/kubendrarajan1402/', name: 'Facebook' },
     { icon: Instagram, href: 'https://www.instagram.com/eye_net_fashion/', name: 'Instagram' },
-    { icon: X, href: 'https://x.com', name: 'X' },
-    { icon: Linkedin, href: 'https://linkedin.com', name: 'LinkedIn' },
     { icon: WhatsAppIcon, href: 'https://wa.me/919842173725', name: 'WhatsApp' },
     { icon: Youtube, href: 'https://www.youtube.com/@EyenetEducationalAcademy', name: 'YouTube' },
   ];
