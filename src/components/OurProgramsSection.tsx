@@ -51,7 +51,7 @@ const programs = [
   },
   {
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000',
-    title: 'Spoken English',
+    title: 'Communication Skills',
     category: 'Skill Enhancement',
     duration: 'Interactive Batches',
     description: 'Enhance your verbal fluency, corporate communication etiquette, public speaking, and self-confidence.',
