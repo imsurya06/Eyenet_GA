@@ -192,10 +192,10 @@ const Courses = () => {
       </section>
 
       {/* Premium Interactive Search Bar */}
-      <div className="max-w-3xl mx-auto px-4 mb-6 relative z-30" ref={searchContainerRef}>
+      <div className="max-w-3xl mx-auto px-4 mb-8 relative z-30" ref={searchContainerRef}>
         <AnimateOnScroll delay={150}>
-          <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-full p-2 border-2 border-slate-200/90 shadow-md hover:shadow-xl focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15 transition-all duration-300">
-            <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0 ml-1">
+          <div className="relative flex items-center bg-white shadow-[0_12px_35px_rgba(0,0,0,0.08)] rounded-2xl sm:rounded-full p-2 border-2 border-primary/20 hover:border-primary/50 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15 transition-all duration-300">
+            <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-primary to-rose-600 text-white flex items-center justify-center shadow-md shadow-primary/30 shrink-0 ml-1">
               <Search className="h-5 w-5 stroke-[2.5]" />
             </div>
             <input
@@ -207,7 +207,7 @@ const Courses = () => {
               }}
               onFocus={() => setShowSuggestions(true)}
               placeholder="Search courses (e.g., Fashion, Aari, Python, Beautician)..."
-              className="w-full h-12 px-4 bg-transparent text-base md:text-lg font-body text-slate-800 placeholder:text-slate-400 focus:outline-none"
+              className="w-full h-12 px-4 bg-transparent text-base md:text-lg font-body text-slate-900 font-medium placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
             />
             {searchQuery ? (
               <button
@@ -222,12 +222,29 @@ const Courses = () => {
               </button>
             ) : (
               <Button
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md hidden sm:flex items-center gap-1.5 flex-shrink-0 mr-1"
+                className="bg-gradient-to-r from-primary to-[#7a1228] hover:from-[#7a1228] hover:to-primary text-white rounded-full px-7 py-3 text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all duration-300 hidden sm:flex items-center gap-2 shrink-0 mr-1"
                 onClick={() => setShowSuggestions(true)}
               >
-                Search
+                <span>Search</span>
               </Button>
             )}
+          </div>
+
+          {/* Quick Search Tag Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-xs font-body text-slate-500">
+            <span className="font-semibold text-slate-700">Popular:</span>
+            {['Fashion Designing', 'Aari Work', 'Web Development', 'Multimedia', 'Cosmetology'].map((tag) => (
+              <button
+                key={tag}
+                onClick={() => {
+                  setSearchQuery(tag);
+                  setShowSuggestions(true);
+                }}
+                className="px-2.5 py-1 rounded-full bg-white/80 border border-slate-200/80 hover:border-primary/40 hover:text-primary hover:bg-white transition-all shadow-2xs cursor-pointer"
+              >
+                {tag}
+              </button>
+            ))}
           </div>
         </AnimateOnScroll>
 
