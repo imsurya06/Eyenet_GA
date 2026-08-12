@@ -56,16 +56,23 @@ const ImpactByNumbersSection = () => {
 
   return (
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
-      {/* Full Width Video Section */}
-      <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-black">
+      {/* Full Width Video Section with Instant Poster Background */}
+      <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-slate-950">
+        {/* Instant Poster Background (0ms load time while Vimeo buffers) */}
+        <img
+          src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1600"
+          alt="Eyenet Fashion Studio"
+          className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none transition-opacity duration-1000"
+        />
+        
         <iframe
-          src="https://player.vimeo.com/video/1213216123?background=1&autoplay=1&loop=1&muted=1&playsinline=1&autopause=0"
+          src="https://player.vimeo.com/video/1213216123?background=1&autoplay=1&loop=1&muted=1&playsinline=1&autopause=0&quality=720p"
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
           title="Vimeo Background Video"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
         />
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/25 transition-colors duration-500 pointer-events-none" />
       </div>
 
       <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12 relative z-10 -mt-10 sm:-mt-16 md:-mt-32">
