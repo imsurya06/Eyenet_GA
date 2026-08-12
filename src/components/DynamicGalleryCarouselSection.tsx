@@ -29,7 +29,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <AnimateOnScroll delay={100}>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-3">
-                Our <span className="text-primary font-heading">Creative Works</span>
+                Our <span className="text-primary font-heading">creative works</span>
               </h2>
             </AnimateOnScroll>
             <AnimateOnScroll delay={200}>

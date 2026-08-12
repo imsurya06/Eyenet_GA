@@ -17,12 +17,12 @@ const AboutHeroSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal leading-tight text-slate-900 tracking-tight mb-3">
-              Eyenet: A Creative <span className="text-primary font-heading italic">Educational Academy</span>
+              Eyenet: A creative <span className="text-primary font-heading italic">educational academy</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={300}>
             <p className="text-base md:text-lg font-body text-slate-600">
-              Where Creativity Creates Career.
+              Where creativity creates career.
             </p>
           </AnimateOnScroll>
         </div>
@@ -50,7 +50,7 @@ const AboutHeroSection = () => {
         <div className="max-w-4xl mx-auto bg-slate-50/80 p-8 sm:p-10 md:p-12 rounded-3xl border border-slate-200/80 text-left shadow-xs">
           <AnimateOnScroll delay={600}>
             <h2 className="text-2xl md:text-3xl font-heading font-normal text-slate-900 mb-5">
-              Shaping Confident & <span className="text-primary font-heading italic">Skilled Designers</span>
+              Shaping confident & <span className="text-primary font-heading italic">skilled designers</span>
             </h2>
           </AnimateOnScroll>
           <AnimateOnScroll delay={700}>

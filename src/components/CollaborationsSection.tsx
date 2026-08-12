@@ -60,7 +60,7 @@ const CollaborationsSection = () => {
 
           <AnimateOnScroll delay={200}>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal mb-4 tracking-tight">
-              Our Industry <span className="text-primary font-heading">Collaborations</span>
+              Our industry <span className="text-primary font-heading">collaborations</span>
             </h2>
           </AnimateOnScroll>
 
