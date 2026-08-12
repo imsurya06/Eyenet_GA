@@ -33,7 +33,6 @@ const Infrastructure = lazy(() => import("./pages/Infrastructure"));
 const NewsEvents = lazy(() => import("./pages/NewsEvents"));
 const Blogs = lazy(() => import("./pages/Blogs"));
 const FacultyPage = lazy(() => import("./pages/FacultyPage"));
-const ThreeSixtyView = lazy(() => import("./pages/ThreeSixtyView"));
 const OurServices = lazy(() => import("./pages/OurServices"));
 
 const queryClient = new QueryClient();
@@ -87,7 +86,6 @@ const App = () => {
                             <Route path="/students-zone" element={<StudentsZone />} />
                             <Route path="/blogs" element={<Blogs />} />
                             <Route path="/faculty" element={<FacultyPage />} />
-                            <Route path="/360-view" element={<ThreeSixtyView />} />
                             <Route path="/our-services" element={<OurServices />} />
                             <Route path="/contact" element={<Contact />} />
                             

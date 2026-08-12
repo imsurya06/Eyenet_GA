@@ -59,7 +59,7 @@ const SecondaryNavbar = () => {
     { name: 'Faculty', to: '/faculty' },
     { name: 'Gallery', to: '/gallery' },
     { name: 'FAQ', to: '/#faq-section' },
-    { name: '360° View', to: '/360-view' },
+    { name: '360° View', href: 'https://www.eyenetfashion.com/virtualtour/index.htm' },
     { name: 'Our Services', to: '/our-services' },
   ];
 
