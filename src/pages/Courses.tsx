@@ -229,23 +229,6 @@ const Courses = () => {
               </Button>
             )}
           </div>
-
-          {/* Quick Search Tag Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-3 text-xs font-body text-slate-500">
-            <span className="font-semibold text-slate-700">Popular:</span>
-            {['Fashion Designing', 'Aari Work', 'Web Development', 'Multimedia', 'Cosmetology'].map((tag) => (
-              <button
-                key={tag}
-                onClick={() => {
-                  setSearchQuery(tag);
-                  setShowSuggestions(true);
-                }}
-                className="px-2.5 py-1 rounded-full bg-white/80 border border-slate-200/80 hover:border-primary/40 hover:text-primary hover:bg-white transition-all shadow-2xs cursor-pointer"
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
         </AnimateOnScroll>
 
         {/* Live Word Autocomplete Suggestions Dropdown */}
