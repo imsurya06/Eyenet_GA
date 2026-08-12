@@ -255,8 +255,8 @@ const CourseDetailsPage = () => {
             Enroll Now <ArrowRight className="h-4 w-4" />
           </Button>
           <a
-            href="/brochures/Course-details-v1.pdf"
-            download
+            href="/brochures/diploma%20in%20fashion%20designing.pdf"
+            download="Diploma-in-Fashion-Designing.pdf"
             className="inline-flex items-center gap-2 px-7 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/10 transition-all text-base shadow-sm"
           >
             Download Brochure <Download className="h-4 w-4" />

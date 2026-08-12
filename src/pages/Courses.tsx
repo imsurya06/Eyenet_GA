@@ -357,7 +357,7 @@ const Courses = () => {
                             asChild
                             className="flex-1 border-primary text-primary hover:bg-primary hover:text-white rounded-xl py-2.5 text-xs font-semibold shadow-sm transition-all"
                           >
-                            <a href="/brochures/Course-details-v1.pdf" download onClick={(e) => e.stopPropagation()}>
+                            <a href="/brochures/diploma%20in%20fashion%20designing.pdf" download="Diploma-in-Fashion-Designing.pdf" onClick={(e) => e.stopPropagation()}>
                               Download Brochure
                             </a>
                           </Button>
