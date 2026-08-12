@@ -51,10 +51,10 @@ const StudentStoriesSection = () => {
                 align: "start",
               }}
             >
-              <CarouselContent className="-ml-4 flex">
+              <CarouselContent className="-ml-4 flex py-6">
                 {approvedTestimonials.map((testimonial) => (
-                  <CarouselItem key={testimonial.id} className="pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex">
-                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-gray-100 group w-full">
+                  <CarouselItem key={testimonial.id} className="pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex pb-2">
+                    <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-slate-200/80 group w-full">
                       <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors duration-300" />
                       
                       {/* Display star rating */}
