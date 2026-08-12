@@ -58,6 +58,12 @@ const ImpactByNumbersSection = () => {
     <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
       {/* Full Width Video Section */}
       <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-black">
+        {/* Local Instant 0ms Video Cover (Official Vimeo 1st Frame) */}
+        <img
+          src="/images/vimeo-cover.jpg"
+          alt="Eyenet Class Video Preview"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        />
         <iframe
           src="https://player.vimeo.com/video/1213216123?background=1&autoplay=1&loop=1&muted=1&playsinline=1&autopause=0"
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-[177.77vh] h-full sm:h-[56.25vw] min-w-full min-h-full pointer-events-none"
@@ -66,7 +72,7 @@ const ImpactByNumbersSection = () => {
           allowFullScreen
           loading="eager"
         />
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500 pointer-events-none" />
       </div>
 
       <div className="max-w-[85rem] 2xl:max-w-[90rem] mx-auto px-4 md:px-8 lg:px-12 relative z-10 -mt-10 sm:-mt-16 md:-mt-32">
