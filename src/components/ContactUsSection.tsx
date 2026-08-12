@@ -5,10 +5,28 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
-import AnimateOnScroll from './AnimateOnScroll';
+import { toast } from 'sonner';
+import { sendFormEmail } from '@/lib/emailjs';
 
 const ContactUsSection = () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
+
+    await sendFormEmail({
+      form_type: 'General Contact',
+      from_name: name,
+      from_email: email,
+      message: message,
+    });
+
+    toast.success(`Thank you, ${name}! Your message has been sent.`);
+    e.currentTarget.reset();
+  };
+
   return (
     <section className="py-14 md:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-white to-[#fdfaf6] text-foreground">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -94,7 +112,7 @@ const ContactUsSection = () => {
               Drop us a message and we'll get back to you promptly.
             </p>
 
-            <form action="https://formspree.io/f/xeqyqjkk" method="POST" className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <Label htmlFor="contact-name" className="text-sm font-semibold text-foreground mb-1.5 block text-left">
                   Full Name*

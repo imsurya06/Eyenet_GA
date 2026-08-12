@@ -28,6 +28,7 @@ import {
 import ConfettiOverlay from '@/components/ConfettiOverlay';
 import EnrollmentSuccessDialog from '@/components/EnrollmentSuccessDialog';
 import { useCourses } from '@/context/CourseContext'; // Import useCourses
+import { sendFormEmail } from '@/lib/emailjs';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -78,6 +79,16 @@ const Admissions = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Form submitted:", values);
+    
+    await sendFormEmail({
+      form_type: 'Admission Application',
+      from_name: values.name,
+      from_email: values.email,
+      from_phone: values.mobile,
+      program_or_service: values.program,
+      message: `Course Enrollment Application for: ${values.program}`,
+    });
+
     setEnrolledCourseName(values.program);
     setEnrolledUserName(values.name);
     setShowConfetti(true);

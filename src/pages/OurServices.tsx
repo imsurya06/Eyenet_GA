@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Scissors, Laptop, Building2, MessageSquare, Send, CheckCircle2, Sparkles } from 'lucide-react';
 import { toast } from "sonner";
+import { sendFormEmail } from '@/lib/emailjs';
 
 const services = [
   {
@@ -55,12 +56,21 @@ const OurServices = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) {
       toast.error('Please fill in your name and contact number.');
       return;
     }
+
+    await sendFormEmail({
+      form_type: 'Service Inquiry',
+      from_name: formData.name,
+      from_email: formData.email,
+      from_phone: formData.phone,
+      program_or_service: formData.service,
+      message: formData.description || `Specialized Studio Inquiry for: ${formData.service}`,
+    });
 
     toast.success(`Thank you, ${formData.name}! Your inquiry for "${formData.service}" has been received.`);
     setIsSubmitted(true);
