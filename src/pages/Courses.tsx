@@ -194,8 +194,8 @@ const Courses = () => {
       {/* Premium Interactive Search Bar */}
       <div className="max-w-3xl mx-auto px-4 mb-6 relative z-30" ref={searchContainerRef}>
         <AnimateOnScroll delay={150}>
-          <div className="relative flex items-center bg-white rounded-full p-2 border-2 border-gray-200/90 shadow-lg hover:shadow-xl focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15 transition-all duration-300">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 ml-1">
+          <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-full p-2 border-2 border-slate-200/90 shadow-md hover:shadow-xl focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15 transition-all duration-300">
+            <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0 ml-1">
               <Search className="h-5 w-5 stroke-[2.5]" />
             </div>
             <input
@@ -207,7 +207,7 @@ const Courses = () => {
               }}
               onFocus={() => setShowSuggestions(true)}
               placeholder="Search courses (e.g., Fashion, Aari, Python, Beautician)..."
-              className="w-full h-12 px-4 bg-transparent text-base md:text-lg font-body text-foreground placeholder:text-gray-400 focus:outline-none"
+              className="w-full h-12 px-4 bg-transparent text-base md:text-lg font-body text-slate-800 placeholder:text-slate-400 focus:outline-none"
             />
             {searchQuery ? (
               <button
@@ -215,14 +215,14 @@ const Courses = () => {
                   setSearchQuery('');
                   setShowSuggestions(false);
                 }}
-                className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors mr-1"
+                className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors mr-1"
                 aria-label="Clear search"
               >
                 <X className="h-5 w-5" />
               </button>
             ) : (
               <Button
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 text-sm font-bold shadow-md hidden sm:flex items-center gap-1.5 flex-shrink-0 mr-1"
+                className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wider shadow-md hidden sm:flex items-center gap-1.5 flex-shrink-0 mr-1"
                 onClick={() => setShowSuggestions(true)}
               >
                 Search
