@@ -7,8 +7,6 @@ import FounderDirectorSection from '@/components/FounderDirectorSection';
 import DynamicGalleryCarouselSection from '@/components/DynamicGalleryCarouselSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import LocationSection from '@/components/LocationSection';
-import ContactUsSection from '@/components/ContactUsSection';
-import AnimateOnScroll from '@/components/AnimateOnScroll'; // Import AnimateOnScroll
 
 const About = () => {
   return (
@@ -19,7 +17,6 @@ const About = () => {
       <DynamicGalleryCarouselSection withButton={true} />
       <TestimonialsSection />
       <LocationSection />
-      <ContactUsSection />
     </>
   );
 };
