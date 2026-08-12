@@ -2,44 +2,110 @@
 
 import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
+import { Award, Quote, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const FounderDirectorSection = () => {
   return (
-    <section className="py-8 md:py-10 lg:py-12 px-3 md:px-8 lg:px-[80px] bg-background text-foreground">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-        {/* Left Section: Image */}
-        <AnimateOnScroll delay={100} className="w-full h-[400px] md:h-[550px] overflow-hidden rounded-3xl shadow-xl border border-gray-100 mx-auto lg:mx-0">
-          <img
-            src="/images/Founder Image.JPEG"
-            alt="Founder & Director"
-            className="w-full h-full object-cover object-center"
-          />
-        </AnimateOnScroll>
+    <section className="py-12 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Main Card Wrapper */}
+        <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100/50 rounded-3xl p-6 sm:p-10 md:p-14 border border-slate-200/80 shadow-xl relative overflow-hidden">
+          
+          {/* Subtle Ambient Background Glow */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-rose-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Right Section: Text Content */}
-        <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-          <AnimateOnScroll delay={200}>
-            <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-6 font-bold text-foreground">
-              Meet Our Founder <br /> & <span className="text-primary font-heading">Director</span>
-            </h2>
-          </AnimateOnScroll>
-          <AnimateOnScroll delay={300}>
-            <p className="text-text-regular font-body text-gray-600 max-w-xl text-justify">
-              Guided by the vision of our Founder and Director, Eyenet is
-              committed to shaping students into confident and skilled
-              professionals. We go beyond theory by offering hands-on
-              training, industry-relevant courses, and practical projects that
-              mirror real-world design challenges. Our teaching approach
-              combines creativity, technology, and professional discipline,
-              ensuring that every student not only masters tools like
-              Photoshop and Illustrator but also develops the confidence to
-              apply their skills in diverse industry settings. By fostering a
-              supportive and inspiring learning environment, we prepare our
-              students to excel in today's fast-paced and highly competitive
-              design world.
-            </p>
-          </AnimateOnScroll>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 lg:gap-14 items-center relative z-10">
+            
+            {/* Left Column: Image with Frame (5 Cols) */}
+            <div className="lg:col-span-5 relative group mx-auto lg:mx-0 w-full max-w-md lg:max-w-none">
+              <AnimateOnScroll delay={100} className="w-full h-[380px] sm:h-[460px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl border border-slate-200/80 relative">
+                <img
+                  src="/images/Founder Image.JPEG"
+                  alt="Founder & Director"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent z-10" />
+
+                {/* Floating Leadership Title Badge inside Image */}
+                <div className="absolute bottom-5 left-5 right-5 z-20 text-white">
+                  <p className="text-lg font-heading font-normal text-white leading-tight">Founder & Director</p>
+                  <p className="text-xs font-body text-white/80">Eyenet Educational Academy</p>
+                </div>
+              </AnimateOnScroll>
+
+              {/* Floating Quote Accent Badge */}
+              <div className="hidden sm:flex absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-primary text-white items-center justify-center shadow-lg border-2 border-white z-30">
+                <Quote className="w-6 h-6 text-white" />
+              </div>
+            </div>
+
+            {/* Right Column: Text & Vision Narrative (7 Cols) */}
+            <div className="lg:col-span-7 flex flex-col items-start text-left">
+              
+              {/* Header Badge */}
+              <AnimateOnScroll delay={200}>
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
+                  <Award className="w-3.5 h-3.5" />
+                  <span>Leadership & Vision</span>
+                </div>
+              </AnimateOnScroll>
+
+              <AnimateOnScroll delay={300}>
+                <h2 className="text-3xl md:text-4xl font-heading font-normal text-slate-900 mb-6 tracking-tight leading-snug">
+                  Meet Our Founder & <span className="text-primary font-heading italic">Director</span>
+                </h2>
+              </AnimateOnScroll>
+
+              {/* Highlighted Pull Quote */}
+              <AnimateOnScroll delay={400}>
+                <div className="border-l-4 border-primary pl-4 py-1.5 mb-6 bg-primary/5 rounded-r-xl">
+                  <p className="font-heading italic text-lg md:text-xl text-slate-800 leading-snug">
+                    "We go beyond theory to shape students into confident, industry-ready creative leaders."
+                  </p>
+                </div>
+              </AnimateOnScroll>
+
+              {/* Full Original Narrative */}
+              <AnimateOnScroll delay={500}>
+                <p className="text-base font-body text-slate-600 leading-relaxed mb-6">
+                  Guided by the vision of our Founder and Director, Eyenet is committed to shaping students into confident and skilled professionals. We go beyond theory by offering hands-on training, industry-relevant courses, and practical projects that mirror real-world design challenges.
+                </p>
+              </AnimateOnScroll>
+
+              <AnimateOnScroll delay={600}>
+                <p className="text-sm md:text-base font-body text-slate-600 leading-relaxed mb-8">
+                  Our teaching approach combines creativity, technology, and professional discipline, ensuring that every student not only masters tools like Photoshop and Illustrator but also develops the confidence to apply their skills in diverse industry settings. By fostering a supportive and inspiring learning environment, we prepare our students to excel in today's fast-paced and highly competitive design world.
+                </p>
+              </AnimateOnScroll>
+
+              {/* Vision Highlights Pills */}
+              <AnimateOnScroll delay={700} className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-200/80">
+                <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-800">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>Hands-On Studio Training</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-800">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>Real-World Design Projects</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-800">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>Mastery of Photoshop & Tools</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-800">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>Supportive Learning Mentorship</span>
+                </div>
+              </AnimateOnScroll>
+
+            </div>
+
+          </div>
+
         </div>
+
       </div>
     </section>
   );
