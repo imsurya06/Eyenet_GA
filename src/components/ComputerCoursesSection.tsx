@@ -145,7 +145,7 @@ const ComputerCoursesSection = () => {
                           className="flex-1 bg-primary hover:bg-primary/95 text-white rounded-xl py-2.5 text-xs font-semibold shadow-sm transition-all"
                           onClick={(e) => handleEnrollClick(e, course.title)}
                         >
-                          Book Now
+                          Enroll Now
                         </Button>
                         <Button
                           variant="outline"
