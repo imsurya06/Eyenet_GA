@@ -74,55 +74,12 @@ interface AdmissionAdItem {
   link?: string;
 }
 
-// Fallback Batches if Sanity CMS has 0 entries
-const defaultUpcomingBatches: BatchItem[] = [
-  {
-    id: 'batch-fullstack',
-    title: 'Full Stack Development',
-    category: 'Computer Courses',
-    tag: 'Seats filling fast',
-    tagBg: 'bg-amber-100 text-amber-800 border-amber-200',
-    startDate: '5 September 2026',
-    duration: '6 months',
-    mode: 'Online + Offline',
-    timing: '6:00 PM - 8:00 PM',
-    seatsLeft: 12,
-    courseTitleToSelect: 'Computer Courses',
-  },
-  {
-    id: 'batch-uiux',
-    title: 'UI/UX Design',
-    category: 'Digital Production',
-    tag: 'New batch',
-    tagBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    startDate: '12 September 2026',
-    duration: '4 months',
-    mode: 'Online',
-    timing: '7:00 PM - 9:00 PM',
-    seatsLeft: 18,
-    courseTitleToSelect: 'Computer Courses',
-  },
-  {
-    id: 'batch-fashion-diploma',
-    title: 'Diploma in Fashion Designing',
-    category: 'Creative Arts',
-    tag: 'Most Popular',
-    tagBg: 'bg-rose-100 text-rose-800 border-rose-200',
-    startDate: '1 September 2026',
-    duration: '1 Year / 6 Months',
-    mode: 'Offline Practical Studio',
-    timing: '10:00 AM - 1:00 PM',
-    seatsLeft: 8,
-    courseTitleToSelect: 'Diploma in Fashion Designing',
-  },
-];
-
 const Admissions = () => {
   const { courses, loading: coursesLoading } = useCourses();
   const [searchParams] = useSearchParams();
   const courseParam = searchParams.get('course');
 
-  const [batches, setBatches] = useState<BatchItem[]>(defaultUpcomingBatches);
+  const [batches, setBatches] = useState<BatchItem[]>([]);
   const [batchesLoading, setBatchesLoading] = useState(true);
 
   const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>([]);
@@ -131,34 +88,56 @@ const Admissions = () => {
 
   // Fetch Upcoming Batches dynamically from Sanity CMS Studio
   useEffect(() => {
+    const query = '*[_type == "batch" || _type == "upcomingBatch"] | order(_createdAt asc)';
+
+    const getTagBg = (tagStr?: string, index = 0) => {
+      const lower = (tagStr || '').toLowerCase();
+      if (lower.includes('seats') || lower.includes('filling') || index === 0) {
+        return 'bg-amber-100 text-amber-800 border-amber-200';
+      }
+      if (lower.includes('new')) {
+        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      }
+      return 'bg-rose-100 text-rose-800 border-rose-200';
+    };
+
     const fetchSanityBatches = async () => {
+      setBatchesLoading(true);
       try {
-        const query = '*[_type == "batch" || _type == "upcomingBatch"] | order(_createdAt desc)';
         const data = await sanityClient.fetch(query);
         if (data && data.length > 0) {
           const mapped: BatchItem[] = data.map((doc: any, index: number) => ({
             id: doc._id || `sanity-batch-${index}`,
             title: doc.title || doc.name || 'Upcoming Batch',
-            category: doc.category || 'Specialized Program',
-            tag: doc.tag || (index === 0 ? 'Seats filling fast' : 'New batch'),
-            tagBg: doc.tagBg || 'bg-amber-100 text-amber-800 border-amber-200',
+            category: doc.category || 'Academy Program',
+            tag: doc.tag || 'Seats filling fast',
+            tagBg: getTagBg(doc.tag, index),
             startDate: doc.startDate || doc.date || 'Coming Soon',
             duration: doc.duration || 'Flexible',
-            mode: doc.mode || 'Online + Offline',
+            mode: doc.mode || 'Hands-on Studio',
             timing: doc.timing || 'Flexible Hours',
-            seatsLeft: doc.seatsLeft || doc.seats || 10,
-            courseTitleToSelect: doc.courseTitleToSelect || doc.title || 'Diploma in Fashion Designing',
+            seatsLeft: doc.seatsLeft ?? doc.seats ?? 10,
+            courseTitleToSelect: doc.courseTitleToSelect || doc.title || '',
           }));
           setBatches(mapped);
+        } else {
+          setBatches([]);
         }
       } catch (err) {
-        console.warn('Sanity CMS upcoming batch fetch fallback to defaults:', err);
+        console.warn('Error fetching batches from Sanity:', err);
       } finally {
         setBatchesLoading(false);
       }
     };
 
     fetchSanityBatches();
+
+    const subscription = sanityClient.listen(query).subscribe({
+      next: () => fetchSanityBatches(),
+      error: (err) => console.warn('Sanity batch subscription error:', err),
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Fetch Admission Ads dynamically from Sanity CMS Studio (Admission Ads)
