@@ -22,6 +22,9 @@ const ContactUsSection = () => {
     await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.CONTACT, {
       from_name: name,
       from_email: email,
+      contact_number: 'Provided in message',
+      subject_or_program: 'General Contact Inquiry',
+      message_details: message,
       message_content: message,
       form_type: 'Contact Us Inquiry',
     });

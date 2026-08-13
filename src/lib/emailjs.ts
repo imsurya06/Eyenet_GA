@@ -1,13 +1,16 @@
 import emailjs from '@emailjs/browser';
 
 // Central EmailJS Configuration
+const defaultTemplate = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || import.meta.env.VITE_EMAILJS_TEMPLATE_ADMISSIONS || 'YOUR_TEMPLATE_ID';
+
 export const EMAILJS_CONFIG = {
   SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
   PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY',
   TEMPLATES: {
-    ADMISSIONS: import.meta.env.VITE_EMAILJS_TEMPLATE_ADMISSIONS || 'YOUR_ADMISSIONS_TEMPLATE_ID',
-    CONTACT: import.meta.env.VITE_EMAILJS_TEMPLATE_CONTACT || 'YOUR_CONTACT_TEMPLATE_ID',
-    SERVICES: import.meta.env.VITE_EMAILJS_TEMPLATE_SERVICES || 'YOUR_SERVICES_TEMPLATE_ID',
+    MASTER: defaultTemplate,
+    ADMISSIONS: import.meta.env.VITE_EMAILJS_TEMPLATE_ADMISSIONS || defaultTemplate,
+    CONTACT: import.meta.env.VITE_EMAILJS_TEMPLATE_CONTACT || defaultTemplate,
+    SERVICES: import.meta.env.VITE_EMAILJS_TEMPLATE_SERVICES || defaultTemplate,
   },
 };
 

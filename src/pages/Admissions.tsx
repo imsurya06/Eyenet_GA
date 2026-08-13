@@ -266,8 +266,11 @@ const Admissions = () => {
     await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.ADMISSIONS, {
       from_name: values.name,
       from_email: values.email,
+      contact_number: values.mobile,
       mobile_number: values.mobile,
+      subject_or_program: values.program,
       program_selected: values.program,
+      message_details: `Course Enrollment Request for: ${values.program}`,
       form_type: 'Admissions & Course Enrollment',
     });
     

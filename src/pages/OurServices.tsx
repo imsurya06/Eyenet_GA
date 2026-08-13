@@ -82,9 +82,11 @@ const OurServices = () => {
 
     await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.SERVICES, {
       from_name: formData.name,
-      contact_number: formData.phone,
       from_email: formData.email,
+      contact_number: formData.phone,
+      subject_or_program: formData.service,
       service_requested: formData.service,
+      message_details: formData.description,
       requirement_details: formData.description,
       form_type: 'Our Services Quotation',
     });
