@@ -59,7 +59,7 @@ const SecondaryNavbar = () => {
     { name: 'Faculty', to: '/faculty' },
     { name: 'Gallery', to: '/gallery' },
     { name: 'FAQ', to: '/#faq-section' },
-    { name: '360° View', href: 'https://www.eyenetfashion.com/virtualtour/index.htm' },
+    { name: '360° View', href: '/virtualtour/' },
     { name: 'Our Services', to: '/our-services' },
   ];
 
@@ -74,9 +74,7 @@ const SecondaryNavbar = () => {
             return (
               <a
                 key={link.name}
-                href="https://www.eyenetfashion.com/virtualtour/index.htm"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/virtualtour/"
                 className="hover:text-primary transition-colors text-foreground font-medium"
               >
                 {link.name}

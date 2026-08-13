@@ -1,7 +1,15 @@
 {
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/virtualtour/",
+      "destination": "/virtualtour/index.htm"
+    },
+    {
+      "source": "/virtualtour",
+      "destination": "/virtualtour/index.htm"
+    },
+    {
+      "source": "/((?!virtualtour).*)",
       "destination": "/index.html"
     }
   ],
