@@ -14,6 +14,9 @@ export const EMAILJS_CONFIG = {
   },
 };
 
+let lastSubmissionTime = 0;
+const SUBMISSION_COOLDOWN_MS = 3000; // 3 seconds gap between form submissions
+
 /**
  * Send an email notification using EmailJS
  */
@@ -21,6 +24,13 @@ export const sendEmailJSNotification = async (
   templateId: string,
   templateParams: Record<string, unknown>
 ) => {
+  const now = Date.now();
+  if (now - lastSubmissionTime < SUBMISSION_COOLDOWN_MS) {
+    console.warn('Duplicate email submission blocked by rate-limiting cooldown.');
+    return { success: false, rateLimited: true };
+  }
+  lastSubmissionTime = now;
+
   try {
     const response = await emailjs.send(
       EMAILJS_CONFIG.SERVICE_ID,

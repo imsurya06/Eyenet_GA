@@ -39,7 +39,8 @@ import {
   Phone,
   Mail,
   Sparkles,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Loader2
 } from 'lucide-react';
 
 const formSchema = z.object({
@@ -258,26 +259,34 @@ const Admissions = () => {
     }
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Form submitted:", values);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Send email notification via EmailJS
-    await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.ADMISSIONS, {
-      from_name: values.name,
-      from_email: values.email,
-      contact_number: values.mobile,
-      mobile_number: values.mobile,
-      subject_or_program: values.program,
-      program_selected: values.program,
-      message_details: `Course Enrollment Request for: ${values.program}`,
-      form_type: 'Admissions & Course Enrollment',
-    });
-    
-    setEnrolledCourseName(values.program);
-    setEnrolledUserName(values.name);
-    setShowConfetti(true);
-    setShowSuccessDialog(true);
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (isSubmitting) return; // Prevent double clicks
+    setIsSubmitting(true);
+
+    try {
+      // Send email notification via EmailJS
+      await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.ADMISSIONS, {
+        from_name: values.name,
+        from_email: values.email,
+        contact_number: values.mobile,
+        mobile_number: values.mobile,
+        subject_or_program: values.program,
+        program_selected: values.program,
+        message_details: `Course Enrollment Request for: ${values.program}`,
+        form_type: 'Admissions & Course Enrollment',
+      });
+      
+      setEnrolledCourseName(values.program);
+      setEnrolledUserName(values.name);
+      setShowSuccessDialog(true);
+      form.reset();
+    } catch (err) {
+      console.error('Submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCloseSuccessDialog = () => {
@@ -530,9 +539,22 @@ const Admissions = () => {
                       )}
                     />
 
-                    <Button type="submit" className="w-full h-14 text-base font-bold bg-primary hover:bg-primary/95 text-white rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
-                      <span>Submit Application Now</span>
-                      <ArrowRight className="w-5 h-5" />
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full h-14 text-base font-bold bg-primary hover:bg-primary/95 text-white rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          <span>Submitting Application...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Submit Application Now</span>
+                          <ArrowRight className="w-5 h-5" />
+                        </>
+                      )}
                     </Button>
                   </form>
                 </Form>

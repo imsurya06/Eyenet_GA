@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, Loader2 } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { toast } from 'sonner';
 
@@ -15,29 +15,40 @@ import SubmissionSuccessModal from '@/components/SubmissionSuccessModal';
 const ContactUsSection = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [contactName, setContactName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const formEl = e.currentTarget;
+    const formData = new FormData(formEl);
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const message = formData.get('message') as string;
 
     setContactName(name || 'Friend');
 
-    await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.CONTACT, {
-      from_name: name,
-      from_email: email,
-      contact_number: 'Provided in message',
-      subject_or_program: 'General Contact Inquiry',
-      message_details: message,
-      message_content: message,
-      form_type: 'Contact Us Inquiry',
-    });
+    try {
+      await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.CONTACT, {
+        from_name: name,
+        from_email: email,
+        contact_number: 'Provided in message',
+        subject_or_program: 'General Contact Inquiry',
+        message_details: message,
+        message_content: message,
+        form_type: 'Contact Us Inquiry',
+      });
 
-    toast.success(`Thank you, ${name || 'there'}! Message received.`);
-    setShowSuccessModal(true);
-    e.currentTarget.reset();
+      toast.success(`Thank you, ${name || 'there'}! Message received.`);
+      setShowSuccessModal(true);
+      formEl.reset();
+    } catch (err) {
+      console.error('Contact submit error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -178,8 +189,22 @@ const ContactUsSection = () => {
                 </Label>
               </div>
 
-              <Button type="submit" className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-md transition-all duration-300">
-                Send Message <Send className="w-4 h-4 ml-2 inline-block" />
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Sending Message...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Message</span>
+                    <Send className="w-4 h-4" />
+                  </>
+                )}
               </Button>
             </form>
           </div>

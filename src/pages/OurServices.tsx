@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Scissors, Laptop, Building2, Camera, Sparkles, MessageSquare, Send, CheckCircle2 } from 'lucide-react';
+import { Scissors, Laptop, Building2, Camera, Sparkles, MessageSquare, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { toast } from "sonner";
 
 import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
@@ -66,6 +66,7 @@ const OurServices = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -84,25 +85,34 @@ const OurServices = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!formData.name || !formData.phone) {
       toast.error('Please fill in your name and contact number.');
       return;
     }
 
-    await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.SERVICES, {
-      from_name: formData.name,
-      from_email: formData.email,
-      contact_number: formData.phone,
-      subject_or_program: formData.service,
-      service_requested: formData.service,
-      message_details: formData.description,
-      requirement_details: formData.description,
-      form_type: 'Our Services Quotation',
-    });
+    setIsSubmitting(true);
 
-    toast.success(`Thank you, ${formData.name}! Inquiry received.`);
-    setIsSubmitted(true);
-    setShowSuccessModal(true);
+    try {
+      await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.SERVICES, {
+        from_name: formData.name,
+        from_email: formData.email,
+        contact_number: formData.phone,
+        subject_or_program: formData.service,
+        service_requested: formData.service,
+        message_details: formData.description,
+        requirement_details: formData.description,
+        form_type: 'Our Services Quotation',
+      });
+
+      toast.success(`Thank you, ${formData.name}! Inquiry received.`);
+      setIsSubmitted(true);
+      setShowSuccessModal(true);
+    } catch (err) {
+      console.error('Service form submission error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -302,10 +312,20 @@ const OurServices = () => {
                     {/* Submit Button */}
                     <Button
                       type="submit"
-                      className="w-full bg-primary hover:bg-primary/90 text-white rounded-2xl py-3 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all duration-300"
+                      disabled={isSubmitting}
+                      className="w-full bg-primary hover:bg-primary/90 text-white rounded-2xl py-3 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      <Send className="w-4 h-4" />
-                      <span>Submit Service Inquiry</span>
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Submitting Inquiry...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Submit Service Inquiry</span>
+                        </>
+                      )}
                     </Button>
                   </form>
                 )}
