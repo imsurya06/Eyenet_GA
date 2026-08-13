@@ -1,16 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { MapPin, Phone, Mail, Clock, Navigation, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, Loader2, ExternalLink } from 'lucide-react';
 import AnimateOnScroll from '@/components/AnimateOnScroll';
+import { toast } from 'sonner';
+import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
+import SubmissionSuccessModal from '@/components/SubmissionSuccessModal';
 
 const Contact = () => {
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [contactName, setContactName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const googleMapsUrl = "https://www.google.com/maps/dir//Suguna+store,+Hamdhiya+towers+2nd+floor,+80+feet+road,+Jn,+Anna+Nagar,+Madurai,+Tamil+Nadu+625020/@9.9291093,78.1409982,15.78z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3b00c5072a46551f:0x3feb0d2a94af46bb!2m2!1d78.1485275!2d9.9215582?entry=ttu";
   const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.1558223405787!2d78.14633887586524!3d9.921563490180477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5072a46551f%3A0x3feb0d2a94af46bb!2sEye-Net%20Educational%20Academy!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const formEl = e.currentTarget;
+    const formData = new FormData(formEl);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
+
+    setContactName(name || 'Friend');
+
+    try {
+      await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.CONTACT, {
+        from_name: name,
+        from_email: email,
+        contact_number: 'Provided in message',
+        subject_or_program: 'General Contact Inquiry',
+        message_details: message,
+        message_content: message,
+        form_type: 'Contact Us Inquiry',
+      });
+
+      toast.success(`Thank you, ${name || 'there'}! Message received.`);
+      setShowSuccessModal(true);
+      formEl.reset();
+    } catch (err) {
+      console.error('Contact page email submit error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background min-h-screen">
@@ -47,10 +88,7 @@ const Contact = () => {
                   Fill out the form below and our counselor will respond within 24 hours.
                 </p>
 
-                <form action="https://formspree.io/f/xeqyqjkk" method="POST" className="space-y-5">
-                  <input type="hidden" name="_next" value={`${window.location.origin}/`} />
-                  <input type="text" name="_gotcha" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
-                  
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
                     <Label htmlFor="name" className="text-sm font-semibold text-foreground mb-1.5 block text-left">
                       Full Name*
@@ -95,7 +133,7 @@ const Contact = () => {
 
                   <div className="flex items-center space-x-3 rounded-xl p-3 bg-gray-50 border border-gray-100">
                     <Checkbox id="terms" name="terms" required className="border-primary data-[state=checked]:bg-primary text-white" />
-                    <Label htmlFor="terms" className="text-xs font-body text-gray-600">
+                    <Label htmlFor="terms" className="text-xs font-body text-gray-600 cursor-pointer">
                       I accept the{' '}
                       <Link to="/terms-of-service" className="underline hover:text-primary font-semibold">
                         Terms & Conditions
@@ -103,8 +141,22 @@ const Contact = () => {
                     </Label>
                   </div>
 
-                  <Button type="submit" className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-md transition-all duration-300">
-                    Send Message Now →
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white rounded-full shadow-md transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Sending Message...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Send Message Now</span>
+                        <Send className="w-4 h-4" />
+                      </>
+                    )}
                   </Button>
                 </form>
               </div>
@@ -201,6 +253,13 @@ const Contact = () => {
         </div>
 
       </div>
+      <SubmissionSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Message Sent!"
+        userName={contactName}
+        message="Your message has been sent successfully. Our counselor will respond within 24 hours."
+      />
     </section>
   );
 };
