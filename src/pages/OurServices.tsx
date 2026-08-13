@@ -10,6 +10,7 @@ import { Scissors, Laptop, Building2, Camera, Sparkles, MessageSquare, Send, Che
 import { toast } from "sonner";
 
 import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
+import SubmissionSuccessModal from '@/components/SubmissionSuccessModal';
 
 const services = [
   {
@@ -64,6 +65,14 @@ const OurServices = () => {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleServiceSelect = (serviceTitle: string) => {
     setFormData((prev) => ({ ...prev, service: serviceTitle }));
@@ -91,8 +100,9 @@ const OurServices = () => {
       form_type: 'Our Services Quotation',
     });
 
-    toast.success(`Thank you, ${formData.name}! Your inquiry for "${formData.service}" has been received.`);
+    toast.success(`Thank you, ${formData.name}! Inquiry received.`);
     setIsSubmitted(true);
+    setShowSuccessModal(true);
   };
 
   return (
@@ -306,6 +316,14 @@ const OurServices = () => {
 
         </div>
       </section>
+      <SubmissionSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Service Inquiry Sent!"
+        userName={formData.name}
+        serviceOrCourse={formData.service}
+        message={`We have received your service request for "${formData.service}". Our representative will contact you at ${formData.phone} shortly.`}
+      />
     </>
   );
 };

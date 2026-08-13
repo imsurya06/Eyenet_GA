@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,14 +10,20 @@ import AnimateOnScroll from './AnimateOnScroll';
 import { toast } from 'sonner';
 
 import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
+import SubmissionSuccessModal from '@/components/SubmissionSuccessModal';
 
 const ContactUsSection = () => {
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [contactName, setContactName] = useState('');
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const message = formData.get('message') as string;
+
+    setContactName(name || 'Friend');
 
     await sendEmailJSNotification(EMAILJS_CONFIG.TEMPLATES.CONTACT, {
       from_name: name,
@@ -29,7 +35,8 @@ const ContactUsSection = () => {
       form_type: 'Contact Us Inquiry',
     });
 
-    toast.success(`Thank you, ${name || 'there'}! Your message has been sent successfully.`);
+    toast.success(`Thank you, ${name || 'there'}! Message received.`);
+    setShowSuccessModal(true);
     e.currentTarget.reset();
   };
 
@@ -179,6 +186,13 @@ const ContactUsSection = () => {
         </AnimateOnScroll>
 
       </div>
+      <SubmissionSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title="Message Sent!"
+        userName={contactName}
+        message="Your message has been sent successfully to our team. We will get back to you shortly."
+      />
     </section>
   );
 };

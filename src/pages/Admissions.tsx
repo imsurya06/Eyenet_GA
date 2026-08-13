@@ -26,8 +26,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import ConfettiOverlay from '@/components/ConfettiOverlay';
-import EnrollmentSuccessDialog from '@/components/EnrollmentSuccessDialog';
+import SubmissionSuccessModal from '@/components/SubmissionSuccessModal';
 import { useCourses } from '@/context/CourseContext';
 import { 
   Calendar, 
@@ -607,13 +606,13 @@ const Admissions = () => {
         </div>
       </section>
 
-      {/* Confetti and Success Dialog */}
-      <ConfettiOverlay show={showConfetti} />
-      <EnrollmentSuccessDialog
-        show={showSuccessDialog}
-        courseName={enrolledCourseName}
-        userName={enrolledUserName}
+      {/* Premium Minimal Success Modal */}
+      <SubmissionSuccessModal
+        isOpen={showSuccessDialog}
         onClose={handleCloseSuccessDialog}
+        title="Application Received!"
+        userName={enrolledUserName}
+        serviceOrCourse={enrolledCourseName}
       />
     </div>
   );
