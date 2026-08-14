@@ -90,9 +90,11 @@ const ContactUsSection = () => {
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Phone</p>
-                    <a href="tel:+919842173725" className="text-sm font-body text-primary font-semibold hover:underline">
-                      +91 98421 73725 / +91 98421 73726
-                    </a>
+                    <div className="text-sm font-body text-primary font-semibold flex flex-wrap items-center gap-1">
+                      <a href="tel:+919842173725" className="hover:underline">+91 98421 73725</a>
+                      <span className="text-gray-400 font-normal">/</span>
+                      <a href="tel:+918300064651" className="hover:underline">+91 83000 64651</a>
+                    </div>
                   </div>
                 </div>
 

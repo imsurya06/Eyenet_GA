@@ -23,17 +23,35 @@ const FounderDirectorSection = () => {
               <AnimateOnScroll delay={100} className="w-full h-[380px] sm:h-[460px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl border border-slate-200/80 relative">
                 <img
                   src="/images/Founder Image.JPEG"
-                  alt="Founder & Director"
+                  alt="Kubendra Rajan S - Founder & Director"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent z-10" />
 
                 {/* Floating Leadership Title Badge inside Image */}
                 <div className="absolute bottom-5 left-5 right-5 z-20 text-white">
-                  <p className="text-lg font-heading font-normal text-white leading-tight">Founder & Director</p>
+                  <h3 className="text-xl sm:text-2xl font-heading font-bold text-white leading-tight mb-0.5">
+                    Kubendra Rajan S
+                  </h3>
+                  <p className="text-sm font-heading font-medium text-amber-300 leading-tight">
+                    Founder & Director
+                  </p>
                   <p className="text-xs font-body text-white/80">Eyenet Educational Academy</p>
                 </div>
               </AnimateOnScroll>
+
+              {/* Dedicated Name & Subheading Badge Below Founder Image */}
+              <div className="mt-4 p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-md text-center">
+                <h3 className="text-lg md:text-xl font-heading font-bold text-slate-900">
+                  Kubendra Rajan S
+                </h3>
+                <p className="text-xs font-bold uppercase tracking-wider text-primary mt-0.5">
+                  Founder & Director
+                </p>
+                <p className="text-xs font-body text-slate-500 mt-0.5">
+                  Eyenet Educational Academy
+                </p>
+              </div>
 
               {/* Floating Quote Accent Badge */}
               <div className="hidden sm:flex absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-primary text-white items-center justify-center shadow-lg border-2 border-white z-30">

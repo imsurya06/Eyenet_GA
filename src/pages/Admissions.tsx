@@ -586,7 +586,11 @@ const Admissions = () => {
                   </div>
                   <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-700">
                     <Phone className="w-4 h-4 text-primary shrink-0" />
-                    <span>+91 98421 73725 / +91 98421 73726</span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <a href="tel:+919842173725" className="hover:text-primary hover:underline font-semibold text-slate-900">+91 98421 73725</a>
+                      <span className="text-slate-400 font-normal">/</span>
+                      <a href="tel:+918300064651" className="hover:text-primary hover:underline font-semibold text-slate-900">+91 83000 64651</a>
+                    </div>
                   </div>
                   <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-700">
                     <Mail className="w-4 h-4 text-primary shrink-0" />
@@ -619,7 +623,7 @@ const Admissions = () => {
               </div>
 
               <div className="mt-8 pt-4 border-t border-gray-100 text-xs text-gray-500 text-center">
-                Need immediate admission guidance? Call <a href="tel:+919842173725" className="font-bold text-primary hover:underline">+91 98421 73725</a>
+                Need immediate admission guidance? Call <a href="tel:+919842173725" className="font-bold text-primary hover:underline">+91 98421 73725</a> or <a href="tel:+918300064651" className="font-bold text-primary hover:underline">+91 83000 64651</a>
               </div>
 
             </div>

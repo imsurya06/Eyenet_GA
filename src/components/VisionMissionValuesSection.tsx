@@ -1,0 +1,140 @@
+"use client";
+
+import React from 'react';
+import AnimateOnScroll from './AnimateOnScroll';
+import { Eye, Compass, HeartHandshake, Sparkles } from 'lucide-react';
+
+const VisionMissionValuesSection = () => {
+  const valuesList = [
+    "Innovation First.",
+    "Pursuit of Excellence.",
+    "Integrity Always.",
+    "Learners at the Heart.",
+    "Power of Collaboration",
+    "Lifelong Learning",
+  ];
+
+  return (
+    <section className="py-10 md:py-14 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/60 via-white to-slate-50/60 text-foreground relative overflow-hidden">
+      {/* Ambient Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-slate-200/30 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-8 md:mb-10">
+          <AnimateOnScroll delay={100}>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-3">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Our Guiding Principles</span>
+            </div>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={200}>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-normal text-slate-900 tracking-tight">
+              Vision, Mission & <span className="text-primary font-heading italic">Core Values</span>
+            </h2>
+          </AnimateOnScroll>
+        </div>
+
+        {/* 3 Compact Horizontal Cards Side by Side with Unique Color Branding */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+          
+          {/* CARD 1: VISION (RED THEME) */}
+          <AnimateOnScroll delay={300} className="h-full">
+            <div className="group relative h-full bg-gradient-to-b from-rose-50/50 via-white to-white rounded-2xl p-5 sm:p-6 border border-rose-200/90 shadow-sm hover:shadow-lg hover:border-rose-400 transition-all duration-300 flex flex-col justify-start">
+              <div className="flex items-center justify-between gap-3 mb-3.5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-md shadow-rose-500/20 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    <Eye className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-heading font-bold text-slate-900 leading-tight">
+                      Vision
+                    </h3>
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-100/80 px-2 py-0.5 rounded-full border border-rose-200/60">
+                  PILLAR 01
+                </span>
+              </div>
+
+              <div>
+                <p className="text-slate-700 font-body text-xs sm:text-sm leading-relaxed italic">
+                  &ldquo;To empower learners with innovative, industry-relevant education that blends creativity, technology, and practical skills Preparing them to excel in today&apos;s dynamic and competitive world.&rdquo;
+                </p>
+              </div>
+            </div>
+          </AnimateOnScroll>
+
+          {/* CARD 2: MISSION (BLUE THEME) */}
+          <AnimateOnScroll delay={400} className="h-full">
+            <div className="group relative h-full bg-gradient-to-b from-blue-50/50 via-white to-white rounded-2xl p-5 sm:p-6 border border-blue-200/90 shadow-sm hover:shadow-lg hover:border-blue-400 transition-all duration-300 flex flex-col justify-start">
+              <div className="flex items-center justify-between gap-3 mb-3.5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    <Compass className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-heading font-bold text-slate-900 leading-tight">
+                      Mission
+                    </h3>
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-100/80 px-2 py-0.5 rounded-full border border-blue-200/60">
+                  PILLAR 02
+                </span>
+              </div>
+
+              <div>
+                <p className="text-slate-700 font-body text-xs sm:text-sm leading-relaxed italic">
+                  &ldquo;To be a leading center of excellence in creative and technical education, shaping future-ready professionals who drive innovation, embrace change, and make a positive impact globally.&rdquo;
+                </p>
+              </div>
+            </div>
+          </AnimateOnScroll>
+
+          {/* CARD 3: CORE VALUES (GREEN THEME) */}
+          <AnimateOnScroll delay={500} className="h-full">
+            <div className="group relative h-full bg-gradient-to-b from-emerald-50/50 via-white to-white rounded-2xl p-5 sm:p-6 border border-emerald-200/90 shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all duration-300 flex flex-col justify-start">
+              <div className="flex items-center justify-between gap-3 mb-3.5">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                    <HeartHandshake className="w-4.5 h-4.5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-heading font-bold text-slate-900 leading-tight">
+                      Core Values
+                    </h3>
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                  PILLAR 03
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {valuesList.map((val, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2 p-1.5 px-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/60 hover:bg-emerald-100/50 transition-all duration-200"
+                  >
+                    <span className="text-emerald-700 font-bold font-heading text-xs shrink-0">
+                      {idx + 1}.
+                    </span>
+                    <span className="font-heading font-medium text-slate-800 text-xs truncate">
+                      {val}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </AnimateOnScroll>
+
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default VisionMissionValuesSection;
