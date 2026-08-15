@@ -16,40 +16,30 @@ const InfrastructureGridSection = () => {
   );
 
   return (
-    <section id="facilities-section" className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/50 via-white to-background text-foreground text-center">
+    <section id="facilities-section" className="py-4 md:py-8 pb-16 md:pb-24 px-4 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
-        <AnimateOnScroll delay={100}>
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100/80 text-amber-900 border border-amber-200 text-xs font-semibold uppercase tracking-widest mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>Campus Infrastructure</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4 text-slate-900">
-            Our <span className="text-primary font-heading">Facilities</span>
-          </h2>
-        </AnimateOnScroll>
-
-        <AnimateOnScroll delay={200}>
-          <p className="text-base md:text-lg font-body text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-            A glimpse into our modern, hands-on, and inspiring learning environment at Eye-Net Academy.
-          </p>
-        </AnimateOnScroll>
-
         {loading ? (
-          <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Skeleton key={i} className="w-full h-64 rounded-2xl break-inside-avoid" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {[1, 2].map((i) => (
+              <Skeleton key={i} className="w-full h-80 rounded-3xl" />
             ))}
           </div>
         ) : facilityImages.length > 0 ? (
-          /* Masonry Collage Grid - Uncropped & Dynamic */
-          <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 text-left">
+          /* Dynamic Prominent Collage Grid - Larger Size & Uncropped */
+          <div
+            className={
+              facilityImages.length === 1
+                ? "max-w-5xl mx-auto flex justify-center"
+                : "columns-1 md:columns-2 gap-8 lg:gap-10 space-y-8 max-w-6xl mx-auto text-left"
+            }
+          >
             {facilityImages.map((image, index) => (
-              <AnimateOnScroll key={image.id || index} delay={200 + (index % 6) * 100}>
+              <AnimateOnScroll key={image.id || index} delay={150 + (index % 4) * 100}>
                 <div
                   onClick={() => setSelectedImage(image)}
-                  className="break-inside-avoid relative group overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-2xl border border-slate-100 transition-all duration-300 cursor-pointer"
+                  className="break-inside-avoid relative group overflow-hidden rounded-2xl md:rounded-3xl bg-white shadow-lg hover:shadow-2xl border border-slate-100 transition-all duration-300 cursor-pointer w-full"
                 >
-                  {/* Uncropped Full Image */}
+                  {/* High-Resolution Uncropped Image */}
                   <img
                     src={image.src}
                     alt={image.alt || image.title || 'Eye-Net Facility'}
@@ -58,20 +48,20 @@ const InfrastructureGridSection = () => {
                   />
 
                   {/* Hover Overlay with Title & Lightbox Action */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
                     <div className="flex items-center justify-between">
                       <div>
                         {image.category && (
-                          <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary/90 text-white text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                          <span className="inline-block px-3 py-1 rounded-full bg-primary/90 text-white text-xs font-bold uppercase tracking-wider mb-2">
                             {image.category}
                           </span>
                         )}
-                        <h4 className="text-white font-heading font-semibold text-base md:text-lg leading-snug drop-shadow-xs">
+                        <h4 className="text-white font-heading font-bold text-lg md:text-2xl leading-snug drop-shadow-xs">
                           {image.alt || image.title || 'Eye-Net Campus Facility'}
                         </h4>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shrink-0 ml-3 group-hover:bg-primary transition-colors duration-200">
-                        <Maximize2 className="w-4 h-4" />
+                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white shrink-0 ml-4 group-hover:bg-primary transition-colors duration-200">
+                        <Maximize2 className="w-5 h-5" />
                       </div>
                     </div>
                   </div>
@@ -80,8 +70,8 @@ const InfrastructureGridSection = () => {
             ))}
           </div>
         ) : (
-          <div className="py-12 bg-white rounded-3xl border border-slate-100 text-slate-500 font-body text-base">
-            No facilities images to display.
+          <div className="py-8 text-slate-400 font-body text-sm">
+            No additional facility images uploaded yet.
           </div>
         )}
       </div>
