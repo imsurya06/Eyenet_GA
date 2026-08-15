@@ -12,7 +12,7 @@ const InfrastructureGridSection = () => {
   const [selectedImage, setSelectedImage] = useState<InfrastructureImage | null>(null);
 
   const facilityImages = images.filter(
-    (img) => img.category !== 'carousel' && img.category !== 'carousal'
+    (img) => img.category !== 'carousel' && img.category !== 'carousal' && Boolean(img.src)
   );
 
   return (
@@ -25,19 +25,19 @@ const InfrastructureGridSection = () => {
             ))}
           </div>
         ) : facilityImages.length > 0 ? (
-          /* Dynamic Prominent Collage Grid - Larger Size & Uncropped */
+          /* Dynamic Prominent Grid - Larger Size & Uncropped */
           <div
             className={
               facilityImages.length === 1
                 ? "max-w-5xl mx-auto flex justify-center"
-                : "columns-1 md:columns-2 gap-8 lg:gap-10 space-y-8 max-w-6xl mx-auto text-left"
+                : "grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start max-w-6xl mx-auto text-left"
             }
           >
             {facilityImages.map((image, index) => (
-              <AnimateOnScroll key={image.id || index} delay={150 + (index % 4) * 100}>
+              <AnimateOnScroll key={image.id || index} delay={150 + (index % 4) * 100} className="w-full">
                 <div
                   onClick={() => setSelectedImage(image)}
-                  className="break-inside-avoid relative group overflow-hidden rounded-2xl md:rounded-3xl bg-white shadow-lg hover:shadow-2xl border border-slate-100 transition-all duration-300 cursor-pointer w-full"
+                  className="relative group overflow-hidden rounded-2xl md:rounded-3xl bg-white shadow-lg hover:shadow-2xl border border-slate-100 transition-all duration-300 cursor-pointer w-full"
                 >
                   {/* High-Resolution Uncropped Image */}
                   <img
