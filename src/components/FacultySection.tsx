@@ -3,23 +3,20 @@
 import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useFaculty } from '@/context/FacultyContext';
-import { GraduationCap, Award, Sparkles } from 'lucide-react';
+import { GraduationCap, Award } from 'lucide-react';
 
 const FacultySection = () => {
   const { faculty, loading } = useFaculty();
-
-  const twoWeeksInMs = 14 * 24 * 60 * 60 * 1000; // Two weeks in milliseconds
 
   return (
     <section id="faculty-section" className="py-12 md:py-20 px-4 sm:px-8 lg:px-[80px] bg-gradient-to-b from-background via-secondary/20 to-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll delay={100}>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold uppercase tracking-widest mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
             Industry Mentors & Leaders
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-normal mb-4 tracking-tight">
-            Meet Our Esteemed Faculty
+            Meet our esteemed faculty
           </h2>
         </AnimateOnScroll>
         <AnimateOnScroll delay={200}>
@@ -44,9 +41,6 @@ const FacultySection = () => {
         ) : faculty.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
             {faculty.map((member, index) => {
-              const createdAtDate = new Date(member.created_at || member._createdAt);
-              const isNewFaculty = createdAtDate && (new Date().getTime() - createdAtDate.getTime()) < twoWeeksInMs;
-
               return (
                 <AnimateOnScroll key={member.id || member._id || index} delay={250 + index * 100}>
                   <div className="group bg-card rounded-2xl border border-border/60 hover:border-primary/40 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full transform hover:-translate-y-1.5 relative">
@@ -58,14 +52,6 @@ const FacultySection = () => {
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent opacity-95 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                      {/* New Faculty Badge */}
-                      {isNewFaculty && (
-                        <div className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 px-3 py-1 bg-primary text-white text-xs font-body font-semibold tracking-wider uppercase rounded-full shadow-lg border border-white/20 backdrop-blur-md">
-                          <Sparkles className="w-3 h-3 text-yellow-300 fill-yellow-300" />
-                          New Faculty
-                        </div>
-                      )}
 
                       {/* Name & Qualification Overlay at Bottom of Portrait */}
                       <div className="absolute bottom-4 left-4 right-4 z-10 text-left">

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Scissors, Laptop, Building2, Camera, Sparkles, MessageSquare, Send, CheckCircle2, Loader2 } from 'lucide-react';
+import { Scissors, Laptop, Building2, Camera, Wand2, MessageSquare, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { toast } from "sonner";
 
 import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
@@ -47,7 +47,7 @@ const services = [
   },
   {
     id: 'makeup-styling',
-    icon: Sparkles,
+    icon: Wand2,
     title: 'Professional Makeup & Bridal Styling',
     badge: 'Beauty & Grooming',
     description: 'Bridal makeover, HD photoshoot styling, hair design, fashion show makeup, cosmetic consultations, and special event beauty artistry.',
@@ -124,7 +124,6 @@ const OurServices = () => {
           <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
             <AnimateOnScroll isHero={true} delay={100}>
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>Our Professional Services</span>
               </div>
             </AnimateOnScroll>

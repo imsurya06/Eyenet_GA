@@ -14,7 +14,7 @@ const LocationSection = () => {
         <div className="text-center mb-12">
           <AnimateOnScroll delay={100}>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground tracking-tight">
-              Our <span className="text-primary font-heading italic">Location</span>
+              Our <span className="text-primary font-heading italic">location</span>
             </h2>
           </AnimateOnScroll>
         </div>

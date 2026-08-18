@@ -438,7 +438,7 @@ const Admissions = () => {
                   </span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-3 text-foreground">
-                  Enroll <span className="text-primary font-heading italic">Now</span>
+                  Enroll <span className="text-primary font-heading italic">now</span>
                 </h2>
                 <p className="text-sm font-body text-gray-600 mb-8">
                   Let's start your professional design journey today.
@@ -571,7 +571,7 @@ const Admissions = () => {
                   CAMPUS & CONTACT
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-3 text-foreground">
-                  Find Us <span className="text-primary font-heading italic">Here</span>
+                  Find us <span className="text-primary font-heading italic">here</span>
                 </h2>
                 <p className="text-sm font-body text-gray-600 mb-8">
                   Visit our Madurai campus or connect with our admission counselors.

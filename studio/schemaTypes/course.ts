@@ -90,5 +90,26 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'gallery',
+      title: 'Course Showcase Gallery Images',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              title: 'Alt Text / Caption',
+              type: 'string',
+            },
+          ],
+        },
+      ],
+      description: 'Upload gallery images for this course to display in the animated infinite ticker carousel on the course details page.',
+    }),
   ],
 })

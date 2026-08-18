@@ -60,11 +60,8 @@ const Contact = () => {
         {/* Page Header */}
         <div className="text-center mb-12">
           <AnimateOnScroll isHero={true} delay={100}>
-            <span className="inline-block uppercase tracking-widest text-xs font-semibold text-gray-500 mb-3">
-              CONNECT WITH US
-            </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold mb-4 text-foreground">
-              Contact <span className="text-primary font-heading">Us</span>
+              Connect with <span className="text-primary font-heading italic">us</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>

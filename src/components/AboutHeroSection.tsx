@@ -17,12 +17,12 @@ const AboutHeroSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal leading-tight text-slate-900 tracking-tight mb-3">
-              Eyenet: A creative <span className="text-primary font-heading italic">educational academy</span>
+              Eyenet: A creative <span className="text-primary font-heading italic">Educational Academy</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={300}>
-            <p className="text-base md:text-lg font-body text-slate-600">
-              Where creativity creates career.
+            <p className="text-lg sm:text-xl md:text-2xl font-heading font-normal text-slate-700 tracking-wide mt-3 max-w-2xl mx-auto leading-relaxed">
+              Where creativity creates <span className="text-primary font-heading italic font-semibold border-b-2 border-primary/30 pb-0.5">career.</span>
             </p>
           </AnimateOnScroll>
         </div>
@@ -55,12 +55,12 @@ const AboutHeroSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={700}>
             <p className="text-base font-body text-slate-600 leading-relaxed mb-5">
-              For over 25 years, Eyenet Institute has been a beacon for creative minds, providing unparalleled training in fashion design, graphic design, and mastery of modern tools like Photoshop and Illustrator. Our commitment is to bridge creativity with industry expertise, transforming passion into a professional career.
+              Eye-net Educational Academy is a leading vocational training institute in Madurai with 25+ years of excellence in skill-based education. Established in 2000, we provide industry-focused training in Fashion Designing, Web Developement with AI, Beautician Training, Computer Applications, CAD, Graphic Design, UI/UX, Digital Marketing, Generative AI, and more.
             </p>
           </AnimateOnScroll>
           <AnimateOnScroll delay={800}>
             <p className="text-base font-body text-slate-600 leading-relaxed">
-              Guided by our Founder and Director's vision, we shape students into confident and skilled professionals through hands-on training, industry-relevant courses, and practical projects that mirror real-world design challenges. Our teaching approach integrates creativity, technology, and professional discipline, ensuring every student develops the confidence to excel in today's fast-paced and highly competitive design world.
+              Our mission is to transform passion into professional skills through practical training, industry exposure, expert guidance, and career-oriented education. With a strong commitment to quality and innovation, Eye-net continues to empower students, entrepreneurs, and aspiring professionals to learn, create, and build successful careers.
             </p>
           </AnimateOnScroll>
         </div>

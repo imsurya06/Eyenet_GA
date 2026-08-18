@@ -13,6 +13,7 @@ export interface Course {
   learningOutcomes: string[];
   careerProspects: string[];
   modules: { title: string; description: string; }[];
+  gallery?: string[];
 }
 
 // The initialCourses array has been removed.

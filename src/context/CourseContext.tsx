@@ -38,6 +38,23 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           return '';
         };
 
+        const getGalleryUrls = (doc: any): string[] => {
+          if (!doc || !Array.isArray(doc.gallery)) return [];
+          return doc.gallery
+            .map((item: any) => {
+              if (typeof item === 'string' && item) return item;
+              if (item && typeof item === 'object' && item.asset) {
+                try {
+                  return urlFor(item).url();
+                } catch {
+                  return '';
+                }
+              }
+              return '';
+            })
+            .filter(Boolean);
+        };
+
         const mappedCourses: Course[] = data.map((doc: any) => {
           let tag = doc.tag;
           if (doc.title && doc.title.toLowerCase().startsWith('diploma')) {
@@ -47,6 +64,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             ...doc,
             id: doc._id,
             image: getImageUrl(doc),
+            gallery: getGalleryUrls(doc),
             tag: tag,
           };
         });

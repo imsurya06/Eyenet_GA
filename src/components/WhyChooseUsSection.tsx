@@ -46,7 +46,6 @@ const WhyChooseUsSection = () => {
         {/* Header Badge */}
         <AnimateOnScroll delay={100}>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
             <span>Why Choose Us</span>
           </div>
         </AnimateOnScroll>

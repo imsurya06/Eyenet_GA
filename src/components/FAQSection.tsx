@@ -53,7 +53,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ id }) => {
       <div className="max-w-4xl mx-auto text-center mb-10 md:mb-12">
         <AnimateOnScroll delay={100}>
           <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
-            Frequently Asked <span className="text-primary font-heading">Questions</span>
+            Frequently asked <span className="text-primary font-heading">questions</span>
           </h2>
         </AnimateOnScroll>
         <AnimateOnScroll delay={200}>

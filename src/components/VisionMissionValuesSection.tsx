@@ -20,7 +20,7 @@ const VisionMissionValuesSection = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-slate-200/30 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-8 md:mb-10">
           <AnimateOnScroll delay={100}>
@@ -31,14 +31,14 @@ const VisionMissionValuesSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={200}>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-normal text-slate-900 tracking-tight">
-              Vision, Mission & <span className="text-primary font-heading italic">Core Values</span>
+              Vision, mission & <span className="text-primary font-heading italic">core values</span>
             </h2>
           </AnimateOnScroll>
         </div>
 
         {/* 3 Compact Horizontal Cards Side by Side with Unique Color Branding */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
-          
+
           {/* CARD 1: VISION (RED THEME) */}
           <AnimateOnScroll delay={300} className="h-full">
             <div className="group relative h-full bg-gradient-to-b from-rose-50/50 via-white to-white rounded-2xl p-5 sm:p-6 border border-rose-200/90 shadow-sm hover:shadow-lg hover:border-rose-400 transition-all duration-300 flex flex-col justify-start">
@@ -116,12 +116,12 @@ const VisionMissionValuesSection = () => {
                 {valuesList.map((val, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center gap-2 p-1.5 px-2.5 rounded-xl bg-emerald-50/60 border border-emerald-200/60 hover:bg-emerald-100/50 transition-all duration-200"
+                    className="flex items-center gap-2 p-2 px-3 rounded-xl bg-emerald-50/60 border border-emerald-200/60 hover:bg-emerald-100/50 transition-all duration-200"
                   >
-                    <span className="text-emerald-700 font-bold font-heading text-xs shrink-0">
+                    <span className="text-emerald-700 font-bold font-body text-xs sm:text-sm shrink-0">
                       {idx + 1}.
                     </span>
-                    <span className="font-heading font-medium text-slate-800 text-xs truncate">
+                    <span className="font-body font-normal text-slate-800 text-xs sm:text-sm italic truncate">
                       {val}
                     </span>
                   </div>
