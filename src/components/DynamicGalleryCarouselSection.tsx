@@ -10,9 +10,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 interface DynamicGalleryCarouselSectionProps {
   withButton?: boolean;
+  hideHeading?: boolean;
 }
 
-const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps> = ({ withButton = false }) => {
+const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps> = ({ 
+  withButton = false,
+  hideHeading = false
+}) => {
   const { images: galleryImages = [], loading } = useGalleryImages();
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -134,7 +138,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
   );
 
   return (
-    <section className="py-12 md:py-16 bg-background text-foreground overflow-hidden">
+    <section className={`bg-background text-foreground overflow-hidden ${hideHeading ? 'py-4 md:py-6' : 'py-12 md:py-16'}`}>
       <style>{`
         @keyframes verticalCreativeWorksMarquee {
           0% { transform: translate3d(0, 0, 0); }
@@ -148,22 +152,24 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
           animation-play-state: paused !important;
         }
       `}</style>
-      <div className="px-4 md:px-8 lg:px-[80px] mb-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <AnimateOnScroll delay={100}>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-3">
-                Our <span className="text-primary font-heading italic">creative works</span>
-              </h2>
-            </AnimateOnScroll>
-            <AnimateOnScroll delay={200}>
-              <p className="text-base font-body text-gray-600 max-w-md">
-                A collection of projects, events, and campus highlights.
-              </p>
-            </AnimateOnScroll>
+      {!hideHeading && (
+        <div className="px-4 md:px-8 lg:px-[80px] mb-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+              <AnimateOnScroll delay={100}>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-3">
+                  Our <span className="text-primary font-heading italic">creative works</span>
+                </h2>
+              </AnimateOnScroll>
+              <AnimateOnScroll delay={200}>
+                <p className="text-base font-body text-gray-600 max-w-md">
+                  A collection of projects, events, and campus highlights.
+                </p>
+              </AnimateOnScroll>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {loading ? (
         <div className="px-4 md:px-8 lg:px-[80px]">

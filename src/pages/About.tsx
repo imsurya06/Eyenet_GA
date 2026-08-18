@@ -16,7 +16,6 @@ const About = () => {
       <WhyChooseUsSection />
       <FounderDirectorSection />
       <VisionMissionValuesSection />
-      <DynamicGalleryCarouselSection withButton={true} />
       <TestimonialsSection />
       <LocationSection />
     </>
