@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { Check, X, Sparkles } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface SubmissionSuccessModalProps {
@@ -60,7 +60,7 @@ const SubmissionSuccessModal: React.FC<SubmissionSuccessModalProps> = ({
 
         {/* Tag Pill */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200/60 text-xs font-semibold uppercase tracking-wider mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+          <Check className="w-3.5 h-3.5 text-amber-600" />
           <span>Submission Confirmed</span>
         </div>
 

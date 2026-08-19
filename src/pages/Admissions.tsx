@@ -38,7 +38,6 @@ import {
   ChevronRight,
   Phone,
   Mail,
-  Sparkles,
   Image as ImageIcon,
   Loader2
 } from 'lucide-react';

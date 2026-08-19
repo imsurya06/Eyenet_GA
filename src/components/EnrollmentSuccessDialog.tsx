@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, Sparkles, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -35,7 +35,7 @@ const EnrollmentSuccessDialog: React.FC<EnrollmentSuccessDialogProps> = ({ show,
         </div>
 
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-bold uppercase tracking-wider shadow-xs">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
           <span>Application Submitted</span>
         </div>
 

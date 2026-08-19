@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Award, Quote, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Award, Quote, CheckCircle2 } from 'lucide-react';
 
 const FounderDirectorSection = () => {
   return (
