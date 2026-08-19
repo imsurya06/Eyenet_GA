@@ -184,7 +184,11 @@ const Footer = () => {
 
         {/* Bottom Copyright Bar */}
         <div className="py-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs font-body text-slate-500 gap-4">
-          <p>© {currentYear} Eyenet Educational Academy. All rights reserved.</p>
+          <p className="flex items-center gap-2 flex-wrap">
+            <span>© {currentYear} Eyenet Educational Academy. All rights reserved.</span>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <span className="text-slate-400 font-medium">Powered by Eyenet</span>
+          </p>
           
           <div className="flex flex-wrap items-center justify-center gap-6">
             <Button
