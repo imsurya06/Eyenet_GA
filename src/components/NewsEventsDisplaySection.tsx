@@ -1,112 +1,348 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNewsEvents } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
-import { CalendarDays, Newspaper, ArrowRight } from 'lucide-react';
+import { CalendarDays, Play, Youtube, ArrowUpRight, Filter, Video, Radio } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const CATEGORIES = ['All', 'Fashion Walks', 'Seminar & Workshop', 'Others'] as const;
+type CategoryFilter = (typeof CATEGORIES)[number];
 
 const NewsEventsDisplaySection = () => {
-  const { newsEvents } = useNewsEvents();
+  const { newsEvents, loading } = useNewsEvents();
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('All');
+  const [activePlayingVideoId, setActivePlayingVideoId] = useState<string | null>(null);
 
-  // Sort news events by date, newest first
-  const sortedNewsEvents = [...newsEvents].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  // Filter and sort events strictly by Event Date desc (newest event date first)
+  const filteredEvents = useMemo(() => {
+    let list = [...newsEvents];
+    if (selectedCategory !== 'All') {
+      list = list.filter(event => 
+        event.category?.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+    return list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [newsEvents, selectedCategory]);
 
-  const featuredEvent = sortedNewsEvents[0];
-  const recentEvents = sortedNewsEvents.slice(1);
+  // Featured Hero Event: Explicitly pinned item (isFeatured), otherwise event with the newest date
+  const featuredEvent = useMemo(() => {
+    if (filteredEvents.length === 0) return null;
+    const explicitFeatured = filteredEvents.find(e => e.isFeatured);
+    if (explicitFeatured) return explicitFeatured;
+    return filteredEvents[0];
+  }, [filteredEvents]);
+
+  // Remaining Items for Grid Below (sorted descending by event date)
+  const remainingEvents = useMemo(() => {
+    if (!featuredEvent) return [];
+    return filteredEvents.filter(e => e.id !== featuredEvent.id);
+  }, [filteredEvents, featuredEvent]);
 
   return (
-    <section className="py-8 md:py-12 lg:py-16 px-4 lg:px-[80px] bg-background text-foreground">
+    <section className="py-10 sm:py-14 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/70 via-white to-background text-foreground">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-200 pb-6">
-          <AnimateOnScroll delay={100}>
-            <h1 className="text-h1-mobile md:text-h1-desktop font-heading text-foreground">
-              News & Events
-            </h1>
-          </AnimateOnScroll>
-          <AnimateOnScroll delay={200}>
-            <p className="text-text-medium font-body text-gray-600 max-w-xl text-right">
-              Highlights from our campus, student achievements, and upcoming workshops.
-            </p>
-          </AnimateOnScroll>
+        
+        {/* HEADER ROW & MINIMAL CATEGORY FILTER */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-12 pb-6 border-b border-slate-200/80 gap-6">
+          
+          {/* Title & Description */}
+          <div className="flex flex-col items-start text-left max-w-xl">
+            <AnimateOnScroll isHero={true} delay={100}>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-normal text-slate-900 tracking-tight mb-2">
+                News & <span className="text-primary font-heading italic">Events</span>
+              </h1>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll isHero={true} delay={200}>
+              <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed">
+                Highlights from our annual fashion runways, seminars, interactive workshops, and campus showcases.
+              </p>
+            </AnimateOnScroll>
+          </div>
+
+          {/* Top Right: Minimal YouTube Link & Category Pills */}
+          <div className="flex flex-col items-start md:items-end gap-3.5 w-full md:w-auto">
+            
+            {/* Minimal YouTube Channel Link */}
+            <AnimateOnScroll isHero={true} delay={200}>
+              <a
+                href="https://www.youtube.com/@Eye-Net-Fashion"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary transition-colors py-1 group"
+              >
+                <Youtube className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                <span>YouTube Channel</span>
+                <ArrowUpRight className="w-3.5 h-3.5 opacity-70 group-hover:opacity-100" />
+              </a>
+            </AnimateOnScroll>
+
+            {/* Category Filter Pills */}
+            <AnimateOnScroll isHero={true} delay={300} className="w-full">
+              <div className="flex flex-wrap items-center gap-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 w-full sm:w-auto">
+                <div className="hidden sm:flex items-center gap-1 text-slate-400 px-2 text-xs font-semibold uppercase tracking-wider">
+                  <Filter className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Category:</span>
+                </div>
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                      selectedCategory === cat
+                        ? 'bg-primary text-white shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </AnimateOnScroll>
+
+          </div>
+
         </div>
 
-        {sortedNewsEvents.length > 0 ? (
-          <div className="space-y-16">
-            {/* Featured Article Section */}
+        {/* LOADING STATE */}
+        {loading ? (
+          <div className="py-20 text-center flex flex-col items-center justify-center gap-3">
+            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-slate-500 font-body text-sm">Loading activities...</p>
+          </div>
+        ) : filteredEvents.length > 0 ? (
+
+          <div className="space-y-12">
+            
+            {/* 1. TOP HERO FEATURED EVENT (LATEST EVENT DATE OR FEATURED ACTIVITY) */}
             {featuredEvent && (
-              <AnimateOnScroll delay={300} className="group">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                  <div className="lg:col-span-8 overflow-hidden rounded-xl shadow-lg h-[400px] lg:h-[500px]">
-                    {featuredEvent.image && (
-                      <img
-                        src={featuredEvent.image}
-                        alt={featuredEvent.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    )}
-                  </div>
-                  <div className="lg:col-span-4 flex flex-col justify-center h-full space-y-4">
-                    <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-primary">
-                      {featuredEvent.category === 'news' ? <Newspaper className="w-4 h-4" /> : <CalendarDays className="w-4 h-4" />}
-                      <span>{featuredEvent.category}</span>
-                      <span className="text-gray-300">|</span>
-                      <span className="text-gray-500">{new Date(featuredEvent.date).toLocaleDateString()}</span>
+              <AnimateOnScroll delay={300} className="w-full">
+                <div className="bg-white rounded-3xl border border-slate-200/80 p-4 sm:p-6 md:p-8 overflow-hidden group">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+                    
+                    {/* Media Frame (Left 7 Cols) */}
+                    <div className="lg:col-span-7 relative aspect-video w-full rounded-2xl bg-slate-950 overflow-hidden">
+                      {activePlayingVideoId === featuredEvent.id && featuredEvent.youtubeVideoId ? (
+                        <iframe
+                          src={`https://www.youtube.com/embed/${featuredEvent.youtubeVideoId}?autoplay=1`}
+                          title={featuredEvent.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="w-full h-full border-0"
+                        />
+                      ) : (
+                        <div
+                          onClick={() => featuredEvent.youtubeVideoId && setActivePlayingVideoId(featuredEvent.id)}
+                          className="relative w-full h-full cursor-pointer group/media"
+                        >
+                          <img
+                            src={featuredEvent.image}
+                            alt={featuredEvent.title}
+                            className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-700 ease-out"
+                          />
+                          
+                          {/* Gradient Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+
+                          {/* Top Left Badge */}
+                          <div className="absolute top-4 left-4 z-10">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold uppercase tracking-wider shadow-xs">
+                              <Radio className="w-3 h-3 animate-pulse" />
+                              <span>Latest Activity</span>
+                            </span>
+                          </div>
+
+                          {/* Play Button Overlay */}
+                          {featuredEvent.youtubeVideoId && (
+                            <div className="absolute inset-0 flex items-center justify-center z-10">
+                              <div className="w-16 h-16 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-md group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
+                                <Play className="w-7 h-7 fill-white ml-1" />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Date Pill Bottom Left */}
+                          <div className="absolute bottom-4 left-4 z-10 flex items-center gap-1.5 text-xs text-white/90 font-medium bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10">
+                            <CalendarDays className="w-3.5 h-3.5 text-primary-foreground/90" />
+                            <span>{new Date(featuredEvent.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <h2 className="text-h2-mobile md:text-h3-desktop font-heading leading-tight group-hover:text-primary transition-colors">
-                      {featuredEvent.title}
-                    </h2>
-                    <p className="text-text-regular font-body text-gray-600 line-clamp-4">
-                      {featuredEvent.description}
-                    </p>
-                    {/* Placeholder for Read More if needed */}
-                    {/* <button className="flex items-center text-primary font-semibold hover:gap-2 transition-all">Read Story <ArrowRight className="ml-2 w-4 h-4" /></button> */}
+
+                    {/* Content Details (Right 5 Cols) */}
+                    <div className="lg:col-span-5 flex flex-col justify-between text-left h-full py-2">
+                      <div>
+                        {/* Category Label */}
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                            {featuredEvent.category}
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          <span className="text-xs font-semibold text-slate-500">
+                            {new Date(featuredEvent.date).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h2 className="text-2xl sm:text-3xl font-heading font-normal text-slate-900 leading-snug mb-4 group-hover:text-primary transition-colors">
+                          {featuredEvent.title}
+                        </h2>
+
+                        {/* Description */}
+                        <p className="text-sm font-body text-slate-600 leading-relaxed mb-6">
+                          {featuredEvent.description}
+                        </p>
+                      </div>
+
+                      {/* Action Links */}
+                      <div className="pt-4 border-t border-slate-100 flex items-center gap-4">
+                        {featuredEvent.youtubeUrl && (
+                          <a
+                            href={featuredEvent.youtubeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
+                          >
+                            <Youtube className="w-4 h-4 text-primary" />
+                            <span>Watch on YouTube</span>
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+
+                        {featuredEvent.youtubeVideoId && activePlayingVideoId !== featuredEvent.id && (
+                          <button
+                            onClick={() => setActivePlayingVideoId(featuredEvent.id)}
+                            className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                          >
+                            <span>Play in page</span>
+                          </button>
+                        )}
+                      </div>
+
+                    </div>
+
                   </div>
                 </div>
               </AnimateOnScroll>
             )}
 
-            {/* Recent News Grid */}
-            {recentEvents.length > 0 && (
-              <div>
-                <h3 className="text-h4-mobile md:text-h4-desktop font-heading mb-8 border-l-4 border-primary pl-4">Recent Updates</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-                  {recentEvents.map((item, index) => (
-                    <AnimateOnScroll key={item.id} delay={100 + index * 50} className="flex flex-col group cursor-pointer transition-all duration-300 hover:-translate-y-1">
-                      <div className="mb-4 overflow-hidden rounded-lg aspect-[3/2] shadow-sm group-hover:shadow-md transition-all duration-300">
-                        {item.image && (
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            {/* 2. UNIFIED REMAINING ACTIVITIES GRID (Fills all 3 columns continuously) */}
+            {remainingEvents.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {remainingEvents.map((item, itemIdx) => {
+                  const isVideoPlaying = activePlayingVideoId === item.id;
+
+                  return (
+                    <AnimateOnScroll
+                      key={item.id}
+                      delay={100 + itemIdx * 60}
+                      className="flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 text-left"
+                    >
+                      {/* Media Poster Frame */}
+                      <div className="relative aspect-video w-full bg-slate-950 overflow-hidden">
+                        {isVideoPlaying && item.youtubeVideoId ? (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${item.youtubeVideoId}?autoplay=1`}
+                            title={item.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full border-0"
                           />
+                        ) : (
+                          <div
+                            onClick={() => item.youtubeVideoId && setActivePlayingVideoId(item.id)}
+                            className="relative w-full h-full cursor-pointer group/media"
+                          >
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-700 ease-out"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+
+                            {/* Category Badge Top Left */}
+                            <div className="absolute top-3 left-3 z-10">
+                              <span className="inline-block px-3 py-1 rounded-full bg-slate-900/90 text-white text-[11px] font-semibold border border-slate-700">
+                                {item.category}
+                              </span>
+                            </div>
+
+                            {/* Play Icon */}
+                            {item.youtubeVideoId && (
+                              <div className="absolute inset-0 flex items-center justify-center z-10">
+                                <div className="w-12 h-12 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300">
+                                  <Play className="w-5 h-5 fill-white ml-0.5" />
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Date Badge Bottom Left */}
+                            <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 text-xs text-white/90 font-medium">
+                              <CalendarDays className="w-3.5 h-3.5 text-primary-foreground" />
+                              <span>{new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                            </div>
+                          </div>
                         )}
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-medium uppercase text-gray-500">
-                          <span className={item.category === 'event' ? 'text-orange-600' : 'text-blue-600'}>{item.category}</span>
-                          <span>•</span>
-                          <span>{new Date(item.date).toLocaleDateString()}</span>
+
+                      {/* Card Content */}
+                      <div className="p-6 flex flex-col justify-between flex-1">
+                        <div>
+                          <h4 className="text-lg font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
+                            {item.title}
+                          </h4>
+                          <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
+                            {item.description}
+                          </p>
                         </div>
-                        <h4 className="text-h5-mobile md:text-h6-desktop font-heading leading-tight group-hover:text-primary transition-colors">
-                          {item.title}
-                        </h4>
-                        <p className="text-sm font-body text-gray-600 line-clamp-3">
-                          {item.description}
-                        </p>
+
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                          {item.youtubeUrl ? (
+                            <a
+                              href={item.youtubeUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs font-bold text-slate-800 hover:text-primary transition-colors"
+                            >
+                              <span>Watch Video</span>
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                            </a>
+                          ) : (
+                            <span className="text-xs font-medium text-slate-400">Activity Showcase</span>
+                          )}
+                        </div>
                       </div>
+
                     </AnimateOnScroll>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
             )}
+
           </div>
+
         ) : (
-          <AnimateOnScroll delay={300}>
-            <p className="text-text-medium font-body text-gray-600 text-center py-20">
-              No news or events to display at the moment.
-            </p>
+          /* NO EVENTS FOUND FOR FILTER */
+          <AnimateOnScroll delay={200}>
+            <div className="py-20 text-center bg-white rounded-3xl border border-slate-200/80 p-8 max-w-lg mx-auto shadow-xs">
+              <Video className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+              <h3 className="text-lg font-heading text-slate-900 mb-2">No items found for "{selectedCategory}"</h3>
+              <p className="text-sm font-body text-slate-500 mb-6">
+                Try selecting "All" or a different category to view our activities.
+              </p>
+              <Button
+                onClick={() => setSelectedCategory('All')}
+                variant="outline"
+                className="rounded-full border-slate-300 text-slate-700"
+              >
+                Show All Activities
+              </Button>
+            </div>
           </AnimateOnScroll>
         )}
+
       </div>
     </section>
   );

@@ -23,7 +23,7 @@ const socialAndContactIcons = [
   { icon: Facebook, href: 'https://www.facebook.com/kubendrarajan1402/', name: 'Facebook' },
   { icon: Instagram, href: 'https://www.instagram.com/eye_net_fashion/', name: 'Instagram' },
   { icon: WhatsAppIcon, href: 'https://wa.me/919842173725', name: 'WhatsApp' },
-  { icon: Youtube, href: 'https://www.youtube.com/@EyenetEducationalAcademy', name: 'YouTube' },
+  { icon: Youtube, href: 'https://www.youtube.com/@Eye-Net-Fashion', name: 'YouTube' },
 ];
 
 const SecondaryNavbar = () => {

@@ -31,7 +31,7 @@ const navItems = [
       { name: 'Visual Media Training', description: 'Comprehensive training in video editing, animation, and digital content creation.', to: '/courses?category=multimedia', icon: LucideIcons.MonitorPlay },
       { name: 'Photography', description: 'Master the art of photography, from basic techniques to advanced studio setups.', to: '/courses?category=photography', icon: LucideIcons.Camera },
       { name: 'Spoken English', description: 'Improve your communication skills with our interactive spoken English courses.', to: '/courses?category=spoken-english', icon: LucideIcons.MessageSquareText },
-      { name: 'Beautician Course', description: 'Learn professional beauty techniques, makeup artistry, and salon management.', to: '/courses?category=beautician', icon: LucideIcons.Scissors },
+      { name: 'Beautician Course', description: 'Learn professional beauty techniques, makeup artistry, and salon management.', to: '/courses?category=beautician', icon: LucideIcons.Sparkles },
     ],
     footer: {
       text: 'Start your design journey',
@@ -96,7 +96,7 @@ const Navbar = () => {
       <div className="flex h-auto items-center justify-between px-4 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-12 md:h-[60px] lg:h-[72px] w-auto object-contain" /> {/* Adjusted logo size */}
+          <img src="/design-system/eyenet png.png" alt="Eye-Net Logo" className="h-12 md:h-[60px] lg:h-[72px] w-auto object-contain" /> {/* Adjusted logo size */}
         </Link>
 
         {/* Desktop Navigation */}
@@ -199,7 +199,7 @@ const Navbar = () => {
             {/* Logo inside the SheetContent */}
             <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white">
               <Link to="/" onClick={() => setIsSheetOpen(false)} className="flex justify-center">
-                <img src="/design-system/eyenet png.png" alt="Eyenet Logo" className="h-[60px] w-auto object-contain" /> {/* Adjusted logo size for mobile sheet */}
+                <img src="/design-system/eyenet png.png" alt="Eye-Net Logo" className="h-[60px] w-auto object-contain" /> {/* Adjusted logo size for mobile sheet */}
               </Link>
             </div>
             <nav className="flex flex-col gap-4 pt-6">

@@ -2,11 +2,12 @@ export interface NewsEvent {
   id: string;
   title: string;
   description: string;
-  date: string; // Stored as a string (e.g., "YYYY-MM-DD")
-  category: 'news' | 'event';
-  image?: string; // Optional image URL
+  date: string; // Stored as YYYY-MM-DD
+  category: 'Fashion Walks' | 'Seminar & Workshop' | 'Others' | string;
+  youtubeUrl?: string;
+  youtubeVideoId?: string;
+  isFeatured?: boolean;
+  image?: string;
 }
 
-// The initialNewsEvents array has been removed.
-// News and events will now be fetched exclusively from the Supabase database.
 export const initialNewsEvents: NewsEvent[] = [];

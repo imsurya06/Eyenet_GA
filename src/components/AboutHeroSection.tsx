@@ -13,12 +13,12 @@ const AboutHeroSection = () => {
         <div className="text-center max-w-3xl mx-auto mb-8 md:mb-12">
           <AnimateOnScroll isHero={true} delay={100}>
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
-              <span>About Eyenet</span>
+              <span>About Eye-Net</span>
             </div>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal leading-tight text-slate-900 tracking-tight mb-3">
-              Eyenet: A creative <span className="text-primary font-heading italic">Educational Academy</span>
+              Eye-Net: A creative <span className="text-primary font-heading italic">Educational Academy</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={300}>
@@ -42,12 +42,12 @@ const AboutHeroSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={700}>
             <p className="text-base font-body text-slate-600 leading-relaxed text-justify mb-5">
-              Eye-net Educational Academy is a leading vocational training institute in Madurai with 25+ years of excellence in skill-based education. Established in 2000, we provide industry-focused training in Fashion Designing, Web Developement with AI, Beautician Training, Computer Applications, CAD, Graphic Design, UI/UX, Digital Marketing, Generative AI, and more.
+              Eye-Net Educational Academy, a franchise of <strong className="font-semibold text-slate-900">NCFT Heights</strong>, a leading vocational training institute in Madurai with 25+ years of excellence in skill-based education. Established in 2000, we provide industry-focused training in <strong className="font-semibold text-slate-900">Fashion Designing</strong>, <strong className="font-semibold text-slate-900">Web Developement with AI</strong>, <strong className="font-semibold text-slate-900">Beautician Training</strong>, <strong className="font-semibold text-slate-900">Computer Applications</strong>, <strong className="font-semibold text-slate-900">CAD</strong>, <strong className="font-semibold text-slate-900">Graphic Design</strong>, <strong className="font-semibold text-slate-900">UI/UX</strong>, <strong className="font-semibold text-slate-900">Digital Marketing</strong>, <strong className="font-semibold text-slate-900">Generative AI</strong>, and more.
             </p>
           </AnimateOnScroll>
           <AnimateOnScroll delay={800}>
             <p className="text-base font-body text-slate-600 leading-relaxed text-justify">
-              Our mission is to transform passion into professional skills through practical training, industry exposure, expert guidance, and career-oriented education. With a strong commitment to quality and innovation, Eye-net continues to empower students, entrepreneurs, and aspiring professionals to learn, create, and build successful careers.
+              With more than two decades of experience in vocational education, Eye-Net Educational Academy has established itself as a trusted and distinctive institution for students and aspiring professionals seeking job-oriented and business-oriented courses. Over the years, the Academy has continuously grown in reputation, quality, and professional excellence.
             </p>
           </AnimateOnScroll>
         </div>

@@ -7,7 +7,7 @@ import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle, Clock, User, Briefcase, Download, Frown, ArrowLeft, GraduationCap, LayoutList, BookOpen, ArrowRight } from 'lucide-react';
+import { CheckCircle, Clock, User, Briefcase, Download, Frown, X, ArrowLeft, GraduationCap, LayoutList, BookOpen, ArrowRight } from 'lucide-react';
 import NCFTLogo from '@/components/NCFTLogo';
 import CallToActionSection from '@/components/CallToActionSection';
 
@@ -354,7 +354,7 @@ const CourseDetailsPage = () => {
               className="absolute -top-12 right-0 md:top-2 md:-right-12 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
               aria-label="Close modal"
             >
-              <Frown className="w-6 h-6 rotate-45" />
+              <X className="w-6 h-6" />
             </button>
             <img
               src={selectedLightboxImage}

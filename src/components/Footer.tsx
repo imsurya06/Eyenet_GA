@@ -47,7 +47,7 @@ const Footer = () => {
     { icon: Facebook, href: 'https://www.facebook.com/kubendrarajan1402/', name: 'Facebook' },
     { icon: Instagram, href: 'https://www.instagram.com/eye_net_fashion/', name: 'Instagram' },
     { icon: WhatsAppIcon, href: 'https://wa.me/919842173725', name: 'WhatsApp' },
-    { icon: Youtube, href: 'https://www.youtube.com/@EyenetEducationalAcademy', name: 'YouTube' },
+    { icon: Youtube, href: 'https://www.youtube.com/@Eye-Net-Fashion', name: 'YouTube' },
   ];
 
   // State for dialogs
@@ -71,7 +71,7 @@ const Footer = () => {
           <div className="lg:col-span-4 flex flex-col items-start text-left">
             <Link to="/" className="mb-6 block group">
               <div className="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 shadow-md group-hover:scale-105 transition-transform duration-300 inline-block">
-                <img src="/design-system/eyenet png.png" alt="Eyenet Educational Academy" className="h-12 w-auto object-contain" />
+                <img src="/design-system/eyenet png.png" alt="Eye-Net Educational Academy" className="h-12 w-auto object-contain" />
               </div>
             </Link>
             
@@ -185,9 +185,9 @@ const Footer = () => {
         {/* Bottom Copyright Bar */}
         <div className="py-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs font-body text-slate-500 gap-4">
           <p className="flex items-center gap-2 flex-wrap">
-            <span>© {currentYear} Eyenet Educational Academy. All rights reserved.</span>
+            <span>© {currentYear} Eye-Net Educational Academy. All rights reserved.</span>
             <span className="hidden sm:inline text-slate-700">•</span>
-            <span className="text-slate-400 font-medium">Powered by Eyenet</span>
+            <span className="text-slate-400 font-medium">Powered by Eye-Net</span>
           </p>
           
           <div className="flex flex-wrap items-center justify-center gap-6">

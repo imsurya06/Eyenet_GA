@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Award, ThumbsUp, Star } from 'lucide-react';
+import { Award, ThumbsUp, Star, Sparkles } from 'lucide-react';
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,

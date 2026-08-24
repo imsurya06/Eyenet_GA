@@ -47,7 +47,7 @@ const TermsAndConditionsDialog: React.FC<TermsAndConditionsDialogProps> = ({ ope
                 <strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a party, where "control" means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.
               </li>
               <li>
-                <strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Eyenet Educational Academy.
+                <strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Eye-Net Educational Academy.
               </li>
               <li>
                 <strong>Country</strong> refers to: Tamil Nadu, India
@@ -65,7 +65,7 @@ const TermsAndConditionsDialog: React.FC<TermsAndConditionsDialogProps> = ({ ope
                 <strong>Third-party Social Media Service</strong> means any services or content (including data, information, products or services) provided by a third-party that may be displayed, included or made available by the Service.
               </li>
               <li>
-                <strong>Website</strong> refers to Eyenet Educational Academy, accessible from https://www.eyenet.com (placeholder URL).
+                <strong>Website</strong> refers to Eye-Net Educational Academy, accessible from https://www.eyenet.com (placeholder URL).
               </li>
               <li>
                 <strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.

@@ -148,7 +148,7 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
                 Write Your Blog
               </DialogTitle>
               <DialogDescription className="text-text-regular font-body text-gray-600">
-                Share your thoughts, experiences, and creative insights with the Eyenet community!
+                Share your thoughts, experiences, and creative insights with the Eye-Net community!
               </DialogDescription>
             </DialogHeader>
         <Form {...form}>

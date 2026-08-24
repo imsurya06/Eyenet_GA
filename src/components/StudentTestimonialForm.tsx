@@ -88,7 +88,7 @@ const StudentTestimonialForm = () => {
         </AnimateOnScroll>
         <AnimateOnScroll delay={200}>
           <p className="text-text-medium font-body text-gray-600 mb-10 text-center">
-            We'd love to hear about your journey at Eyenet! Your feedback helps us grow.
+            We'd love to hear about your journey at Eye-Net! Your feedback helps us grow.
           </p>
         </AnimateOnScroll>
 

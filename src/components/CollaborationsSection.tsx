@@ -32,6 +32,13 @@ const collaborationPartners = [
     src: '/images/fashion-dazzling.png',
     category: 'Design Studio',
   },
+  {
+    name: 'Grafino',
+    tagline: 'Technology & Digital Partner',
+    description: 'Empowering students with modern web engineering, AI tools, UI/UX workshops, and digital branding solutions.',
+    src: '/images/grafino-logo.png',
+    category: 'Tech Partner',
+  },
 ];
 
 const CollaborationsSection = () => {
@@ -71,8 +78,8 @@ const CollaborationsSection = () => {
           </AnimateOnScroll>
         </div>
 
-        {/* Desktop Grid Layout (3 Centered Cards, No Indicators) */}
-        <div className="hidden lg:grid grid-cols-3 gap-8 items-stretch justify-center max-w-7xl mx-auto py-4">
+        {/* Desktop Grid Layout (4 Centered Cards) */}
+        <div className="hidden lg:grid grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 items-stretch justify-center max-w-7xl mx-auto py-4">
           {collaborationPartners.map((partner, index) => (
             <AnimateOnScroll key={partner.name} delay={150 + index * 150} className="h-full">
               <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-8 border border-border/60 hover:border-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center hover:-translate-y-1.5">
@@ -81,13 +88,11 @@ const CollaborationsSection = () => {
 
                 {/* Logo Frame */}
                 <div className="relative mb-6">
-                  <div className="w-32 h-32 rounded-full p-2.5 bg-white shadow-md border border-gray-100 dark:border-gray-800 flex items-center justify-center group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <img
-                      src={partner.src}
-                      alt={partner.name}
-                      className="max-w-full max-h-full object-contain p-1 rounded-full"
-                    />
-                  </div>
+                  <img
+                    src={partner.src}
+                    alt={partner.name}
+                    className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300"
+                  />
                   <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap shadow-xs">
                     {partner.category}
                   </span>
@@ -109,7 +114,7 @@ const CollaborationsSection = () => {
         </div>
 
         {/* Mobile View: Embla Carousel with Autoplay + Touch Swipe (Hidden on Desktop) */}
-        <div className="lg:hidden w-full relative py-4">
+        <div className="lg:hidden w-full relative py-2">
           <Carousel
             plugins={[plugin.current]}
             opts={{
@@ -118,34 +123,34 @@ const CollaborationsSection = () => {
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-3">
+            <CarouselContent className="-ml-3 py-6">
               {collaborationPartners.map((partner, index) => (
-                <CarouselItem key={`${partner.name}-${index}`} className="pl-3 basis-[82%] sm:basis-[300px]">
-                  <div className="group relative h-full bg-card/80 backdrop-blur-md rounded-2xl p-6 border border-border/60 shadow-md flex flex-col items-center text-center">
+                <CarouselItem key={`${partner.name}-${index}`} className="pl-3 basis-[88%] sm:basis-[340px]">
+                  <div className="group relative h-full bg-white backdrop-blur-md rounded-3xl p-7 border border-slate-200/80 shadow-md flex flex-col items-center text-center justify-between">
                     {/* Logo Frame */}
                     <div className="relative mb-5">
-                      <div className="w-24 h-24 rounded-full p-2 bg-white shadow-md border border-gray-100 flex items-center justify-center">
-                        <img
-                          src={partner.src}
-                          alt={partner.name}
-                          className="max-w-full max-h-full object-contain p-1 rounded-full"
-                        />
-                      </div>
-                      <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap">
+                      <img
+                        src={partner.src}
+                        alt={partner.name}
+                        className="w-24 h-24 object-cover rounded-full shadow-md"
+                      />
+                      <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-medium text-slate-700 border border-slate-200 whitespace-nowrap shadow-xs">
                         {partner.category}
                       </span>
                     </div>
 
                     {/* Partner Details */}
-                    <h3 className="text-lg font-heading font-normal text-foreground mb-1">
-                      {partner.name}
-                    </h3>
-                    <p className="text-xs font-semibold text-primary/80 uppercase tracking-wide mb-2 font-body">
-                      {partner.tagline}
-                    </p>
-                    <p className="text-xs font-body text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {partner.description}
-                    </p>
+                    <div>
+                      <h3 className="text-xl font-heading font-normal text-slate-900 mb-1">
+                        {partner.name}
+                      </h3>
+                      <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-3 font-body">
+                        {partner.tagline}
+                      </p>
+                      <p className="text-xs sm:text-sm font-body text-slate-600 leading-relaxed">
+                        {partner.description}
+                      </p>
+                    </div>
                   </div>
                 </CarouselItem>
               ))}

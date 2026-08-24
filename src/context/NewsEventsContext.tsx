@@ -12,11 +12,30 @@ interface NewsEventsContextType {
 
 const NewsEventsContext = createContext<NewsEventsContextType | undefined>(undefined);
 
+// Robust helper function to extract 11-char YouTube Video ID from ALL url variants
+export function extractYouTubeId(url?: string): string | undefined {
+  if (!url) return undefined;
+  const trimmed = url.trim();
+  
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+    return trimmed;
+  }
+
+  // Matches watch?v=ID, youtu.be/ID, embed/ID, shorts/ID, live/ID, etc.
+  const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts|live)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = trimmed.match(regExp);
+  if (match && match[1]) {
+    return match[1];
+  }
+  return undefined;
+}
+
 export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [newsEvents, setNewsEvents] = useState<NewsEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Fetch all news events ordered strictly by Event Date desc (newest event date first)
     const query = '*[_type == "newsEvent"] | order(date desc)';
 
     const fetchNewsEvents = async (showLoading = true) => {
@@ -38,11 +57,26 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
           return '';
         };
 
-        const mappedEvents: NewsEvent[] = data.map((doc: any) => ({
-          ...doc,
-          id: doc._id,
-          image: getImageUrl(doc),
-        }));
+        const mappedEvents: NewsEvent[] = data.map((doc: any) => {
+          const youtubeUrl = doc.youtubeUrl || '';
+          const videoId = extractYouTubeId(youtubeUrl);
+          let image = getImageUrl(doc);
+
+          // Fallback to high quality YouTube thumbnail if Sanity image is not uploaded
+          if (!image && videoId) {
+            image = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+          }
+
+          return {
+            ...doc,
+            id: doc._id,
+            category: doc.category || 'Others',
+            youtubeUrl,
+            youtubeVideoId: videoId,
+            isFeatured: Boolean(doc.isFeatured),
+            image: image || 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=1200',
+          };
+        });
 
         setNewsEvents(mappedEvents);
       } catch (error) {

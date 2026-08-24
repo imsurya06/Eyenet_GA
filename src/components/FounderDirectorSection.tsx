@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Award, Quote, CheckCircle2 } from 'lucide-react';
+import { Award, Quote, Sparkles, CheckCircle2 } from 'lucide-react';
 
 const FounderDirectorSection = () => {
   return (
@@ -36,7 +36,7 @@ const FounderDirectorSection = () => {
                   <p className="text-xs sm:text-sm font-heading font-medium text-amber-300 leading-tight">
                     Founder & Director
                   </p>
-                  <p className="text-[11px] sm:text-xs font-body text-white/80">Eyenet Educational Academy</p>
+                  <p className="text-[11px] sm:text-xs font-body text-white/80">Eye-Net Educational Academy</p>
                 </div>
               </AnimateOnScroll>
 
@@ -49,7 +49,7 @@ const FounderDirectorSection = () => {
                   Founder & Director
                 </p>
                 <p className="text-xs font-body text-slate-500 mt-0.5">
-                  Eyenet Educational Academy
+                  Eye-Net Educational Academy
                 </p>
               </div>
 
@@ -89,7 +89,7 @@ const FounderDirectorSection = () => {
               <div className="block md:hidden w-full">
                 <AnimateOnScroll delay={500}>
                   <p className="text-xs sm:text-sm font-body text-slate-600 leading-relaxed text-justify mb-4">
-                    Guided by our Founder & Director, Eyenet is committed to shaping students into confident, skilled professionals through hands-on practical training, real-world design projects, and career-focused mentorship.
+                    Guided by our Founder & Director, Eye-Net is committed to shaping students into confident, skilled professionals through hands-on practical training, real-world design projects, and career-focused mentorship.
                   </p>
                 </AnimateOnScroll>
               </div>
@@ -98,7 +98,7 @@ const FounderDirectorSection = () => {
               <div className="hidden md:block w-full">
                 <AnimateOnScroll delay={500}>
                   <p className="text-base font-body text-slate-600 leading-relaxed mb-6">
-                    Guided by the vision of our Founder and Director, Eyenet is committed to shaping students into confident and skilled professionals. We go beyond theory by offering hands-on training, industry-relevant courses, and practical projects that mirror real-world design challenges.
+                    Guided by the vision of our Founder and Director, Eye-Net is committed to shaping students into confident and skilled professionals. We go beyond theory by offering hands-on training, industry-relevant courses, and practical projects that mirror real-world design challenges.
                   </p>
                 </AnimateOnScroll>
 

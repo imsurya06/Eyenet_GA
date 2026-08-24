@@ -44,43 +44,48 @@ const FacultySection = () => {
               return (
                 <AnimateOnScroll key={member.id || member._id || index} delay={250 + index * 100}>
                   <div className="group bg-card rounded-2xl border border-border/60 hover:border-primary/40 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full transform hover:-translate-y-1.5 relative">
-                    {/* Header Portrait with Gradient Overlay */}
-                    <div className="relative w-full aspect-[4/4.5] sm:aspect-[4/4.8] overflow-hidden bg-muted/30">
+                    {/* Header Portrait without heavy dark overlay */}
+                    <div className="relative w-full aspect-[4/4.5] sm:aspect-[4/4.8] overflow-hidden bg-slate-100">
                       <img
                         src={member.image || '/placeholder.svg'}
                         alt={member.name}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent opacity-95 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                      {/* Name & Qualification Overlay at Bottom of Portrait */}
-                      <div className="absolute bottom-4 left-4 right-4 z-10 text-left">
-                        {member.qualification && (
-                          <div className="inline-flex items-center gap-1.5 text-xs font-body font-medium text-white/95 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/25 mb-2">
-                            <GraduationCap className="w-3.5 h-3.5 text-white/95" />
-                            <span>{member.qualification}</span>
+                      {/* Qualification Badge at Bottom of Portrait */}
+                      {member.qualification && (
+                        <div className="absolute bottom-3 left-3 right-3 z-10 text-left">
+                          <div className="inline-flex items-center gap-1.5 text-xs font-body font-medium text-slate-800 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200/80 shadow-xs">
+                            <GraduationCap className="w-3.5 h-3.5 text-primary shrink-0" />
+                            <span className="line-clamp-1">{member.qualification}</span>
                           </div>
-                        )}
-                        <h3 className="text-xl sm:text-2xl font-heading font-semibold text-white tracking-wide leading-tight">
-                          {member.name}
-                        </h3>
-                      </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Card Content */}
                     <div className="p-6 flex flex-col flex-grow text-left justify-between gap-4 bg-card">
-                      {member.achievements && (
-                        <div className="flex items-start gap-2.5 text-xs sm:text-sm font-body text-primary font-medium bg-primary/5 p-3 rounded-xl border border-primary/10">
-                          <Award className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                          <span className="leading-snug">{member.achievements}</span>
-                        </div>
-                      )}
+                      <div>
+                        {/* Name */}
+                        <h3 className="text-xl sm:text-2xl font-heading font-normal text-slate-900 tracking-wide leading-tight mb-3">
+                          {member.name}
+                        </h3>
 
-                      {member.description && (
-                        <p className="text-sm font-body text-muted-foreground leading-relaxed flex-grow">
-                          {member.description}
-                        </p>
-                      )}
+                        {/* Achievements */}
+                        {member.achievements && (
+                          <div className="flex items-start gap-2.5 text-xs sm:text-sm font-body text-primary font-medium bg-primary/5 p-3 rounded-xl border border-primary/10 mb-3">
+                            <Award className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                            <span className="leading-snug">{member.achievements}</span>
+                          </div>
+                        )}
+
+                        {/* Description */}
+                        {member.description && (
+                          <p className="text-sm font-body text-muted-foreground leading-relaxed">
+                            {member.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* Decorative Bottom Accent Line */}

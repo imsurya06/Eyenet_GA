@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Scissors, Laptop, Building2, Camera, Wand2, MessageSquare, Send, CheckCircle2, Loader2 } from 'lucide-react';
+import { Scissors, Laptop, Building2, Camera, Wand2, ArrowRight, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { toast } from "sonner";
 
 import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
@@ -68,13 +68,6 @@ const OurServices = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleServiceSelect = (serviceTitle: string) => {
     setFormData((prev) => ({ ...prev, service: serviceTitle }));
     const formElement = document.getElementById('service-inquiry-form');
@@ -134,7 +127,7 @@ const OurServices = () => {
             </AnimateOnScroll>
             <AnimateOnScroll isHero={true} delay={300}>
               <p className="text-base md:text-lg font-body text-slate-600 leading-relaxed">
-                Beyond educational training, Eyenet delivers bespoke studio solutions ranging from custom couture fashion crafting to photography, makeup styling, web engineering, and architectural design.
+                Beyond educational training, Eye-Net delivers bespoke studio solutions ranging from custom couture fashion crafting to photography, makeup styling, web engineering, and architectural design.
               </p>
             </AnimateOnScroll>
           </div>
@@ -144,193 +137,172 @@ const OurServices = () => {
             {services.map((service, index) => {
               const IconComponent = service.icon;
               return (
-                <AnimateOnScroll key={service.id} delay={200 + index * 150} className="h-full">
-                  <div className="flex flex-col h-full bg-white rounded-3xl p-6 border border-slate-200/80 shadow-md hover:shadow-xl hover:border-primary/40 hover:-translate-y-1.5 transition-all duration-300">
-                    
-                    {/* Image Box */}
-                    <div className="relative w-full h-56 overflow-hidden rounded-2xl mb-6">
-                      <img
-                        src={service.image}
-                        alt={service.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                      />
-                      <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-xs font-semibold px-3.5 py-1 rounded-full text-slate-800 shadow-sm border border-slate-100">
-                        {service.badge}
+                <AnimateOnScroll key={service.id} delay={100 * (index + 1)}>
+                  <div className="h-full bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                      <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                        <IconComponent className="w-7 h-7" />
                       </div>
-                      <div className="absolute bottom-3 right-3 p-3 rounded-2xl bg-primary text-white shadow-md">
-                        <IconComponent className="h-5 w-5" />
-                      </div>
+                      <h3 className="text-xl font-heading font-normal text-slate-900 mb-3">
+                        {service.title}
+                      </h3>
+                      <p className="text-sm font-body text-slate-600 leading-relaxed mb-6">
+                        {service.description}
+                      </p>
                     </div>
 
-                    {/* Content */}
-                    <div className="flex flex-col flex-grow justify-between text-left">
-                      <div>
-                        <h2 className="text-xl md:text-2xl font-heading font-normal mb-3 text-slate-900 leading-snug">
-                          {service.title}
-                        </h2>
-                        <p className="text-sm font-body text-slate-600 leading-relaxed mb-6">
-                          {service.description}
-                        </p>
-                      </div>
-
-                      {/* Enquire Now Button */}
-                      <div className="pt-4 border-t border-slate-100 mt-auto">
-                        <Button
-                          onClick={() => handleServiceSelect(service.title)}
-                          className="w-full bg-primary hover:bg-primary/90 text-white rounded-2xl py-2.5 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-all duration-300 hover:shadow-md"
-                        >
-                          <MessageSquare className="w-4 h-4" />
-                          <span>Enquire Now</span>
-                        </Button>
-                      </div>
-                    </div>
-
+                    <Button
+                      onClick={() => handleServiceSelect(service.title)}
+                      className="w-full bg-slate-900 hover:bg-primary text-white rounded-full transition-colors duration-300 flex items-center justify-center gap-2 group-hover:bg-primary font-body text-sm py-2.5"
+                    >
+                      <span>Request Service</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
                   </div>
                 </AnimateOnScroll>
               );
             })}
           </div>
 
-          {/* Minimal Inquiry Form at Bottom */}
-          <div id="service-inquiry-form" className="scroll-mt-24 max-w-3xl mx-auto">
-            <AnimateOnScroll delay={300}>
-              <div className="bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200/90 shadow-lg relative overflow-hidden">
-                <div className="text-center mb-8">
-                  <span className="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">
-                    SERVICE INQUIRY
-                  </span>
-                  <h2 className="text-2xl md:text-3xl font-heading font-normal text-slate-900 mb-2">
-                    Request a <span className="text-primary font-heading italic">service quotation</span>
-                  </h2>
-                  <p className="text-sm font-body text-slate-600">
-                    Fill in your details below and our service specialists will reach out promptly.
+          {/* Service Inquiry Form */}
+          <div id="service-inquiry-form" className="max-w-3xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-200/80 shadow-md">
+            <AnimateOnScroll>
+              <div className="text-center mb-8">
+                <h2 className="text-2xl sm:text-3xl font-heading font-normal text-slate-900 mb-2">
+                  Request a <span className="text-primary font-heading italic">service</span>
+                </h2>
+                <p className="text-sm font-body text-slate-600">
+                  Fill out the details below and our studio team will get back to you shortly.
+                </p>
+              </div>
+            </AnimateOnScroll>
+
+            {isSubmitted ? (
+              <AnimateOnScroll>
+                <div className="text-center py-8">
+                  <CheckCircle2 className="w-16 h-16 text-emerald-600 mx-auto mb-3" />
+                  <h3 className="text-xl font-heading text-slate-900 mb-2">Inquiry Submitted Successfully</h3>
+                  <p className="text-sm font-body text-slate-600 mb-6">
+                    Thank you for choosing Eye-Net. Our team will contact you regarding your request for <strong>{formData.service}</strong>.
                   </p>
+                  <Button
+                    onClick={() => setIsSubmitted(false)}
+                    variant="outline"
+                    className="rounded-full border-slate-300 text-slate-700"
+                  >
+                    Submit Another Inquiry
+                  </Button>
                 </div>
-
-                {isSubmitted ? (
-                  <div className="text-center py-10 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-6">
-                    <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                    <h3 className="text-xl font-heading text-slate-900 mb-2">Inquiry Submitted Successfully</h3>
-                    <p className="text-sm font-body text-slate-600 mb-6">
-                      Thank you for choosing Eyenet. Our team will contact you regarding your request for <strong>{formData.service}</strong>.
-                    </p>
-                    <Button
-                      onClick={() => setIsSubmitted(false)}
-                      variant="outline"
-                      className="rounded-full border-slate-300 text-slate-700"
-                    >
-                      Submit Another Inquiry
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5 text-left">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      {/* Name */}
-                      <div className="space-y-1.5">
-                        <Label htmlFor="name" className="text-xs font-semibold text-slate-700">
-                          Full Name *
-                        </Label>
-                        <Input
-                          id="name"
-                          required
-                          placeholder="Enter your full name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="rounded-xl border-slate-200 bg-white"
-                        />
-                      </div>
-
-                      {/* Phone */}
-                      <div className="space-y-1.5">
-                        <Label htmlFor="phone" className="text-xs font-semibold text-slate-700">
-                          Contact Number *
-                        </Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          required
-                          placeholder="+91 98421 73725"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="rounded-xl border-slate-200 bg-white"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      {/* Email */}
-                      <div className="space-y-1.5">
-                        <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
-                          Email Address
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="your.email@example.com"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="rounded-xl border-slate-200 bg-white"
-                        />
-                      </div>
-
-                      {/* Service Select */}
-                      <div className="space-y-1.5">
-                        <Label htmlFor="service" className="text-xs font-semibold text-slate-700">
-                          Service Required *
-                        </Label>
-                        <select
-                          id="service"
-                          value={formData.service}
-                          onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                          className="w-full h-10 px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-800 font-body"
-                        >
-                          {services.map((s) => (
-                            <option key={s.id} value={s.title}>
-                              {s.title}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Description */}
+              </AnimateOnScroll>
+            ) : (
+              <AnimateOnScroll>
+                <form onSubmit={handleSubmit} className="space-y-5 text-left">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Name */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="description" className="text-xs font-semibold text-slate-700">
-                        Requirement Details / Description
+                      <Label htmlFor="name" className="text-xs font-semibold text-slate-700">
+                        Full Name *
                       </Label>
-                      <Textarea
-                        id="description"
-                        rows={4}
-                        placeholder="Please describe your specific project requirements, timelines, or specifications..."
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      <Input
+                        id="name"
+                        required
+                        placeholder="Enter your full name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="rounded-xl border-slate-200 bg-white"
                       />
                     </div>
 
-                    {/* Submit Button */}
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-primary hover:bg-primary/90 text-white rounded-2xl py-3 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Submitting Inquiry...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" />
-                          <span>Submit Service Inquiry</span>
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                )}
+                    {/* Phone */}
+                    <div className="space-y-1.5">
+                      <Label htmlFor="phone" className="text-xs font-semibold text-slate-700">
+                        Contact Number *
+                      </Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        required
+                        placeholder="+91 98421 73725"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="rounded-xl border-slate-200 bg-white"
+                      />
+                    </div>
+                  </div>
 
-              </div>
-            </AnimateOnScroll>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Email */}
+                    <div className="space-y-1.5">
+                      <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
+                        Email Address
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your.email@example.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="rounded-xl border-slate-200 bg-white"
+                      />
+                    </div>
+
+                    {/* Service Select */}
+                    <div className="space-y-1.5">
+                      <Label htmlFor="service" className="text-xs font-semibold text-slate-700">
+                        Service Required *
+                      </Label>
+                      <select
+                        id="service"
+                        value={formData.service}
+                        onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                        className="w-full h-10 px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-800 font-body"
+                      >
+                        {services.map((s) => (
+                          <option key={s.id} value={s.title}>
+                            {s.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div className="space-y-1.5">
+                    <Label htmlFor="description" className="text-xs font-semibold text-slate-700">
+                      Requirement Details / Description
+                    </Label>
+                    <Textarea
+                      id="description"
+                      rows={4}
+                      placeholder="Please describe your specific project requirements, timelines, or specifications..."
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      className="rounded-xl border-slate-200 bg-white"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary hover:bg-primary/90 text-white rounded-2xl py-3 text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Submitting Inquiry...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Submit Service Inquiry</span>
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </AnimateOnScroll>
+            )}
+
           </div>
 
         </div>

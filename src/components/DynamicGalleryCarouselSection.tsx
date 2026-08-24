@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Frown } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -229,7 +229,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
               className="absolute -top-12 right-0 md:top-2 md:-right-12 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
               aria-label="Close modal"
             >
-              <Frown className="w-6 h-6 rotate-45" />
+              <X className="w-6 h-6" />
             </button>
             <img
               src={selectedLightboxImage}
