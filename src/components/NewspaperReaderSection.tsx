@@ -27,12 +27,14 @@ const NewspaperReaderSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0); // On mobile: page index. On desktop: spread index.
   const [isMobile, setIsMobile] = useState(false);
 
+  // Lightbox Modal State
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   // Physics Drag & Flip State
   const [isDragging, setIsDragging] = useState(false);
   const [dragProgress, setDragProgress] = useState(0); // 0 to 1
   const [dragDirection, setDragDirection] = useState<'next' | 'prev'>('next');
   const [isAnimating, setIsAnimating] = useState(false);
-  const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const startXRef = useRef<number>(0);
@@ -159,13 +161,22 @@ const NewspaperReaderSection: React.FC = () => {
       const currentP = currentProgressRef.current;
       const diff = targetP - currentP;
 
-      if (Math.abs(diff) < 0.005) {
+      if (Math.abs(diff) < 0.01) {
         currentProgressRef.current = targetP;
         setDragProgress(targetP);
-        setIsAnimating(false);
-        if (onComplete) onComplete();
+
+        if (targetP === 1 && onComplete) {
+          // Instant state swap at 100% without reverse transition flicker
+          onComplete();
+          currentProgressRef.current = 0;
+          setDragProgress(0);
+        }
+
+        setTimeout(() => {
+          setIsAnimating(false);
+        }, 30);
       } else {
-        const nextP = currentP + diff * 0.18;
+        const nextP = currentP + diff * 0.22;
         currentProgressRef.current = nextP;
         setDragProgress(nextP);
         animFrameRef.current = requestAnimationFrame(step);
@@ -180,8 +191,6 @@ const NewspaperReaderSection: React.FC = () => {
     setDragDirection('next');
     animateToTargetProgress(1, () => {
       setCurrentIndex((prev) => prev + 1);
-      currentProgressRef.current = 0;
-      setDragProgress(0);
     });
   };
 
@@ -190,8 +199,6 @@ const NewspaperReaderSection: React.FC = () => {
     setDragDirection('prev');
     animateToTargetProgress(1, () => {
       setCurrentIndex((prev) => prev - 1);
-      currentProgressRef.current = 0;
-      setDragProgress(0);
     });
   };
 
@@ -244,15 +251,34 @@ const NewspaperReaderSection: React.FC = () => {
     }
   };
 
+  // Lightbox Modal Navigation
+  const handleLightboxNext = () => {
+    if (lightboxIndex !== null && lightboxIndex < totalClippings - 1) {
+      setLightboxIndex((prev) => (prev !== null ? prev + 1 : null));
+    }
+  };
+
+  const handleLightboxPrev = () => {
+    if (lightboxIndex !== null && lightboxIndex > 0) {
+      setLightboxIndex((prev) => (prev !== null ? prev - 1 : null));
+    }
+  };
+
   // Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft') handlePrev();
+      if (lightboxIndex !== null) {
+        if (e.key === 'ArrowRight') handleLightboxNext();
+        if (e.key === 'ArrowLeft') handleLightboxPrev();
+        if (e.key === 'Escape') setLightboxIndex(null);
+      } else {
+        if (e.key === 'ArrowRight') handleNext();
+        if (e.key === 'ArrowLeft') handlePrev();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, maxIndex, isAnimating]);
+  }, [currentIndex, maxIndex, isAnimating, lightboxIndex, totalClippings]);
 
   // Desktop Book Bend Physics
   const angle = dragProgress * 180;
@@ -267,11 +293,10 @@ const NewspaperReaderSection: React.FC = () => {
   const desktopLeafFront = dragDirection === 'next' ? rightClipping : leftClipping;
   const desktopLeafBack = dragDirection === 'next' ? nextLeftClipping : prevRightClipping;
 
-  // Mobile Single Paper Slide Physics
+  // Mobile Single Paper Physics
   const mobileTargetClipping = dragDirection === 'next' ? mobileNextClipping : mobilePrevClipping;
   const mobileTranslateX = dragDirection === 'next' ? -dragProgress * 105 : dragProgress * 105;
-  const mobileRotateY = dragDirection === 'next' ? -dragProgress * 30 : dragProgress * 30;
-  const mobileOpacity = 1 - dragProgress * 0.85;
+  const mobileOpacity = Math.max(0, 1 - dragProgress * 0.9);
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
@@ -315,8 +340,8 @@ const NewspaperReaderSection: React.FC = () => {
 
               <Button
                 onClick={() => {
-                  const targetImg = isMobile ? mobileCurrentClipping?.imageUrl : leftClipping?.imageUrl;
-                  if (targetImg) setSelectedLightboxImage(targetImg);
+                  const targetIdx = isMobile ? currentIndex : leftPageIdx;
+                  setLightboxIndex(targetIdx);
                 }}
                 variant="outline"
                 size="sm"
@@ -366,11 +391,11 @@ const NewspaperReaderSection: React.FC = () => {
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 
-                {/* --- A. MOBILE LAYOUT (100% FLICKER-FREE SINGLE PAPER FLIP SLIDE) --- */}
+                {/* --- A. MOBILE LAYOUT (100% FLICKER-FREE SINGLE PAPER SLIDE) --- */}
                 {isMobile ? (
-                  <div className="relative w-full h-full bg-white overflow-hidden" style={{ transformStyle: 'preserve-3d' }}>
+                  <div className="relative w-full h-full bg-white overflow-hidden">
                     
-                    {/* Underlying Target Next/Prev Page (Clean Waiting Base) */}
+                    {/* Underneath Target Page (Base) */}
                     <div className="absolute inset-0 w-full h-full bg-white">
                       {mobileTargetClipping ? (
                         <img 
@@ -383,20 +408,16 @@ const NewspaperReaderSection: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Sliding/Flipping Top Page Sheet */}
+                    {/* Sliding Top Sheet */}
                     <div 
                       onClick={() => {
-                        if (mobileCurrentClipping && !isDragging) setSelectedLightboxImage(mobileCurrentClipping.imageUrl);
+                        if (mobileCurrentClipping && !isDragging) setLightboxIndex(currentIndex);
                       }}
-                      className={`absolute inset-0 w-full h-full bg-white cursor-pointer ${
-                        isDragging ? 'transition-none' : 'transition-transform duration-200 ease-out'
-                      }`}
+                      className="absolute inset-0 w-full h-full bg-white cursor-pointer"
                       style={{
-                        transform: (dragProgress > 0 || isAnimating) 
-                          ? `translateX(${mobileTranslateX}%) rotateY(${mobileRotateY}deg)` 
-                          : 'translateX(0%) rotateY(0deg)',
+                        transform: (dragProgress > 0 || isAnimating) ? `translateX(${mobileTranslateX}%)` : 'translateX(0%)',
                         opacity: (dragProgress > 0 || isAnimating) ? mobileOpacity : 1,
-                        boxShadow: (dragProgress > 0 || isAnimating) ? '-10px 0 25px rgba(0,0,0,0.25)' : 'none',
+                        transition: isDragging ? 'none' : 'transform 0.05s linear',
                       }}
                     >
                       {mobileCurrentClipping ? (
@@ -418,7 +439,7 @@ const NewspaperReaderSection: React.FC = () => {
                     {/* BASE LEFT A4 SHEET */}
                     <div 
                       onClick={() => {
-                        if (desktopBaseLeft && !isDragging) setSelectedLightboxImage(desktopBaseLeft.imageUrl);
+                        if (desktopBaseLeft && !isDragging) setLightboxIndex(leftPageIdx);
                       }}
                       className="relative w-1/2 h-full bg-white border-r border-slate-300/80 overflow-hidden cursor-pointer"
                     >
@@ -433,7 +454,7 @@ const NewspaperReaderSection: React.FC = () => {
                     {/* BASE RIGHT A4 SHEET */}
                     <div 
                       onClick={() => {
-                        if (desktopBaseRight && !isDragging) setSelectedLightboxImage(desktopBaseRight.imageUrl);
+                        if (desktopBaseRight && !isDragging) setLightboxIndex(rightPageIdx);
                       }}
                       className="relative w-1/2 h-full bg-white overflow-hidden cursor-pointer"
                     >
@@ -505,31 +526,63 @@ const NewspaperReaderSection: React.FC = () => {
 
       </div>
 
-      {/* Lightbox Modal for HD Full View */}
-      {selectedLightboxImage && (
+      {/* Lightbox Modal with Full Front/Back Navigation Controls */}
+      {lightboxIndex !== null && clippings[lightboxIndex] && (
         <div
-          className="fixed inset-0 z-[9999] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200"
-          onClick={() => setSelectedLightboxImage(null)}
+          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none"
+          onClick={() => setLightboxIndex(null)}
         >
           <div
-            className="relative max-w-5xl w-full max-h-[92vh] flex flex-col items-center justify-center"
+            className="relative max-w-5xl w-full max-h-[94vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setSelectedLightboxImage(null)}
-              className="absolute -top-12 right-0 md:top-2 md:-right-12 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer shrink-0"
-              aria-label="Close reader modal"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* Modal Header Toolbar */}
+            <div className="w-full flex items-center justify-between mb-3 text-white">
+              <span className="text-xs sm:text-sm font-semibold text-slate-300 bg-white/10 px-3 py-1 rounded-full border border-white/20">
+                Page {lightboxIndex + 1} of {totalClippings}
+              </span>
 
-            <div className="relative max-w-full max-h-[85vh] overflow-auto rounded-xl bg-white shadow-2xl p-2">
-              <img
-                src={selectedLightboxImage}
-                alt="Newspaper Clipping Full View"
-                className="max-w-full max-h-[80vh] object-contain rounded-lg mx-auto"
-              />
+              <button
+                onClick={() => setLightboxIndex(null)}
+                className="text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
+                aria-label="Close reader modal"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
+
+            {/* Modal Image Container */}
+            <div className="relative w-full flex items-center justify-center">
+              
+              {/* Prev Lightbox Button */}
+              <button
+                onClick={handleLightboxPrev}
+                disabled={lightboxIndex === 0}
+                className="absolute left-2 sm:left-4 z-50 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-primary text-white border border-white/20 shadow-2xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                aria-label="Previous Lightbox Image"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              {/* Next Lightbox Button */}
+              <button
+                onClick={handleLightboxNext}
+                disabled={lightboxIndex >= totalClippings - 1}
+                className="absolute right-2 sm:right-4 z-50 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-primary text-white border border-white/20 shadow-2xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                aria-label="Next Lightbox Image"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              <div className="relative max-w-full max-h-[82vh] overflow-auto rounded-xl bg-slate-900 shadow-2xl p-2 border border-white/10">
+                <img
+                  src={clippings[lightboxIndex].imageUrl}
+                  alt={clippings[lightboxIndex].title}
+                  className="max-w-full max-h-[78vh] object-contain rounded-lg mx-auto transition-opacity duration-200"
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       )}
