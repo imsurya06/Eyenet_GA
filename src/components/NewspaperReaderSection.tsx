@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Maximize2, 
-  X, 
-  Newspaper 
+import {
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  X,
+  Newspaper
 } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { sanityClient, urlFor } from '@/lib/sanityClient';
@@ -22,7 +22,7 @@ export interface NewspaperClipping {
 const NewspaperReaderSection: React.FC = () => {
   const [clippings, setClippings] = useState<NewspaperClipping[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Index state
   const [currentIndex, setCurrentIndex] = useState(0); // On mobile: page index. On desktop: spread index.
   const [isMobile, setIsMobile] = useState(false);
@@ -219,7 +219,7 @@ const NewspaperReaderSection: React.FC = () => {
     if (!isDragging || !containerRef.current || isAnimating) return;
     const containerWidth = containerRef.current.clientWidth;
     const deltaX = startXRef.current - clientX;
-    
+
     let p = deltaX / containerWidth;
 
     if (p >= 0) {
@@ -300,9 +300,9 @@ const NewspaperReaderSection: React.FC = () => {
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
-      
+
       <div className="max-w-7xl mx-auto relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           <AnimateOnScroll delay={100}>
@@ -329,12 +329,12 @@ const NewspaperReaderSection: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center">
-            
+
             {/* Top Toolbar: Counter & Zoom Button */}
             <div className="w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] flex items-center justify-between mb-4 px-2">
               <span className="text-xs sm:text-sm font-body font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3.5 py-1 rounded-full shadow-2xs">
-                {isMobile 
-                  ? `Page ${currentIndex + 1} of ${totalClippings}` 
+                {isMobile
+                  ? `Page ${currentIndex + 1} of ${totalClippings}`
                   : `Spread ${currentIndex + 1} of ${totalSpreads} (Pages ${leftPageIdx + 1}-${Math.min(rightPageIdx + 1, totalClippings)})`}
               </span>
 
@@ -354,7 +354,7 @@ const NewspaperReaderSection: React.FC = () => {
 
             {/* Newspaper 3D Stage */}
             <div className="relative w-full flex items-center justify-center py-4 [perspective:2200px]">
-              
+
               {/* Prev Button */}
               <button
                 onClick={handlePrev}
@@ -376,7 +376,7 @@ const NewspaperReaderSection: React.FC = () => {
               </button>
 
               {/* Responsive Container (Mobile: Single A4 Page / Desktop: Double-Page Spread) */}
-              <div 
+              <div
                 ref={containerRef}
                 onMouseDown={(e) => startDrag(e.clientX)}
                 onMouseMove={(e) => updateDrag(e.clientX)}
@@ -385,23 +385,22 @@ const NewspaperReaderSection: React.FC = () => {
                 onTouchStart={(e) => startDrag(e.touches[0].clientX)}
                 onTouchMove={(e) => updateDrag(e.touches[0].clientX)}
                 onTouchEnd={endDrag}
-                className={`relative w-full max-w-[310px] xs:max-w-[340px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-row select-none ${
-                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
-                }`}
+                className={`relative w-full max-w-[310px] xs:max-w-[340px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-row select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                  }`}
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                
+
                 {/* --- A. MOBILE LAYOUT (100% FLICKER-FREE SINGLE PAPER SLIDE) --- */}
                 {isMobile ? (
                   <div className="relative w-full h-full bg-white overflow-hidden">
-                    
+
                     {/* Underneath Target Page (Base) */}
                     <div className="absolute inset-0 w-full h-full bg-white">
                       {mobileTargetClipping ? (
-                        <img 
-                          src={mobileTargetClipping.imageUrl} 
-                          alt={mobileTargetClipping.title} 
-                          className="w-full h-full object-contain pointer-events-none" 
+                        <img
+                          src={mobileTargetClipping.imageUrl}
+                          alt={mobileTargetClipping.title}
+                          className="w-full h-full object-contain pointer-events-none"
                         />
                       ) : (
                         <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
@@ -409,7 +408,7 @@ const NewspaperReaderSection: React.FC = () => {
                     </div>
 
                     {/* Sliding Top Sheet */}
-                    <div 
+                    <div
                       onClick={() => {
                         if (mobileCurrentClipping && !isDragging) setLightboxIndex(currentIndex);
                       }}
@@ -421,10 +420,10 @@ const NewspaperReaderSection: React.FC = () => {
                       }}
                     >
                       {mobileCurrentClipping ? (
-                        <img 
-                          src={mobileCurrentClipping.imageUrl} 
-                          alt={mobileCurrentClipping.title} 
-                          className="w-full h-full object-contain pointer-events-none" 
+                        <img
+                          src={mobileCurrentClipping.imageUrl}
+                          alt={mobileCurrentClipping.title}
+                          className="w-full h-full object-contain pointer-events-none"
                         />
                       ) : (
                         <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
@@ -437,7 +436,7 @@ const NewspaperReaderSection: React.FC = () => {
                   /* --- B. DESKTOP / TABLET LAYOUT (2-Page Spread View) --- */
                   <>
                     {/* BASE LEFT A4 SHEET */}
-                    <div 
+                    <div
                       onClick={() => {
                         if (desktopBaseLeft && !isDragging) setLightboxIndex(leftPageIdx);
                       }}
@@ -452,7 +451,7 @@ const NewspaperReaderSection: React.FC = () => {
                     </div>
 
                     {/* BASE RIGHT A4 SHEET */}
-                    <div 
+                    <div
                       onClick={() => {
                         if (desktopBaseRight && !isDragging) setLightboxIndex(rightPageIdx);
                       }}
@@ -469,9 +468,8 @@ const NewspaperReaderSection: React.FC = () => {
                     {/* DESKTOP 3D FLIPPING LEAF */}
                     {(dragProgress > 0 || isAnimating) && (
                       <div
-                        className={`absolute top-0 bottom-0 w-1/2 h-full z-30 ${
-                          dragDirection === 'next' ? 'right-0 origin-left' : 'left-0 origin-right'
-                        }`}
+                        className={`absolute top-0 bottom-0 w-1/2 h-full z-30 ${dragDirection === 'next' ? 'right-0 origin-left' : 'left-0 origin-right'
+                          }`}
                         style={{
                           transformStyle: 'preserve-3d',
                           transform: `rotateY(${dragDirection === 'next' ? -angle : angle}deg) skewY(${dragDirection === 'next' ? bendSkew : -bendSkew}deg) translateZ(${elevationZ}px)`,
@@ -553,7 +551,7 @@ const NewspaperReaderSection: React.FC = () => {
 
             {/* Modal Image Container */}
             <div className="relative w-full flex items-center justify-center">
-              
+
               {/* Prev Lightbox Button */}
               <button
                 onClick={handleLightboxPrev}
