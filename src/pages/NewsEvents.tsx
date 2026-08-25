@@ -1,15 +1,16 @@
 "use client";
 
 import React from 'react';
-import AnimateOnScroll from '@/components/AnimateOnScroll';
-import NewsEventsDisplaySection from '@/components/NewsEventsDisplaySection'; // Import the new component
-import CallToActionSection from '@/components/CallToActionSection'; // Import CallToActionSection
+import NewsEventsDisplaySection from '@/components/NewsEventsDisplaySection';
+import NewspaperReaderSection from '@/components/NewspaperReaderSection';
+import CallToActionSection from '@/components/CallToActionSection';
 
 const NewsEvents = () => {
   return (
     <>
       <NewsEventsDisplaySection />
-      <CallToActionSection /> {/* Add CallToActionSection here */}
+      <NewspaperReaderSection />
+      <CallToActionSection />
     </>
   );
 };
