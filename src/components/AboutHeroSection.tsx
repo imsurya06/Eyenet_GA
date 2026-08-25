@@ -8,7 +8,7 @@ const AboutHeroSection = () => {
   return (
     <section className="py-10 md:py-16 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Main Title and Subtitle - Centered */}
         <div className="text-center max-w-3xl mx-auto mb-8 md:mb-12">
           <AnimateOnScroll isHero={true} delay={100}>
