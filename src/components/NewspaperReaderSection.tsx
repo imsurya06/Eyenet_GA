@@ -24,9 +24,9 @@ const NewspaperReaderSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [currentSpreadIndex, setCurrentSpreadIndex] = useState(0);
   
-  // Real-world 3D Drag & Gravity Flip Physics State
+  // 3D Physics Drag & Flip State
   const [isDragging, setIsDragging] = useState(false);
-  const [dragProgress, setDragProgress] = useState(0); // 0 (flat right) to 1 (flat left)
+  const [dragProgress, setDragProgress] = useState(0); // 0 to 1
   const [dragDirection, setDragDirection] = useState<'next' | 'prev'>('next');
   const [isAnimating, setIsAnimating] = useState(false);
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
@@ -34,6 +34,7 @@ const NewspaperReaderSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const startXRef = useRef<number>(0);
   const currentProgressRef = useRef<number>(0);
+  const animFrameRef = useRef<number | null>(null);
 
   // Fallback newspaper clippings
   const fallbackClippings: NewspaperClipping[] = [
@@ -116,83 +117,71 @@ const NewspaperReaderSection: React.FC = () => {
   const totalClippings = clippings.length;
   const totalSpreads = Math.max(1, Math.ceil(totalClippings / 2));
 
+  // Page index mappings
   const leftPageIdx = currentSpreadIndex * 2;
   const rightPageIdx = currentSpreadIndex * 2 + 1;
 
   const leftClipping = clippings[leftPageIdx];
   const rightClipping = clippings[rightPageIdx];
 
-  // Next / Prev spread references
+  // Next spread page references
   const nextLeftClipping = clippings[(currentSpreadIndex + 1) * 2];
   const nextRightClipping = clippings[(currentSpreadIndex + 1) * 2 + 1];
 
+  // Prev spread page references
   const prevLeftClipping = clippings[(currentSpreadIndex - 1) * 2];
   const prevRightClipping = clippings[(currentSpreadIndex - 1) * 2 + 1];
 
-  // Animated Flip Triggers
+  // Smooth requestAnimationFrame 60fps/120fps physics interpolation
+  const animateToTargetProgress = (targetP: number, onComplete?: () => void) => {
+    setIsAnimating(true);
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+
+    const step = () => {
+      const currentP = currentProgressRef.current;
+      const diff = targetP - currentP;
+
+      if (Math.abs(diff) < 0.005) {
+        currentProgressRef.current = targetP;
+        setDragProgress(targetP);
+        setIsAnimating(false);
+        if (onComplete) onComplete();
+      } else {
+        const nextP = currentP + diff * 0.18;
+        currentProgressRef.current = nextP;
+        setDragProgress(nextP);
+        animFrameRef.current = requestAnimationFrame(step);
+      }
+    };
+
+    animFrameRef.current = requestAnimationFrame(step);
+  };
+
   const animateToNextSpread = () => {
     if (isAnimating || currentSpreadIndex >= totalSpreads - 1) return;
-    setIsAnimating(true);
     setDragDirection('next');
-    
-    let p = currentProgressRef.current;
-    const interval = setInterval(() => {
-      p += 0.06;
-      if (p >= 1) {
-        p = 1;
-        clearInterval(interval);
-        setCurrentSpreadIndex((prev) => prev + 1);
-        setDragProgress(0);
-        currentProgressRef.current = 0;
-        setIsAnimating(false);
-      } else {
-        setDragProgress(p);
-        currentProgressRef.current = p;
-      }
-    }, 16);
+    animateToTargetProgress(1, () => {
+      setCurrentSpreadIndex((prev) => prev + 1);
+      currentProgressRef.current = 0;
+      setDragProgress(0);
+    });
   };
 
   const animateToPrevSpread = () => {
     if (isAnimating || currentSpreadIndex <= 0) return;
-    setIsAnimating(true);
     setDragDirection('prev');
-    
-    let p = currentProgressRef.current;
-    const interval = setInterval(() => {
-      p += 0.06;
-      if (p >= 1) {
-        p = 1;
-        clearInterval(interval);
-        setCurrentSpreadIndex((prev) => prev - 1);
-        setDragProgress(0);
-        currentProgressRef.current = 0;
-        setIsAnimating(false);
-      } else {
-        setDragProgress(p);
-        currentProgressRef.current = p;
-      }
-    }, 16);
+    animateToTargetProgress(1, () => {
+      setCurrentSpreadIndex((prev) => prev - 1);
+      currentProgressRef.current = 0;
+      setDragProgress(0);
+    });
   };
 
   const springBack = () => {
-    setIsAnimating(true);
-    let p = currentProgressRef.current;
-    const interval = setInterval(() => {
-      p -= 0.08;
-      if (p <= 0) {
-        p = 0;
-        clearInterval(interval);
-        setDragProgress(0);
-        currentProgressRef.current = 0;
-        setIsAnimating(false);
-      } else {
-        setDragProgress(p);
-        currentProgressRef.current = p;
-      }
-    }, 16);
+    animateToTargetProgress(0);
   };
 
-  // Drag Gesture Physics Handlers (Mouse & Touch)
+  // Drag Gesture Handlers
   const startDrag = (clientX: number) => {
     if (isAnimating) return;
     setIsDragging(true);
@@ -209,12 +198,10 @@ const NewspaperReaderSection: React.FC = () => {
     let p = deltaX / containerWidth;
 
     if (p >= 0) {
-      // Dragging Left -> Turn Next Page
       if (currentSpreadIndex >= totalSpreads - 1) return;
       setDragDirection('next');
       p = Math.min(Math.max(p, 0), 1);
     } else {
-      // Dragging Right -> Turn Prev Page
       if (currentSpreadIndex <= 0) return;
       setDragDirection('prev');
       p = Math.min(Math.max(-p, 0), 1);
@@ -228,7 +215,7 @@ const NewspaperReaderSection: React.FC = () => {
     if (!isDragging) return;
     setIsDragging(false);
 
-    if (currentProgressRef.current > 0.35) {
+    if (currentProgressRef.current > 0.3) {
       if (dragDirection === 'next') {
         animateToNextSpread();
       } else {
@@ -239,7 +226,7 @@ const NewspaperReaderSection: React.FC = () => {
     }
   };
 
-  // Keyboard navigation
+  // Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') animateToNextSpread();
@@ -249,32 +236,27 @@ const NewspaperReaderSection: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentSpreadIndex, totalSpreads, isAnimating]);
 
-  // Calculate paper bend curvature, angle & gravity elevation
-  const calculateFlipTransforms = (p: number) => {
-    // 0 = flat on right side, 1 = flat on left side
-    const angle = p * 180;
-    
-    // Paper bend arc (peaks around p = 0.5)
-    const arcHeight = Math.sin(p * Math.PI);
-    const bendSkew = -6 * Math.sin(p * Math.PI);
-    const elevationZ = arcHeight * 80;
+  // Paper Bend & Elevation Physics
+  const angle = dragProgress * 180;
+  const arcHeight = Math.sin(dragProgress * Math.PI);
+  const bendSkew = -4 * Math.sin(dragProgress * Math.PI);
+  const elevationZ = arcHeight * 50;
+  const shadowOpacity = Math.min(arcHeight * 0.3, 0.3);
 
-    return {
-      rotateY: dragDirection === 'next' ? -angle : angle,
-      skewY: dragDirection === 'next' ? bendSkew : -bendSkew,
-      translateZ: elevationZ,
-      shadowOpacity: Math.min(arcHeight * 0.45, 0.45),
-    };
-  };
+  // Exact Book Base Sheet Assignment
+  const baseLeftClipping = dragDirection === 'prev' && dragProgress > 0 ? prevLeftClipping : leftClipping;
+  const baseRightClipping = dragDirection === 'next' && dragProgress > 0 ? nextRightClipping : rightClipping;
 
-  const transforms = calculateFlipTransforms(dragProgress);
+  // Exact 2-Sided Flipping Leaf Assignment
+  const leafFrontClipping = dragDirection === 'next' ? rightClipping : leftClipping;
+  const leafBackClipping = dragDirection === 'next' ? nextLeftClipping : prevRightClipping;
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
       
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Clean Light Section Header */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           <AnimateOnScroll delay={100}>
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-3">
@@ -289,7 +271,7 @@ const NewspaperReaderSection: React.FC = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={300}>
             <p className="text-sm sm:text-base font-body text-slate-600 max-w-xl mx-auto leading-relaxed">
-              Drag with your cursor or use arrows to flip pages with real paper gravity physics.
+              Drag with your cursor or use arrow buttons to flip pages forward and backward in real book order.
             </p>
           </AnimateOnScroll>
         </div>
@@ -321,14 +303,14 @@ const NewspaperReaderSection: React.FC = () => {
             </div>
 
             {/* Double-Page Newspaper 3D Stage with Real Paper Bend Physics */}
-            <div className="relative w-full flex items-center justify-center py-4 [perspective:2000px]">
+            <div className="relative w-full flex items-center justify-center py-4 [perspective:2200px]">
               
               {/* Prev Spread Button */}
               <button
                 onClick={animateToPrevSpread}
                 disabled={currentSpreadIndex === 0 || isAnimating}
                 aria-label="Previous Spread"
-                className="absolute left-1 sm:left-2 md:left-4 lg:left-8 z-40 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                className="absolute left-1 sm:left-2 md:left-4 lg:left-8 z-50 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
@@ -338,7 +320,7 @@ const NewspaperReaderSection: React.FC = () => {
                 onClick={animateToNextSpread}
                 disabled={currentSpreadIndex >= totalSpreads - 1 || isAnimating}
                 aria-label="Next Spread"
-                className="absolute right-1 sm:right-2 md:right-4 lg:right-8 z-40 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                className="absolute right-1 sm:right-2 md:right-4 lg:right-8 z-50 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -359,22 +341,15 @@ const NewspaperReaderSection: React.FC = () => {
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 
-                {/* 1. LEFT A4 SHEET (Page N) */}
+                {/* 1. BASE LEFT A4 SHEET */}
                 <div 
                   onClick={() => {
-                    if (leftClipping && !isDragging) setSelectedLightboxImage(leftClipping.imageUrl);
+                    if (baseLeftClipping && !isDragging) setSelectedLightboxImage(baseLeftClipping.imageUrl);
                   }}
                   className="relative w-full sm:w-1/2 h-full bg-white border-r border-slate-300/80 overflow-hidden cursor-pointer"
                 >
-                  {dragDirection === 'prev' && dragProgress > 0 ? (
-                    // Underneath left sheet when flipping backward
-                    prevLeftClipping ? (
-                      <img src={prevLeftClipping.imageUrl} alt={prevLeftClipping.title} className="w-full h-full object-contain pointer-events-none" />
-                    ) : (
-                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
-                    )
-                  ) : leftClipping ? (
-                    <img src={leftClipping.imageUrl} alt={leftClipping.title} className="w-full h-full object-contain pointer-events-none" />
+                  {baseLeftClipping ? (
+                    <img src={baseLeftClipping.imageUrl} alt={baseLeftClipping.title} className="w-full h-full object-contain pointer-events-none" />
                   ) : (
                     <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                   )}
@@ -383,73 +358,79 @@ const NewspaperReaderSection: React.FC = () => {
                   <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
                 </div>
 
-                {/* 2. RIGHT A4 SHEET (Page N+1) */}
+                {/* 2. BASE RIGHT A4 SHEET */}
                 <div 
-                  className="relative w-full sm:w-1/2 h-full bg-white overflow-hidden"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  onClick={() => {
+                    if (baseRightClipping && !isDragging) setSelectedLightboxImage(baseRightClipping.imageUrl);
+                  }}
+                  className="relative w-full sm:w-1/2 h-full bg-white overflow-hidden cursor-pointer"
                 >
-                  
-                  {/* Underneath Revealed Page (Right Sheet of Next Spread when flipping) */}
-                  <div className="absolute inset-0 w-full h-full bg-white">
-                    {dragDirection === 'next' && nextRightClipping ? (
-                      <img src={nextRightClipping.imageUrl} alt={nextRightClipping.title} className="w-full h-full object-contain pointer-events-none" />
-                    ) : rightClipping ? (
-                      <img src={rightClipping.imageUrl} alt={rightClipping.title} className="w-full h-full object-contain pointer-events-none" />
-                    ) : (
-                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
-                    )}
-
-                    {/* Right Spine Fold Shadow */}
-                    <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
-                  </div>
-
-                  {/* Current Right A4 Sheet Image */}
-                  <div 
-                    onClick={() => {
-                      if (rightClipping && !isDragging) setSelectedLightboxImage(rightClipping.imageUrl);
-                    }}
-                    className="absolute inset-0 w-full h-full bg-white cursor-pointer"
-                  >
-                    {rightClipping ? (
-                      <img src={rightClipping.imageUrl} alt={rightClipping.title} className="w-full h-full object-contain pointer-events-none" />
-                    ) : (
-                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
-                    )}
-
-                    {/* Right Spine Fold Shadow */}
-                    <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
-                  </div>
-
-                  {/* 3D REAL-WORLD PAPER BEND & GRAVITY FALL SHEET */}
-                  {(dragProgress > 0 || isAnimating) && (
-                    <div 
-                      className={`absolute inset-0 w-full h-full bg-white transition-transform ${
-                        isDragging ? 'duration-0' : 'duration-300 ease-out'
-                      } ${dragDirection === 'next' ? 'origin-left' : 'origin-right'}`}
-                      style={{
-                        transformStyle: 'preserve-3d',
-                        backfaceVisibility: 'hidden',
-                        transform: `rotateY(${transforms.rotateY}deg) skewY(${transforms.skewY}deg) translateZ(${transforms.translateZ}px)`,
-                      }}
-                    >
-                      <img
-                        src={dragDirection === 'next' ? (rightClipping?.imageUrl || '') : (leftClipping?.imageUrl || '')}
-                        alt="Flipping Newspaper Sheet"
-                        className="w-full h-full object-contain bg-white pointer-events-none"
-                      />
-
-                      {/* Gravity Elevation Shadow Overlay Effect */}
-                      <div 
-                        className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity duration-150"
-                        style={{ opacity: transforms.shadowOpacity }}
-                      />
-                    </div>
+                  {baseRightClipping ? (
+                    <img src={baseRightClipping.imageUrl} alt={baseRightClipping.title} className="w-full h-full object-contain pointer-events-none" />
+                  ) : (
+                    <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                   )}
 
+                  {/* Right Spine Fold Shadow */}
+                  <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
                 </div>
 
+                {/* 3. TWO-SIDED 3D FLIPPING LEAF (EXACT BOOK PAGE ORDER FOR BOTH NEXT & PREV) */}
+                {(dragProgress > 0 || isAnimating) && (
+                  <div
+                    className={`absolute top-0 bottom-0 w-full sm:w-1/2 h-full z-30 ${
+                      dragDirection === 'next' ? 'right-0 origin-left' : 'left-0 origin-right'
+                    }`}
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      transform: `rotateY(${dragDirection === 'next' ? -angle : angle}deg) skewY(${dragDirection === 'next' ? bendSkew : -bendSkew}deg) translateZ(${elevationZ}px)`,
+                    }}
+                  >
+                    {/* FRONT SIDE OF FLIPPING LEAF (0deg to 90deg) */}
+                    <div
+                      className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                      }}
+                    >
+                      {leafFrontClipping ? (
+                        <img
+                          src={leafFrontClipping.imageUrl}
+                          alt="Front Flipping Leaf"
+                          className="w-full h-full object-contain bg-white pointer-events-none"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                      )}
+                      <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: shadowOpacity }} />
+                    </div>
+
+                    {/* BACK SIDE OF FLIPPING LEAF (90deg to 180deg - Landing Page) */}
+                    <div
+                      className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                        transform: 'rotateY(180deg)',
+                      }}
+                    >
+                      {leafBackClipping ? (
+                        <img
+                          src={leafBackClipping.imageUrl}
+                          alt="Back Flipping Leaf"
+                          className="w-full h-full object-contain bg-white pointer-events-none"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                      )}
+                      <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: shadowOpacity }} />
+                    </div>
+                  </div>
+                )}
+
                 {/* Center Book Spine Line Accent */}
-                <div className="hidden sm:block absolute inset-y-0 left-1/2 -ml-px w-0.5 bg-slate-300/80 shadow-xs pointer-events-none z-30" />
+                <div className="hidden sm:block absolute inset-y-0 left-1/2 -ml-px w-0.5 bg-slate-300/80 shadow-xs pointer-events-none z-40" />
 
               </div>
 
