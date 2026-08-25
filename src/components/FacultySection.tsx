@@ -90,21 +90,21 @@ const FacultySection = () => {
   }, [faculty]);
 
   return (
-    <section id="faculty-section" className="py-12 md:py-20 px-4 sm:px-8 lg:px-[80px] bg-gradient-to-b from-background via-secondary/20 to-background text-foreground text-center">
-      <div className="max-w-7xl mx-auto space-y-16 sm:space-y-24">
+    <section id="faculty-section" className="py-6 md:py-12 px-4 sm:px-8 lg:px-[80px] bg-gradient-to-b from-background via-secondary/20 to-background text-foreground text-center">
+      <div className="max-w-7xl mx-auto space-y-12 sm:space-y-20">
         
         {/* 1. ACADEMIC FACULTY & MENTORS */}
         <div>
           <AnimateOnScroll delay={100}>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold uppercase tracking-widest mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-body font-semibold uppercase tracking-widest mb-3">
               Industry Mentors & Leaders
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-normal mb-4 tracking-tight">
-              Meet our esteemed faculty
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-normal mb-3 tracking-tight">
+              Meet our esteemed <span className="text-primary font-heading italic">faculty</span>
             </h2>
           </AnimateOnScroll>
           <AnimateOnScroll delay={200}>
-            <p className="text-base sm:text-lg font-body text-muted-foreground mb-12 sm:mb-16 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base font-body text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed">
               Our dedicated team of veteran educators and creative directors bring real-world industry experience to your classroom.
             </p>
           </AnimateOnScroll>
