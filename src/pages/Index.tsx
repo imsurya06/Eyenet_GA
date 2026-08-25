@@ -18,7 +18,7 @@ const Index = () => {
         {/* Mobile Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat lg:hidden opacity-15"
-          style={{ backgroundImage: 'url(/images/hero-model.jpg)' }}
+          style={{ backgroundImage: 'url(/images/Hero-Image-02.jpg)' }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background"></div>
         </div>
@@ -62,7 +62,7 @@ const Index = () => {
               {/* 1. Main Feature Image: Fashion Designing (hero-model.jpg) */}
               <div className="col-span-7 relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs bg-slate-100 group min-h-[220px]">
                 <img
-                  src="/images/hero-model.jpg"
+                  src="/images/Hero-Image-02.jpg"
                   alt="Fashion Designing"
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
