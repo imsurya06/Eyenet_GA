@@ -22,8 +22,11 @@ export interface NewspaperClipping {
 const NewspaperReaderSection: React.FC = () => {
   const [clippings, setClippings] = useState<NewspaperClipping[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentSpreadIndex, setCurrentSpreadIndex] = useState(0);
   
+  // Index state
+  const [currentIndex, setCurrentIndex] = useState(0); // On mobile: page index. On desktop: spread index.
+  const [isMobile, setIsMobile] = useState(false);
+
   // 3D Physics Drag & Flip State
   const [isDragging, setIsDragging] = useState(false);
   const [dragProgress, setDragProgress] = useState(0); // 0 to 1
@@ -35,6 +38,17 @@ const NewspaperReaderSection: React.FC = () => {
   const startXRef = useRef<number>(0);
   const currentProgressRef = useRef<number>(0);
   const animFrameRef = useRef<number | null>(null);
+
+  // Responsive Screen Detector
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Fallback newspaper clippings
   const fallbackClippings: NewspaperClipping[] = [
@@ -116,23 +130,28 @@ const NewspaperReaderSection: React.FC = () => {
 
   const totalClippings = clippings.length;
   const totalSpreads = Math.max(1, Math.ceil(totalClippings / 2));
+  const maxIndex = isMobile ? totalClippings - 1 : totalSpreads - 1;
 
-  // Page index mappings
-  const leftPageIdx = currentSpreadIndex * 2;
-  const rightPageIdx = currentSpreadIndex * 2 + 1;
+  // Mobile vs Desktop Page Mappings
+  // On Mobile: Single Page
+  const mobileCurrentClipping = clippings[currentIndex] || fallbackClippings[0];
+  const mobileNextClipping = clippings[currentIndex + 1] || fallbackClippings[0];
+  const mobilePrevClipping = clippings[currentIndex - 1] || fallbackClippings[0];
+
+  // On Desktop: 2-Page Spread
+  const leftPageIdx = currentIndex * 2;
+  const rightPageIdx = currentIndex * 2 + 1;
 
   const leftClipping = clippings[leftPageIdx];
   const rightClipping = clippings[rightPageIdx];
 
-  // Next spread page references
-  const nextLeftClipping = clippings[(currentSpreadIndex + 1) * 2];
-  const nextRightClipping = clippings[(currentSpreadIndex + 1) * 2 + 1];
+  const nextLeftClipping = clippings[(currentIndex + 1) * 2];
+  const nextRightClipping = clippings[(currentIndex + 1) * 2 + 1];
 
-  // Prev spread page references
-  const prevLeftClipping = clippings[(currentSpreadIndex - 1) * 2];
-  const prevRightClipping = clippings[(currentSpreadIndex - 1) * 2 + 1];
+  const prevLeftClipping = clippings[(currentIndex - 1) * 2];
+  const prevRightClipping = clippings[(currentIndex - 1) * 2 + 1];
 
-  // Smooth requestAnimationFrame 60fps/120fps physics interpolation
+  // 60fps/120fps requestAnimationFrame physics animation engine
   const animateToTargetProgress = (targetP: number, onComplete?: () => void) => {
     setIsAnimating(true);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -157,21 +176,21 @@ const NewspaperReaderSection: React.FC = () => {
     animFrameRef.current = requestAnimationFrame(step);
   };
 
-  const animateToNextSpread = () => {
-    if (isAnimating || currentSpreadIndex >= totalSpreads - 1) return;
+  const handleNext = () => {
+    if (isAnimating || currentIndex >= maxIndex) return;
     setDragDirection('next');
     animateToTargetProgress(1, () => {
-      setCurrentSpreadIndex((prev) => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
       currentProgressRef.current = 0;
       setDragProgress(0);
     });
   };
 
-  const animateToPrevSpread = () => {
-    if (isAnimating || currentSpreadIndex <= 0) return;
+  const handlePrev = () => {
+    if (isAnimating || currentIndex <= 0) return;
     setDragDirection('prev');
     animateToTargetProgress(1, () => {
-      setCurrentSpreadIndex((prev) => prev - 1);
+      setCurrentIndex((prev) => prev - 1);
       currentProgressRef.current = 0;
       setDragProgress(0);
     });
@@ -192,17 +211,17 @@ const NewspaperReaderSection: React.FC = () => {
 
   const updateDrag = (clientX: number) => {
     if (!isDragging || !containerRef.current || isAnimating) return;
-    const containerWidth = containerRef.current.clientWidth / 2;
+    const containerWidth = isMobile ? containerRef.current.clientWidth : containerRef.current.clientWidth / 2;
     const deltaX = startXRef.current - clientX;
     
     let p = deltaX / containerWidth;
 
     if (p >= 0) {
-      if (currentSpreadIndex >= totalSpreads - 1) return;
+      if (currentIndex >= maxIndex) return;
       setDragDirection('next');
       p = Math.min(Math.max(p, 0), 1);
     } else {
-      if (currentSpreadIndex <= 0) return;
+      if (currentIndex <= 0) return;
       setDragDirection('prev');
       p = Math.min(Math.max(-p, 0), 1);
     }
@@ -217,9 +236,9 @@ const NewspaperReaderSection: React.FC = () => {
 
     if (currentProgressRef.current > 0.3) {
       if (dragDirection === 'next') {
-        animateToNextSpread();
+        handleNext();
       } else {
-        animateToPrevSpread();
+        handlePrev();
       }
     } else {
       springBack();
@@ -229,12 +248,12 @@ const NewspaperReaderSection: React.FC = () => {
   // Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') animateToNextSpread();
-      if (e.key === 'ArrowLeft') animateToPrevSpread();
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSpreadIndex, totalSpreads, isAnimating]);
+  }, [currentIndex, maxIndex, isAnimating]);
 
   // Paper Bend & Elevation Physics
   const angle = dragProgress * 180;
@@ -243,13 +262,16 @@ const NewspaperReaderSection: React.FC = () => {
   const elevationZ = arcHeight * 50;
   const shadowOpacity = Math.min(arcHeight * 0.3, 0.3);
 
-  // Exact Book Base Sheet Assignment
-  const baseLeftClipping = dragDirection === 'prev' && dragProgress > 0 ? prevLeftClipping : leftClipping;
-  const baseRightClipping = dragDirection === 'next' && dragProgress > 0 ? nextRightClipping : rightClipping;
+  // Desktop Base & Leaf Mappings
+  const desktopBaseLeft = dragDirection === 'prev' && dragProgress > 0 ? prevLeftClipping : leftClipping;
+  const desktopBaseRight = dragDirection === 'next' && dragProgress > 0 ? nextRightClipping : rightClipping;
+  const desktopLeafFront = dragDirection === 'next' ? rightClipping : leftClipping;
+  const desktopLeafBack = dragDirection === 'next' ? nextLeftClipping : prevRightClipping;
 
-  // Exact 2-Sided Flipping Leaf Assignment
-  const leafFrontClipping = dragDirection === 'next' ? rightClipping : leftClipping;
-  const leafBackClipping = dragDirection === 'next' ? nextLeftClipping : prevRightClipping;
+  // Mobile Base & Leaf Mappings
+  const mobileBaseImage = dragDirection === 'next' ? mobileNextClipping : mobilePrevClipping;
+  const mobileLeafFront = mobileCurrentClipping;
+  const mobileLeafBack = dragDirection === 'next' ? mobileNextClipping : mobilePrevClipping;
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
@@ -271,27 +293,30 @@ const NewspaperReaderSection: React.FC = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={300}>
             <p className="text-sm sm:text-base font-body text-slate-600 max-w-xl mx-auto leading-relaxed">
-              Drag with your cursor or use arrow buttons to flip pages forward and backward in real book order.
+              Drag with your cursor or swipe to flip through our press features.
             </p>
           </AnimateOnScroll>
         </div>
 
         {loading ? (
           <div className="flex justify-center my-8">
-            <Skeleton className="w-full max-w-[880px] aspect-[2/1.414] rounded-2xl bg-slate-200" />
+            <Skeleton className="w-full max-w-[340px] sm:max-w-[880px] aspect-[1/1.414] sm:aspect-[2/1.414] rounded-2xl bg-slate-200" />
           </div>
         ) : (
           <div className="flex flex-col items-center">
             
-            {/* Top Toolbar: Spread Counter & Zoom Button */}
-            <div className="w-full max-w-[340px] xs:max-w-[420px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] flex items-center justify-between mb-4 px-2">
+            {/* Top Toolbar: Counter & Zoom Button */}
+            <div className="w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] flex items-center justify-between mb-4 px-2">
               <span className="text-xs sm:text-sm font-body font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3.5 py-1 rounded-full shadow-2xs">
-                Spread {currentSpreadIndex + 1} of {totalSpreads} (Pages {leftPageIdx + 1}-{Math.min(rightPageIdx + 1, totalClippings)})
+                {isMobile 
+                  ? `Page ${currentIndex + 1} of ${totalClippings}` 
+                  : `Spread ${currentIndex + 1} of ${totalSpreads} (Pages ${leftPageIdx + 1}-${Math.min(rightPageIdx + 1, totalClippings)})`}
               </span>
 
               <Button
                 onClick={() => {
-                  if (leftClipping) setSelectedLightboxImage(leftClipping.imageUrl);
+                  const targetImg = isMobile ? mobileCurrentClipping?.imageUrl : leftClipping?.imageUrl;
+                  if (targetImg) setSelectedLightboxImage(targetImg);
                 }}
                 variant="outline"
                 size="sm"
@@ -302,30 +327,30 @@ const NewspaperReaderSection: React.FC = () => {
               </Button>
             </div>
 
-            {/* Double-Page Newspaper 3D Stage with Real Paper Bend Physics */}
+            {/* Newspaper 3D Stage */}
             <div className="relative w-full flex items-center justify-center py-4 [perspective:2200px]">
               
-              {/* Prev Spread Button */}
+              {/* Prev Button */}
               <button
-                onClick={animateToPrevSpread}
-                disabled={currentSpreadIndex === 0 || isAnimating}
-                aria-label="Previous Spread"
-                className="absolute left-1 sm:left-2 md:left-4 lg:left-8 z-50 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                onClick={handlePrev}
+                disabled={currentIndex === 0 || isAnimating}
+                aria-label="Previous Page"
+                className="absolute left-1 sm:left-2 md:left-4 lg:left-8 z-50 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
-              {/* Next Spread Button */}
+              {/* Next Button */}
               <button
-                onClick={animateToNextSpread}
-                disabled={currentSpreadIndex >= totalSpreads - 1 || isAnimating}
-                aria-label="Next Spread"
-                className="absolute right-1 sm:right-2 md:right-4 lg:right-8 z-50 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                onClick={handleNext}
+                disabled={currentIndex >= maxIndex || isAnimating}
+                aria-label="Next Page"
+                className="absolute right-1 sm:right-2 md:right-4 lg:right-8 z-50 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
-              {/* Double-Page Interactive Newspaper Container (Mouse Drag & Touch Swipeable) */}
+              {/* Responsive Container (Mobile: Single A4 Page / Desktop: Double-Page Spread) */}
               <div 
                 ref={containerRef}
                 onMouseDown={(e) => startDrag(e.clientX)}
@@ -335,102 +360,170 @@ const NewspaperReaderSection: React.FC = () => {
                 onTouchStart={(e) => startDrag(e.touches[0].clientX)}
                 onTouchMove={(e) => updateDrag(e.touches[0].clientX)}
                 onTouchEnd={endDrag}
-                className={`relative w-full max-w-[340px] xs:max-w-[420px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] bg-slate-100 rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col sm:flex-row select-none ${
+                className={`relative w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-row select-none ${
                   isDragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 
-                {/* 1. BASE LEFT A4 SHEET */}
-                <div 
-                  onClick={() => {
-                    if (baseLeftClipping && !isDragging) setSelectedLightboxImage(baseLeftClipping.imageUrl);
-                  }}
-                  className="relative w-full sm:w-1/2 h-full bg-white border-r border-slate-300/80 overflow-hidden cursor-pointer"
-                >
-                  {baseLeftClipping ? (
-                    <img src={baseLeftClipping.imageUrl} alt={baseLeftClipping.title} className="w-full h-full object-contain pointer-events-none" />
-                  ) : (
-                    <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
-                  )}
-
-                  {/* Left Spine Fold Shadow */}
-                  <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
-                </div>
-
-                {/* 2. BASE RIGHT A4 SHEET */}
-                <div 
-                  onClick={() => {
-                    if (baseRightClipping && !isDragging) setSelectedLightboxImage(baseRightClipping.imageUrl);
-                  }}
-                  className="relative w-full sm:w-1/2 h-full bg-white overflow-hidden cursor-pointer"
-                >
-                  {baseRightClipping ? (
-                    <img src={baseRightClipping.imageUrl} alt={baseRightClipping.title} className="w-full h-full object-contain pointer-events-none" />
-                  ) : (
-                    <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
-                  )}
-
-                  {/* Right Spine Fold Shadow */}
-                  <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
-                </div>
-
-                {/* 3. TWO-SIDED 3D FLIPPING LEAF (EXACT BOOK PAGE ORDER FOR BOTH NEXT & PREV) */}
-                {(dragProgress > 0 || isAnimating) && (
-                  <div
-                    className={`absolute top-0 bottom-0 w-full sm:w-1/2 h-full z-30 ${
-                      dragDirection === 'next' ? 'right-0 origin-left' : 'left-0 origin-right'
-                    }`}
-                    style={{
-                      transformStyle: 'preserve-3d',
-                      transform: `rotateY(${dragDirection === 'next' ? -angle : angle}deg) skewY(${dragDirection === 'next' ? bendSkew : -bendSkew}deg) translateZ(${elevationZ}px)`,
-                    }}
-                  >
-                    {/* FRONT SIDE OF FLIPPING LEAF (0deg to 90deg) */}
-                    <div
-                      className="absolute inset-0 w-full h-full bg-white overflow-hidden"
-                      style={{
-                        backfaceVisibility: 'hidden',
-                        WebkitBackfaceVisibility: 'hidden',
-                      }}
-                    >
-                      {leafFrontClipping ? (
-                        <img
-                          src={leafFrontClipping.imageUrl}
-                          alt="Front Flipping Leaf"
-                          className="w-full h-full object-contain bg-white pointer-events-none"
-                        />
+                {/* --- A. MOBILE LAYOUT (Single Page View) --- */}
+                {isMobile ? (
+                  <div className="relative w-full h-full bg-white overflow-hidden" style={{ transformStyle: 'preserve-3d' }}>
+                    
+                    {/* Underlying Revealed Next/Prev Page */}
+                    <div className="absolute inset-0 w-full h-full bg-white">
+                      {mobileBaseImage ? (
+                        <img src={mobileBaseImage.imageUrl} alt={mobileBaseImage.title} className="w-full h-full object-contain pointer-events-none" />
                       ) : (
                         <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                       )}
-                      <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: shadowOpacity }} />
                     </div>
 
-                    {/* BACK SIDE OF FLIPPING LEAF (90deg to 180deg - Landing Page) */}
-                    <div
-                      className="absolute inset-0 w-full h-full bg-white overflow-hidden"
-                      style={{
-                        backfaceVisibility: 'hidden',
-                        WebkitBackfaceVisibility: 'hidden',
-                        transform: 'rotateY(180deg)',
+                    {/* Current Single A4 Page Image */}
+                    <div 
+                      onClick={() => {
+                        if (mobileCurrentClipping && !isDragging) setSelectedLightboxImage(mobileCurrentClipping.imageUrl);
                       }}
+                      className="absolute inset-0 w-full h-full bg-white cursor-pointer"
                     >
-                      {leafBackClipping ? (
-                        <img
-                          src={leafBackClipping.imageUrl}
-                          alt="Back Flipping Leaf"
-                          className="w-full h-full object-contain bg-white pointer-events-none"
-                        />
+                      {mobileCurrentClipping ? (
+                        <img src={mobileCurrentClipping.imageUrl} alt={mobileCurrentClipping.title} className="w-full h-full object-contain pointer-events-none" />
                       ) : (
                         <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                       )}
-                      <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: shadowOpacity }} />
                     </div>
+
+                    {/* Mobile 3D Flipping Page Physics */}
+                    {(dragProgress > 0 || isAnimating) && (
+                      <div
+                        className={`absolute inset-0 w-full h-full z-30 ${
+                          dragDirection === 'next' ? 'origin-left' : 'origin-right'
+                        }`}
+                        style={{
+                          transformStyle: 'preserve-3d',
+                          transform: `rotateY(${dragDirection === 'next' ? -angle : angle}deg) skewY(${dragDirection === 'next' ? bendSkew : -bendSkew}deg) translateZ(${elevationZ}px)`,
+                        }}
+                      >
+                        {/* FRONT SIDE */}
+                        <div
+                          className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                          }}
+                        >
+                          {mobileLeafFront ? (
+                            <img src={mobileLeafFront.imageUrl} alt="Front Leaf" className="w-full h-full object-contain bg-white pointer-events-none" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                          )}
+                          <div className="absolute inset-0 bg-slate-950 pointer-events-none" style={{ opacity: shadowOpacity }} />
+                        </div>
+
+                        {/* BACK SIDE */}
+                        <div
+                          className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            transform: 'rotateY(180deg)',
+                          }}
+                        >
+                          {mobileLeafBack ? (
+                            <img src={mobileLeafBack.imageUrl} alt="Back Leaf" className="w-full h-full object-contain bg-white pointer-events-none" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                          )}
+                          <div className="absolute inset-0 bg-slate-950 pointer-events-none" style={{ opacity: shadowOpacity }} />
+                        </div>
+                      </div>
+                    )}
+
                   </div>
-                )}
+                ) : (
 
-                {/* Center Book Spine Line Accent */}
-                <div className="hidden sm:block absolute inset-y-0 left-1/2 -ml-px w-0.5 bg-slate-300/80 shadow-xs pointer-events-none z-40" />
+                  /* --- B. DESKTOP / TABLET LAYOUT (2-Page Spread View) --- */
+                  <>
+                    {/* BASE LEFT A4 SHEET */}
+                    <div 
+                      onClick={() => {
+                        if (desktopBaseLeft && !isDragging) setSelectedLightboxImage(desktopBaseLeft.imageUrl);
+                      }}
+                      className="relative w-1/2 h-full bg-white border-r border-slate-300/80 overflow-hidden cursor-pointer"
+                    >
+                      {desktopBaseLeft ? (
+                        <img src={desktopBaseLeft.imageUrl} alt={desktopBaseLeft.title} className="w-full h-full object-contain pointer-events-none" />
+                      ) : (
+                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                      )}
+                      <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
+                    </div>
+
+                    {/* BASE RIGHT A4 SHEET */}
+                    <div 
+                      onClick={() => {
+                        if (desktopBaseRight && !isDragging) setSelectedLightboxImage(desktopBaseRight.imageUrl);
+                      }}
+                      className="relative w-1/2 h-full bg-white overflow-hidden cursor-pointer"
+                    >
+                      {desktopBaseRight ? (
+                        <img src={desktopBaseRight.imageUrl} alt={desktopBaseRight.title} className="w-full h-full object-contain pointer-events-none" />
+                      ) : (
+                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                      )}
+                      <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
+                    </div>
+
+                    {/* DESKTOP 3D FLIPPING LEAF */}
+                    {(dragProgress > 0 || isAnimating) && (
+                      <div
+                        className={`absolute top-0 bottom-0 w-1/2 h-full z-30 ${
+                          dragDirection === 'next' ? 'right-0 origin-left' : 'left-0 origin-right'
+                        }`}
+                        style={{
+                          transformStyle: 'preserve-3d',
+                          transform: `rotateY(${dragDirection === 'next' ? -angle : angle}deg) skewY(${dragDirection === 'next' ? bendSkew : -bendSkew}deg) translateZ(${elevationZ}px)`,
+                        }}
+                      >
+                        {/* FRONT SIDE OF FLIPPING LEAF */}
+                        <div
+                          className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                          }}
+                        >
+                          {desktopLeafFront ? (
+                            <img src={desktopLeafFront.imageUrl} alt="Front Flipping Leaf" className="w-full h-full object-contain bg-white pointer-events-none" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                          )}
+                          <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: shadowOpacity }} />
+                        </div>
+
+                        {/* BACK SIDE OF FLIPPING LEAF */}
+                        <div
+                          className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            transform: 'rotateY(180deg)',
+                          }}
+                        >
+                          {desktopLeafBack ? (
+                            <img src={desktopLeafBack.imageUrl} alt="Back Flipping Leaf" className="w-full h-full object-contain bg-white pointer-events-none" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                          )}
+                          <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: shadowOpacity }} />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Center Spine Accent */}
+                    <div className="absolute inset-y-0 left-1/2 -ml-px w-0.5 bg-slate-300/80 shadow-xs pointer-events-none z-40" />
+                  </>
+                )}
 
               </div>
 
