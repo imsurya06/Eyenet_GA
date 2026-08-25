@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   ChevronLeft, 
@@ -23,12 +23,19 @@ const NewspaperReaderSection: React.FC = () => {
   const [clippings, setClippings] = useState<NewspaperClipping[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentSpreadIndex, setCurrentSpreadIndex] = useState(0);
-  const [isFlipping, setIsFlipping] = useState(false);
-  const [flipDirection, setFlipDirection] = useState<'next' | 'prev'>('next');
+  
+  // Real-world 3D Drag & Gravity Flip Physics State
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragProgress, setDragProgress] = useState(0); // 0 (flat right) to 1 (flat left)
+  const [dragDirection, setDragDirection] = useState<'next' | 'prev'>('next');
+  const [isAnimating, setIsAnimating] = useState(false);
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  // Fallback newspaper clippings (pairs)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef<number>(0);
+  const currentProgressRef = useRef<number>(0);
+
+  // Fallback newspaper clippings
   const fallbackClippings: NewspaperClipping[] = [
     {
       id: 'fallback-1',
@@ -107,7 +114,6 @@ const NewspaperReaderSection: React.FC = () => {
   }, []);
 
   const totalClippings = clippings.length;
-  // Group into spreads (2 pages per spread)
   const totalSpreads = Math.max(1, Math.ceil(totalClippings / 2));
 
   const leftPageIdx = currentSpreadIndex * 2;
@@ -116,58 +122,152 @@ const NewspaperReaderSection: React.FC = () => {
   const leftClipping = clippings[leftPageIdx];
   const rightClipping = clippings[rightPageIdx];
 
-  // Next spread page references
+  // Next / Prev spread references
   const nextLeftClipping = clippings[(currentSpreadIndex + 1) * 2];
   const nextRightClipping = clippings[(currentSpreadIndex + 1) * 2 + 1];
 
-  const handleNextSpread = () => {
-    if (isFlipping || currentSpreadIndex >= totalSpreads - 1) return;
-    setFlipDirection('next');
-    setIsFlipping(true);
-    setTimeout(() => {
-      setCurrentSpreadIndex((prev) => prev + 1);
-      setIsFlipping(false);
-    }, 550);
+  const prevLeftClipping = clippings[(currentSpreadIndex - 1) * 2];
+  const prevRightClipping = clippings[(currentSpreadIndex - 1) * 2 + 1];
+
+  // Animated Flip Triggers
+  const animateToNextSpread = () => {
+    if (isAnimating || currentSpreadIndex >= totalSpreads - 1) return;
+    setIsAnimating(true);
+    setDragDirection('next');
+    
+    let p = currentProgressRef.current;
+    const interval = setInterval(() => {
+      p += 0.06;
+      if (p >= 1) {
+        p = 1;
+        clearInterval(interval);
+        setCurrentSpreadIndex((prev) => prev + 1);
+        setDragProgress(0);
+        currentProgressRef.current = 0;
+        setIsAnimating(false);
+      } else {
+        setDragProgress(p);
+        currentProgressRef.current = p;
+      }
+    }, 16);
   };
 
-  const handlePrevSpread = () => {
-    if (isFlipping || currentSpreadIndex <= 0) return;
-    setFlipDirection('prev');
-    setIsFlipping(true);
-    setTimeout(() => {
-      setCurrentSpreadIndex((prev) => prev - 1);
-      setIsFlipping(false);
-    }, 550);
+  const animateToPrevSpread = () => {
+    if (isAnimating || currentSpreadIndex <= 0) return;
+    setIsAnimating(true);
+    setDragDirection('prev');
+    
+    let p = currentProgressRef.current;
+    const interval = setInterval(() => {
+      p += 0.06;
+      if (p >= 1) {
+        p = 1;
+        clearInterval(interval);
+        setCurrentSpreadIndex((prev) => prev - 1);
+        setDragProgress(0);
+        currentProgressRef.current = 0;
+        setIsAnimating(false);
+      } else {
+        setDragProgress(p);
+        currentProgressRef.current = p;
+      }
+    }, 16);
+  };
+
+  const springBack = () => {
+    setIsAnimating(true);
+    let p = currentProgressRef.current;
+    const interval = setInterval(() => {
+      p -= 0.08;
+      if (p <= 0) {
+        p = 0;
+        clearInterval(interval);
+        setDragProgress(0);
+        currentProgressRef.current = 0;
+        setIsAnimating(false);
+      } else {
+        setDragProgress(p);
+        currentProgressRef.current = p;
+      }
+    }, 16);
+  };
+
+  // Drag Gesture Physics Handlers (Mouse & Touch)
+  const startDrag = (clientX: number) => {
+    if (isAnimating) return;
+    setIsDragging(true);
+    startXRef.current = clientX;
+    setDragProgress(0);
+    currentProgressRef.current = 0;
+  };
+
+  const updateDrag = (clientX: number) => {
+    if (!isDragging || !containerRef.current || isAnimating) return;
+    const containerWidth = containerRef.current.clientWidth / 2;
+    const deltaX = startXRef.current - clientX;
+    
+    let p = deltaX / containerWidth;
+
+    if (p >= 0) {
+      // Dragging Left -> Turn Next Page
+      if (currentSpreadIndex >= totalSpreads - 1) return;
+      setDragDirection('next');
+      p = Math.min(Math.max(p, 0), 1);
+    } else {
+      // Dragging Right -> Turn Prev Page
+      if (currentSpreadIndex <= 0) return;
+      setDragDirection('prev');
+      p = Math.min(Math.max(-p, 0), 1);
+    }
+
+    setDragProgress(p);
+    currentProgressRef.current = p;
+  };
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+
+    if (currentProgressRef.current > 0.35) {
+      if (dragDirection === 'next') {
+        animateToNextSpread();
+      } else {
+        animateToPrevSpread();
+      }
+    } else {
+      springBack();
+    }
   };
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') handleNextSpread();
-      if (e.key === 'ArrowLeft') handlePrevSpread();
+      if (e.key === 'ArrowRight') animateToNextSpread();
+      if (e.key === 'ArrowLeft') animateToPrevSpread();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSpreadIndex, totalSpreads, isFlipping]);
+  }, [currentSpreadIndex, totalSpreads, isAnimating]);
 
-  // Touch Swipe Handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
+  // Calculate paper bend curvature, angle & gravity elevation
+  const calculateFlipTransforms = (p: number) => {
+    // 0 = flat on right side, 1 = flat on left side
+    const angle = p * 180;
+    
+    // Paper bend arc (peaks around p = 0.5)
+    const arcHeight = Math.sin(p * Math.PI);
+    const bendSkew = -6 * Math.sin(p * Math.PI);
+    const elevationZ = arcHeight * 80;
+
+    return {
+      rotateY: dragDirection === 'next' ? -angle : angle,
+      skewY: dragDirection === 'next' ? bendSkew : -bendSkew,
+      translateZ: elevationZ,
+      shadowOpacity: Math.min(arcHeight * 0.45, 0.45),
+    };
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diffX = touchStartX - touchEndX;
-    if (Math.abs(diffX) > 40) {
-      if (diffX > 0) {
-        handleNextSpread();
-      } else {
-        handlePrevSpread();
-      }
-    }
-    setTouchStartX(null);
-  };
+  const transforms = calculateFlipTransforms(dragProgress);
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
@@ -189,7 +289,7 @@ const NewspaperReaderSection: React.FC = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={300}>
             <p className="text-sm sm:text-base font-body text-slate-600 max-w-xl mx-auto leading-relaxed">
-              Flip through two-page spreads of our real-world newspaper press features.
+              Drag with your cursor or use arrows to flip pages with real paper gravity physics.
             </p>
           </AnimateOnScroll>
         </div>
@@ -203,7 +303,7 @@ const NewspaperReaderSection: React.FC = () => {
             
             {/* Top Toolbar: Spread Counter & Zoom Button */}
             <div className="w-full max-w-[340px] xs:max-w-[420px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] flex items-center justify-between mb-4 px-2">
-              <span className="text-xs sm:text-sm font-body font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full shadow-2xs">
+              <span className="text-xs sm:text-sm font-body font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3.5 py-1 rounded-full shadow-2xs">
                 Spread {currentSpreadIndex + 1} of {totalSpreads} (Pages {leftPageIdx + 1}-{Math.min(rightPageIdx + 1, totalClippings)})
               </span>
 
@@ -220,13 +320,13 @@ const NewspaperReaderSection: React.FC = () => {
               </Button>
             </div>
 
-            {/* Double-Page Spread Newspaper 3D Stage */}
-            <div className="relative w-full flex items-center justify-center py-4 [perspective:1800px]">
+            {/* Double-Page Newspaper 3D Stage with Real Paper Bend Physics */}
+            <div className="relative w-full flex items-center justify-center py-4 [perspective:2000px]">
               
               {/* Prev Spread Button */}
               <button
-                onClick={handlePrevSpread}
-                disabled={currentSpreadIndex === 0 || isFlipping}
+                onClick={animateToPrevSpread}
+                disabled={currentSpreadIndex === 0 || isAnimating}
                 aria-label="Previous Spread"
                 className="absolute left-1 sm:left-2 md:left-4 lg:left-8 z-40 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
               >
@@ -235,46 +335,55 @@ const NewspaperReaderSection: React.FC = () => {
 
               {/* Next Spread Button */}
               <button
-                onClick={handleNextSpread}
-                disabled={currentSpreadIndex >= totalSpreads - 1 || isFlipping}
+                onClick={animateToNextSpread}
+                disabled={currentSpreadIndex >= totalSpreads - 1 || isAnimating}
                 aria-label="Next Spread"
                 className="absolute right-1 sm:right-2 md:right-4 lg:right-8 z-40 w-11 h-11 rounded-full bg-white hover:bg-primary text-slate-800 hover:text-white border border-slate-200 shadow-xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
 
-              {/* Double-Page Book / Newspaper Container */}
+              {/* Double-Page Interactive Newspaper Container (Mouse Drag & Touch Swipeable) */}
               <div 
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                className="relative w-full max-w-[340px] xs:max-w-[420px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] bg-slate-100 rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col sm:flex-row select-none"
+                ref={containerRef}
+                onMouseDown={(e) => startDrag(e.clientX)}
+                onMouseMove={(e) => updateDrag(e.clientX)}
+                onMouseUp={endDrag}
+                onMouseLeave={endDrag}
+                onTouchStart={(e) => startDrag(e.touches[0].clientX)}
+                onTouchMove={(e) => updateDrag(e.touches[0].clientX)}
+                onTouchEnd={endDrag}
+                className={`relative w-full max-w-[340px] xs:max-w-[420px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] bg-slate-100 rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col sm:flex-row select-none ${
+                  isDragging ? 'cursor-grabbing' : 'cursor-grab'
+                }`}
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 
                 {/* 1. LEFT A4 SHEET (Page N) */}
                 <div 
                   onClick={() => {
-                    if (leftClipping) setSelectedLightboxImage(leftClipping.imageUrl);
+                    if (leftClipping && !isDragging) setSelectedLightboxImage(leftClipping.imageUrl);
                   }}
                   className="relative w-full sm:w-1/2 h-full bg-white border-r border-slate-300/80 overflow-hidden cursor-pointer"
                 >
-                  {leftClipping ? (
-                    <img
-                      src={leftClipping.imageUrl}
-                      alt={leftClipping.title}
-                      className="w-full h-full object-contain"
-                    />
+                  {dragDirection === 'prev' && dragProgress > 0 ? (
+                    // Underneath left sheet when flipping backward
+                    prevLeftClipping ? (
+                      <img src={prevLeftClipping.imageUrl} alt={prevLeftClipping.title} className="w-full h-full object-contain pointer-events-none" />
+                    ) : (
+                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                    )
+                  ) : leftClipping ? (
+                    <img src={leftClipping.imageUrl} alt={leftClipping.title} className="w-full h-full object-contain pointer-events-none" />
                   ) : (
-                    <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">
-                      Blank Page
-                    </div>
+                    <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                   )}
 
                   {/* Left Spine Fold Shadow */}
                   <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
                 </div>
 
-                {/* 2. RIGHT A4 SHEET (Page N+1) & 3D Flipping Sheet Layer */}
+                {/* 2. RIGHT A4 SHEET (Page N+1) */}
                 <div 
                   className="relative w-full sm:w-1/2 h-full bg-white overflow-hidden"
                   style={{ transformStyle: 'preserve-3d' }}
@@ -282,16 +391,12 @@ const NewspaperReaderSection: React.FC = () => {
                   
                   {/* Underneath Revealed Page (Right Sheet of Next Spread when flipping) */}
                   <div className="absolute inset-0 w-full h-full bg-white">
-                    {nextRightClipping ? (
-                      <img
-                        src={nextRightClipping.imageUrl}
-                        alt={nextRightClipping.title}
-                        className="w-full h-full object-contain"
-                      />
+                    {dragDirection === 'next' && nextRightClipping ? (
+                      <img src={nextRightClipping.imageUrl} alt={nextRightClipping.title} className="w-full h-full object-contain pointer-events-none" />
+                    ) : rightClipping ? (
+                      <img src={rightClipping.imageUrl} alt={rightClipping.title} className="w-full h-full object-contain pointer-events-none" />
                     ) : (
-                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">
-                        End of Newspaper
-                      </div>
+                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                     )}
 
                     {/* Right Spine Fold Shadow */}
@@ -301,47 +406,43 @@ const NewspaperReaderSection: React.FC = () => {
                   {/* Current Right A4 Sheet Image */}
                   <div 
                     onClick={() => {
-                      if (rightClipping) setSelectedLightboxImage(rightClipping.imageUrl);
+                      if (rightClipping && !isDragging) setSelectedLightboxImage(rightClipping.imageUrl);
                     }}
                     className="absolute inset-0 w-full h-full bg-white cursor-pointer"
                   >
                     {rightClipping ? (
-                      <img
-                        src={rightClipping.imageUrl}
-                        alt={rightClipping.title}
-                        className="w-full h-full object-contain"
-                      />
+                      <img src={rightClipping.imageUrl} alt={rightClipping.title} className="w-full h-full object-contain pointer-events-none" />
                     ) : (
-                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">
-                        Blank Page
-                      </div>
+                      <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                     )}
 
                     {/* Right Spine Fold Shadow */}
                     <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950/15 via-slate-950/5 to-transparent pointer-events-none" />
                   </div>
 
-                  {/* 3D Physical Animated Flipping Sheet (Lifts from Right & Falls onto Left Sheet) */}
-                  {isFlipping && (
+                  {/* 3D REAL-WORLD PAPER BEND & GRAVITY FALL SHEET */}
+                  {(dragProgress > 0 || isAnimating) && (
                     <div 
-                      className={`absolute inset-0 w-full h-full bg-white origin-left transition-transform duration-550 ease-in-out ${
-                        flipDirection === 'next'
-                          ? '[transform:rotateY(-180deg)]'
-                          : '[transform:rotateY(180deg)] origin-right'
-                      }`}
+                      className={`absolute inset-0 w-full h-full bg-white transition-transform ${
+                        isDragging ? 'duration-0' : 'duration-300 ease-out'
+                      } ${dragDirection === 'next' ? 'origin-left' : 'origin-right'}`}
                       style={{
                         transformStyle: 'preserve-3d',
                         backfaceVisibility: 'hidden',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                        transform: `rotateY(${transforms.rotateY}deg) skewY(${transforms.skewY}deg) translateZ(${transforms.translateZ}px)`,
                       }}
                     >
                       <img
-                        src={flipDirection === 'next' ? (rightClipping?.imageUrl || '') : (nextLeftClipping?.imageUrl || '')}
+                        src={dragDirection === 'next' ? (rightClipping?.imageUrl || '') : (leftClipping?.imageUrl || '')}
                         alt="Flipping Newspaper Sheet"
-                        className="w-full h-full object-contain bg-white"
+                        className="w-full h-full object-contain bg-white pointer-events-none"
                       />
-                      {/* Dynamic Paper Fold Shadow Effect during 3D flip */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/30 via-transparent to-slate-950/20 pointer-events-none" />
+
+                      {/* Gravity Elevation Shadow Overlay Effect */}
+                      <div 
+                        className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity duration-150"
+                        style={{ opacity: transforms.shadowOpacity }}
+                      />
                     </div>
                   )}
 
@@ -353,45 +454,6 @@ const NewspaperReaderSection: React.FC = () => {
               </div>
 
             </div>
-
-            {/* Thumbnail Page Switcher Strip (All A4 Sheets) */}
-            {totalClippings > 1 && (
-              <div className="w-full max-w-[720px] mt-8 flex items-center justify-center gap-3 overflow-x-auto py-2 px-4 scrollbar-none">
-                {clippings.map((item, idx) => {
-                  const targetSpread = Math.floor(idx / 2);
-                  const isCurrent = targetSpread === currentSpreadIndex;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        if (targetSpread !== currentSpreadIndex) {
-                          setFlipDirection(targetSpread > currentSpreadIndex ? 'next' : 'prev');
-                          setIsFlipping(true);
-                          setTimeout(() => {
-                            setCurrentSpreadIndex(targetSpread);
-                            setIsFlipping(false);
-                          }, 400);
-                        }
-                      }}
-                      className={`relative shrink-0 w-14 sm:w-16 aspect-[1/1.414] rounded-md overflow-hidden border-2 transition-all duration-300 cursor-pointer ${
-                        isCurrent 
-                          ? 'border-primary scale-110 shadow-md ring-2 ring-primary/30' 
-                          : 'border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400'
-                      }`}
-                    >
-                      <img 
-                        src={item.imageUrl} 
-                        alt={`Page ${idx + 1}`} 
-                        className="w-full h-full object-cover" 
-                      />
-                      <span className="absolute bottom-0.5 right-0.5 text-[9px] font-bold bg-slate-900/80 text-white px-1 rounded">
-                        {idx + 1}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
 
           </div>
         )}
