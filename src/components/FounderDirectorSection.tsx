@@ -72,7 +72,7 @@ const FounderDirectorSection = () => {
 
               <AnimateOnScroll delay={300}>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-normal text-slate-900 mb-4 md:mb-6 tracking-tight leading-snug">
-                  Meet our founder & <span className="text-primary font-heading italic">director</span>
+                  Meet our Founder & <span className="text-primary font-heading italic">Director</span>
                 </h2>
               </AnimateOnScroll>
 

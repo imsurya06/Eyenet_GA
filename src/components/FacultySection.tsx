@@ -7,7 +7,7 @@ import { GraduationCap, Award, Code2 } from 'lucide-react';
 import { Faculty } from '@/data/faculty';
 
 const FacultyCard: React.FC<{ member: Faculty }> = ({ member }) => (
-  <div className="group bg-card rounded-2xl border border-border/60 hover:border-primary/40 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full transform hover:-translate-y-1.5 relative text-left">
+  <div className="group bg-card rounded-2xl border border-border/60 hover:border-primary/40 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full w-full transform hover:-translate-y-1.5 relative text-left">
     {/* Header Portrait - Proper vertical aspect ratio to preserve full face, hair & shoulders */}
     <div className="relative w-full aspect-[4/4.5] sm:aspect-[4/4.8] overflow-hidden bg-slate-100">
       <img
@@ -68,10 +68,6 @@ const FacultySection = () => {
       return name.includes('nithin') || name.includes('surya') || name.includes('sambath');
     };
 
-    // Explicit order for Technical Team:
-    // 1st: Nithin Kubendra Rajan
-    // 2nd: Surya P
-    // 3rd: Sambath Raja G.S
     const getTechOrder = (name: string) => {
       const lower = (name || '').toLowerCase();
       if (lower.includes('nithin')) return 1;
@@ -110,9 +106,9 @@ const FacultySection = () => {
           </AnimateOnScroll>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex flex-wrap justify-center gap-8 sm:gap-10 max-w-7xl mx-auto">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse bg-card rounded-2xl border border-border/50 overflow-hidden h-[450px]">
+                <div key={i} className="animate-pulse bg-card rounded-2xl border border-border/50 overflow-hidden h-[450px] w-full md:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.75rem)] max-w-[400px]">
                   <div className="w-full h-[280px] bg-muted/60"></div>
                   <div className="p-6 space-y-3">
                     <div className="h-6 bg-muted/80 rounded w-2/3"></div>
@@ -123,9 +119,13 @@ const FacultySection = () => {
               ))}
             </div>
           ) : academicFaculty.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+            <div className="flex flex-wrap justify-center gap-8 sm:gap-10 max-w-7xl mx-auto">
               {academicFaculty.map((member, index) => (
-                <AnimateOnScroll key={member.id || member._id || index} delay={250 + index * 100}>
+                <AnimateOnScroll
+                  key={member.id || member._id || index}
+                  delay={250 + index * 100}
+                  className="w-full md:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.75rem)] max-w-[400px] flex shrink-0"
+                >
                   <FacultyCard member={member} />
                 </AnimateOnScroll>
               ))}
@@ -133,7 +133,7 @@ const FacultySection = () => {
           ) : null}
         </div>
 
-        {/* 2. TECHNICAL TEAM SECTION (1 Row, Nithin 1st, Surya 2nd, Sambath 3rd) */}
+        {/* 2. TECHNICAL TEAM SECTION (Centered Row) */}
         {(!loading && techTeam.length > 0) && (
           <div className="pt-12 border-t border-slate-200/80">
             <AnimateOnScroll delay={100}>
@@ -149,10 +149,14 @@ const FacultySection = () => {
               </p>
             </AnimateOnScroll>
 
-            {/* Single Row of 3 Members */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 max-w-7xl mx-auto">
+            {/* Centered Row of Members */}
+            <div className="flex flex-wrap justify-center gap-8 sm:gap-10 max-w-7xl mx-auto">
               {techTeam.map((member, index) => (
-                <AnimateOnScroll key={member.id || member._id || index} delay={250 + index * 100}>
+                <AnimateOnScroll
+                  key={member.id || member._id || index}
+                  delay={250 + index * 100}
+                  className="w-full md:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.75rem)] max-w-[400px] flex shrink-0"
+                >
                   <FacultyCard member={member} />
                 </AnimateOnScroll>
               ))}
