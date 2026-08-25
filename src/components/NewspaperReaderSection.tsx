@@ -297,12 +297,12 @@ const NewspaperReaderSection: React.FC = () => {
   const mobileOpacity = Math.max(0, 1 - dragProgress * 0.9);
 
   return (
-    <section className="py-6 sm:py-8 md:py-10 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80 min-h-[calc(100vh-100px)] flex flex-col justify-center">
+    <section className="py-4 sm:py-6 md:py-8 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80 min-h-[calc(100dvh-125px)] max-h-[none] lg:max-h-[calc(100dvh-80px)] flex flex-col justify-center">
       
       <div className="max-w-7xl mx-auto w-full relative z-10 my-auto">
         
-        {/* Subtitle Line (Exact match to MacBook master image) */}
-        <div className="text-center max-w-3xl mx-auto mb-4 sm:mb-6">
+        {/* Subtitle Line (Exact match to Master Laptop Screenshot) */}
+        <div className="text-center max-w-3xl mx-auto mb-3 sm:mb-4">
           <AnimateOnScroll delay={100}>
             <p className="text-sm sm:text-base font-body text-slate-600 max-w-xl mx-auto leading-relaxed">
               Drag with your cursor or swipe to flip through our press features.
@@ -317,8 +317,8 @@ const NewspaperReaderSection: React.FC = () => {
         ) : (
           <div className="flex flex-col items-center">
             
-            {/* Top Toolbar: Counter & Zoom Button (Identical to Image 2) */}
-            <div className="w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] flex items-center justify-between mb-4 px-2">
+            {/* Top Toolbar: Counter & Zoom Button (Exact match to Master Laptop Screenshot) */}
+            <div className="w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] flex items-center justify-between mb-3 px-2">
               <span className="text-xs sm:text-sm font-body font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3.5 py-1 rounded-full shadow-2xs">
                 {isMobile 
                   ? `Page ${currentIndex + 1} of ${totalClippings}` 
@@ -339,7 +339,7 @@ const NewspaperReaderSection: React.FC = () => {
               </Button>
             </div>
 
-            {/* Newspaper 3D Stage (Exact Proportional Fit) */}
+            {/* Newspaper 3D Stage (Proportionally Scaled for 100% Viewport Height Fitting) */}
             <div className="relative w-full flex items-center justify-center py-2 [perspective:2200px]">
               
               {/* Prev Button */}
@@ -362,7 +362,7 @@ const NewspaperReaderSection: React.FC = () => {
                 <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
-              {/* Master Double-Page Container (Proportionally Scaled to Fit Display Screen) */}
+              {/* Master Double-Page Container (Proportionally Viewport Fitted) */}
               <div 
                 ref={containerRef}
                 onMouseDown={(e) => startDrag(e.clientX)}
@@ -372,7 +372,7 @@ const NewspaperReaderSection: React.FC = () => {
                 onTouchStart={(e) => startDrag(e.touches[0].clientX)}
                 onTouchMove={(e) => updateDrag(e.touches[0].clientX)}
                 onTouchEnd={endDrag}
-                className={`relative w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] max-h-[calc(100vh-220px)] bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-row select-none ${
+                className={`relative w-full max-w-[320px] xs:max-w-[360px] sm:max-w-[720px] md:max-w-[920px] lg:max-w-[1020px] aspect-[1/1.414] sm:aspect-[2/1.414] max-h-[calc(100dvh-200px)] bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-row select-none ${
                   isDragging ? 'cursor-grabbing' : 'cursor-grab'
                 }`}
                 style={{ transformStyle: 'preserve-3d' }}
@@ -421,7 +421,7 @@ const NewspaperReaderSection: React.FC = () => {
                   </div>
                 ) : (
 
-                  /* --- B. DESKTOP LAYOUT (EXACT IMAGE 2 LOOK) --- */
+                  /* --- B. DESKTOP LAYOUT (EXACT MASTER LAPTOP LOOK) --- */
                   <>
                     {/* BASE LEFT A4 SHEET */}
                     <div 
