@@ -26,6 +26,7 @@ export default defineType({
       type: 'string',
       options: {
         list: [
+          {title: 'About Page 3D Slider', value: 'about_hero_slider'},
           {title: 'Carousel', value: 'carousel'},
           {title: 'Fashion', value: 'fashion'},
           {title: 'Event', value: 'event'},

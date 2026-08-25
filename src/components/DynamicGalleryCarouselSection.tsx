@@ -1,28 +1,34 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, X } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { Skeleton } from '@/components/ui/skeleton';
+import { sanityClient, urlFor } from '@/lib/sanityClient';
 
 interface DynamicGalleryCarouselSectionProps {
   withButton?: boolean;
   hideHeading?: boolean;
+  variant?: '2d' | '3d';
 }
 
 const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps> = ({ 
   withButton = false,
-  hideHeading = false
+  hideHeading = false,
+  variant = '3d'
 }) => {
-  const { images: galleryImages = [], loading } = useGalleryImages();
+  const { images: galleryImages = [], loading: contextLoading } = useGalleryImages();
+  const [aboutSliderImages, setAboutSliderImages] = useState<string[]>([]);
+  const [loadingAboutImages, setLoadingAboutImages] = useState(false);
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Fallback images if no gallery images uploaded yet
+  // Fallback images if no images uploaded yet
   const fallbackImages = [
     'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200',
@@ -32,11 +38,53 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     'https://images.unsplash.com/photo-1542744094-3a317272018a?auto=format&fit=crop&q=80&w=1200',
   ];
 
-  // Include all uploaded gallery images that have a valid src URL
+  // Dynamically fetch custom "About Page 3D Slider" images from Sanity CMS Studio
+  useEffect(() => {
+    if (variant !== '3d') return;
+
+    const query = '*[_type == "aboutSliderImage" || (_type == "galleryImage" && category == "about_hero_slider")] | order(order asc, _createdAt desc)';
+
+    const fetchAboutSliderImages = async () => {
+      setLoadingAboutImages(true);
+      try {
+        const data = await sanityClient.fetch(query);
+        if (data && data.length > 0) {
+          const urls: string[] = data.map((doc: any) => {
+            if (typeof doc.image === 'string' && doc.image) return doc.image;
+            if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
+            if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
+              try {
+                return urlFor(doc.image).url();
+              } catch {
+                return '';
+              }
+            }
+            return '';
+          }).filter(Boolean);
+
+          if (urls.length > 0) {
+            setAboutSliderImages(urls);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch custom aboutSliderImage documents:', err);
+      } finally {
+        setLoadingAboutImages(false);
+      }
+    };
+
+    fetchAboutSliderImages();
+  }, [variant]);
+
+  // Valid general gallery images
   const validGalleryImages = galleryImages.filter(img => Boolean(img.src));
 
-  // Custom ordering helper to group ALL matching dress outfits side-by-side
   const getOrderedSources = () => {
+    // If custom About Slider images uploaded in Sanity, use them!
+    if (aboutSliderImages.length > 0) {
+      return aboutSliderImages;
+    }
+
     if (validGalleryImages.length === 0) return fallbackImages;
 
     const redGowns: string[] = [];
@@ -47,31 +95,19 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
 
     validGalleryImages.forEach(img => {
       const text = `${img.alt || ''} ${img.category || ''} ${img.src || ''}`.toLowerCase();
-
-      // 1. Red Gown photos (matching 'salwar', 'stitching', 'pattern', 'red', 'gown')
       if (text.includes('salwar') || text.includes('pattern') || text.includes('red') || text.includes('gown') || text.includes('stitching')) {
         redGowns.push(img.src);
-      }
-      // 2. Rainbow Skirt photos (matching 'rainbow', 'skirt', 'runway', 'exhibition', 'annual')
-      else if (text.includes('rainbow') || text.includes('skirt') || text.includes('runway') || text.includes('exhibition') || text.includes('annual')) {
+      } else if (text.includes('rainbow') || text.includes('skirt') || text.includes('runway') || text.includes('exhibition') || text.includes('annual')) {
         rainbowSkirts.push(img.src);
-      }
-      // 3. Green Blouse photos (matching 'aari', 'green', 'blouse', 'computer', 'lab', 'workshop')
-      else if (text.includes('aari') || text.includes('green') || text.includes('blouse') || text.includes('computer') || text.includes('lab') || text.includes('workshop')) {
+      } else if (text.includes('aari') || text.includes('green') || text.includes('blouse') || text.includes('computer') || text.includes('lab') || text.includes('workshop')) {
         greenBlouses.push(img.src);
-      }
-      // 4. Pink/White Lehengas & Printed Dresses (matching 'illustration', 'sketching', 'convocation', 'ceremony', 'painting')
-      else if (text.includes('illustration') || text.includes('sketching') || text.includes('convocation') || text.includes('ceremony') || text.includes('painting') || text.includes('lehenga')) {
+      } else if (text.includes('illustration') || text.includes('sketching') || text.includes('convocation') || text.includes('ceremony') || text.includes('painting') || text.includes('lehenga')) {
         lehengasAndDresses.push(img.src);
-      }
-      // 5. Remaining photos fallback
-      else {
+      } else {
         remainingPhotos.push(img.src);
       }
     });
 
-    // Build perfect paired outfit sequence:
-    // [Red Gowns together, Rainbow Skirts together, Green Blouses together, Lehengas together, Others]
     const combined = [
       ...redGowns,
       ...rainbowSkirts,
@@ -80,30 +116,28 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
       ...remainingPhotos,
     ];
 
-    // Ensure all 8 uploaded photos are included without duplicates
     const uniqueSequence: string[] = [];
     combined.forEach(src => {
-      if (!uniqueSequence.includes(src)) {
-        uniqueSequence.push(src);
-      }
+      if (!uniqueSequence.includes(src)) uniqueSequence.push(src);
     });
-
     validGalleryImages.forEach(img => {
-      if (!uniqueSequence.includes(img.src)) {
-        uniqueSequence.push(img.src);
-      }
+      if (!uniqueSequence.includes(img.src)) uniqueSequence.push(img.src);
     });
 
     return uniqueSequence;
   };
 
   const displayImageSources = getOrderedSources();
+  const totalCards = displayImageSources.length;
 
-  // Duplicate displayImageSources array to ensure a rich, endless loop showing all uploaded images
-  let trackSources = [...displayImageSources];
-  while (trackSources.length < 16) {
-    trackSources = [...trackSources, ...displayImageSources];
-  }
+  // Continuous auto-loop for 3D perspective carousel
+  useEffect(() => {
+    if (variant !== '3d' || totalCards === 0) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % totalCards);
+    }, 2200);
+    return () => clearInterval(timer);
+  }, [variant, totalCards]);
 
   const handleInteractionStart = () => {
     setIsPaused(true);
@@ -117,6 +151,132 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     }, 500);
   };
 
+  // Render 3D Perspective Stage Carousel
+  const render3DCarousel = () => (
+    <div className="relative w-full overflow-hidden py-4 sm:py-8 select-none">
+      <div className="relative w-full h-[340px] xs:h-[390px] sm:h-[450px] md:h-[510px] lg:h-[550px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
+        {displayImageSources.map((src, idx) => {
+          let rawOffset = idx - activeIndex;
+          if (rawOffset > totalCards / 2) rawOffset -= totalCards;
+          if (rawOffset < -totalCards / 2) rawOffset += totalCards;
+
+          const maxOffset = typeof window !== 'undefined' && window.innerWidth < 640 ? 2 : 4;
+          const isVisible = Math.abs(rawOffset) <= maxOffset;
+          if (!isVisible) return null;
+
+          let rotateY = 0;
+          let translateZ = 0;
+          let translateX = 0;
+          let scale = 1;
+          let zIndex = 30;
+          let opacity = 1;
+
+          const isSmallMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
+          if (rawOffset === 0) {
+            rotateY = 0;
+            translateZ = 0;
+            translateX = 0;
+            scale = isSmallMobile ? 1.05 : 1.08;
+            zIndex = 50;
+            opacity = 1;
+          } else if (rawOffset === 1) {
+            rotateY = isSmallMobile ? -16 : -24;
+            translateZ = isSmallMobile ? -50 : -90;
+            translateX = isSmallMobile ? 135 : 360;
+            scale = isSmallMobile ? 0.86 : 0.92;
+            zIndex = 40;
+            opacity = isSmallMobile ? 0.85 : 0.95;
+          } else if (rawOffset === 2) {
+            rotateY = isSmallMobile ? -30 : -38;
+            translateZ = isSmallMobile ? -110 : -180;
+            translateX = isSmallMobile ? 250 : 700;
+            scale = isSmallMobile ? 0.72 : 0.78;
+            zIndex = 30;
+            opacity = isSmallMobile ? 0.65 : 0.8;
+          } else if (rawOffset === 3) {
+            rotateY = -52;
+            translateZ = -280;
+            translateX = 1040;
+            scale = 0.65;
+            zIndex = 20;
+            opacity = 0.65;
+          } else if (rawOffset === 4) {
+            rotateY = -64;
+            translateZ = -380;
+            translateX = 1380;
+            scale = 0.52;
+            zIndex = 10;
+            opacity = 0.45;
+          } else if (rawOffset === -1) {
+            rotateY = isSmallMobile ? 16 : 24;
+            translateZ = isSmallMobile ? -50 : -90;
+            translateX = isSmallMobile ? -135 : -360;
+            scale = isSmallMobile ? 0.86 : 0.92;
+            zIndex = 40;
+            opacity = isSmallMobile ? 0.85 : 0.95;
+          } else if (rawOffset === -2) {
+            rotateY = isSmallMobile ? 30 : 38;
+            translateZ = isSmallMobile ? -110 : -180;
+            translateX = isSmallMobile ? -250 : -700;
+            scale = isSmallMobile ? 0.72 : 0.78;
+            zIndex = 30;
+            opacity = isSmallMobile ? 0.65 : 0.8;
+          } else if (rawOffset === -3) {
+            rotateY = 52;
+            translateZ = -280;
+            translateX = -1040;
+            scale = 0.65;
+            zIndex = 20;
+            opacity = 0.65;
+          } else if (rawOffset === -4) {
+            rotateY = 64;
+            translateZ = -380;
+            translateX = -1380;
+            scale = 0.52;
+            zIndex = 10;
+            opacity = 0.45;
+          }
+
+          return (
+            <div
+              key={idx}
+              onClick={() => {
+                if (rawOffset === 0) {
+                  setSelectedLightboxImage(src);
+                } else {
+                  setActiveIndex(idx);
+                }
+              }}
+              className="absolute top-1/2 left-1/2 transition-all duration-700 ease-out cursor-pointer"
+              style={{
+                zIndex,
+                opacity,
+                transform: `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              <div className="relative w-[230px] xs:w-[270px] sm:w-[320px] md:w-[380px] h-[320px] xs:h-[370px] sm:h-[430px] md:h-[490px] bg-slate-900 border border-slate-200/80 shadow-xl rounded-2xl md:rounded-3xl overflow-hidden group">
+                <img
+                  src={src}
+                  alt={`Creative Work ${idx + 1}`}
+                  className="w-full h-full object-cover rounded-2xl md:rounded-3xl group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none rounded-2xl md:rounded-3xl" />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  // Render 2D Marquee Strip
+  let trackSources = [...displayImageSources];
+  while (trackSources.length < 16) {
+    trackSources = [...trackSources, ...displayImageSources];
+  }
+
   const renderVerticalCard = (src: string, indexKey: string) => (
     <div
       key={indexKey}
@@ -129,13 +289,33 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-        <span className="text-white text-xs font-semibold tracking-wider uppercase font-body bg-slate-900/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-          View Image
-        </span>
+    </div>
+  );
+
+  const render2DCarousel = () => (
+    <div className="relative w-full py-2 overflow-hidden select-none">
+      <div
+        onTouchStart={handleInteractionStart}
+        onTouchEnd={handleInteractionEnd}
+        onMouseDown={handleInteractionStart}
+        onMouseUp={handleInteractionEnd}
+        onMouseLeave={handleInteractionEnd}
+        onWheel={handleInteractionStart}
+        className="w-full overflow-hidden flex"
+      >
+        <div className={`flex w-max animate-creative-vertical ease-linear ${isPaused ? 'paused' : ''}`}>
+          <div className="flex shrink-0 space-x-4 sm:space-x-5 md:space-x-6 pr-4 sm:pr-5 md:pr-6">
+            {trackSources.map((src, idx) => renderVerticalCard(src, `vset1-${idx}`))}
+          </div>
+          <div className="flex shrink-0 space-x-4 sm:space-x-5 md:space-x-6 pr-4 sm:pr-5 md:pr-6">
+            {trackSources.map((src, idx) => renderVerticalCard(src, `vset2-${idx}`))}
+          </div>
+        </div>
       </div>
     </div>
   );
+
+  const isOverallLoading = contextLoading || loadingAboutImages;
 
   return (
     <section className={`bg-background text-foreground overflow-hidden ${hideHeading ? 'py-4 md:py-6' : 'py-12 md:py-16'}`}>
@@ -171,34 +351,14 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
         </div>
       )}
 
-      {loading ? (
+      {isOverallLoading ? (
         <div className="px-4 md:px-8 lg:px-[80px]">
           <Skeleton className="w-full h-80 rounded-3xl" />
         </div>
+      ) : variant === '3d' ? (
+        render3DCarousel()
       ) : (
-        <div className="relative w-full py-2 overflow-hidden select-none">
-          <div
-            onTouchStart={handleInteractionStart}
-            onTouchEnd={handleInteractionEnd}
-            onMouseDown={handleInteractionStart}
-            onMouseUp={handleInteractionEnd}
-            onMouseLeave={handleInteractionEnd}
-            onWheel={handleInteractionStart}
-            className="w-full overflow-hidden flex"
-          >
-            <div className={`flex w-max animate-creative-vertical ease-linear ${isPaused ? 'paused' : ''}`}>
-              {/* Set 1 */}
-              <div className="flex shrink-0 space-x-4 sm:space-x-5 md:space-x-6 pr-4 sm:pr-5 md:pr-6">
-                {trackSources.map((src, idx) => renderVerticalCard(src, `vset1-${idx}`))}
-              </div>
-
-              {/* Set 2 (100% Endless Infinite Loop) */}
-              <div className="flex shrink-0 space-x-4 sm:space-x-5 md:space-x-6 pr-4 sm:pr-5 md:pr-6">
-                {trackSources.map((src, idx) => renderVerticalCard(src, `vset2-${idx}`))}
-              </div>
-            </div>
-          </div>
-        </div>
+        render2DCarousel()
       )}
 
       {/* View Gallery Button */}

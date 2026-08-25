@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -73,6 +73,135 @@ interface AdmissionAdItem {
   imageUrl: string;
   link?: string;
 }
+
+const AdmissionsCarousel: React.FC<{ ads: AdmissionAdItem[]; onAdClick: () => void }> = ({ ads, onAdClick }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Duplicate items array for infinite loop
+  const displayAds = [...ads, ...ads, ...ads, ...ads];
+
+  // Auto-scroll animation loop
+  useEffect(() => {
+    let animationFrameId: number;
+
+    const scroll = () => {
+      if (containerRef.current && !isUserInteracting && !isDragging) {
+        containerRef.current.scrollLeft += 1.2;
+
+        const halfWidth = containerRef.current.scrollWidth / 2;
+        if (containerRef.current.scrollLeft >= halfWidth) {
+          containerRef.current.scrollLeft -= halfWidth;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isUserInteracting, isDragging]);
+
+  const pauseAutoScroll = () => {
+    setIsUserInteracting(true);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  };
+
+  const resumeAutoScroll = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, 1500);
+  };
+
+  // Drag Handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(false);
+    pauseAutoScroll();
+    if (!containerRef.current) return;
+    setStartX(e.pageX - containerRef.current.offsetLeft);
+    setScrollLeftState(containerRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    if (e.buttons !== 1) return;
+    setIsDragging(true);
+    e.preventDefault();
+    const x = e.pageX - containerRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    containerRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
+  const handleMouseUp = () => {
+    setTimeout(() => setIsDragging(false), 50);
+    resumeAutoScroll();
+  };
+
+  // Button Scroll Handlers
+  const scrollByAmount = (offset: number) => {
+    pauseAutoScroll();
+    if (containerRef.current) {
+      containerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+    resumeAutoScroll();
+  };
+
+  return (
+    <div className="relative group/carousel w-full py-4 select-none">
+      {/* Left Scroll Button */}
+      <button
+        onClick={() => scrollByAmount(-380)}
+        className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 cursor-pointer"
+        aria-label="Scroll Left"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+
+      {/* Right Scroll Button */}
+      <button
+        onClick={() => scrollByAmount(380)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-md flex items-center justify-center border border-white/20 shadow-lg opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 cursor-pointer"
+        aria-label="Scroll Right"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Draggable & Auto-Scrolling Track */}
+      <div
+        ref={containerRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onTouchStart={pauseAutoScroll}
+        onTouchEnd={resumeAutoScroll}
+        onWheel={pauseAutoScroll}
+        className="flex items-center gap-6 md:gap-8 px-4 overflow-x-auto scrollbar-none cursor-grab active:cursor-grabbing"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {displayAds.map((ad, idx) => (
+          <div
+            key={`${ad.id}-${idx}`}
+            onClick={() => {
+              if (!isDragging) onAdClick();
+            }}
+            className="shrink-0 cursor-pointer rounded-2xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group bg-white"
+          >
+            <img
+              src={ad.imageUrl}
+              alt={ad.title || `Admission Ad ${idx + 1}`}
+              className="h-[360px] sm:h-[440px] md:h-[480px] w-auto object-contain rounded-2xl pointer-events-none"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const Admissions = () => {
   const { courses, loading: coursesLoading } = useCourses();
@@ -366,7 +495,7 @@ const Admissions = () => {
         </div>
       </section>
 
-      {/* 2. CONTINUOUS RUNNING TICKER SHOWCASE (PURE AD IMAGES, NO BACKGROUND) */}
+      {/* 2. CONTINUOUS RUNNING TICKER SHOWCASE (PURE AD IMAGES, DRAG-SCROLLABLE & AUTO-SCROLLING) */}
       <section className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80">
         <div className="w-full text-center mb-8 px-4">
           <AnimateOnScroll delay={100}>
@@ -380,24 +509,7 @@ const Admissions = () => {
         </div>
 
         {admissionAds.length > 0 ? (
-          <div className="w-full overflow-hidden py-4">
-            <div className="animate-ticker flex items-center gap-6 md:gap-8 px-4">
-              {/* Multiply the ads list to ensure an infinite seamless marquee ticker */}
-              {[...admissionAds, ...admissionAds, ...admissionAds, ...admissionAds].map((ad, idx) => (
-                <div
-                  key={`${ad.id}-${idx}`}
-                  onClick={() => scrollToElement('enrollment-form')}
-                  className="shrink-0 cursor-pointer rounded-2xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 group bg-white"
-                >
-                  <img
-                    src={ad.imageUrl}
-                    alt={ad.title || `Admission Ad ${idx + 1}`}
-                    className="h-[360px] sm:h-[440px] md:h-[480px] w-auto object-contain rounded-2xl"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <AdmissionsCarousel ads={admissionAds} onAdClick={() => scrollToElement('enrollment-form')} />
         ) : (
           /* Guidance Container when 0 images are uploaded in Sanity CMS yet */
           <AnimateOnScroll delay={150}>

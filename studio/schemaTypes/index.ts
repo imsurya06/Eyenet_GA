@@ -7,11 +7,13 @@ import newsEvent from './newsEvent'
 import testimonial from './testimonial'
 import batch from './batch'
 import admissionAd from './admissionAd'
+import aboutSliderImage from './aboutSliderImage'
 
 export const schemaTypes = [
   course,
   batch,
   admissionAd,
+  aboutSliderImage,
   blog,
   faculty,
   galleryImage,

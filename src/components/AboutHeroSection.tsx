@@ -28,9 +28,9 @@ const AboutHeroSection = () => {
           </AnimateOnScroll>
         </div>
 
-        {/* Hero Showcase Marquee Ticker (Full Screen Viewport Width Edge-to-Edge) */}
+        {/* Hero Showcase 3D Perspective Carousel (Full Screen Viewport Width Edge-to-Edge) */}
         <div className="mb-12 md:mb-16 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden">
-          <DynamicGalleryCarouselSection hideHeading={true} withButton={false} />
+          <DynamicGalleryCarouselSection hideHeading={true} withButton={false} variant="3d" />
         </div>
 
         {/* Clean Balanced Narrative Text Card */}
