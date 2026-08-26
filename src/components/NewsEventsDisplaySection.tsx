@@ -35,7 +35,7 @@ const NewsEventsDisplaySection = () => {
   };
 
   return (
-    <section className="py-10 sm:py-14 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/70 via-white to-background text-foreground">
+    <section className="pt-3 sm:pt-4 md:pt-6 pb-10 sm:pb-14 md:pb-16 px-4 sm:px-6 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/70 via-white to-background text-foreground">
       <div className="max-w-7xl mx-auto">
         
         {/* HEADER ROW & MINIMAL CATEGORY FILTER */}

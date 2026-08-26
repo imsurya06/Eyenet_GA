@@ -8,7 +8,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Autoplay from "embla-carousel-autoplay";
 import AnimateOnScroll from './AnimateOnScroll';
@@ -25,53 +24,51 @@ const InfrastructureHeroSection = () => {
   );
 
   return (
-    <section className="pt-4 md:pt-6 lg:pt-8 pb-4 md:pb-6 px-3 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
+    <section className="pt-2 sm:pt-4 pb-4 md:pb-6 px-3 sm:px-6 md:px-8 lg:px-[80px] bg-background text-foreground text-center">
       <div className="max-w-7xl mx-auto">
         <AnimateOnScroll isHero={true} delay={100}>
-          <h1 className="text-h1-mobile md:text-h1-desktop font-heading mb-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-normal text-slate-900 mb-2">
             Infrastructure
           </h1>
         </AnimateOnScroll>
         <AnimateOnScroll isHero={true} delay={200}>
-          <p className="text-text-medium font-body text-gray-600 mb-4 md:mb-6 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base font-body text-slate-600 mb-4 md:mb-6 max-w-2xl mx-auto">
             We have well enough infrastructure to enhance the life of students.
           </p>
         </AnimateOnScroll>
 
-        <AnimateOnScroll isHero={true} delay={300} className="w-full max-h-[min(520px,calc(100dvh-200px))] flex items-center justify-center">
+        <AnimateOnScroll isHero={true} delay={300} className="w-full">
           {loading ? (
-            <Skeleton className="w-full aspect-[2.2/1] rounded-lg" />
+            <Skeleton className="w-full h-[320px] sm:h-[400px] md:h-[480px] rounded-2xl" />
           ) : carouselImages.length > 0 ? (
-            <Carousel
-              plugins={[plugin.current]}
-              className="w-full max-h-[min(520px,calc(100dvh-200px))]"
-              opts={{
-                loop: true,
-              }}
-            >
-              <CarouselContent>
-                {carouselImages.map((image, index) => (
-                  <CarouselItem key={image.id || index}>
-                    <div className="p-1">
-                      <Card className="border-none shadow-lg">
-                        <CardContent className="flex aspect-[2.2/1] max-h-[min(480px,calc(100dvh-220px))] items-center justify-center p-0 overflow-hidden rounded-lg">
-                          <img
-                            src={image.src}
-                            alt={image.alt || 'Infrastructure Carousel Image'}
-                            className="w-full h-full object-cover object-top"
-                          />
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
-              <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
-            </Carousel>
+            <div className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-slate-200/80">
+              <Carousel
+                plugins={[plugin.current]}
+                className="w-full"
+                opts={{
+                  loop: true,
+                }}
+              >
+                <CarouselContent className="-ml-0">
+                  {carouselImages.map((image, index) => (
+                    <CarouselItem key={image.id || index} className="pl-0 w-full basis-full">
+                      <div className="relative w-full h-[300px] xs:h-[360px] sm:h-[420px] md:h-[480px] lg:h-[520px] overflow-hidden rounded-2xl">
+                        <img
+                          src={image.src}
+                          alt={image.alt || 'Infrastructure Carousel Image'}
+                          className="w-full h-full object-cover object-center rounded-2xl"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-10 bg-slate-900/70 hover:bg-slate-900 text-white border-white/20 shadow-md" />
+                <CarouselNext className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-10 bg-slate-900/70 hover:bg-slate-900 text-white border-white/20 shadow-md" />
+              </Carousel>
+            </div>
           ) : (
-            <div className="flex aspect-[2.2/1] items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-gray-500">
-              <p className="font-body text-text-medium">
+            <div className="flex h-[320px] items-center justify-center border-2 border-dashed border-slate-300 rounded-2xl p-8 text-slate-500">
+              <p className="font-body text-sm">
                 No carousel images added yet. Add images with category &ldquo;Carousel&rdquo; in Sanity Studio.
               </p>
             </div>
