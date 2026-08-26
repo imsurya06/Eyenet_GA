@@ -29,7 +29,7 @@ const AboutHeroSection = () => {
         </div>
 
         {/* Hero Showcase 3D Perspective Carousel (Full Screen Viewport Width Edge-to-Edge) */}
-        <div className="mb-8 md:mb-12 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden max-h-[min(500px,calc(100dvh-200px))]">
+        <div className="mb-8 md:mb-12 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-2 sm:py-4">
           <DynamicGalleryCarouselSection hideHeading={true} withButton={false} variant="3d" />
         </div>
 

@@ -153,8 +153,8 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
 
   // Render 3D Perspective Stage Carousel
   const render3DCarousel = () => (
-    <div className="relative w-full overflow-hidden py-4 sm:py-8 select-none">
-      <div className="relative w-full h-[340px] xs:h-[390px] sm:h-[450px] md:h-[510px] lg:h-[550px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
+    <div className="relative w-full overflow-hidden py-6 sm:py-10 select-none">
+      <div className="relative w-full h-[360px] xs:h-[410px] sm:h-[470px] md:h-[530px] lg:h-[570px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
         {displayImageSources.map((src, idx) => {
           let rawOffset = idx - activeIndex;
           if (rawOffset > totalCards / 2) rawOffset -= totalCards;
@@ -256,7 +256,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
                 transformStyle: 'preserve-3d',
               }}
             >
-              <div className="relative w-[230px] xs:w-[270px] sm:w-[320px] md:w-[380px] h-[320px] xs:h-[370px] sm:h-[430px] md:h-[490px] bg-slate-900 border border-slate-200/80 shadow-xl rounded-2xl md:rounded-3xl overflow-hidden group">
+              <div className="relative w-[220px] xs:w-[260px] sm:w-[310px] md:w-[360px] h-[310px] xs:h-[360px] sm:h-[420px] md:h-[470px] bg-slate-900 border border-slate-200/80 shadow-xl rounded-2xl md:rounded-3xl overflow-hidden group">
                 <img
                   src={src}
                   alt={`Creative Work ${idx + 1}`}
