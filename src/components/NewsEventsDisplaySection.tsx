@@ -108,7 +108,7 @@ const NewsEventsDisplaySection = () => {
           </div>
         ) : filteredEvents.length > 0 ? (
 
-          /* CLEAN BENTO GRID - NO WHITE CARD BACKGROUNDS, NO BORDERS, NO VIEW POSTER FOOTER */
+          /* CLEAN BENTO GRID - ZERO SIDE BARS ON VIDEOS, ZERO GREY BOXES */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
             {filteredEvents.map((item, itemIdx) => {
               const isVideoPlaying = activePlayingVideoId === item.id;
@@ -124,7 +124,7 @@ const NewsEventsDisplaySection = () => {
                     isFeatured && !isTall ? 'md:col-span-2' : 'col-span-1'
                   }`}
                 >
-                  {/* Clean Media Frame (Zero White Borders, Zero Dark Side Bars) */}
+                  {/* Media Frame: Videos fill 100% 16:9 edge-to-edge; Posters display natural vertical height */}
                   <div className={`relative w-full bg-transparent overflow-hidden rounded-2xl mb-4 flex items-center justify-center ${
                     isTall ? 'aspect-[3/4] sm:aspect-[4/5]' : 'aspect-video'
                   }`}>
@@ -147,12 +147,12 @@ const NewsEventsDisplaySection = () => {
                         }}
                         className="relative w-full h-full cursor-pointer group/media flex items-center justify-center rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-300"
                       >
-                        {/* Clean Image / Poster (NO white card background, NO dark side bars) */}
+                        {/* 100% Clean Image/Video Thumbnail - Videos fill 100% edge-to-edge (object-cover) with ZERO side bars */}
                         <img
                           src={item.image}
                           alt={item.title}
                           className={`w-full h-full rounded-2xl group-hover/media:scale-[1.02] transition-transform duration-500 ease-out ${
-                            isTall ? 'object-contain' : 'object-cover sm:object-contain'
+                            isTall ? 'object-contain' : 'object-cover'
                           }`}
                         />
 
@@ -170,7 +170,7 @@ const NewsEventsDisplaySection = () => {
 
                         {/* Clean Play Icon for Videos */}
                         {item.youtubeVideoId && (
-                          <div className="absolute inset-0 flex items-center justify-center z-20 bg-slate-950/15 backdrop-blur-[1px]">
+                          <div className="absolute inset-0 flex items-center justify-center z-20 bg-slate-950/20 backdrop-blur-[1px]">
                             <div className="w-14 h-14 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
                               <Play className="w-6 h-6 fill-white ml-0.5" />
                             </div>
