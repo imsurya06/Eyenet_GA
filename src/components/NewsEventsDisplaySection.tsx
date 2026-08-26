@@ -40,6 +40,8 @@ const NewsEventsDisplaySection = () => {
     return filteredEvents.filter(e => e.id !== featuredEvent.id);
   }, [filteredEvents, featuredEvent]);
 
+  const hasFeaturedDescription = Boolean(featuredEvent?.description && featuredEvent.description.trim().length > 0);
+
   return (
     <section className="py-10 sm:py-14 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/70 via-white to-background text-foreground">
       <div className="max-w-7xl mx-auto">
@@ -116,14 +118,14 @@ const NewsEventsDisplaySection = () => {
 
           <div className="space-y-12">
             
-            {/* 1. TOP HERO FEATURED EVENT - Clean Poster Display with ZERO Background Card / ZERO Extra White Spaces */}
+            {/* 1. TOP HERO FEATURED EVENT - Fully Adaptive (Poster Only vs Poster + Description) */}
             {featuredEvent && (
               <AnimateOnScroll delay={300} className="w-full">
                 <div className="w-full">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                  <div className={`grid grid-cols-1 ${hasFeaturedDescription ? 'lg:grid-cols-12 gap-8 lg:gap-12 items-center' : 'max-w-3xl mx-auto gap-6'}`}>
                     
-                    {/* Poster Frame (Left 7 Cols) - Natural Poster Display directly without any outer background card */}
-                    <div className="lg:col-span-7 flex items-center justify-center w-full">
+                    {/* Poster Frame - Displays 100% Uncropped Image/Poster */}
+                    <div className={`${hasFeaturedDescription ? 'lg:col-span-7' : 'w-full'} flex items-center justify-center`}>
                       {activePlayingVideoId === featuredEvent.id && featuredEvent.youtubeVideoId ? (
                         <div className="relative aspect-video w-full rounded-2xl bg-slate-950 overflow-hidden shadow-lg">
                           <iframe
@@ -145,11 +147,11 @@ const NewsEventsDisplaySection = () => {
                           }}
                           className="relative max-w-full cursor-pointer group/media flex items-center justify-center rounded-2xl overflow-hidden shadow-lg border border-slate-200/80"
                         >
-                          {/* Poster Image - Fits 100% cleanly without any extra background padding/card */}
+                          {/* Clean Natural Poster Image */}
                           <img
                             src={featuredEvent.image}
                             alt={featuredEvent.title}
-                            className="w-auto max-w-full max-h-[520px] lg:max-h-[560px] h-auto object-contain rounded-2xl group-hover/media:scale-[1.02] transition-transform duration-500 ease-out"
+                            className="w-auto max-w-full max-h-[520px] lg:max-h-[580px] h-auto object-contain rounded-2xl group-hover/media:scale-[1.02] transition-transform duration-500 ease-out"
                           />
                           
                           {/* Top Left Badge */}
@@ -190,11 +192,11 @@ const NewsEventsDisplaySection = () => {
                       )}
                     </div>
 
-                    {/* Content Details (Right 5 Cols) */}
-                    <div className="lg:col-span-5 flex flex-col justify-between text-left h-full py-2">
+                    {/* Content Details */}
+                    <div className={`${hasFeaturedDescription ? 'lg:col-span-5' : 'w-full text-center'} flex flex-col justify-between h-full py-2`}>
                       <div>
                         {/* Category Label */}
-                        <div className="flex items-center gap-2 mb-3">
+                        <div className={`flex items-center gap-2 mb-3 ${hasFeaturedDescription ? 'justify-start' : 'justify-center'}`}>
                           <span className="text-xs font-bold uppercase tracking-widest text-primary">
                             {featuredEvent.category}
                           </span>
@@ -209,14 +211,16 @@ const NewsEventsDisplaySection = () => {
                           {featuredEvent.title}
                         </h2>
 
-                        {/* Description */}
-                        <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed mb-6">
-                          {featuredEvent.description}
-                        </p>
+                        {/* Description (Rendered ONLY IF present) */}
+                        {hasFeaturedDescription && (
+                          <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed mb-6">
+                            {featuredEvent.description}
+                          </p>
+                        )}
                       </div>
 
                       {/* Action Links */}
-                      <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
+                      <div className={`pt-4 border-t border-slate-200/80 flex flex-wrap items-center gap-3 ${hasFeaturedDescription ? 'justify-between' : 'justify-center'}`}>
                         <button
                           onClick={() => setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title })}
                           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 hover:text-primary transition-colors py-1 cursor-pointer"
@@ -255,11 +259,12 @@ const NewsEventsDisplaySection = () => {
               </AnimateOnScroll>
             )}
 
-            {/* 2. UNIFIED REMAINING ACTIVITIES GRID (Fills all 3 columns continuously) */}
+            {/* 2. UNIFIED REMAINING ACTIVITIES GRID */}
             {remainingEvents.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
                 {remainingEvents.map((item, itemIdx) => {
                   const isVideoPlaying = activePlayingVideoId === item.id;
+                  const hasItemDescription = Boolean(item.description && item.description.trim().length > 0);
 
                   return (
                     <AnimateOnScroll
@@ -341,12 +346,15 @@ const NewsEventsDisplaySection = () => {
                           <h4 className="text-lg font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
                             {item.title}
                           </h4>
-                          <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
-                            {item.description}
-                          </p>
+                          {/* Description (Rendered ONLY IF present) */}
+                          {hasItemDescription && (
+                            <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
+                              {item.description}
+                            </p>
+                          )}
                         </div>
 
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
                           <button
                             onClick={() => setSelectedLightboxPoster({ src: item.image, title: item.title })}
                             className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-primary transition-colors cursor-pointer"
