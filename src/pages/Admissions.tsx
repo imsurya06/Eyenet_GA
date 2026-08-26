@@ -427,19 +427,19 @@ const Admissions = () => {
     <div className="bg-gradient-to-b from-[#fdfaf6] via-white to-background min-h-screen">
       
       {/* 1. HERO SECTION: UPCOMING BATCHES (SANITY CMS COMPATIBLE) */}
-      <section id="upcoming-batches" className="relative pt-12 md:pt-16 pb-14 md:pb-20 px-4 md:px-8 lg:px-[80px] overflow-hidden border-b border-slate-200/80 scroll-mt-10">
+      <section id="upcoming-batches" className="relative pt-4 md:pt-6 lg:pt-8 pb-10 md:pb-14 px-4 md:px-8 lg:px-[80px] overflow-hidden border-b border-slate-200/80 scroll-mt-10">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <AnimateOnScroll isHero={true} delay={100}>
-            <span className="uppercase tracking-widest text-xs font-bold text-primary mb-2 block">
+            <span className="uppercase tracking-widest text-xs font-bold text-primary mb-1.5 block">
               LIVE COHORTS
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-4 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-2 sm:mb-3 tracking-tight">
               Upcoming Batches
             </h1>
-            <p className="text-base md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-12">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-6 md:mb-8">
               Select your preferred batch schedule and register early before seats are filled.
             </p>
           </AnimateOnScroll>

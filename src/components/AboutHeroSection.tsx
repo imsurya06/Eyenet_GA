@@ -6,30 +6,30 @@ import DynamicGalleryCarouselSection from './DynamicGalleryCarouselSection';
 
 const AboutHeroSection = () => {
   return (
-    <section className="py-10 md:py-16 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
+    <section className="pt-4 md:pt-6 lg:pt-8 pb-8 md:pb-12 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
 
         {/* Main Title and Subtitle - Centered */}
-        <div className="text-center max-w-3xl mx-auto mb-8 md:mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-4 md:mb-6">
           <AnimateOnScroll isHero={true} delay={100}>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-2">
               <span>About Eye-Net</span>
             </div>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal leading-tight text-slate-900 tracking-tight mb-3">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal leading-tight text-slate-900 tracking-tight mb-2">
               Eye-Net: A creative <span className="text-primary font-heading italic">Educational Academy</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={300}>
-            <p className="text-lg sm:text-xl md:text-2xl font-heading font-normal text-slate-700 tracking-wide mt-3 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl font-heading font-normal text-slate-700 tracking-wide mt-1 max-w-2xl mx-auto leading-relaxed">
               Where creativity creates <span className="text-primary font-heading italic font-semibold border-b-2 border-primary/30 pb-0.5">career.</span>
             </p>
           </AnimateOnScroll>
         </div>
 
         {/* Hero Showcase 3D Perspective Carousel (Full Screen Viewport Width Edge-to-Edge) */}
-        <div className="mb-12 md:mb-16 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden">
+        <div className="mb-8 md:mb-12 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden max-h-[min(500px,calc(100dvh-200px))]">
           <DynamicGalleryCarouselSection hideHeading={true} withButton={false} variant="3d" />
         </div>
 
