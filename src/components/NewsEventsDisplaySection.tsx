@@ -108,8 +108,8 @@ const NewsEventsDisplaySection = () => {
           </div>
         ) : filteredEvents.length > 0 ? (
 
-          /* DYNAMIC CLEAN BENTO GRID SYSTEM - NO OVERLAY BADGES, NO DARK BACKGROUNDS */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+          /* CLEAN BENTO GRID - NO WHITE CARD BACKGROUNDS, NO BORDERS, NO VIEW POSTER FOOTER */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
             {filteredEvents.map((item, itemIdx) => {
               const isVideoPlaying = activePlayingVideoId === item.id;
               const hasDescription = Boolean(item.description && item.description.trim().length > 0);
@@ -120,12 +120,12 @@ const NewsEventsDisplaySection = () => {
                 <AnimateOnScroll
                   key={item.id}
                   delay={100 + itemIdx * 60}
-                  className={`flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 text-left ${
+                  className={`flex flex-col bg-transparent group text-left ${
                     isFeatured && !isTall ? 'md:col-span-2' : 'col-span-1'
                   }`}
                 >
-                  {/* Media Frame: Clean Light Background with 100% Uncropped Media and NO Overlay Badges/Tags */}
-                  <div className={`relative w-full bg-slate-50 border-b border-slate-100 overflow-hidden flex items-center justify-center ${
+                  {/* Clean Media Frame (Zero White Borders, Zero Dark Side Bars) */}
+                  <div className={`relative w-full bg-transparent overflow-hidden rounded-2xl mb-4 flex items-center justify-center ${
                     isTall ? 'aspect-[3/4] sm:aspect-[4/5]' : 'aspect-video'
                   }`}>
                     {isVideoPlaying && item.youtubeVideoId ? (
@@ -134,7 +134,7 @@ const NewsEventsDisplaySection = () => {
                         title={item.title}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                        className="w-full h-full border-0"
+                        className="w-full h-full border-0 rounded-2xl shadow-sm"
                       />
                     ) : (
                       <div
@@ -145,18 +145,18 @@ const NewsEventsDisplaySection = () => {
                             setSelectedLightboxPoster({ src: item.image, title: item.title });
                           }
                         }}
-                        className="relative w-full h-full cursor-pointer group/media flex items-center justify-center overflow-hidden p-1 sm:p-2"
+                        className="relative w-full h-full cursor-pointer group/media flex items-center justify-center rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-300"
                       >
-                        {/* 100% Clean Image/Poster (No Dark Background, No Overlay Badges/Tags) */}
+                        {/* Clean Image / Poster (NO white card background, NO dark side bars) */}
                         <img
                           src={item.image}
                           alt={item.title}
-                          className={`w-full h-full rounded-2xl group-hover/media:scale-[1.03] transition-transform duration-500 ease-out ${
+                          className={`w-full h-full rounded-2xl group-hover/media:scale-[1.02] transition-transform duration-500 ease-out ${
                             isTall ? 'object-contain' : 'object-cover sm:object-contain'
                           }`}
                         />
 
-                        {/* Top Right Subtle Expand Icon on Hover */}
+                        {/* Expand Icon on Hover */}
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -168,10 +168,10 @@ const NewsEventsDisplaySection = () => {
                           <Maximize2 className="w-4 h-4" />
                         </button>
 
-                        {/* Play Icon for Videos */}
+                        {/* Clean Play Icon for Videos */}
                         {item.youtubeVideoId && (
-                          <div className="absolute inset-0 flex items-center justify-center z-20">
-                            <div className="w-14 h-14 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
+                          <div className="absolute inset-0 flex items-center justify-center z-20 bg-slate-950/15 backdrop-blur-[1px]">
+                            <div className="w-14 h-14 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
                               <Play className="w-6 h-6 fill-white ml-0.5" />
                             </div>
                           </div>
@@ -180,57 +180,46 @@ const NewsEventsDisplaySection = () => {
                     )}
                   </div>
 
-                  {/* Bento Card Content */}
-                  <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
-                    <div>
-                      {/* Meta Category & Date row under title */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                          {item.category}
-                        </span>
-                        <span className="text-slate-300">•</span>
-                        <span className="text-xs font-semibold text-slate-500">
-                          {new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg sm:text-xl font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
-                        {item.title}
-                      </h3>
-
-                      {/* Description (Rendered ONLY IF present) */}
-                      {hasDescription && (
-                        <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
-                          {item.description}
-                        </p>
-                      )}
+                  {/* Clean Content Below Image (No card padding, no card borders) */}
+                  <div className="flex flex-col flex-1">
+                    {/* Meta Row: Category & Date */}
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                        {item.category}
+                      </span>
+                      <span className="text-slate-300">•</span>
+                      <span className="text-xs font-semibold text-slate-500">
+                        {new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
                     </div>
 
-                    {/* Footer Action Links */}
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto gap-2">
-                      <button
-                        onClick={() => setSelectedLightboxPoster({ src: item.image, title: item.title })}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-primary transition-colors cursor-pointer"
-                      >
-                        <Maximize2 className="w-3 h-3 text-primary" />
-                        <span>View Poster</span>
-                      </button>
+                    {/* Title */}
+                    <h3 className="text-lg sm:text-xl font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h3>
 
-                      {item.youtubeUrl ? (
+                    {/* Description (Rendered ONLY IF present) */}
+                    {hasDescription && (
+                      <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-3">
+                        {item.description}
+                      </p>
+                    )}
+
+                    {/* Clean Watch Video Link (Rendered ONLY IF YouTube video exists) */}
+                    {item.youtubeUrl && (
+                      <div className="pt-2">
                         <a
                           href={item.youtubeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
                         >
                           <Youtube className="w-3.5 h-3.5 text-primary" />
                           <span>Watch Video</span>
-                          <ArrowUpRight className="w-3.5 h-3.5" />
+                          <ArrowUpRight className="w-3 h-3" />
                         </a>
-                      ) : (
-                        <span className="text-xs font-medium text-slate-400">Activity Showcase</span>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
 
                 </AnimateOnScroll>
