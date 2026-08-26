@@ -14,7 +14,7 @@ import {
 
 const programs = [
   {
-    image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://i.pinimg.com/736x/22/b3/4d/22b34d2ee7def7b9e9dbdac6d9f027eb.jpg',
     title: 'Fashion Design',
     category: 'Creative Arts',
     duration: 'Diploma / Certificate',
@@ -23,7 +23,7 @@ const programs = [
     badge: 'Popular'
   },
   {
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://i.pinimg.com/736x/54/02/8d/54028dfe6f4775ed2afdf481735d0143.jpg',
     title: 'Computer Courses',
     category: 'Information Tech',
     duration: 'Short & Advanced Terms',
@@ -32,7 +32,7 @@ const programs = [
     badge: 'High Demand'
   },
   {
-    image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://i.pinimg.com/736x/0b/3e/28/0b3e28bc4f888f2eeed42d021ff95c8a.jpg',
     title: 'Photography',
     category: 'Visual Media',
     duration: 'Practical Hands-on',
@@ -59,7 +59,7 @@ const programs = [
     badge: 'Career Boost'
   },
   {
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://i.pinimg.com/736x/81/69/c7/8169c76187973b2a994c2823fdc0ce6b.jpg',
     title: 'Beautician Course',
     category: 'Personal Care',
     duration: 'Certified Program',

@@ -18,7 +18,7 @@ interface DynamicGalleryCarouselSectionProps {
 const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps> = ({ 
   withButton = false,
   hideHeading = false,
-  variant = '3d'
+  variant = '2d'
 }) => {
   const { images: galleryImages = [], loading: contextLoading } = useGalleryImages();
   const [aboutSliderImages, setAboutSliderImages] = useState<string[]>([]);

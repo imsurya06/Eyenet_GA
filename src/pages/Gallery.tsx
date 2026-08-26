@@ -25,7 +25,7 @@ const Gallery = () => {
         </div>
       </section>
       <GalleryCarouselSection /> {/* This section remains for specific hardcoded concert images */}
-      <DynamicGalleryCarouselSection /> {/* This replaces the old GalleryGridSection */}
+      <DynamicGalleryCarouselSection variant="2d" /> {/* Replaces 3D carousel with 2D continuous ticker loop */}
       <CallToActionSection />
     </>
   );
