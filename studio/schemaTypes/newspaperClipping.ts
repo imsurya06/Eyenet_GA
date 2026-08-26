@@ -2,8 +2,15 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'newspaperClipping',
-  title: 'Newspaper Clippings',
+  title: '5. Newspaper Clippings & Press Scans',
   type: 'document',
+  orderings: [
+    {
+      title: 'Publication Date, Newest First',
+      name: 'publishDateDesc',
+      by: [{field: 'publishDate', direction: 'desc'}],
+    },
+  ],
   fields: [
     defineField({
       name: 'title',
@@ -30,6 +37,8 @@ export default defineType({
       name: 'publishDate',
       title: 'Publication Date',
       type: 'date',
+      description: 'Publication date (Newer publications automatically appear first on the website)',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
@@ -37,12 +46,12 @@ export default defineType({
       type: 'text',
       rows: 2,
     }),
-    defineField({
-      name: 'order',
-      title: 'Display Order Priority',
-      type: 'number',
-      description: 'Lower numbers appear first (e.g. 1, 2, 3)',
-      initialValue: 1,
-    }),
   ],
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'publishDate',
+      media: 'clippingImage',
+    },
+  },
 })

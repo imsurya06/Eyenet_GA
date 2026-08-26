@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'galleryImage',
-  title: 'Gallery Image',
+  title: '8. General Gallery Images',
   type: 'document',
   fields: [
     defineField({

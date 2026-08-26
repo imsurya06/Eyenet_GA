@@ -78,7 +78,7 @@ const NewspaperReaderSection: React.FC = () => {
 
   // Fetch Newspaper Clippings dynamically from Sanity CMS
   useEffect(() => {
-    const query = '*[_type == "newspaperClipping"] | order(order asc, _createdAt desc)';
+    const query = '*[_type == "newspaperClipping"] | order(publishDate desc, date desc, _createdAt desc)';
 
     const fetchClippings = async () => {
       setLoading(true);

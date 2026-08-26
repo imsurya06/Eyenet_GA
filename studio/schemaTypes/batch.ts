@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'batch',
-  title: 'Upcoming Batch',
+  title: '2. Upcoming Batches',
   type: 'document',
   fields: [
     defineField({

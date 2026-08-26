@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'aboutSliderImage',
-  title: 'About Page 3D Slider',
+  title: '9. About Page 3D Carousel Images',
   type: 'document',
   fields: [
     defineField({

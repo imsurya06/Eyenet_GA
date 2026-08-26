@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'infrastructureImage',
-  title: 'Infrastructure Image',
+  title: '10. Infrastructure Images',
   type: 'document',
   fields: [
     defineField({

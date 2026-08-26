@@ -2,7 +2,7 @@ import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'newsEvent',
-  title: 'News & Event',
+  title: '4. News & Events (Workshops, Runway Shows)',
   type: 'document',
   fields: [
     defineField({
@@ -45,9 +45,9 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Description (Optional)',
       type: 'text',
-      validation: (Rule) => Rule.required(),
+      description: 'Optional brief description',
     }),
     defineField({
       name: 'image',
