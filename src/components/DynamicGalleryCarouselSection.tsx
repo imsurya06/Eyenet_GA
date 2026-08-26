@@ -154,7 +154,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
   // Render 3D Perspective Stage Carousel
   const render3DCarousel = () => (
     <div className="relative w-full overflow-hidden py-1 sm:py-2 select-none">
-      <div className="relative w-full h-[360px] xs:h-[410px] sm:h-[470px] md:h-[530px] lg:h-[570px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
+      <div className="relative w-full h-[220px] xs:h-[270px] sm:h-[340px] md:h-[410px] lg:h-[460px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
         {displayImageSources.map((src, idx) => {
           let rawOffset = idx - activeIndex;
           if (rawOffset > totalCards / 2) rawOffset -= totalCards;
@@ -177,62 +177,62 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
             rotateY = 0;
             translateZ = 0;
             translateX = 0;
-            scale = isSmallMobile ? 1.05 : 1.08;
+            scale = isSmallMobile ? 1.04 : 1.06;
             zIndex = 50;
             opacity = 1;
           } else if (rawOffset === 1) {
             rotateY = isSmallMobile ? -16 : -24;
             translateZ = isSmallMobile ? -50 : -90;
-            translateX = isSmallMobile ? 135 : 360;
+            translateX = isSmallMobile ? 160 : 430;
             scale = isSmallMobile ? 0.86 : 0.92;
             zIndex = 40;
             opacity = isSmallMobile ? 0.85 : 0.95;
           } else if (rawOffset === 2) {
             rotateY = isSmallMobile ? -30 : -38;
             translateZ = isSmallMobile ? -110 : -180;
-            translateX = isSmallMobile ? 250 : 700;
+            translateX = isSmallMobile ? 290 : 840;
             scale = isSmallMobile ? 0.72 : 0.78;
             zIndex = 30;
             opacity = isSmallMobile ? 0.65 : 0.8;
           } else if (rawOffset === 3) {
             rotateY = -52;
             translateZ = -280;
-            translateX = 1040;
+            translateX = 1240;
             scale = 0.65;
             zIndex = 20;
             opacity = 0.65;
           } else if (rawOffset === 4) {
             rotateY = -64;
             translateZ = -380;
-            translateX = 1380;
+            translateX = 1620;
             scale = 0.52;
             zIndex = 10;
             opacity = 0.45;
           } else if (rawOffset === -1) {
             rotateY = isSmallMobile ? 16 : 24;
             translateZ = isSmallMobile ? -50 : -90;
-            translateX = isSmallMobile ? -135 : -360;
+            translateX = isSmallMobile ? -160 : -430;
             scale = isSmallMobile ? 0.86 : 0.92;
             zIndex = 40;
             opacity = isSmallMobile ? 0.85 : 0.95;
           } else if (rawOffset === -2) {
             rotateY = isSmallMobile ? 30 : 38;
             translateZ = isSmallMobile ? -110 : -180;
-            translateX = isSmallMobile ? -250 : -700;
+            translateX = isSmallMobile ? -290 : -840;
             scale = isSmallMobile ? 0.72 : 0.78;
             zIndex = 30;
             opacity = isSmallMobile ? 0.65 : 0.8;
           } else if (rawOffset === -3) {
             rotateY = 52;
             translateZ = -280;
-            translateX = -1040;
+            translateX = -1240;
             scale = 0.65;
             zIndex = 20;
             opacity = 0.65;
           } else if (rawOffset === -4) {
             rotateY = 64;
             translateZ = -380;
-            translateX = -1380;
+            translateX = -1620;
             scale = 0.52;
             zIndex = 10;
             opacity = 0.45;
@@ -256,13 +256,13 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
                 transformStyle: 'preserve-3d',
               }}
             >
-              <div className="relative w-[220px] xs:w-[260px] sm:w-[310px] md:w-[360px] h-[310px] xs:h-[360px] sm:h-[420px] md:h-[470px] bg-slate-900 border border-slate-200/80 shadow-xl rounded-2xl md:rounded-3xl overflow-hidden group">
+              {/* Horizontal Landscape 3D Card Box for Full Uncropped Horizontal Posters */}
+              <div className="relative w-[260px] xs:w-[320px] sm:w-[420px] md:w-[500px] lg:w-[560px] h-[190px] xs:h-[235px] sm:h-[305px] md:h-[365px] lg:h-[405px] bg-slate-950 border border-slate-200/80 shadow-2xl rounded-2xl md:rounded-3xl overflow-hidden group flex items-center justify-center">
                 <img
                   src={src}
                   alt={`Creative Work ${idx + 1}`}
-                  className="w-full h-full object-cover rounded-2xl md:rounded-3xl group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className="w-full h-full object-contain rounded-2xl md:rounded-3xl group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none rounded-2xl md:rounded-3xl" />
               </div>
             </div>
           );
