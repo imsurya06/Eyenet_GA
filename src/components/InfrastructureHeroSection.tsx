@@ -39,7 +39,7 @@ const InfrastructureHeroSection = () => {
 
         <AnimateOnScroll isHero={true} delay={300} className="w-full">
           {loading ? (
-            <Skeleton className="w-full h-[320px] sm:h-[400px] md:h-[480px] rounded-2xl" />
+            <Skeleton className="w-full aspect-[16/9] sm:aspect-[2/1] rounded-2xl" />
           ) : carouselImages.length > 0 ? (
             <div className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-slate-200/80">
               <Carousel
@@ -52,19 +52,12 @@ const InfrastructureHeroSection = () => {
                 <CarouselContent className="-ml-0">
                   {carouselImages.map((image, index) => (
                     <CarouselItem key={image.id || index} className="pl-0 w-full basis-full">
-                      <div className="relative w-full h-[320px] xs:h-[380px] sm:h-[440px] md:h-[500px] lg:h-[540px] bg-slate-950 flex items-center justify-center overflow-hidden rounded-2xl">
-                        {/* Layer 1: Ambient Blurred Backdrop to Fill Margins Seamlessly */}
-                        <img
-                          src={image.src}
-                          alt=""
-                          className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
-                        />
-
-                        {/* Layer 2: 100% Fully Visible Uncropped Image */}
+                      <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-[2.2/1] overflow-hidden rounded-2xl">
+                        {/* 100% Full-bleed Image (ZERO side bars, ZERO dark boxes) */}
                         <img
                           src={image.src}
                           alt={image.alt || 'Infrastructure Carousel Image'}
-                          className="relative z-10 w-full h-full object-contain rounded-2xl"
+                          className="w-full h-full object-cover object-center rounded-2xl"
                         />
                       </div>
                     </CarouselItem>
