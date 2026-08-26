@@ -52,18 +52,26 @@ const InfrastructureHeroSection = () => {
                 <CarouselContent className="-ml-0">
                   {carouselImages.map((image, index) => (
                     <CarouselItem key={image.id || index} className="pl-0 w-full basis-full">
-                      <div className="relative w-full h-[300px] xs:h-[360px] sm:h-[420px] md:h-[480px] lg:h-[520px] overflow-hidden rounded-2xl">
+                      <div className="relative w-full h-[320px] xs:h-[380px] sm:h-[440px] md:h-[500px] lg:h-[540px] bg-slate-950 flex items-center justify-center overflow-hidden rounded-2xl">
+                        {/* Layer 1: Ambient Blurred Backdrop to Fill Margins Seamlessly */}
+                        <img
+                          src={image.src}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
+                        />
+
+                        {/* Layer 2: 100% Fully Visible Uncropped Image */}
                         <img
                           src={image.src}
                           alt={image.alt || 'Infrastructure Carousel Image'}
-                          className="w-full h-full object-cover object-center rounded-2xl"
+                          className="relative z-10 w-full h-full object-contain rounded-2xl"
                         />
                       </div>
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-10 bg-slate-900/70 hover:bg-slate-900 text-white border-white/20 shadow-md" />
-                <CarouselNext className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-10 bg-slate-900/70 hover:bg-slate-900 text-white border-white/20 shadow-md" />
+                <CarouselPrevious className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 bg-slate-900/80 hover:bg-slate-900 text-white border-white/20 shadow-md" />
+                <CarouselNext className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 bg-slate-900/80 hover:bg-slate-900 text-white border-white/20 shadow-md" />
               </Carousel>
             </div>
           ) : (
