@@ -7,7 +7,7 @@ import { useCourses } from '@/context/CourseContext';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CheckCircle, Clock, User, Briefcase, Download, Frown, X, ArrowLeft, GraduationCap, LayoutList, BookOpen, ArrowRight } from 'lucide-react';
+import { CheckCircle, Clock, User, Briefcase, Download, Frown, ArrowLeft, GraduationCap, LayoutList, BookOpen, ArrowRight } from 'lucide-react';
 import NCFTLogo from '@/components/NCFTLogo';
 import CallToActionSection from '@/components/CallToActionSection';
 
@@ -68,44 +68,6 @@ const CourseDetailsPage = () => {
   const careerProspects = course.careerProspects || [];
   const modules = course.modules || [];
 
-  // Course Gallery Images (from Sanity or category-based fallbacks)
-  const getCategoryFallbackGallery = (category: string) => {
-    switch (category) {
-      case 'fashion':
-        return [
-          'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=1200',
-        ];
-      case 'computer':
-      case 'multimedia':
-        return [
-          'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1542744094-3a317272018a?auto=format&fit=crop&q=80&w=1200',
-        ];
-      case 'beautician':
-        return [
-          'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=1200',
-        ];
-      default:
-        return [
-          'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200',
-          'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200',
-        ];
-    }
-  };
-
-  const galleryImages = (course.gallery && course.gallery.length > 0)
-    ? course.gallery
-    : getCategoryFallbackGallery(course.category);
-
   const getFallbackImage = (category: string) => {
     switch (category) {
       case 'fashion': return 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1200';
@@ -120,8 +82,6 @@ const CourseDetailsPage = () => {
   const validImage = course.image && !course.image.includes('/images/img') && !course.image.includes('placeholder')
     ? course.image
     : getFallbackImage(course.category);
-
-  const [selectedLightboxImage, setSelectedLightboxImage] = React.useState<string | null>(null);
 
   return (
     <div className="bg-background text-foreground">
@@ -189,38 +149,6 @@ const CourseDetailsPage = () => {
               </p>
             </div>
           </AnimateOnScroll>
-        </div>
-      </section>
-
-      {/* Course Showcase Gallery Ticker */}
-      <section className="py-12 md:py-16 px-3 md:px-8 lg:px-[80px] bg-gradient-to-b from-background via-slate-50 to-background overflow-hidden border-t border-b border-gray-100">
-        <style>{`
-          @keyframes courseGalleryMarquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); }
-          }
-          .animate-course-gallery {
-            animation: courseGalleryMarquee 60s linear infinite;
-            will-change: transform;
-          }
-          .animate-course-gallery.paused {
-            animation-play-state: paused !important;
-          }
-        `}</style>
-        <div className="max-w-7xl mx-auto">
-          <AnimateOnScroll delay={100}>
-            <div className="text-center max-w-2xl mx-auto mb-8 md:mb-12">
-              <span className="inline-block uppercase tracking-widest text-xs font-semibold text-primary mb-2">
-                PRACTICAL WORK & WORKSHOPS
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-heading font-bold text-foreground">
-                Course <span className="text-primary font-heading italic">gallery showcase</span>
-              </h2>
-            </div>
-          </AnimateOnScroll>
-
-          {/* Marquee Ticker */}
-          <CourseGalleryTicker images={galleryImages} onSelectImage={setSelectedLightboxImage} />
         </div>
       </section>
 
@@ -338,105 +266,6 @@ const CourseDetailsPage = () => {
 
       {/* Call to Action */}
       <CallToActionSection courseTitle={course.title} />
-
-      {/* Lightbox Modal for Gallery Full View */}
-      {selectedLightboxImage && (
-        <div
-          className="fixed inset-0 z-[9999] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
-          onClick={() => setSelectedLightboxImage(null)}
-        >
-          <div
-            className="relative max-w-6xl w-full max-h-[90vh] flex flex-col items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedLightboxImage(null)}
-              className="absolute -top-12 right-0 md:top-2 md:-right-12 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
-              aria-label="Close modal"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <img
-              src={selectedLightboxImage}
-              alt="Course Gallery Full View"
-              className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-white/10"
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// Course Gallery Vertical Cards Ticker Sub-component
-const CourseGalleryTicker: React.FC<{
-  images: string[];
-  onSelectImage: (img: string) => void;
-}> = ({ images, onSelectImage }) => {
-  const [isPaused, setIsPaused] = React.useState(false);
-  const resumeTimerRef = React.useRef<NodeJS.Timeout | null>(null);
-
-  // Duplicate images array to ensure a rich, endless loop showing all uploaded images
-  let trackSources = [...images];
-  while (trackSources.length < 16) {
-    trackSources = [...trackSources, ...images];
-  }
-
-  const handleInteractionStart = () => {
-    setIsPaused(true);
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-  };
-
-  const handleInteractionEnd = () => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    resumeTimerRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, 500);
-  };
-
-  const renderVerticalCard = (src: string, indexKey: string) => (
-    <div
-      key={indexKey}
-      onClick={() => onSelectImage(src)}
-      className="group relative w-[240px] sm:w-[280px] md:w-[320px] h-[340px] sm:h-[400px] md:h-[460px] rounded-2xl md:rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer flex-shrink-0"
-    >
-      <img
-        src={src}
-        alt="Course Gallery Work"
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        loading="lazy"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-        <span className="text-white text-xs font-semibold tracking-wider uppercase font-body bg-slate-900/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-          View Image
-        </span>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="relative w-full py-2 overflow-hidden select-none">
-      <div
-        onTouchStart={handleInteractionStart}
-        onTouchEnd={handleInteractionEnd}
-        onMouseDown={handleInteractionStart}
-        onMouseUp={handleInteractionEnd}
-        onMouseLeave={handleInteractionEnd}
-        onWheel={handleInteractionStart}
-        className="w-full overflow-hidden flex"
-      >
-        <div className={`flex w-max animate-course-gallery ease-linear ${isPaused ? 'paused' : ''}`}>
-          {/* Set 1 */}
-          <div className="flex shrink-0 space-x-4 sm:space-x-5 md:space-x-6 pr-4 sm:pr-5 md:pr-6">
-            {trackSources.map((src, idx) => renderVerticalCard(src, `cvset1-${idx}`))}
-          </div>
-
-          {/* Set 2 (100% Endless Infinite Loop) */}
-          <div className="flex shrink-0 space-x-4 sm:space-x-5 md:space-x-6 pr-4 sm:pr-5 md:pr-6">
-            {trackSources.map((src, idx) => renderVerticalCard(src, `cvset2-${idx}`))}
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
