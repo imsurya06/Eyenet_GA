@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNewsEvents, NewsEvent } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
-import { CalendarDays, Play, Youtube, ArrowUpRight, Filter, Video, Radio, Maximize2, X } from 'lucide-react';
+import { Play, Youtube, ArrowUpRight, Filter, Video, Maximize2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const CATEGORIES = ['All', 'Fashion Walks', 'Seminar & Workshop', 'Others'] as const;
@@ -108,7 +108,7 @@ const NewsEventsDisplaySection = () => {
           </div>
         ) : filteredEvents.length > 0 ? (
 
-          /* DYNAMIC BENTO GRID SYSTEM FOR ALL POSTERS, IMAGES & VIDEOS */
+          /* DYNAMIC CLEAN BENTO GRID SYSTEM - NO OVERLAY BADGES, NO DARK BACKGROUNDS */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
             {filteredEvents.map((item, itemIdx) => {
               const isVideoPlaying = activePlayingVideoId === item.id;
@@ -124,8 +124,8 @@ const NewsEventsDisplaySection = () => {
                     isFeatured && !isTall ? 'md:col-span-2' : 'col-span-1'
                   }`}
                 >
-                  {/* Media Frame: Adaptive Bento Ratio (Tall for vertical posters, Aspect-Video for Videos) */}
-                  <div className={`relative w-full bg-slate-950 overflow-hidden flex items-center justify-center ${
+                  {/* Media Frame: Clean Light Background with 100% Uncropped Media and NO Overlay Badges/Tags */}
+                  <div className={`relative w-full bg-slate-50 border-b border-slate-100 overflow-hidden flex items-center justify-center ${
                     isTall ? 'aspect-[3/4] sm:aspect-[4/5]' : 'aspect-video'
                   }`}>
                     {isVideoPlaying && item.youtubeVideoId ? (
@@ -145,63 +145,37 @@ const NewsEventsDisplaySection = () => {
                             setSelectedLightboxPoster({ src: item.image, title: item.title });
                           }
                         }}
-                        className="relative w-full h-full cursor-pointer group/media flex items-center justify-center overflow-hidden"
+                        className="relative w-full h-full cursor-pointer group/media flex items-center justify-center overflow-hidden p-1 sm:p-2"
                       >
-                        {/* Layer 1: Ambient Blurred Background */}
-                        <img
-                          src={item.image}
-                          alt=""
-                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
-                        />
-
-                        {/* Layer 2: 100% Uncropped Media Poster */}
+                        {/* 100% Clean Image/Poster (No Dark Background, No Overlay Badges/Tags) */}
                         <img
                           src={item.image}
                           alt={item.title}
-                          className={`relative z-10 w-full h-full p-2 group-hover/media:scale-[1.03] transition-transform duration-500 ease-out ${
+                          className={`w-full h-full rounded-2xl group-hover/media:scale-[1.03] transition-transform duration-500 ease-out ${
                             isTall ? 'object-contain' : 'object-cover sm:object-contain'
                           }`}
                         />
 
-                        {/* Top Left Badge */}
-                        <div className="absolute top-3 left-3 z-20 flex items-center gap-2">
-                          {isFeatured && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                              <Radio className="w-3 h-3 animate-pulse" />
-                              <span>Featured</span>
-                            </span>
-                          )}
-                          <span className="inline-block px-3 py-0.5 rounded-full bg-slate-900/85 text-white text-[11px] font-semibold border border-slate-700">
-                            {item.category}
-                          </span>
-                        </div>
-
-                        {/* Top Right Expand Icon */}
+                        {/* Top Right Subtle Expand Icon on Hover */}
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setSelectedLightboxPoster({ src: item.image, title: item.title });
                           }}
-                          className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-md"
+                          className="absolute top-3 right-3 z-20 p-2 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white opacity-0 group-hover/media:opacity-100 transition-opacity duration-300 cursor-pointer shadow-md"
                           title="View Full Poster"
                         >
-                          <Maximize2 className="w-3.5 h-3.5" />
+                          <Maximize2 className="w-4 h-4" />
                         </button>
 
-                        {/* Play Icon */}
+                        {/* Play Icon for Videos */}
                         {item.youtubeVideoId && (
-                          <div className="absolute inset-0 flex items-center justify-center z-20 bg-slate-950/20 backdrop-blur-[1px]">
-                            <div className="w-14 h-14 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
+                          <div className="absolute inset-0 flex items-center justify-center z-20">
+                            <div className="w-14 h-14 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
                               <Play className="w-6 h-6 fill-white ml-0.5" />
                             </div>
                           </div>
                         )}
-
-                        {/* Date Badge Bottom Left */}
-                        <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 text-xs text-white font-medium bg-slate-900/85 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-white/10">
-                          <CalendarDays className="w-3.5 h-3.5 text-primary-foreground" />
-                          <span>{new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                        </div>
                       </div>
                     )}
                   </div>
@@ -209,9 +183,22 @@ const NewsEventsDisplaySection = () => {
                   {/* Bento Card Content */}
                   <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
                     <div>
+                      {/* Meta Category & Date row under title */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                          {item.category}
+                        </span>
+                        <span className="text-slate-300">•</span>
+                        <span className="text-xs font-semibold text-slate-500">
+                          {new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                      </div>
+
                       <h3 className="text-lg sm:text-xl font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
                         {item.title}
                       </h3>
+
+                      {/* Description (Rendered ONLY IF present) */}
                       {hasDescription && (
                         <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
                           {item.description}
