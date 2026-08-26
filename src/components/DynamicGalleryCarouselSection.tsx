@@ -153,7 +153,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
 
   // Render 3D Perspective Stage Carousel
   const render3DCarousel = () => (
-    <div className="relative w-full overflow-hidden py-6 sm:py-10 select-none">
+    <div className="relative w-full overflow-hidden py-1 sm:py-2 select-none">
       <div className="relative w-full h-[360px] xs:h-[410px] sm:h-[470px] md:h-[530px] lg:h-[570px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
         {displayImageSources.map((src, idx) => {
           let rawOffset = idx - activeIndex;
