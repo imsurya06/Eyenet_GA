@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import { useNewsEvents } from '@/context/NewsEventsContext';
+import { useNewsEvents, NewsEvent } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
 import { CalendarDays, Play, Youtube, ArrowUpRight, Filter, Video, Radio, Maximize2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,21 +26,13 @@ const NewsEventsDisplaySection = () => {
     return list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [newsEvents, selectedCategory]);
 
-  // Featured Hero Event: Explicitly pinned item (isFeatured), otherwise event with the newest date
-  const featuredEvent = useMemo(() => {
-    if (filteredEvents.length === 0) return null;
-    const explicitFeatured = filteredEvents.find(e => e.isFeatured);
-    if (explicitFeatured) return explicitFeatured;
-    return filteredEvents[0];
-  }, [filteredEvents]);
-
-  // Remaining Items for Grid Below (sorted descending by event date)
-  const remainingEvents = useMemo(() => {
-    if (!featuredEvent) return [];
-    return filteredEvents.filter(e => e.id !== featuredEvent.id);
-  }, [filteredEvents, featuredEvent]);
-
-  const hasFeaturedDescription = Boolean(featuredEvent?.description && featuredEvent.description.trim().length > 0);
+  // Helper to determine if an event is a Vertical/Tall Poster
+  const isTallPoster = (event: NewsEvent) => {
+    if (event.youtubeVideoId) return false;
+    const cat = (event.category || '').toLowerCase();
+    const title = (event.title || '').toLowerCase();
+    return cat.includes('workshop') || cat.includes('seminar') || title.includes('workshop') || title.includes('poster') || title.includes('photography');
+  };
 
   return (
     <section className="py-10 sm:py-14 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/70 via-white to-background text-foreground">
@@ -116,275 +108,147 @@ const NewsEventsDisplaySection = () => {
           </div>
         ) : filteredEvents.length > 0 ? (
 
-          <div className="space-y-12">
-            
-            {/* 1. TOP HERO FEATURED EVENT - Fully Adaptive (Poster Only vs Poster + Description) */}
-            {featuredEvent && (
-              <AnimateOnScroll delay={300} className="w-full">
-                <div className="w-full">
-                  <div className={`grid grid-cols-1 ${hasFeaturedDescription ? 'lg:grid-cols-12 gap-8 lg:gap-12 items-center' : 'max-w-3xl mx-auto gap-6'}`}>
-                    
-                    {/* Poster Frame - Displays 100% Uncropped Image/Poster */}
-                    <div className={`${hasFeaturedDescription ? 'lg:col-span-7' : 'w-full'} flex items-center justify-center`}>
-                      {activePlayingVideoId === featuredEvent.id && featuredEvent.youtubeVideoId ? (
-                        <div className="relative aspect-video w-full rounded-2xl bg-slate-950 overflow-hidden shadow-lg">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${featuredEvent.youtubeVideoId}?autoplay=1`}
-                            title={featuredEvent.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-full border-0"
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => {
-                            if (featuredEvent.youtubeVideoId) {
-                              setActivePlayingVideoId(featuredEvent.id);
-                            } else {
-                              setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title });
-                            }
-                          }}
-                          className="relative max-w-full cursor-pointer group/media flex items-center justify-center rounded-2xl overflow-hidden shadow-lg border border-slate-200/80"
-                        >
-                          {/* Clean Natural Poster Image */}
-                          <img
-                            src={featuredEvent.image}
-                            alt={featuredEvent.title}
-                            className="w-auto max-w-full max-h-[520px] lg:max-h-[580px] h-auto object-contain rounded-2xl group-hover/media:scale-[1.02] transition-transform duration-500 ease-out"
-                          />
-                          
-                          {/* Top Left Badge */}
-                          <div className="absolute top-3 left-3 z-10">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold uppercase tracking-wider shadow-md">
+          /* DYNAMIC BENTO GRID SYSTEM FOR ALL POSTERS, IMAGES & VIDEOS */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
+            {filteredEvents.map((item, itemIdx) => {
+              const isVideoPlaying = activePlayingVideoId === item.id;
+              const hasDescription = Boolean(item.description && item.description.trim().length > 0);
+              const isTall = isTallPoster(item);
+              const isFeatured = Boolean(item.isFeatured) || itemIdx === 0;
+
+              return (
+                <AnimateOnScroll
+                  key={item.id}
+                  delay={100 + itemIdx * 60}
+                  className={`flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 text-left ${
+                    isFeatured && !isTall ? 'md:col-span-2' : 'col-span-1'
+                  }`}
+                >
+                  {/* Media Frame: Adaptive Bento Ratio (Tall for vertical posters, Aspect-Video for Videos) */}
+                  <div className={`relative w-full bg-slate-950 overflow-hidden flex items-center justify-center ${
+                    isTall ? 'aspect-[3/4] sm:aspect-[4/5]' : 'aspect-video'
+                  }`}>
+                    {isVideoPlaying && item.youtubeVideoId ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${item.youtubeVideoId}?autoplay=1`}
+                        title={item.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full border-0"
+                      />
+                    ) : (
+                      <div
+                        onClick={() => {
+                          if (item.youtubeVideoId) {
+                            setActivePlayingVideoId(item.id);
+                          } else {
+                            setSelectedLightboxPoster({ src: item.image, title: item.title });
+                          }
+                        }}
+                        className="relative w-full h-full cursor-pointer group/media flex items-center justify-center overflow-hidden"
+                      >
+                        {/* Layer 1: Ambient Blurred Background */}
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110 pointer-events-none"
+                        />
+
+                        {/* Layer 2: 100% Uncropped Media Poster */}
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className={`relative z-10 w-full h-full p-2 group-hover/media:scale-[1.03] transition-transform duration-500 ease-out ${
+                            isTall ? 'object-contain' : 'object-cover sm:object-contain'
+                          }`}
+                        />
+
+                        {/* Top Left Badge */}
+                        <div className="absolute top-3 left-3 z-20 flex items-center gap-2">
+                          {isFeatured && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
                               <Radio className="w-3 h-3 animate-pulse" />
-                              <span>Latest Activity</span>
+                              <span>Featured</span>
                             </span>
-                          </div>
-
-                          {/* Top Right Expand Icon */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title });
-                            }}
-                            className="absolute top-3 right-3 z-10 p-2 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-md"
-                            title="View Full Poster"
-                          >
-                            <Maximize2 className="w-4 h-4" />
-                          </button>
-
-                          {/* Play Button Overlay */}
-                          {featuredEvent.youtubeVideoId && (
-                            <div className="absolute inset-0 flex items-center justify-center z-10 bg-slate-950/20 backdrop-blur-[2px]">
-                              <div className="w-16 h-16 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
-                                <Play className="w-7 h-7 fill-white ml-1" />
-                              </div>
-                            </div>
                           )}
-
-                          {/* Date Pill Bottom Left */}
-                          <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 text-xs text-white font-medium bg-slate-900/85 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 shadow-sm">
-                            <CalendarDays className="w-3.5 h-3.5 text-primary-foreground" />
-                            <span>{new Date(featuredEvent.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                          </div>
+                          <span className="inline-block px-3 py-0.5 rounded-full bg-slate-900/85 text-white text-[11px] font-semibold border border-slate-700">
+                            {item.category}
+                          </span>
                         </div>
+
+                        {/* Top Right Expand Icon */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedLightboxPoster({ src: item.image, title: item.title });
+                          }}
+                          className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-md"
+                          title="View Full Poster"
+                        >
+                          <Maximize2 className="w-3.5 h-3.5" />
+                        </button>
+
+                        {/* Play Icon */}
+                        {item.youtubeVideoId && (
+                          <div className="absolute inset-0 flex items-center justify-center z-20 bg-slate-950/20 backdrop-blur-[1px]">
+                            <div className="w-14 h-14 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
+                              <Play className="w-6 h-6 fill-white ml-0.5" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Date Badge Bottom Left */}
+                        <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 text-xs text-white font-medium bg-slate-900/85 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-white/10">
+                          <CalendarDays className="w-3.5 h-3.5 text-primary-foreground" />
+                          <span>{new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bento Card Content */}
+                  <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
+                        {item.title}
+                      </h3>
+                      {hasDescription && (
+                        <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
+                          {item.description}
+                        </p>
                       )}
                     </div>
 
-                    {/* Content Details */}
-                    <div className={`${hasFeaturedDescription ? 'lg:col-span-5' : 'w-full text-center'} flex flex-col justify-between h-full py-2`}>
-                      <div>
-                        {/* Category Label */}
-                        <div className={`flex items-center gap-2 mb-3 ${hasFeaturedDescription ? 'justify-start' : 'justify-center'}`}>
-                          <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                            {featuredEvent.category}
-                          </span>
-                          <span className="text-slate-300">•</span>
-                          <span className="text-xs font-semibold text-slate-500">
-                            {new Date(featuredEvent.date).toLocaleDateString()}
-                          </span>
-                        </div>
+                    {/* Footer Action Links */}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto gap-2">
+                      <button
+                        onClick={() => setSelectedLightboxPoster({ src: item.image, title: item.title })}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-primary transition-colors cursor-pointer"
+                      >
+                        <Maximize2 className="w-3 h-3 text-primary" />
+                        <span>View Poster</span>
+                      </button>
 
-                        {/* Title */}
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-normal text-slate-900 leading-snug mb-4 group-hover:text-primary transition-colors">
-                          {featuredEvent.title}
-                        </h2>
-
-                        {/* Description (Rendered ONLY IF present) */}
-                        {hasFeaturedDescription && (
-                          <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed mb-6">
-                            {featuredEvent.description}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Action Links */}
-                      <div className={`pt-4 border-t border-slate-200/80 flex flex-wrap items-center gap-3 ${hasFeaturedDescription ? 'justify-between' : 'justify-center'}`}>
-                        <button
-                          onClick={() => setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title })}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 hover:text-primary transition-colors py-1 cursor-pointer"
+                      {item.youtubeUrl ? (
+                        <a
+                          href={item.youtubeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
                         >
-                          <Maximize2 className="w-3.5 h-3.5 text-primary" />
-                          <span>View Full Poster</span>
-                        </button>
-
-                        {featuredEvent.youtubeUrl && (
-                          <a
-                            href={featuredEvent.youtubeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
-                          >
-                            <Youtube className="w-4 h-4 text-primary" />
-                            <span>Watch on YouTube</span>
-                            <ArrowUpRight className="w-3.5 h-3.5" />
-                          </a>
-                        )}
-
-                        {featuredEvent.youtubeVideoId && activePlayingVideoId !== featuredEvent.id && (
-                          <button
-                            onClick={() => setActivePlayingVideoId(featuredEvent.id)}
-                            className="text-xs font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
-                          >
-                            <span>Play in page</span>
-                          </button>
-                        )}
-                      </div>
-
+                          <Youtube className="w-3.5 h-3.5 text-primary" />
+                          <span>Watch Video</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      ) : (
+                        <span className="text-xs font-medium text-slate-400">Activity Showcase</span>
+                      )}
                     </div>
-
                   </div>
-                </div>
-              </AnimateOnScroll>
-            )}
 
-            {/* 2. UNIFIED REMAINING ACTIVITIES GRID */}
-            {remainingEvents.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
-                {remainingEvents.map((item, itemIdx) => {
-                  const isVideoPlaying = activePlayingVideoId === item.id;
-                  const hasItemDescription = Boolean(item.description && item.description.trim().length > 0);
-
-                  return (
-                    <AnimateOnScroll
-                      key={item.id}
-                      delay={100 + itemIdx * 60}
-                      className="flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 text-left"
-                    >
-                      {/* Media Poster Frame */}
-                      <div className="relative aspect-video w-full bg-slate-900 overflow-hidden flex items-center justify-center">
-                        {isVideoPlaying && item.youtubeVideoId ? (
-                          <iframe
-                            src={`https://www.youtube.com/embed/${item.youtubeVideoId}?autoplay=1`}
-                            title={item.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-full border-0"
-                          />
-                        ) : (
-                          <div
-                            onClick={() => {
-                              if (item.youtubeVideoId) {
-                                setActivePlayingVideoId(item.id);
-                              } else {
-                                setSelectedLightboxPoster({ src: item.image, title: item.title });
-                              }
-                            }}
-                            className="relative w-full h-full cursor-pointer group/media flex items-center justify-center"
-                          >
-                            {/* Full-bleed Image */}
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-500 ease-out"
-                            />
-
-                            {/* Gradient Overlay for Text Visibility */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
-
-                            {/* Category Badge Top Left */}
-                            <div className="absolute top-3 left-3 z-10">
-                              <span className="inline-block px-3 py-1 rounded-full bg-slate-900/85 text-white text-[11px] font-semibold backdrop-blur-xs">
-                                {item.category}
-                              </span>
-                            </div>
-
-                            {/* Top Right Expand Icon */}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedLightboxPoster({ src: item.image, title: item.title });
-                              }}
-                              className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-slate-900/75 hover:bg-slate-900 text-white backdrop-blur-xs border border-white/20 transition-all cursor-pointer shadow-sm"
-                              title="View Full Poster"
-                            >
-                              <Maximize2 className="w-3.5 h-3.5" />
-                            </button>
-
-                            {/* Play Icon */}
-                            {item.youtubeVideoId && (
-                              <div className="absolute inset-0 flex items-center justify-center z-10">
-                                <div className="w-12 h-12 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300 border border-white/20">
-                                  <Play className="w-5 h-5 fill-white ml-0.5" />
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Date Badge Bottom Left */}
-                            <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 text-xs text-white font-medium">
-                              <CalendarDays className="w-3.5 h-3.5 text-primary-foreground" />
-                              <span>{new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Card Content */}
-                      <div className="p-6 flex flex-col justify-between flex-1">
-                        <div>
-                          <h4 className="text-lg font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
-                            {item.title}
-                          </h4>
-                          {/* Description (Rendered ONLY IF present) */}
-                          {hasItemDescription && (
-                            <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-4">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
-                          <button
-                            onClick={() => setSelectedLightboxPoster({ src: item.image, title: item.title })}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-primary transition-colors cursor-pointer"
-                          >
-                            <Maximize2 className="w-3 h-3 text-primary" />
-                            <span>View Poster</span>
-                          </button>
-
-                          {item.youtubeUrl ? (
-                            <a
-                              href={item.youtubeUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-xs font-bold text-slate-800 hover:text-primary transition-colors"
-                            >
-                              <span>Watch Video</span>
-                              <ArrowUpRight className="w-3.5 h-3.5" />
-                            </a>
-                          ) : (
-                            <span className="text-xs font-medium text-slate-400">Activity Showcase</span>
-                          )}
-                        </div>
-                      </div>
-
-                    </AnimateOnScroll>
-                  );
-                })}
-              </div>
-            )}
-
+                </AnimateOnScroll>
+              );
+            })}
           </div>
 
         ) : (
