@@ -256,12 +256,12 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
                 transformStyle: 'preserve-3d',
               }}
             >
-              {/* Horizontal Landscape 3D Card Box for Full Uncropped Horizontal Posters */}
-              <div className="relative w-[260px] xs:w-[320px] sm:w-[420px] md:w-[500px] lg:w-[560px] h-[190px] xs:h-[235px] sm:h-[305px] md:h-[365px] lg:h-[405px] bg-slate-950 border border-slate-200/80 shadow-2xl rounded-2xl md:rounded-3xl overflow-hidden group flex items-center justify-center">
+              {/* Horizontal Landscape 3D Card Box with ZERO Black Bars */}
+              <div className="relative w-[260px] xs:w-[320px] sm:w-[420px] md:w-[500px] lg:w-[560px] h-[190px] xs:h-[235px] sm:h-[305px] md:h-[365px] lg:h-[405px] bg-transparent group flex items-center justify-center">
                 <img
                   src={src}
                   alt={`Creative Work ${idx + 1}`}
-                  className="w-full h-full object-contain rounded-2xl md:rounded-3xl group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  className="w-full h-full object-cover rounded-2xl md:rounded-3xl shadow-2xl border border-slate-200/80 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 />
               </div>
             </div>
