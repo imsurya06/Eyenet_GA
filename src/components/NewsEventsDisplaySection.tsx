@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNewsEvents } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
-import { CalendarDays, Play, Youtube, ArrowUpRight, Filter, Video, Radio } from 'lucide-react';
+import { CalendarDays, Play, Youtube, ArrowUpRight, Filter, Video, Radio, Maximize2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const CATEGORIES = ['All', 'Fashion Walks', 'Seminar & Workshop', 'Others'] as const;
@@ -13,6 +13,7 @@ const NewsEventsDisplaySection = () => {
   const { newsEvents, loading } = useNewsEvents();
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('All');
   const [activePlayingVideoId, setActivePlayingVideoId] = useState<string | null>(null);
+  const [selectedLightboxPoster, setSelectedLightboxPoster] = useState<{ src: string; title: string } | null>(null);
 
   // Filter and sort events strictly by Event Date desc (newest event date first)
   const filteredEvents = useMemo(() => {
@@ -118,11 +119,11 @@ const NewsEventsDisplaySection = () => {
             {/* 1. TOP HERO FEATURED EVENT (LATEST EVENT DATE OR FEATURED ACTIVITY) */}
             {featuredEvent && (
               <AnimateOnScroll delay={300} className="w-full">
-                <div className="bg-white rounded-3xl border border-slate-200/80 p-4 sm:p-6 md:p-8 overflow-hidden group">
+                <div className="bg-white rounded-3xl border border-slate-200/80 p-4 sm:p-6 md:p-8 overflow-hidden group shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
                     
-                    {/* Media Frame (Left 7 Cols) */}
-                    <div className="lg:col-span-7 relative aspect-video w-full rounded-2xl bg-slate-950 overflow-hidden">
+                    {/* Adaptive Poster Frame (Left 7 Cols) - Displays 100% Uncropped Image/Poster */}
+                    <div className="lg:col-span-7 relative aspect-[16/10] sm:aspect-video w-full rounded-2xl bg-slate-950 overflow-hidden flex items-center justify-center">
                       {activePlayingVideoId === featuredEvent.id && featuredEvent.youtubeVideoId ? (
                         <iframe
                           src={`https://www.youtube.com/embed/${featuredEvent.youtubeVideoId}?autoplay=1`}
@@ -133,29 +134,52 @@ const NewsEventsDisplaySection = () => {
                         />
                       ) : (
                         <div
-                          onClick={() => featuredEvent.youtubeVideoId && setActivePlayingVideoId(featuredEvent.id)}
-                          className="relative w-full h-full cursor-pointer group/media"
+                          onClick={() => {
+                            if (featuredEvent.youtubeVideoId) {
+                              setActivePlayingVideoId(featuredEvent.id);
+                            } else {
+                              setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title });
+                            }
+                          }}
+                          className="relative w-full h-full cursor-pointer group/media flex items-center justify-center overflow-hidden"
                         >
+                          {/* Layer 1: Ambient Blurred Background */}
+                          <img
+                            src={featuredEvent.image}
+                            alt=""
+                            className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 pointer-events-none"
+                          />
+
+                          {/* Layer 2: 100% Uncropped Foreground Poster */}
                           <img
                             src={featuredEvent.image}
                             alt={featuredEvent.title}
-                            className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-700 ease-out"
+                            className="relative z-10 w-full h-full object-contain p-2 sm:p-3 group-hover/media:scale-105 transition-transform duration-700 ease-out"
                           />
                           
-                          {/* Gradient Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-
                           {/* Top Left Badge */}
-                          <div className="absolute top-4 left-4 z-10">
+                          <div className="absolute top-4 left-4 z-20">
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold uppercase tracking-wider shadow-xs">
                               <Radio className="w-3 h-3 animate-pulse" />
                               <span>Latest Activity</span>
                             </span>
                           </div>
 
+                          {/* Top Right Expand Icon */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title });
+                            }}
+                            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white/90 hover:text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-md"
+                            title="View Full Poster"
+                          >
+                            <Maximize2 className="w-4 h-4" />
+                          </button>
+
                           {/* Play Button Overlay */}
                           {featuredEvent.youtubeVideoId && (
-                            <div className="absolute inset-0 flex items-center justify-center z-10">
+                            <div className="absolute inset-0 flex items-center justify-center z-20">
                               <div className="w-16 h-16 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-md group-hover/media:scale-110 transition-transform duration-300 border border-white/30">
                                 <Play className="w-7 h-7 fill-white ml-1" />
                               </div>
@@ -163,7 +187,7 @@ const NewsEventsDisplaySection = () => {
                           )}
 
                           {/* Date Pill Bottom Left */}
-                          <div className="absolute bottom-4 left-4 z-10 flex items-center gap-1.5 text-xs text-white/90 font-medium bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10">
+                          <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1.5 text-xs text-white/90 font-medium bg-slate-900/85 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10">
                             <CalendarDays className="w-3.5 h-3.5 text-primary-foreground/90" />
                             <span>{new Date(featuredEvent.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                           </div>
@@ -197,13 +221,21 @@ const NewsEventsDisplaySection = () => {
                       </div>
 
                       {/* Action Links */}
-                      <div className="pt-4 border-t border-slate-100 flex items-center gap-4">
+                      <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                        <button
+                          onClick={() => setSelectedLightboxPoster({ src: featuredEvent.image, title: featuredEvent.title })}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800 hover:text-primary transition-colors py-1 cursor-pointer"
+                        >
+                          <Maximize2 className="w-3.5 h-3.5 text-primary" />
+                          <span>View Full Poster</span>
+                        </button>
+
                         {featuredEvent.youtubeUrl && (
                           <a
                             href={featuredEvent.youtubeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
                           >
                             <Youtube className="w-4 h-4 text-primary" />
                             <span>Watch on YouTube</span>
@@ -214,7 +246,7 @@ const NewsEventsDisplaySection = () => {
                         {featuredEvent.youtubeVideoId && activePlayingVideoId !== featuredEvent.id && (
                           <button
                             onClick={() => setActivePlayingVideoId(featuredEvent.id)}
-                            className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+                            className="text-xs font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
                           >
                             <span>Play in page</span>
                           </button>
@@ -240,8 +272,8 @@ const NewsEventsDisplaySection = () => {
                       delay={100 + itemIdx * 60}
                       className="flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 text-left"
                     >
-                      {/* Media Poster Frame */}
-                      <div className="relative aspect-video w-full bg-slate-950 overflow-hidden">
+                      {/* Media Poster Frame - Uncropped 100% Fit */}
+                      <div className="relative aspect-[16/10] sm:aspect-video w-full bg-slate-950 overflow-hidden flex items-center justify-center">
                         {isVideoPlaying && item.youtubeVideoId ? (
                           <iframe
                             src={`https://www.youtube.com/embed/${item.youtubeVideoId}?autoplay=1`}
@@ -252,26 +284,51 @@ const NewsEventsDisplaySection = () => {
                           />
                         ) : (
                           <div
-                            onClick={() => item.youtubeVideoId && setActivePlayingVideoId(item.id)}
-                            className="relative w-full h-full cursor-pointer group/media"
+                            onClick={() => {
+                              if (item.youtubeVideoId) {
+                                setActivePlayingVideoId(item.id);
+                              } else {
+                                setSelectedLightboxPoster({ src: item.image, title: item.title });
+                              }
+                            }}
+                            className="relative w-full h-full cursor-pointer group/media flex items-center justify-center overflow-hidden"
                           >
+                            {/* Layer 1: Ambient Blurred Background */}
+                            <img
+                              src={item.image}
+                              alt=""
+                              className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 pointer-events-none"
+                            />
+
+                            {/* Layer 2: 100% Uncropped Foreground Poster */}
                             <img
                               src={item.image}
                               alt={item.title}
-                              className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-700 ease-out"
+                              className="relative z-10 w-full h-full object-contain p-2 group-hover/media:scale-105 transition-transform duration-700 ease-out"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
 
                             {/* Category Badge Top Left */}
-                            <div className="absolute top-3 left-3 z-10">
+                            <div className="absolute top-3 left-3 z-20">
                               <span className="inline-block px-3 py-1 rounded-full bg-slate-900/90 text-white text-[11px] font-semibold border border-slate-700">
                                 {item.category}
                               </span>
                             </div>
 
+                            {/* Top Right Expand Icon */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedLightboxPoster({ src: item.image, title: item.title });
+                              }}
+                              className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white/90 hover:text-white backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-md"
+                              title="View Full Poster"
+                            >
+                              <Maximize2 className="w-3.5 h-3.5" />
+                            </button>
+
                             {/* Play Icon */}
                             {item.youtubeVideoId && (
-                              <div className="absolute inset-0 flex items-center justify-center z-10">
+                              <div className="absolute inset-0 flex items-center justify-center z-20">
                                 <div className="w-12 h-12 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-lg group-hover/media:scale-110 transition-transform duration-300">
                                   <Play className="w-5 h-5 fill-white ml-0.5" />
                                 </div>
@@ -279,7 +336,7 @@ const NewsEventsDisplaySection = () => {
                             )}
 
                             {/* Date Badge Bottom Left */}
-                            <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 text-xs text-white/90 font-medium">
+                            <div className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 text-xs text-white/90 font-medium bg-slate-900/85 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-white/10">
                               <CalendarDays className="w-3.5 h-3.5 text-primary-foreground" />
                               <span>{new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                             </div>
@@ -299,6 +356,14 @@ const NewsEventsDisplaySection = () => {
                         </div>
 
                         <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                          <button
+                            onClick={() => setSelectedLightboxPoster({ src: item.image, title: item.title })}
+                            className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-primary transition-colors cursor-pointer"
+                          >
+                            <Maximize2 className="w-3 h-3 text-primary" />
+                            <span>View Poster</span>
+                          </button>
+
                           {item.youtubeUrl ? (
                             <a
                               href={item.youtubeUrl}
@@ -344,6 +409,37 @@ const NewsEventsDisplaySection = () => {
         )}
 
       </div>
+
+      {/* Lightbox Modal for Full Resolution Poster View */}
+      {selectedLightboxPoster && (
+        <div
+          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200 select-none"
+          onClick={() => setSelectedLightboxPoster(null)}
+        >
+          <div
+            className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedLightboxPoster(null)}
+              className="absolute -top-12 right-0 md:top-2 md:-right-12 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <img
+              src={selectedLightboxPoster.src}
+              alt={selectedLightboxPoster.title}
+              className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-white/10"
+            />
+            {selectedLightboxPoster.title && (
+              <p className="text-white/90 text-sm font-heading font-medium mt-3 text-center">
+                {selectedLightboxPoster.title}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };
