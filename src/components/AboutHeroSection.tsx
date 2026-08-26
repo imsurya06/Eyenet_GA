@@ -28,8 +28,8 @@ const AboutHeroSection = () => {
           <DynamicGalleryCarouselSection hideHeading={true} withButton={false} variant="3d" />
         </div>
 
-        {/* Clean Balanced Narrative Text Card (Compact Top Margin) */}
-        <div className="max-w-4xl mx-auto bg-slate-50/80 p-6 sm:p-8 md:p-10 rounded-3xl border border-slate-200/80 text-left shadow-xs">
+        {/* Wide Full-Width Narrative Text Card */}
+        <div className="w-full max-w-7xl mx-auto bg-slate-50/80 p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl border border-slate-200/80 text-left shadow-xs">
           <AnimateOnScroll delay={300}>
             <h2 className="text-2xl md:text-3xl font-heading font-normal text-slate-900 mb-4">
               Shaping confident & <span className="text-primary font-heading italic">skilled designers</span>
