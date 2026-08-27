@@ -25,25 +25,28 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useBlogs } from '@/context/BlogContext';
 import { toast } from 'sonner';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { Blog } from '@/data/blogs';
 
 interface StudentWriteBlogDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-// Zod schema for form validation
+// Helper to count words in text
+const countWords = (text: string) => text ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+
+// Zod schema with word limit for blog content (15 - 300 words)
 const formSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
   author: z.string().min(2, { message: 'Your name must be at least 2 characters.' }),
   date: z.date({ required_error: 'A date is required.' }),
-  content: z.string().min(50, { message: 'Content must be at least 50 characters.' }),
+  content: z.string()
+    .refine((val) => countWords(val) >= 15, { message: 'Blog description must be at least 15 words.' })
+    .refine((val) => countWords(val) <= 300, { message: 'Blog description cannot exceed 300 words.' }),
   imageFile: z.any()
     .refine((file) => !file || (file instanceof File && file.size <= 10 * 1024 * 1024), 'Image size must be less than 10MB.')
     .optional(),
@@ -241,8 +244,17 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
                 <FormItem>
                   <FormLabel className="text-text-regular font-body text-foreground">Blog Content:</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Write your blog post here..." rows={10} {...field} required />
+                    <Textarea placeholder="Write your blog post here (15 to 300 words)..." rows={8} {...field} required />
                   </FormControl>
+                  <div className="flex justify-between items-center text-xs text-slate-500 mt-1 font-body">
+                    <span>Limit: 15 to 300 words</span>
+                    <span className={cn(
+                      "font-semibold",
+                      countWords(field.value) > 300 ? "text-rose-600 font-bold" : "text-slate-600"
+                    )}>
+                      {countWords(field.value)} / 300 words
+                    </span>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
