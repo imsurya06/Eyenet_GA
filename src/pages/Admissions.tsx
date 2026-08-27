@@ -460,7 +460,7 @@ const Admissions = () => {
                       </span>
                     </div>
 
-                    <h3 className="text-[22px] sm:text-[24px] font-sans font-black text-slate-950 mb-3.5 group-hover:text-primary transition-colors tracking-tight leading-snug">
+                    <h3 className="text-2xl sm:text-3xl font-heading font-extrabold text-primary group-hover:text-primary/85 transition-colors tracking-tight leading-snug mb-3.5 border-b border-slate-100 pb-2.5">
                       {batch.title}
                     </h3>
 
