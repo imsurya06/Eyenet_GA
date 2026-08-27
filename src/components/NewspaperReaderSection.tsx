@@ -30,7 +30,7 @@ const NewspaperReaderSection: React.FC = () => {
   // Lightbox Modal State
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Physics Drag & Flip State
+  // Drag & Animation State
   const [isDragging, setIsDragging] = useState(false);
   const [dragProgress, setDragProgress] = useState(0); // 0 to 1
   const [dragDirection, setDragDirection] = useState<'next' | 'prev'>('next');
@@ -136,8 +136,6 @@ const NewspaperReaderSection: React.FC = () => {
 
   // Mobile Page Mappings
   const mobileCurrentClipping = clippings[currentIndex] || fallbackClippings[0];
-  const mobileNextClipping = clippings[currentIndex + 1] || fallbackClippings[0];
-  const mobilePrevClipping = clippings[currentIndex - 1] || fallbackClippings[0];
 
   // Desktop Spread Mappings
   const leftPageIdx = currentIndex * 2;
@@ -152,7 +150,7 @@ const NewspaperReaderSection: React.FC = () => {
   const prevLeftClipping = clippings[(currentIndex - 1) * 2];
   const prevRightClipping = clippings[(currentIndex - 1) * 2 + 1];
 
-  // 60fps/120fps requestAnimationFrame physics animation engine
+  // Desktop 60fps physics animation engine
   const animateToTargetProgress = (targetP: number, onComplete?: () => void) => {
     setIsAnimating(true);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -166,7 +164,6 @@ const NewspaperReaderSection: React.FC = () => {
         setDragProgress(targetP);
 
         if (targetP === 1 && onComplete) {
-          // Instant state swap at 100% without reverse transition flicker
           onComplete();
           currentProgressRef.current = 0;
           setDragProgress(0);
@@ -188,22 +185,50 @@ const NewspaperReaderSection: React.FC = () => {
 
   const handleNext = () => {
     if (isAnimating || currentIndex >= maxIndex) return;
+    setIsAnimating(true);
     setDragDirection('next');
-    animateToTargetProgress(1, () => {
-      setCurrentIndex((prev) => prev + 1);
-    });
+
+    if (isMobile) {
+      // Mobile 100% flicker-free smooth transition
+      setDragProgress(1);
+      setTimeout(() => {
+        setCurrentIndex((prev) => prev + 1);
+        setDragProgress(0);
+        setIsAnimating(false);
+      }, 250);
+    } else {
+      animateToTargetProgress(1, () => {
+        setCurrentIndex((prev) => prev + 1);
+      });
+    }
   };
 
   const handlePrev = () => {
     if (isAnimating || currentIndex <= 0) return;
+    setIsAnimating(true);
     setDragDirection('prev');
-    animateToTargetProgress(1, () => {
-      setCurrentIndex((prev) => prev - 1);
-    });
+
+    if (isMobile) {
+      // Mobile 100% flicker-free smooth transition
+      setDragProgress(1);
+      setTimeout(() => {
+        setCurrentIndex((prev) => prev - 1);
+        setDragProgress(0);
+        setIsAnimating(false);
+      }, 250);
+    } else {
+      animateToTargetProgress(1, () => {
+        setCurrentIndex((prev) => prev - 1);
+      });
+    }
   };
 
   const springBack = () => {
-    animateToTargetProgress(0);
+    if (isMobile) {
+      setDragProgress(0);
+    } else {
+      animateToTargetProgress(0);
+    }
   };
 
   // Drag Gesture Handlers
@@ -240,7 +265,7 @@ const NewspaperReaderSection: React.FC = () => {
     if (!isDragging) return;
     setIsDragging(false);
 
-    if (currentProgressRef.current > 0.25) {
+    if (currentProgressRef.current > 0.2) {
       if (dragDirection === 'next') {
         handleNext();
       } else {
@@ -294,9 +319,7 @@ const NewspaperReaderSection: React.FC = () => {
   const desktopLeafBack = dragDirection === 'next' ? nextLeftClipping : prevRightClipping;
 
   // Mobile Single Paper Physics
-  const mobileTargetClipping = dragDirection === 'next' ? mobileNextClipping : mobilePrevClipping;
-  const mobileTranslateX = dragDirection === 'next' ? -dragProgress * 105 : dragProgress * 105;
-  const mobileOpacity = Math.max(0, 1 - dragProgress * 0.9);
+  const mobileTranslateX = dragDirection === 'next' ? -dragProgress * 100 : dragProgress * 100;
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
@@ -390,33 +413,17 @@ const NewspaperReaderSection: React.FC = () => {
                 style={{ transformStyle: 'preserve-3d' }}
               >
 
-                {/* --- A. MOBILE LAYOUT (100% FLICKER-FREE SINGLE PAPER SLIDE) --- */}
+                {/* --- A. MOBILE LAYOUT (100% FLICKER-FREE SMOOTH SLIDE) --- */}
                 {isMobile ? (
-                  <div className="relative w-full h-full bg-white overflow-hidden">
-
-                    {/* Underneath Target Page (Base) */}
-                    <div className="absolute inset-0 w-full h-full bg-white">
-                      {mobileTargetClipping ? (
-                        <img
-                          src={mobileTargetClipping.imageUrl}
-                          alt={mobileTargetClipping.title}
-                          className="w-full h-full object-contain pointer-events-none"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
-                      )}
-                    </div>
-
-                    {/* Sliding Top Sheet */}
+                  <div className="relative w-full h-full bg-white overflow-hidden rounded-xl">
                     <div
                       onClick={() => {
                         if (mobileCurrentClipping && !isDragging) setLightboxIndex(currentIndex);
                       }}
-                      className="absolute inset-0 w-full h-full bg-white cursor-pointer"
+                      className="w-full h-full bg-white cursor-pointer will-change-transform"
                       style={{
-                        transform: (dragProgress > 0 || isAnimating) ? `translateX(${mobileTranslateX}%)` : 'translateX(0%)',
-                        opacity: (dragProgress > 0 || isAnimating) ? mobileOpacity : 1,
-                        transition: isDragging ? 'none' : 'transform 0.05s linear',
+                        transform: (isAnimating || isDragging) ? `translateX(${mobileTranslateX}%)` : 'translateX(0%)',
+                        transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
                       }}
                     >
                       {mobileCurrentClipping ? (
@@ -429,7 +436,6 @@ const NewspaperReaderSection: React.FC = () => {
                         <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
                       )}
                     </div>
-
                   </div>
                 ) : (
 

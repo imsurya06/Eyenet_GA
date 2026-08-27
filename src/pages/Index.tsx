@@ -19,7 +19,7 @@ const Index = () => {
         - 100% Responsive on Mobile & Tablets with zero overflow or cropping
       */}
       <div className="relative flex flex-col lg:flex-row items-center justify-between px-4 sm:px-8 lg:px-[80px] bg-background min-h-[80vh] lg:min-h-[calc(100dvh-120px)] lg:max-h-[calc(100dvh-70px)] py-6 sm:py-8 lg:py-6 lg:gap-x-12 overflow-hidden">
-        
+
         {/* Mobile Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat lg:hidden opacity-15"
@@ -38,7 +38,7 @@ const Index = () => {
                 excellence
               </span>
             </h1>
-            
+
             {/* Hero Description - Justified Text on Desktop */}
             <p className="text-sm sm:text-base xl:text-text-large font-body mb-5 sm:mb-6 xl:mb-7 text-gray-600 drop-shadow-sm lg:drop-shadow-none leading-relaxed max-w-md lg:max-w-lg text-center lg:text-justify mx-auto lg:mx-0">
               Transform your passion into a professional career. Our institute offers
@@ -60,10 +60,10 @@ const Index = () => {
         {/* Right Section: Pixel-Perfect Bento Grid (Scales dynamically on all screens) */}
         <AnimateOnScroll isHero={true} delay={200} className="relative z-10 w-full lg:w-1/2 flex justify-center lg:justify-end items-center py-4 lg:py-2 mt-6 lg:mt-0">
           <div className="w-full max-w-[480px] xl:max-w-[540px] flex flex-col gap-3 sm:gap-4">
-            
+
             {/* Top Grid Block: Fashion Model (7 cols) + Stacked Computer & Active Makeup (5 cols) */}
             <div className="grid grid-cols-12 gap-3 sm:gap-4 items-stretch">
-              
+
               {/* 1. Main Feature Image: Fashion Designing */}
               <div className="col-span-7 relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs bg-slate-100 group min-h-[160px] sm:min-h-[220px]">
                 <img
@@ -75,7 +75,7 @@ const Index = () => {
 
               {/* Right Stack: Computer Lab + Active Makeup Session */}
               <div className="col-span-5 flex flex-col gap-3 sm:gap-4">
-                
+
                 {/* 2. Computer Courses & AI */}
                 <div className="flex-1 relative aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs bg-slate-100 group">
                   <img
@@ -100,7 +100,7 @@ const Index = () => {
 
             {/* Bottom Grid Block: Photography (5 cols) + Architectural Site Planning (7 cols) */}
             <div className="grid grid-cols-12 gap-3 sm:gap-4 h-[120px] sm:h-[160px] md:h-[175px]">
-              
+
               {/* 4. Photography */}
               <div className="col-span-5 h-full relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs bg-slate-100 group">
                 <img
