@@ -317,7 +317,7 @@ const Courses = () => {
                           </span>
 
                           <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`}>
-                            <h3 className="text-[22px] sm:text-2xl font-heading font-extrabold mb-1.5 text-primary hover:text-primary/80 transition-colors break-words [overflow-wrap:anywhere] tracking-tight leading-snug drop-shadow-[0_0.5px_0px_rgba(150,0,0,0.2)]">
+                            <h3 className="text-[22px] sm:text-[24px] font-sans font-black mb-2 text-slate-950 hover:text-primary transition-colors break-words [overflow-wrap:anywhere] tracking-tight leading-snug">
                               {course.title}
                             </h3>
                           </Link>
