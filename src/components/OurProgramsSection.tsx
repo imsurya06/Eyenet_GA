@@ -16,8 +16,8 @@ const programs = [
   {
     image: 'https://i.pinimg.com/736x/22/b3/4d/22b34d2ee7def7b9e9dbdac6d9f027eb.jpg',
     title: 'Fashion Design',
-    category: 'Creative Arts',
-    duration: 'Diploma / Certificate',
+    category: 'Diploma / Certificate',
+    duration: '',
     description: 'Master garment sketching, haute couture pattern making, textile selection, and runway fashion creation.',
     href: '/courses?category=fashion',
     badge: 'Popular'
@@ -25,8 +25,8 @@ const programs = [
   {
     image: 'https://i.pinimg.com/736x/54/02/8d/54028dfe6f4775ed2afdf481735d0143.jpg',
     title: 'Computer Courses',
-    category: 'Information Tech',
-    duration: 'Short & Advanced Terms',
+    category: 'Advanced & Short Terms',
+    duration: '',
     description: 'Master essential office software, CAD, graphic design tools, web basics, and modern IT utilities.',
     href: '/courses?category=computer',
     badge: 'High Demand'
@@ -35,7 +35,7 @@ const programs = [
     image: 'https://i.pinimg.com/736x/0b/3e/28/0b3e28bc4f888f2eeed42d021ff95c8a.jpg',
     title: 'Photography',
     category: 'Visual Media',
-    duration: 'Practical Hands-on',
+    duration: '',
     description: 'Master studio lighting, camera mechanics, framing, portraiture, and commercial studio photography.',
     href: '/courses?category=photography',
     badge: 'Professional'
@@ -44,7 +44,7 @@ const programs = [
     image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1000',
     title: 'Visual Media Training',
     category: 'Digital Production',
-    duration: 'Studio Oriented',
+    duration: '',
     description: 'Explore video editing suite, motion graphics timeline, 2D/3D animation, and digital post-production.',
     href: '/courses?category=multimedia',
     badge: 'Industry Standard'
@@ -53,7 +53,7 @@ const programs = [
     image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1000',
     title: 'Communication Skills',
     category: 'Skill Enhancement',
-    duration: 'Interactive Batches',
+    duration: '',
     description: 'Enhance your verbal fluency, corporate communication etiquette, public speaking, and self-confidence.',
     href: '/courses?category=spoken-english',
     badge: 'Career Boost'
@@ -62,7 +62,7 @@ const programs = [
     image: 'https://i.pinimg.com/736x/81/69/c7/8169c76187973b2a994c2823fdc0ce6b.jpg',
     title: 'Beautician Course',
     category: 'Personal Care',
-    duration: 'Certified Program',
+    duration: '',
     description: 'Learn professional makeup artistry, hair styling, bridal aesthetics, skin therapy, and cosmetology.',
     href: '/courses?category=beautician',
     badge: 'Certified'
@@ -76,14 +76,11 @@ const OurProgramsSection = () => {
 
   return (
     <section className="py-14 md:py-20 lg:py-24 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50 via-slate-100/40 to-slate-50 text-center overflow-hidden">
-      <NCFTLogo className="bg-transparent py-0 md:py-0 lg:py-0 mb-2" />
-      
-      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
-        <span>Our Programs</span>
-      </div>
+      <NCFTLogo className="bg-transparent py-0 md:py-0 lg:py-0 mb-4" />
 
       <h2 className="text-h2-mobile md:text-h2-desktop font-heading font-normal mb-4 max-w-4xl mx-auto text-slate-900 tracking-tight">
-        Comprehensive design courses for <span className="text-primary font-heading italic">aspiring creatives</span>
+        Comprehensive design courses for <br />
+        <span className="text-primary font-heading italic">aspiring creatives</span>
       </h2>
       <p className="text-slate-600 font-body text-base md:text-lg max-w-2xl mx-auto mb-10 md:mb-14">
         Industry-aligned vocational and professional programs crafted to transform passion into successful creative careers.
@@ -121,12 +118,14 @@ const OurProgramsSection = () => {
                         {program.badge}
                       </span>
 
-                      <div className="absolute bottom-3 left-3 right-3 z-20">
-                        <span className="text-white/90 text-xs flex items-center gap-1 font-medium">
-                          <Award className="w-3.5 h-3.5 text-primary-foreground" />
-                          {program.duration}
-                        </span>
-                      </div>
+                      {program.duration && (
+                        <div className="absolute bottom-3 left-3 right-3 z-20">
+                          <span className="text-white/90 text-xs flex items-center gap-1 font-medium">
+                            <Award className="w-3.5 h-3.5 text-primary-foreground" />
+                            {program.duration}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Content */}
@@ -177,12 +176,14 @@ const OurProgramsSection = () => {
                     {program.badge}
                   </span>
 
-                  <div className="absolute bottom-3 left-4 right-4 z-20">
-                    <span className="text-white/80 text-xs flex items-center gap-1 font-medium mb-0.5">
-                      <Award className="w-3.5 h-3.5 text-primary-foreground/90" />
-                      {program.duration}
-                    </span>
-                  </div>
+                  {program.duration && (
+                    <div className="absolute bottom-3 left-4 right-4 z-20">
+                      <span className="text-white/80 text-xs flex items-center gap-1 font-medium mb-0.5">
+                        <Award className="w-3.5 h-3.5 text-primary-foreground/90" />
+                        {program.duration}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6 flex flex-col flex-grow bg-white">

@@ -64,8 +64,8 @@ const SecondaryNavbar = () => {
 
   return (
     <div className="bg-background text-foreground py-2.5 px-4 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 font-body border-b border-border">
-      {/* Left Section: Navigation Links with Increased Font Size */}
-      <div className="flex items-center gap-5 sm:gap-7 flex-wrap justify-center sm:justify-start">
+      {/* Left Section: Navigation Links with Further Increased Font Size */}
+      <div className="flex items-center gap-6 sm:gap-8 flex-wrap justify-center sm:justify-start">
         {secondaryNavLinks.map((link) => {
           const isFaqLink = link.name === 'FAQ';
           
@@ -74,7 +74,7 @@ const SecondaryNavbar = () => {
               <a
                 key={link.name}
                 href="/virtualtour/"
-                className="text-xs sm:text-sm md:text-[15px] font-medium text-slate-800 hover:text-primary transition-colors tracking-tight"
+                className="text-sm sm:text-base md:text-[17px] lg:text-[18px] font-medium text-slate-800 hover:text-primary transition-colors tracking-tight"
               >
                 {link.name}
               </a>
@@ -87,7 +87,7 @@ const SecondaryNavbar = () => {
               to={link.to}
               className={({ isActive }) =>
                 cn(
-                  "text-xs sm:text-sm md:text-[15px] font-medium text-slate-800 hover:text-primary transition-colors tracking-tight",
+                  "text-sm sm:text-base md:text-[17px] lg:text-[18px] font-medium text-slate-800 hover:text-primary transition-colors tracking-tight",
                   ((isActive && !isFaqLink) || (isFaqLink && isFaqInView)) && "text-primary font-semibold"
                 )
               }
@@ -102,14 +102,14 @@ const SecondaryNavbar = () => {
       {/* Right Section: Contact Info and Social Icons */}
       <div className="flex flex-row items-center justify-center sm:justify-end gap-x-4 sm:gap-x-6 flex-wrap mt-1 sm:mt-0">
         {/* Phone Numbers */}
-        <div className="flex items-center gap-1.5 text-primary font-semibold text-xs sm:text-sm md:text-[15px]">
-          <Phone className="h-4 w-4 sm:h-4.5 sm:w-4.5 flex-shrink-0" />
+        <div className="flex items-center gap-1.5 text-primary font-semibold text-sm sm:text-base md:text-[16px]">
+          <Phone className="h-4.5 w-4.5 sm:h-5 sm:w-5 flex-shrink-0" />
           <a href="tel:+919842173725" className="hover:underline">+91 9842173725</a>
           <span className="text-slate-400 font-normal">/</span>
           <a href="tel:+918300064651" className="hover:underline">+91 8300064651</a>
         </div>
         {/* Social Icons */}
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center gap-x-3.5">
           {socialAndContactIcons.map((item) => (
             <a
               key={item.name}
@@ -119,7 +119,7 @@ const SecondaryNavbar = () => {
               aria-label={item.name}
               className="hover:text-primary transition-colors text-primary p-0.5"
             >
-              <item.icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+              <item.icon className="h-5 w-5 sm:h-[22px] sm:w-[22px]" />
             </a>
           ))}
         </div>
