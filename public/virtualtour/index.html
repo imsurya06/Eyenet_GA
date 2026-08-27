@@ -12,10 +12,6 @@
         var player;
         var isInitialized = false;
 
-        function isSafariBrowser() {
-            return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent);
-        }
-
         function loadTour()
         {
             if(player) return;
@@ -38,12 +34,6 @@
             var settings = new TDV.PlayerSettings();
             settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
             settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1625125640410');
-            
-            // Disable WebVR polyfill for Safari to prevent WebGL canvas blocking
-            if (!isSafariBrowser()) {
-                settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1625125640410');
-            }
-            
             settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1625125640410');
 
@@ -51,16 +41,16 @@
             player.bind('preloadMediaShow', beginFunc, player, true);
             player.bind('stateChange', beginFunc, player, true);
             
-            // Force hide preloader screen on all browsers after player initializes
+            // Force hide preloader screen after player initializes
             setTimeout(function() {
                 disposePreloader();
-            }, 1000);
+            }, 800);
             setTimeout(function() {
                 disposePreloader();
-            }, 2500);
+            }, 2000);
 
-            /* Clean up bottom right grey box dynamically */
-            setInterval(cleanBottomRightOverlay, 500);
+            /* Periodically clean up bottom-right grey overlay box */
+            setInterval(cleanBottomRightOverlay, 300);
         }
 
         function cleanBottomRightOverlay() {
@@ -71,11 +61,9 @@
                 for (var i = 0; i < divs.length; i++) {
                     var d = divs[i];
                     var style = d.getAttribute('style') || '';
-                    // Remove bottom-right grey placeholder box
-                    if ((style.indexOf('bottom') !== -1 && style.indexOf('right') !== -1 && style.indexOf('top') === -1) ||
-                        (d.offsetWidth > 150 && d.offsetHeight > 150 && style.indexOf('right: 0') !== -1) ||
-                        (style.indexOf('rgba(128') !== -1) || (style.indexOf('rgba(0, 0, 0, 0.') !== -1 && style.indexOf('bottom') !== -1)) {
-                        if (d.children.length === 0 || !d.querySelector('img')) {
+                    if (style.indexOf('right:') !== -1 && (style.indexOf('bottom:') !== -1 || style.indexOf('bottom :') !== -1)) {
+                        // Check if it's the grey placeholder overlay (no interactive children)
+                        if (!d.querySelector('button') && !d.querySelector('a') && !d.querySelector('input') && !d.classList.contains('PlayList')) {
                             d.style.display = 'none';
                             d.style.opacity = '0';
                             d.style.visibility = 'hidden';
@@ -139,15 +127,11 @@
             -webkit-transition: opacity 0.4s ease-out; 
         }
 
-        /* Hide unwanted bottom-right grey placeholder overlay box */
-        #viewer div[style*="bottom"][style*="right"]:not([style*="top"]),
-        #viewer div[style*="right: 0px"][style*="bottom: 0px"],
-        #viewer div[style*="right:0px"][style*="bottom:0px"] {
+        /* Suppress unwanted bottom-right grey placeholder box */
+        #viewer div[style*="right"][style*="bottom"] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
-            width: 0 !important;
-            height: 0 !important;
         }
     </style>
 </head>
