@@ -130,14 +130,14 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
   const displayImageSources = getOrderedSources();
   const totalCards = displayImageSources.length;
 
-  // Continuous auto-loop for 3D perspective carousel
+  // Continuous auto-loop for 3D perspective carousel (pauses on hover)
   useEffect(() => {
-    if (variant !== '3d' || totalCards === 0) return;
+    if (variant !== '3d' || totalCards === 0 || isPaused) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % totalCards);
     }, 2200);
     return () => clearInterval(timer);
-  }, [variant, totalCards]);
+  }, [variant, totalCards, isPaused]);
 
   const handleInteractionStart = () => {
     setIsPaused(true);
@@ -151,9 +151,15 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     }, 500);
   };
 
-  // Render 3D Perspective Stage Carousel
+  // Render 3D Perspective Stage Carousel (Pauses on Hover)
   const render3DCarousel = () => (
-    <div className="relative w-full overflow-hidden py-1 sm:py-2 select-none">
+    <div
+      onMouseEnter={handleInteractionStart}
+      onMouseLeave={handleInteractionEnd}
+      onTouchStart={handleInteractionStart}
+      onTouchEnd={handleInteractionEnd}
+      className="relative w-full overflow-hidden py-1 sm:py-2 select-none"
+    >
       <div className="relative w-full h-[220px] xs:h-[270px] sm:h-[340px] md:h-[410px] lg:h-[460px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
         {displayImageSources.map((src, idx) => {
           let rawOffset = idx - activeIndex;
@@ -293,7 +299,11 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
   );
 
   const render2DCarousel = () => (
-    <div className="relative w-full py-2 overflow-hidden select-none">
+    <div
+      onMouseEnter={handleInteractionStart}
+      onMouseLeave={handleInteractionEnd}
+      className="relative w-full py-2 overflow-hidden select-none"
+    >
       <div
         onTouchStart={handleInteractionStart}
         onTouchEnd={handleInteractionEnd}
