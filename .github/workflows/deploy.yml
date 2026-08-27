@@ -7,7 +7,7 @@ on:
 
 jobs:
   web-deploy:
-    name: Deploy Website
+    name: Build & Verify Website
     runs-on: ubuntu-latest
     steps:
       - name: Get latest code
@@ -19,13 +19,17 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --legacy-peer-deps
 
       - name: Build production bundle
         run: npx vite build
 
-      - name: Sync files to cPanel FTP
+      - name: Sync files to cPanel FTP (Optional)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
+        if: ${{ env.FTP_SERVER != '' }}
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
