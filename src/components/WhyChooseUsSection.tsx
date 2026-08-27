@@ -37,7 +37,7 @@ const WhyChooseUsSection = () => {
   );
 
   return (
-    <section className="py-12 md:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/60 via-slate-100/40 to-slate-50/60 text-center relative overflow-hidden">
+    <section className="py-4 sm:py-6 md:py-8 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-slate-50/60 via-slate-100/40 to-slate-50/60 text-center relative overflow-hidden">
       {/* Background ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -45,13 +45,13 @@ const WhyChooseUsSection = () => {
         
         {/* Header Badge */}
         <AnimateOnScroll delay={100}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs uppercase tracking-widest mb-3">
             <span>Why Choose Us</span>
           </div>
         </AnimateOnScroll>
 
         <AnimateOnScroll delay={200}>
-          <h2 className="text-3xl md:text-4xl font-heading font-normal text-slate-900 mb-8 md:mb-14 tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-heading font-normal text-slate-900 mb-4 md:mb-6 tracking-tight">
             Excellence Backed by <span className="text-primary font-heading italic">Proven Impact</span>
           </h2>
         </AnimateOnScroll>
