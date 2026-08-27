@@ -63,9 +63,9 @@ const SecondaryNavbar = () => {
   ];
 
   return (
-    <div className="bg-background text-foreground py-2.5 px-4 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 font-body border-b border-border">
-      {/* Left Section: Navigation Links with Increased Font Size */}
-      <div className="flex items-center gap-5 sm:gap-7 flex-wrap justify-center sm:justify-start">
+    <div className="bg-background text-foreground py-2 sm:py-2.5 px-3 sm:px-6 md:px-8 lg:px-[80px] flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 font-body border-b border-border">
+      {/* Left Section: Navigation Links */}
+      <div className="flex items-center gap-3.5 sm:gap-6 flex-wrap justify-center sm:justify-start">
         {secondaryNavLinks.map((link) => {
           const isFaqLink = link.name === 'FAQ';
 
@@ -99,17 +99,18 @@ const SecondaryNavbar = () => {
         })}
       </div>
 
-      {/* Right Section: Contact Info and Social Icons */}
-      <div className="flex flex-row items-center justify-center sm:justify-end gap-x-4 sm:gap-x-6 flex-wrap mt-1 sm:mt-0">
+      {/* Right Section: Contact Info and Social Icons (No collision on Mobile) */}
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1.5 sm:gap-x-6 flex-wrap w-full sm:w-auto">
         {/* Phone Numbers */}
-        <div className="flex items-center gap-1.5 text-primary font-semibold text-xs sm:text-sm md:text-[15px]">
-          <Phone className="h-4 w-4 sm:h-4.5 sm:w-4.5 flex-shrink-0" />
+        <div className="flex items-center gap-1 text-primary font-semibold text-xs sm:text-sm md:text-[15px]">
+          <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
           <a href="tel:+919842173725" className="hover:underline">+91 9842173725</a>
           <span className="text-slate-400 font-normal">/</span>
           <a href="tel:+918300064651" className="hover:underline">+91 8300064651</a>
         </div>
+
         {/* Social Icons */}
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center gap-x-4 sm:gap-x-3 mt-1 sm:mt-0">
           {socialAndContactIcons.map((item) => (
             <a
               key={item.name}
@@ -119,7 +120,7 @@ const SecondaryNavbar = () => {
               aria-label={item.name}
               className="hover:text-primary transition-colors text-primary p-0.5"
             >
-              <item.icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+              <item.icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
             </a>
           ))}
         </div>
