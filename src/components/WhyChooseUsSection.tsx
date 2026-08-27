@@ -52,7 +52,7 @@ const WhyChooseUsSection = () => {
 
         <AnimateOnScroll delay={200}>
           <h2 className="text-3xl md:text-4xl font-heading font-normal text-slate-900 mb-8 md:mb-14 tracking-tight">
-            Excellence backed by <span className="text-primary font-heading italic">proven impact</span>
+            Excellence Backed by <span className="text-primary font-heading italic">Proven Impact</span>
           </h2>
         </AnimateOnScroll>
 

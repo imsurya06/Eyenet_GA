@@ -126,7 +126,7 @@ const VisionMissionValuesSection = () => {
           </AnimateOnScroll>
           <AnimateOnScroll delay={200}>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-normal text-slate-900 tracking-tight">
-              Vision, mission & <span className="text-primary font-heading italic">core values</span>
+              Vision, Mission & <span className="text-primary font-heading italic">Core Values</span>
             </h2>
           </AnimateOnScroll>
         </div>

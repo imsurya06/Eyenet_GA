@@ -499,9 +499,6 @@ const Admissions = () => {
       <section className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80">
         <div className="w-full text-center mb-8 px-4">
           <AnimateOnScroll delay={100}>
-            <span className="uppercase tracking-widest text-xs font-bold text-primary mb-2 block">
-              ADVERTISEMENT SHOWCASE
-            </span>
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900">
               Special Announcements & Highlights
             </h2>

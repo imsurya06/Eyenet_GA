@@ -25,7 +25,7 @@ const programs = [
   {
     image: 'https://i.pinimg.com/736x/54/02/8d/54028dfe6f4775ed2afdf481735d0143.jpg',
     title: 'Computer Courses',
-    category: 'Advanced & Short Terms',
+    category: 'Advanced / Short Terms',
     duration: '',
     description: 'Master essential office software, CAD, graphic design tools, web basics, and modern IT utilities.',
     href: '/courses?category=computer',
