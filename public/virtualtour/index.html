@@ -6,72 +6,33 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />
     <meta name="description" content="360° Virtual Tour of Eye-Net Educational Academy Campus"/>
     <meta name="theme-color" content="#1e293b"/>
-    
-    <!-- Native Script Preloads for Safari macOS & iOS Compatibility -->
     <script src="lib/tdvplayer.js?v=1625125640410"></script>
     <script src="lib/Hls.js?v=1625125640410"></script>
     <script src="script.js?v=1625125640410"></script>
-    
     <script type="text/javascript">
         var player;
-        var isInitialized = false;
-
-        function loadTour()
-        {
+        function loadTour() {
             if(player) return;
-
-            var beginFunc = function(event){
-                if(event.name == 'begin')
-                {
-                    var camera = event.data.source && event.data.source.get && event.data.source.get('camera');
-                    if(camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
-                        return;
-                }
-
-                if(event.sourceClassName == "MediaAudio")
-                    return;
-
-                isInitialized = true;
-                disposePreloader();
-            };
-
             var settings = new TDV.PlayerSettings();
             settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
             settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1625125640410');
-
             window.tdvplayer = player = TDV.PlayerAPI.create(settings);
-            player.bind('preloadMediaShow', beginFunc, player, true);
-            player.bind('stateChange', beginFunc, player, true);
-            
-            // Force hide preloader screen after player initializes
-            setTimeout(function() {
-                disposePreloader();
-            }, 300);
-            setTimeout(function() {
-                disposePreloader();
-            }, 1000);
-
-            // Continuously enforce Safari canvas dimensions & hide bottom-right grey box
-            setInterval(enforceSafariCanvasAndCleanOverlays, 200);
+            setTimeout(disposePreloader, 300);
+            setTimeout(disposePreloader, 1000);
+            setInterval(cleanOverlays, 250);
         }
-
-        function enforceSafariCanvasAndCleanOverlays() {
+        function cleanOverlays() {
             try {
-                var viewer = document.getElementById('viewer');
-                if (!viewer) return;
-
-                // 1. Safari Canvas Size Fix: Ensure canvas fills screen and is not 0x0
-                var canvases = viewer.getElementsByTagName('canvas');
-                var winW = window.innerWidth || document.documentElement.clientWidth || 1920;
-                var winH = window.innerHeight || document.documentElement.clientHeight || 1080;
-
+                var v = document.getElementById('viewer');
+                if (!v) return;
+                var canvases = v.getElementsByTagName('canvas');
                 for (var c = 0; c < canvases.length; c++) {
                     var cv = canvases[c];
                     if (cv.width === 0 || cv.clientWidth === 0) {
-                        cv.width = winW;
-                        cv.height = winH;
+                        cv.width = window.innerWidth || 1920;
+                        cv.height = window.innerHeight || 1080;
                     }
                     cv.style.width = '100vw';
                     cv.style.height = '100vh';
@@ -79,101 +40,39 @@
                     cv.style.top = '0px';
                     cv.style.left = '0px';
                 }
-
-                // 2. Clean up bottom-right grey overlay box
-                var divs = viewer.getElementsByTagName('div');
+                var divs = v.getElementsByTagName('div');
                 for (var i = 0; i < divs.length; i++) {
-                    var d = divs[i];
-                    var style = d.getAttribute('style') || '';
-                    if (style.indexOf('right:') !== -1 && (style.indexOf('bottom:') !== -1 || style.indexOf('bottom :') !== -1)) {
+                    var d = divs[i], s = d.getAttribute('style') || '';
+                    if (s.indexOf('right:') !== -1 && s.indexOf('bottom:') !== -1) {
                         if (!d.querySelector('button') && !d.querySelector('a') && !d.querySelector('input') && !d.classList.contains('PlayList')) {
                             d.style.display = 'none';
                             d.style.opacity = '0';
-                            d.style.visibility = 'hidden';
                         }
                     }
                 }
             } catch(e){}
         }
-
-        function disposePreloader()
-        {
-            var preloadContainer = document.getElementById('preloadContainer');
-            if(preloadContainer)
-            {
-                preloadContainer.style.opacity = '0';
-                preloadContainer.style.pointerEvents = 'none';
-                setTimeout(function(){
-                    if (preloadContainer && preloadContainer.parentNode) {
-                        preloadContainer.parentNode.removeChild(preloadContainer);
-                    }
-                }, 300);
+        function disposePreloader() {
+            var p = document.getElementById('preloadContainer');
+            if (p) {
+                p.style.opacity = '0';
+                p.style.pointerEvents = 'none';
+                setTimeout(function(){ if(p && p.parentNode) p.parentNode.removeChild(p); }, 300);
             }
-        }
-
-        function onLoad()
-        {
-            loadTour();
         }
     </script>
     <style type="text/css">
-        html, body { 
-            width: 100%; 
-            height: 100%; 
-            margin: 0; 
-            padding: 0; 
-            overflow: hidden;
-            background-color: #000000;
-        }
-
-        #viewer { 
-            background-color: #000000; 
-            z-index: 1; 
-            position: absolute; 
-            width: 100vw !important; 
-            height: 100vh !important; 
-            top: 0 !important; 
-            left: 0 !important; 
-            right: 0 !important;
-            bottom: 0 !important;
-            margin: 0 !important;
-        }
-
-        #viewer canvas {
-            width: 100vw !important;
-            height: 100vh !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            object-fit: cover !important;
-        }
-
-        #preloadContainer { 
-            z-index: 9999; 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            top: 0;
-            left: 0;
-            background-color: #ffffff;
-            transition: opacity 0.3s ease-out; 
-            -webkit-transition: opacity 0.3s ease-out; 
-        }
-
-        /* Suppress unwanted bottom-right grey placeholder box */
-        #viewer div[style*="right"][style*="bottom"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-        }
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background: #000; }
+        #viewer { background: #000; z-index: 1; position: absolute; width: 100vw !important; height: 100vh !important; top: 0 !important; left: 0 !important; }
+        #viewer canvas { width: 100vw !important; height: 100vh !important; position: absolute !important; top: 0 !important; left: 0 !important; object-fit: cover !important; }
+        #preloadContainer { z-index: 9999; position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: #fff; transition: opacity 0.3s; }
+        #viewer div[style*="right"][style*="bottom"] { display: none !important; opacity: 0 !important; }
     </style>
 </head>
-<body onload="onLoad()">
+<body onload="loadTour()">
     <div id="preloadContainer">
-        <div style="z-index: 4; position: absolute; left: 0%; top: 45%; width: 100%; text-align: center;">
-            <div style="font-size: 16px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #334155;">
-                Loading 360° Virtual Tour...
-            </div>
+        <div style="z-index: 4; position: absolute; top: 45%; width: 100%; text-align: center; font-size: 16px; font-weight: 600; font-family: sans-serif; color: #334155;">
+            Loading 360° Virtual Tour...
         </div>
     </div>
     <div id="viewer"></div>
