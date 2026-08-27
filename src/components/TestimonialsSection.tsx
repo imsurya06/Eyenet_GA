@@ -22,7 +22,7 @@ const TestimonialsSection = () => {
   );
 
   return (
-    <section className="pt-4 sm:pt-6 md:pt-8 pb-12 md:pb-20 lg:pb-24 px-4 md:px-8 lg:px-[80px] bg-slate-50 text-center relative overflow-hidden">
+    <section className="pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 md:pb-8 px-4 md:px-8 lg:px-[80px] bg-slate-50 text-center relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
       
       <AnimateOnScroll delay={100}>

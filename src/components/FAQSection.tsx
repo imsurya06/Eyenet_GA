@@ -49,7 +49,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ id }) => {
   ];
 
   return (
-    <section id={id} className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-background">
+    <section id={id} className="pt-4 sm:pt-6 md:pt-8 pb-12 md:pb-16 px-4 md:px-8 lg:px-[80px] bg-background">
       <div className="max-w-4xl mx-auto text-center mb-10 md:mb-12">
         <AnimateOnScroll delay={100}>
           <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
