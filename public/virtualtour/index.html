@@ -19,25 +19,6 @@
             settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1625125640410');
             window.tdvplayer = player = TDV.PlayerAPI.create(settings);
-            setInterval(cleanUnwantedOverlays, 300);
-        }
-
-        function cleanUnwantedOverlays() {
-            try {
-                var v = document.getElementById('viewer');
-                if (!v) return;
-                var divs = v.getElementsByTagName('div');
-                for (var i = 0; i < divs.length; i++) {
-                    var d = divs[i], s = d.getAttribute('style') || '';
-                    if (s.indexOf('right:') !== -1 && s.indexOf('bottom:') !== -1) {
-                        if (!d.querySelector('button') && !d.querySelector('a') && !d.querySelector('input') && !d.classList.contains('PlayList')) {
-                            d.style.display = 'none';
-                            d.style.opacity = '0';
-                            d.style.visibility = 'hidden';
-                        }
-                    }
-                }
-            } catch(e){}
         }
     </script>
     <style type="text/css">
@@ -60,12 +41,6 @@
             right: 0 !important;
             bottom: 0 !important;
             margin: 0 !important;
-        }
-        /* Hide bottom-right grey placeholder box cleanly */
-        #viewer div[style*="right"][style*="bottom"] { 
-            display: none !important; 
-            opacity: 0 !important; 
-            visibility: hidden !important;
         }
     </style>
 </head>

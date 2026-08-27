@@ -19,7 +19,9 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install --force --no-audit --no-fund
+        run: |
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npm install @rollup/rollup-linux-x64-gnu --no-save
 
       - name: Build production bundle
         env:
