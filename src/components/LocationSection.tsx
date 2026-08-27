@@ -9,7 +9,7 @@ const LocationSection = () => {
   const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.1558223405787!2d78.14633887586524!3d9.921563490180477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5072a46551f%3A0x3feb0d2a94af46bb!2sEye-Net%20Educational%20Academy!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin";
 
   return (
-    <section className="py-14 md:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background">
+    <section className="pt-4 sm:pt-6 md:pt-8 pb-12 md:pb-16 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <AnimateOnScroll delay={100}>
