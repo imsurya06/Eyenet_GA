@@ -32,10 +32,17 @@ export const sendEmailJSNotification = async (
   lastSubmissionTime = now;
 
   try {
+    const payload = {
+      to_email: 'eyenetfashion@gmail.com',
+      to_name: 'Eyenet Educational Academy',
+      reply_to: (templateParams.from_email as string) || 'eyenetfashion@gmail.com',
+      ...templateParams,
+    };
+
     const response = await emailjs.send(
       EMAILJS_CONFIG.SERVICE_ID,
       templateId,
-      templateParams,
+      payload,
       EMAILJS_CONFIG.PUBLIC_KEY
     );
     return { success: true, response };
