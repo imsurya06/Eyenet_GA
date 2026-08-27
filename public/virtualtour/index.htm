@@ -4,10 +4,14 @@
     <title>Eye-Net Educational Academy - 360° Virtual Tour</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />
-    <link rel="preload" href="script.js?v=1625125640410" as="script"/>
     <meta name="description" content="360° Virtual Tour of Eye-Net Educational Academy Campus"/>
     <meta name="theme-color" content="#1e293b"/>
+    
+    <!-- Native Script Preloads for Safari macOS & iOS Compatibility -->
     <script src="lib/tdvplayer.js?v=1625125640410"></script>
+    <script src="lib/Hls.js?v=1625125640410"></script>
+    <script src="script.js?v=1625125640410"></script>
+    
     <script type="text/javascript">
         var player;
         var isInitialized = false;
@@ -44,13 +48,13 @@
             // Force hide preloader screen after player initializes
             setTimeout(function() {
                 disposePreloader();
-            }, 500);
+            }, 300);
             setTimeout(function() {
                 disposePreloader();
-            }, 1500);
+            }, 1000);
 
             // Continuously enforce Safari canvas dimensions & hide bottom-right grey box
-            setInterval(enforceSafariCanvasAndCleanOverlays, 250);
+            setInterval(enforceSafariCanvasAndCleanOverlays, 200);
         }
 
         function enforceSafariCanvasAndCleanOverlays() {
@@ -103,7 +107,7 @@
                     if (preloadContainer && preloadContainer.parentNode) {
                         preloadContainer.parentNode.removeChild(preloadContainer);
                     }
-                }, 400);
+                }, 300);
             }
         }
 
@@ -152,8 +156,8 @@
             top: 0;
             left: 0;
             background-color: #ffffff;
-            transition: opacity 0.4s ease-out; 
-            -webkit-transition: opacity 0.4s ease-out; 
+            transition: opacity 0.3s ease-out; 
+            -webkit-transition: opacity 0.3s ease-out; 
         }
 
         /* Suppress unwanted bottom-right grey placeholder box */
