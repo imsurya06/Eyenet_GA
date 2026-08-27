@@ -48,7 +48,7 @@ const navItems = [
       { name: 'Infrastructure', description: 'Explore our facilities and campus', to: '/explore/infrastructure', icon: LucideIcons.Home },
       { name: 'Gallery', description: 'View our creative works and events', to: '/explore/gallery', icon: LucideIcons.LayoutGrid },
       { name: 'News & Events', description: 'Stay updated with the latest happenings', to: '/explore/news-events', icon: LucideIcons.CalendarDays },
-      { name: 'Our Services', description: 'Specialized training and additional services', to: '/our-services', icon: LucideIcons.Briefcase }, // New 'Our Services' link
+      { name: 'Our Services', description: 'Specialized training and additional services', to: '/our-services', icon: LucideIcons.Briefcase },
     ],
     footer: {
       text: 'Start your design journey',
@@ -92,18 +92,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-background text-foreground shadow-lg py-2 lg:py-3">
+    <nav className="sticky top-0 z-50 bg-background text-foreground shadow-md py-2.5 lg:py-3.5">
       <div className="flex h-auto items-center justify-between px-4 lg:px-[80px]">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src="/design-system/eyenet png.png" alt="Eye-Net Logo" className="h-12 md:h-[60px] lg:h-[72px] w-auto object-contain" /> {/* Adjusted logo size */}
+          <img src="/design-system/eyenet png.png" alt="Eye-Net Logo" className="h-12 md:h-[60px] lg:h-[72px] w-auto object-contain" />
         </Link>
 
         {/* Desktop Navigation */}
         <>
-          {/* Nav Links - Centered */}
+          {/* Nav Links - Centered with Increased Font Size */}
           <div className="hidden lg:flex flex-grow justify-center">
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2 xl:space-x-4">
               {navItems.map((item) => (
                 item.type === 'link' ? (
                   <NavLink
@@ -111,8 +111,8 @@ const Navbar = () => {
                     to={item.to}
                     className={({ isActive }) =>
                       cn(
-                        "text-text-regular font-normal transition-colors hover:text-primary px-4 py-2 rounded-md",
-                        isActive && "text-primary"
+                        "text-base md:text-[17px] lg:text-[18px] font-medium transition-colors hover:text-primary px-4 py-2 rounded-md tracking-tight",
+                        isActive ? "text-primary font-semibold" : "text-slate-800"
                       )
                     }
                   >
@@ -128,14 +128,13 @@ const Navbar = () => {
                       <Button
                         variant="ghost"
                         className={cn(
-                          "font-normal transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2",
-                          "text-text-regular",
-                          (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) && "text-primary",
-                          (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) && "text-primary"
+                          "text-base md:text-[17px] lg:text-[18px] font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2 tracking-tight",
+                          (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) ? "text-primary font-semibold" : "text-slate-800",
+                          (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) ? "text-primary font-semibold" : "text-slate-800"
                         )}
                       >
                         {item.name}
-                        <ChevronDown className="ml-1 h-4 w-4" />
+                        <ChevronDown className="ml-1 h-4.5 w-4.5" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -176,12 +175,12 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Buttons - Right aligned */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          {/* Buttons - Right aligned with prominent sizing */}
+          <div className="hidden lg:flex items-center space-x-3.5">
+            <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base px-5 py-2">
               <Link to="/contact">Contact</Link>
             </Button>
-            <Button variant="default" asChild className="hover:animate-shake">
+            <Button variant="default" asChild className="hover:animate-shake text-base px-5 py-2">
               <Link to="/admissions#enrollment-form">Apply</Link>
             </Button>
           </div>
@@ -195,14 +194,14 @@ const Navbar = () => {
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[280px] sm:w-[320px]"> {/* Adjusted width */}
+          <SheetContent side="right" className="w-[280px] sm:w-[320px]">
             {/* Logo inside the SheetContent */}
             <div className="flex items-center justify-center py-4 border-b border-border mb-4 bg-white">
               <Link to="/" onClick={() => setIsSheetOpen(false)} className="flex justify-center">
-                <img src="/design-system/eyenet png.png" alt="Eye-Net Logo" className="h-[60px] w-auto object-contain" /> {/* Adjusted logo size for mobile sheet */}
+                <img src="/design-system/eyenet png.png" alt="Eye-Net Logo" className="h-[60px] w-auto object-contain" />
               </Link>
             </div>
-            <nav className="flex flex-col gap-4 pt-6">
+            <nav className="flex flex-col gap-4 pt-4">
               {navItems.map((item) => (
                 item.type === 'link' ? (
                   <NavLink
@@ -211,8 +210,8 @@ const Navbar = () => {
                     onClick={() => setIsSheetOpen(false)}
                     className={({ isActive }) =>
                       cn(
-                        "text-text-regular font-normal hover:text-primary",
-                        isActive ? "text-primary" : "text-muted-foreground"
+                        "text-base font-medium hover:text-primary py-1",
+                        isActive ? "text-primary font-semibold" : "text-slate-800"
                       )
                     }
                   >
@@ -223,10 +222,10 @@ const Navbar = () => {
                     <button
                       onClick={() => toggleMobileDropdown(item.name)}
                       className={cn(
-                        "flex items-center justify-between w-full text-text-regular font-normal hover:text-primary py-2",
-                        (item.name === 'Courses' && isCoursesPathActive) && "text-primary",
-                        (item.name === 'Explore' && isExplorePathActive) && "text-primary",
-                        !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-muted-foreground"
+                        "flex items-center justify-between w-full text-base font-medium hover:text-primary py-1",
+                        (item.name === 'Courses' && isCoursesPathActive) && "text-primary font-semibold",
+                        (item.name === 'Explore' && isExplorePathActive) && "text-primary font-semibold",
+                        !(item.name === 'Courses' && isCoursesPathActive) && !(item.name === 'Explore' && isExplorePathActive) && "text-slate-800"
                       )}
                     >
                       {item.name}
@@ -241,8 +240,8 @@ const Navbar = () => {
                             onClick={() => setIsSheetOpen(false)}
                             className={({ isActive }) =>
                               cn(
-                                "text-text-small hover:text-primary",
-                                isActive ? "text-primary" : "text-muted-foreground"
+                                "text-sm font-normal hover:text-primary py-1",
+                                isActive ? "text-primary font-medium" : "text-slate-600"
                               )
                             }
                           >
@@ -254,10 +253,10 @@ const Navbar = () => {
                   </div>
                 )
               ))}
-              <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base">
                 <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
               </Button>
-              <Button variant="default" asChild className="mt-2 hover:animate-shake">
+              <Button variant="default" asChild className="mt-2 hover:animate-shake text-base">
                 <Link to="/admissions#enrollment-form" onClick={() => setIsSheetOpen(false)}>Apply</Link>
               </Button>
             </nav>
