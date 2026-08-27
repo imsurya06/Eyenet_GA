@@ -12,10 +12,6 @@
         var player;
         var isInitialized = false;
 
-        function isSafariBrowser() {
-            return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent);
-        }
-
         function loadTour()
         {
             if(player) return;
@@ -48,25 +44,44 @@
             // Force hide preloader screen after player initializes
             setTimeout(function() {
                 disposePreloader();
-            }, 600);
+            }, 500);
             setTimeout(function() {
                 disposePreloader();
-            }, 1800);
+            }, 1500);
 
-            /* Periodically clean up bottom-right grey overlay box */
-            setInterval(cleanBottomRightOverlay, 300);
+            // Continuously enforce Safari canvas dimensions & hide bottom-right grey box
+            setInterval(enforceSafariCanvasAndCleanOverlays, 250);
         }
 
-        function cleanBottomRightOverlay() {
+        function enforceSafariCanvasAndCleanOverlays() {
             try {
                 var viewer = document.getElementById('viewer');
                 if (!viewer) return;
+
+                // 1. Safari Canvas Size Fix: Ensure canvas fills screen and is not 0x0
+                var canvases = viewer.getElementsByTagName('canvas');
+                var winW = window.innerWidth || document.documentElement.clientWidth || 1920;
+                var winH = window.innerHeight || document.documentElement.clientHeight || 1080;
+
+                for (var c = 0; c < canvases.length; c++) {
+                    var cv = canvases[c];
+                    if (cv.width === 0 || cv.clientWidth === 0) {
+                        cv.width = winW;
+                        cv.height = winH;
+                    }
+                    cv.style.width = '100vw';
+                    cv.style.height = '100vh';
+                    cv.style.position = 'absolute';
+                    cv.style.top = '0px';
+                    cv.style.left = '0px';
+                }
+
+                // 2. Clean up bottom-right grey overlay box
                 var divs = viewer.getElementsByTagName('div');
                 for (var i = 0; i < divs.length; i++) {
                     var d = divs[i];
                     var style = d.getAttribute('style') || '';
                     if (style.indexOf('right:') !== -1 && (style.indexOf('bottom:') !== -1 || style.indexOf('bottom :') !== -1)) {
-                        // Check if it's the grey placeholder overlay (no interactive children)
                         if (!d.querySelector('button') && !d.querySelector('a') && !d.querySelector('input') && !d.classList.contains('PlayList')) {
                             d.style.display = 'none';
                             d.style.opacity = '0';
@@ -92,26 +107,9 @@
             }
         }
 
-        function startSafariTour() {
-            var safariBtn = document.getElementById('safariStartBtn');
-            if (safariBtn) {
-                safariBtn.style.display = 'none';
-            }
-            loadTour();
-        }
-
         function onLoad()
         {
-            if (isSafariBrowser()) {
-                // Show clean user interaction overlay for Safari WebGL permission
-                var safariBtn = document.getElementById('safariStartBtn');
-                if (safariBtn) {
-                    safariBtn.style.display = 'flex';
-                }
-                loadTour();
-            } else {
-                loadTour();
-            }
+            loadTour();
         }
     </script>
     <style type="text/css">
@@ -128,14 +126,24 @@
             background-color: #000000; 
             z-index: 1; 
             position: absolute; 
-            width: 100% !important; 
-            height: 100% !important; 
+            width: 100vw !important; 
+            height: 100vh !important; 
             top: 0 !important; 
             left: 0 !important; 
             right: 0 !important;
             bottom: 0 !important;
             margin: 0 !important;
         }
+
+        #viewer canvas {
+            width: 100vw !important;
+            height: 100vh !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            object-fit: cover !important;
+        }
+
         #preloadContainer { 
             z-index: 9999; 
             position: absolute; 
@@ -148,23 +156,6 @@
             -webkit-transition: opacity 0.4s ease-out; 
         }
 
-        #safariStartBtn {
-            display: none;
-            position: absolute;
-            z-index: 10000;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
         /* Suppress unwanted bottom-right grey placeholder box */
         #viewer div[style*="right"][style*="bottom"] {
             display: none !important;
@@ -174,12 +165,6 @@
     </style>
 </head>
 <body onload="onLoad()">
-    <div id="safariStartBtn" onclick="startSafariTour()">
-        <div style="background: #800020; color: #ffffff; padding: 16px 32px; border-radius: 9999px; font-family: system-ui, sans-serif; font-size: 16px; font-weight: 600; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
-            ▶ Click to Start 360° Virtual Tour
-        </div>
-    </div>
-
     <div id="preloadContainer">
         <div style="z-index: 4; position: absolute; left: 0%; top: 45%; width: 100%; text-align: center;">
             <div style="font-size: 16px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #334155;">

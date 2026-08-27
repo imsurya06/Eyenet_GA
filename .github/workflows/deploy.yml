@@ -1,4 +1,4 @@
-name: Deploy to cPanel via FTP
+name: Build & Verify Website
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - main
 
 jobs:
-  web-deploy:
-    name: Build & Verify Website
+  build:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -23,18 +23,3 @@ jobs:
 
       - name: Build production bundle
         run: npx vite build
-
-      - name: Sync files to cPanel FTP (Optional)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        continue-on-error: true
-        if: ${{ env.FTP_SERVER != '' }}
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          port: 21
-          server-dir: public_html/
-          local-dir: ./dist/
