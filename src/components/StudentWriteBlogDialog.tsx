@@ -135,11 +135,28 @@ const StudentWriteBlogDialog: React.FC<StudentWriteBlogDialogProps> = ({ open, o
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] p-6 md:p-8 max-h-[90vh] overflow-y-auto">
         {isSuccess ? (
-          <div className="flex flex-col items-center justify-center py-10 space-y-4">
-            <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
-            <h2 className="text-2xl font-bold text-center">Successfully Submitted!</h2>
-            <p className="text-center text-gray-500 mb-6">Your blog has been submitted for review. It will appear once approved.</p>
-            <Button onClick={() => onOpenChange(false)} className="w-full">Close</Button>
+          <div className="py-6 px-2 text-center flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-600 flex items-center justify-center mb-5 shadow-sm">
+              <CheckCircle2 className="w-9 h-9" />
+            </div>
+
+            <DialogHeader className="p-0 text-center mb-3">
+              <DialogTitle className="text-2xl sm:text-3xl font-heading font-bold text-slate-900 text-center">
+                Successfully Submitted!
+              </DialogTitle>
+              <DialogDescription className="text-sm font-body text-slate-600 text-center max-w-sm mx-auto leading-relaxed mt-2">
+                Your blog post has been submitted for review. It will appear live once approved by our editorial team.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="w-full mt-6 pt-4 border-t border-slate-100">
+              <Button 
+                onClick={() => onOpenChange(false)} 
+                className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-3 rounded-xl shadow-md transition-all"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         ) : (
           <>
