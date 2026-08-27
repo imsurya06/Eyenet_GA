@@ -19,10 +19,10 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --no-audit --no-fund
 
       - name: Build production bundle
-        run: npm run build
+        run: npx vite build
 
       - name: Sync files to cPanel FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
