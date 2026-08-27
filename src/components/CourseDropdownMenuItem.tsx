@@ -4,6 +4,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import * as LucideIcons from 'lucide-react';
 
 interface CourseDropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof NavLink> {
   to: string;
@@ -23,29 +24,27 @@ const CourseDropdownMenuItem = React.forwardRef<
         to={to}
         className={({ isActive }) =>
           cn(
-            "flex items-start gap-3.5 rounded-xl p-3 text-left transition-colors hover:bg-slate-100/80 focus:bg-slate-100/80 group cursor-pointer",
-            isActive && "bg-primary/5 text-primary",
+            "flex items-start gap-3 rounded-md p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            isActive && "text-primary",
             className
           )
         }
         {...props}
       >
         {IconComponent ? (
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-            <IconComponent className="h-5.5 w-5.5" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <IconComponent className="h-5 w-5" />
           </div>
         ) : (
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-red-500 text-white">
             ?
           </div>
         )}
-        <div className="flex flex-col justify-center py-0.5">
-          <p className="text-base sm:text-[17px] font-semibold text-slate-900 leading-tight mb-1 group-hover:text-primary transition-colors">{title}</p>
-          {description && (
-            <p className="line-clamp-2 text-xs sm:text-[13.5px] text-slate-600 leading-snug">
-              {description}
-            </p>
-          )}
+        <div className="flex flex-col justify-center min-h-[2.5rem]">
+          <p className="text-base sm:text-[16px] font-normal leading-snug">{title}</p>
+          <p className="line-clamp-2 text-xs sm:text-[13px] leading-snug text-muted-foreground mt-0.5">
+            {description || '\u00A0'}
+          </p>
         </div>
       </NavLink>
     </DropdownMenuItem>

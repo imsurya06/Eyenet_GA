@@ -49,7 +49,7 @@ const CollaborationsSection = () => {
   return (
     <section
       id="collaborations-section"
-      className="pt-4 sm:pt-6 md:pt-8 pb-12 md:pb-16 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-background via-muted/40 to-background text-foreground relative overflow-hidden"
+      className="py-16 md:py-24 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-background via-muted/40 to-background text-foreground relative overflow-hidden"
     >
       {/* Decorative ambient glow */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
