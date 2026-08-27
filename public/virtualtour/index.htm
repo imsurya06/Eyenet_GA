@@ -5,15 +5,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />
     <link rel="preload" href="script.js?v=1625125640410" as="script"/>
-    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/l/3/0_0.jpg?v=1625125640410" as="image"/>
     <meta name="description" content="360° Virtual Tour of Eye-Net Educational Academy Campus"/>
     <meta name="theme-color" content="#1e293b"/>
     <script src="lib/tdvplayer.js?v=1625125640410"></script>
     <script type="text/javascript">
         var player;
-        var playersPlayingTmp = [];
         var isInitialized = false;
-        var isPaused = false;
 
         function isSafariBrowser() {
             return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent);
@@ -21,13 +18,12 @@
 
         function loadTour()
         {
-            if(player)
-                return;
+            if(player) return;
 
             var beginFunc = function(event){
                 if(event.name == 'begin')
                 {
-                    var camera = event.data.source.get('camera');
+                    var camera = event.data.source && event.data.source.get && event.data.source.get('camera');
                     if(camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
                         return;
                 }
@@ -36,148 +32,57 @@
                     return;
 
                 isInitialized = true;
-
-                player.unbind('preloadMediaShow', beginFunc, player, true);
-                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
-                player.unbind('stateChange', beginFunc, player, true);
-                
                 disposePreloader();
-                onVirtualTourLoaded();
             };
 
             var settings = new TDV.PlayerSettings();
-            
             settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
             settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1625125640410');
             
-            // Safari Fix: Avoid WebVR polyfill interference on Safari WebGL context
+            // Disable WebVR polyfill for Safari to prevent WebGL canvas blocking
             if (!isSafariBrowser()) {
                 settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1625125640410');
             }
             
             settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1625125640410');
+
             window.tdvplayer = player = TDV.PlayerAPI.create(settings);
             player.bind('preloadMediaShow', beginFunc, player, true);
             player.bind('stateChange', beginFunc, player, true);
-            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
-            player.bindOnObject('rootPlayer', 'start', function(e){
-                var queryDict = {}; location.search.substr(1).split("&").forEach(function(item) {var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);queryDict[k] = v});
-                var item = undefined;
-                if("media-index" in queryDict){
-                    item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
-                }
-                else if("media-name" in queryDict){
-                    item = setMediaByName(queryDict["media-name"]);
-                }
-                else{
-                    item = setMediaByIndex(0);
-                }
-                if(item != undefined && "trigger-overlay-name" in queryDict){
-                    triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
-                }
+            
+            // Force hide preloader screen on all browsers after player initializes
+            setTimeout(function() {
+                disposePreloader();
+            }, 1000);
+            setTimeout(function() {
+                disposePreloader();
+            }, 2500);
 
-                player.getById('rootPlayer').bind('tourEnded', function(){
-                    onVirtualTourEnded();
-                }, player, true);
-
-                // Safari fallback: Force dismiss loading screen once player starts
-                setTimeout(function() {
-                    disposePreloader();
-                }, 1500);
-            }, player, false);
-
-            /* Listen messages */
-            window.addEventListener('message', function (e) {
-                var action = e.data;
-                if (action == 'pauseTour' || action == 'resumeTour') {
-                    this[action].apply(this);
-                }
-            });
+            /* Clean up bottom right grey box dynamically */
+            setInterval(cleanBottomRightOverlay, 500);
         }
 
-        function pauseTour()
-        {
-            isPaused = true;
-            if(!isInitialized)
-                return;
-
-            var playLists = player.getByClassName('PlayList');
-            for(var i = 0; i< playLists.length; i++)
-            {
-                var playList = playLists[i];
-                var media = playList.get('selectedMedia');
-                if(media)
-                {
-                    media.pause();
-                }
-            }
-        }
-
-        function resumeTour()
-        {
-            isPaused = false;
-            if(!isInitialized)
-                return;
-
-            var playLists = player.getByClassName('PlayList');
-            for(var i = 0; i< playLists.length; i++)
-            {
-                var playList = playLists[i];
-                var media = playList.get('selectedMedia');
-                if(media)
-                {
-                    media.play();
-                }
-            }
-        }
-
-        function onVirtualTourLoaded()
-        {
-            disposePreloader();
-        }
-
-        function onVirtualTourEnded()
-        {
-        }
-
-        function setMediaByIndex(index)
-        {
-            var rootPlayer = player.getById('rootPlayer');
-            if(rootPlayer != undefined)
-            {
-                return rootPlayer.setMediaByIndex(index);
-            }
-        }
-
-        function setMediaByName(name)
-        {
-            var rootPlayer = player.getById('rootPlayer');
-            if(rootPlayer != undefined)
-            {
-                return rootPlayer.setMediaByName(name);
-            }
-        }
-
-        function triggerOverlayByName(item, name, eventName)
-        {
-            var overlays = item.get('overlays');
-            if(overlays)
-            {
-                for(var i = 0; i < overlays.length; i++)
-                {
-                    var overlay = overlays[i];
-                    if(overlay.get('name') == name)
-                    {
-                        var event = overlay.get(eventName);
-                        if(event)
-                        {
-                            event.execute();
+        function cleanBottomRightOverlay() {
+            try {
+                var viewer = document.getElementById('viewer');
+                if (!viewer) return;
+                var divs = viewer.getElementsByTagName('div');
+                for (var i = 0; i < divs.length; i++) {
+                    var d = divs[i];
+                    var style = d.getAttribute('style') || '';
+                    // Remove bottom-right grey placeholder box
+                    if ((style.indexOf('bottom') !== -1 && style.indexOf('right') !== -1 && style.indexOf('top') === -1) ||
+                        (d.offsetWidth > 150 && d.offsetHeight > 150 && style.indexOf('right: 0') !== -1) ||
+                        (style.indexOf('rgba(128') !== -1) || (style.indexOf('rgba(0, 0, 0, 0.') !== -1 && style.indexOf('bottom') !== -1)) {
+                        if (d.children.length === 0 || !d.querySelector('img')) {
+                            d.style.display = 'none';
+                            d.style.opacity = '0';
+                            d.style.visibility = 'hidden';
                         }
-                        break;
                     }
                 }
-            }
+            } catch(e){}
         }
 
         function disposePreloader()
@@ -186,24 +91,17 @@
             if(preloadContainer)
             {
                 preloadContainer.style.opacity = '0';
+                preloadContainer.style.pointerEvents = 'none';
                 setTimeout(function(){
-                    if (preloadContainer.parentNode) {
+                    if (preloadContainer && preloadContainer.parentNode) {
                         preloadContainer.parentNode.removeChild(preloadContainer);
                     }
-                }, 500);
+                }, 400);
             }
-        }
-
-        function showPreloader()
-        {
-            var preloadContainer = document.getElementById('preloadContainer');
-            if(preloadContainer)
-                preloadContainer.style.opacity = '1';
         }
 
         function onLoad()
         {
-            showPreloader();
             loadTour();
         }
     </script>
@@ -214,30 +112,42 @@
             margin: 0; 
             padding: 0; 
             overflow: hidden;
-            background-color: #1e293b;
+            background-color: #000000;
         }
 
         #viewer { 
-            background-color: #1e293b; 
+            background-color: #000000; 
             z-index: 1; 
             position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            top: 0; 
-            left: 0; 
-            right: 0;
-            bottom: 0;
+            width: 100% !important; 
+            height: 100% !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            right: 0 !important;
+            bottom: 0 !important;
+            margin: 0 !important;
         }
         #preloadContainer { 
-            z-index: 999; 
+            z-index: 9999; 
             position: absolute; 
             width: 100%; 
             height: 100%; 
             top: 0;
             left: 0;
             background-color: #ffffff;
-            transition: opacity 0.5s; 
-            -webkit-transition: opacity 0.5s; 
+            transition: opacity 0.4s ease-out; 
+            -webkit-transition: opacity 0.4s ease-out; 
+        }
+
+        /* Hide unwanted bottom-right grey placeholder overlay box */
+        #viewer div[style*="bottom"][style*="right"]:not([style*="top"]),
+        #viewer div[style*="right: 0px"][style*="bottom: 0px"],
+        #viewer div[style*="right:0px"][style*="bottom:0px"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
         }
     </style>
 </head>
