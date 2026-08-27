@@ -9,11 +9,12 @@ const AboutHeroSection = () => {
     <section className="pt-2 sm:pt-4 pb-6 sm:pb-8 px-4 md:px-8 lg:px-[80px] bg-background text-foreground">
       <div className="max-w-7xl mx-auto">
 
-        {/* Main Title and Subtitle - Centered (Tight Gap to Carousel) */}
+        {/* Main Title and Subtitle - Centered */}
         <div className="text-center max-w-3xl mx-auto mb-1 sm:mb-2">
           <AnimateOnScroll isHero={true} delay={100}>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-normal leading-tight text-slate-900 tracking-tight mb-1.5">
-              Eye-Net: A creative <span className="text-primary font-heading italic">Educational Academy</span>
+              <span className="font-sans font-extrabold text-slate-950 tracking-normal mr-2">Eye-Net</span>
+              A creative <span className="text-primary font-heading italic">Educational Academy</span>
             </h1>
           </AnimateOnScroll>
           <AnimateOnScroll isHero={true} delay={200}>
@@ -23,7 +24,7 @@ const AboutHeroSection = () => {
           </AnimateOnScroll>
         </div>
 
-        {/* Hero Showcase 3D Perspective Carousel (Tight Vertical Spacing) */}
+        {/* Hero Showcase 3D Perspective Carousel */}
         <div className="mb-2 sm:mb-4 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-0">
           <DynamicGalleryCarouselSection hideHeading={true} withButton={false} variant="3d" />
         </div>
