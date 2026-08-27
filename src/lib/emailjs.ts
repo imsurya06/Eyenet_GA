@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 const defaultTemplate = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || import.meta.env.VITE_EMAILJS_TEMPLATE_ADMISSIONS || 'template_b2o0hse';
 
 export const EMAILJS_CONFIG = {
-  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_fi2oe1i',
+  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_8wtbepv',
   PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'q6Z-hRqiUj0_J1Qps',
   TEMPLATES: {
     MASTER: defaultTemplate,
