@@ -112,7 +112,7 @@ const FashionCoursesSection = () => {
                           {course.tag} / Offline
                         </span>
                         
-                        <h3 className="text-[22px] sm:text-2xl font-heading font-extrabold mb-1.5 text-primary hover:text-primary/80 transition-colors break-words [overflow-wrap:anywhere] tracking-tight leading-snug drop-shadow-[0_0.5px_0px_rgba(150,0,0,0.2)]">
+                        <h3 className="text-2xl sm:text-3xl font-heading font-extrabold mb-2 text-primary hover:text-primary/85 transition-colors break-words [overflow-wrap:anywhere] tracking-tight leading-snug">
                           {course.title}
                         </h3>
 
