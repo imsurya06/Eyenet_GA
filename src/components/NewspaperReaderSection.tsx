@@ -30,7 +30,7 @@ const NewspaperReaderSection: React.FC = () => {
   // Lightbox Modal State
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Drag & Animation State
+  // Drag & 3D Flip State
   const [isDragging, setIsDragging] = useState(false);
   const [dragProgress, setDragProgress] = useState(0); // 0 to 1
   const [dragDirection, setDragDirection] = useState<'next' | 'prev'>('next');
@@ -136,6 +136,8 @@ const NewspaperReaderSection: React.FC = () => {
 
   // Mobile Page Mappings
   const mobileCurrentClipping = clippings[currentIndex] || fallbackClippings[0];
+  const mobileNextClipping = clippings[currentIndex + 1] || fallbackClippings[0];
+  const mobilePrevClipping = clippings[currentIndex - 1] || fallbackClippings[0];
 
   // Desktop Spread Mappings
   const leftPageIdx = currentIndex * 2;
@@ -150,7 +152,7 @@ const NewspaperReaderSection: React.FC = () => {
   const prevLeftClipping = clippings[(currentIndex - 1) * 2];
   const prevRightClipping = clippings[(currentIndex - 1) * 2 + 1];
 
-  // Desktop 60fps physics animation engine
+  // 60fps/120fps physics animation engine for smooth 3D page flips
   const animateToTargetProgress = (targetP: number, onComplete?: () => void) => {
     setIsAnimating(true);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -159,7 +161,7 @@ const NewspaperReaderSection: React.FC = () => {
       const currentP = currentProgressRef.current;
       const diff = targetP - currentP;
 
-      if (Math.abs(diff) < 0.01) {
+      if (Math.abs(diff) < 0.008) {
         currentProgressRef.current = targetP;
         setDragProgress(targetP);
 
@@ -171,9 +173,9 @@ const NewspaperReaderSection: React.FC = () => {
 
         setTimeout(() => {
           setIsAnimating(false);
-        }, 30);
+        }, 20);
       } else {
-        const nextP = currentP + diff * 0.22;
+        const nextP = currentP + diff * 0.24;
         currentProgressRef.current = nextP;
         setDragProgress(nextP);
         animFrameRef.current = requestAnimationFrame(step);
@@ -185,50 +187,22 @@ const NewspaperReaderSection: React.FC = () => {
 
   const handleNext = () => {
     if (isAnimating || currentIndex >= maxIndex) return;
-    setIsAnimating(true);
     setDragDirection('next');
-
-    if (isMobile) {
-      // Mobile 100% flicker-free smooth transition
-      setDragProgress(1);
-      setTimeout(() => {
-        setCurrentIndex((prev) => prev + 1);
-        setDragProgress(0);
-        setIsAnimating(false);
-      }, 250);
-    } else {
-      animateToTargetProgress(1, () => {
-        setCurrentIndex((prev) => prev + 1);
-      });
-    }
+    animateToTargetProgress(1, () => {
+      setCurrentIndex((prev) => prev + 1);
+    });
   };
 
   const handlePrev = () => {
     if (isAnimating || currentIndex <= 0) return;
-    setIsAnimating(true);
     setDragDirection('prev');
-
-    if (isMobile) {
-      // Mobile 100% flicker-free smooth transition
-      setDragProgress(1);
-      setTimeout(() => {
-        setCurrentIndex((prev) => prev - 1);
-        setDragProgress(0);
-        setIsAnimating(false);
-      }, 250);
-    } else {
-      animateToTargetProgress(1, () => {
-        setCurrentIndex((prev) => prev - 1);
-      });
-    }
+    animateToTargetProgress(1, () => {
+      setCurrentIndex((prev) => prev - 1);
+    });
   };
 
   const springBack = () => {
-    if (isMobile) {
-      setDragProgress(0);
-    } else {
-      animateToTargetProgress(0);
-    }
+    animateToTargetProgress(0);
   };
 
   // Drag Gesture Handlers
@@ -265,7 +239,7 @@ const NewspaperReaderSection: React.FC = () => {
     if (!isDragging) return;
     setIsDragging(false);
 
-    if (currentProgressRef.current > 0.2) {
+    if (currentProgressRef.current > 0.22) {
       if (dragDirection === 'next') {
         handleNext();
       } else {
@@ -305,7 +279,7 @@ const NewspaperReaderSection: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex, maxIndex, isAnimating, lightboxIndex, totalClippings]);
 
-  // Desktop Book Bend Physics
+  // Desktop 3D Book Bend Physics
   const angle = dragProgress * 180;
   const arcHeight = Math.sin(dragProgress * Math.PI);
   const bendSkew = -4 * Math.sin(dragProgress * Math.PI);
@@ -318,8 +292,14 @@ const NewspaperReaderSection: React.FC = () => {
   const desktopLeafFront = dragDirection === 'next' ? rightClipping : leftClipping;
   const desktopLeafBack = dragDirection === 'next' ? nextLeftClipping : prevRightClipping;
 
-  // Mobile Single Paper Physics
-  const mobileTranslateX = dragDirection === 'next' ? -dragProgress * 100 : dragProgress * 100;
+  // Mobile Single Paper 3D Physics
+  const mobileAngle = dragProgress * 180;
+  const mobileArcHeight = Math.sin(dragProgress * Math.PI);
+  const mobileBendSkew = -3 * Math.sin(dragProgress * Math.PI);
+  const mobileElevationZ = mobileArcHeight * 45;
+  const mobileShadowOpacity = Math.min(mobileArcHeight * 0.35, 0.35);
+
+  const mobileTargetClipping = dragDirection === 'next' ? mobileNextClipping : mobilePrevClipping;
 
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4 md:px-8 lg:px-[80px] bg-background text-foreground relative overflow-hidden select-none border-t border-slate-200/80">
@@ -413,29 +393,86 @@ const NewspaperReaderSection: React.FC = () => {
                 style={{ transformStyle: 'preserve-3d' }}
               >
 
-                {/* --- A. MOBILE LAYOUT (100% FLICKER-FREE SMOOTH SLIDE) --- */}
+                {/* --- A. MOBILE LAYOUT (REALISTIC 3D NEWSPAPER PAGE FOLD & FLIP) --- */}
                 {isMobile ? (
                   <div className="relative w-full h-full bg-white overflow-hidden rounded-xl">
-                    <div
-                      onClick={() => {
-                        if (mobileCurrentClipping && !isDragging) setLightboxIndex(currentIndex);
-                      }}
-                      className="w-full h-full bg-white cursor-pointer will-change-transform"
-                      style={{
-                        transform: (isAnimating || isDragging) ? `translateX(${mobileTranslateX}%)` : 'translateX(0%)',
-                        transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)',
-                      }}
-                    >
-                      {mobileCurrentClipping ? (
+                    
+                    {/* Base Layer: Underneath Target Page (Revealed as top page flips) */}
+                    <div className="absolute inset-0 w-full h-full bg-white">
+                      {mobileTargetClipping ? (
                         <img
-                          src={mobileCurrentClipping.imageUrl}
-                          alt={mobileCurrentClipping.title}
+                          src={mobileTargetClipping.imageUrl}
+                          alt={mobileTargetClipping.title}
                           className="w-full h-full object-contain pointer-events-none"
                         />
                       ) : (
-                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                        <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">End of Clippings</div>
                       )}
                     </div>
+
+                    {/* Base Layer: Current Static Page (Visible when idle) */}
+                    {(!isAnimating && !isDragging) && (
+                      <div
+                        onClick={() => {
+                          if (mobileCurrentClipping) setLightboxIndex(currentIndex);
+                        }}
+                        className="absolute inset-0 w-full h-full bg-white cursor-pointer"
+                      >
+                        {mobileCurrentClipping ? (
+                          <img
+                            src={mobileCurrentClipping.imageUrl}
+                            alt={mobileCurrentClipping.title}
+                            className="w-full h-full object-contain pointer-events-none"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* 3D Flipping Newspaper Leaf (Active Fold Animation) */}
+                    {(isDragging || isAnimating) && (
+                      <div
+                        className={`absolute inset-0 w-full h-full z-30 ${dragDirection === 'next' ? 'origin-left' : 'origin-right'}`}
+                        style={{
+                          transformStyle: 'preserve-3d',
+                          transform: `rotateY(${dragDirection === 'next' ? -mobileAngle : mobileAngle}deg) skewY(${dragDirection === 'next' ? mobileBendSkew : -mobileBendSkew}deg) translateZ(${mobileElevationZ}px)`,
+                        }}
+                      >
+                        {/* FRONT SIDE OF MOBILE NEWSPAPER LEAF */}
+                        <div
+                          className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                          }}
+                        >
+                          {mobileCurrentClipping ? (
+                            <img src={mobileCurrentClipping.imageUrl} alt="Front Flipping Leaf" className="w-full h-full object-contain bg-white pointer-events-none" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                          )}
+                          <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: mobileShadowOpacity }} />
+                        </div>
+
+                        {/* BACK SIDE OF MOBILE NEWSPAPER LEAF */}
+                        <div
+                          className="absolute inset-0 w-full h-full bg-white overflow-hidden"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            transform: 'rotateY(180deg)',
+                          }}
+                        >
+                          {mobileTargetClipping ? (
+                            <img src={mobileTargetClipping.imageUrl} alt="Back Flipping Leaf" className="w-full h-full object-contain bg-white pointer-events-none" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium">Blank Page</div>
+                          )}
+                          <div className="absolute inset-0 bg-slate-950 pointer-events-none transition-opacity" style={{ opacity: mobileShadowOpacity }} />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
 
