@@ -55,7 +55,7 @@ const ImpactByNumbersSection = () => {
   ];
 
   return (
-    <section className="bg-secondary/30 relative overflow-hidden pb-20 md:pb-28">
+    <section className="bg-secondary/30 relative overflow-hidden pb-6 sm:pb-8 md:pb-10">
       {/* Full Width Video Section */}
       <div className="w-full aspect-[16/9] sm:aspect-auto sm:h-[45vh] md:h-[70vh] relative group overflow-hidden bg-black">
         <iframe
