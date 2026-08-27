@@ -19,20 +19,20 @@
             settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1625125640410');
             window.tdvplayer = player = TDV.PlayerAPI.create(settings);
-            setTimeout(disposePreloader, 300);
-            setTimeout(disposePreloader, 1000);
-            setInterval(cleanOverlays, 250);
+            setInterval(cleanOverlaysAndSizeCanvas, 200);
         }
-        function cleanOverlays() {
+        function cleanOverlaysAndSizeCanvas() {
             try {
                 var v = document.getElementById('viewer');
                 if (!v) return;
                 var canvases = v.getElementsByTagName('canvas');
+                var w = window.innerWidth || document.documentElement.clientWidth || 1920;
+                var h = window.innerHeight || document.documentElement.clientHeight || 1080;
                 for (var c = 0; c < canvases.length; c++) {
                     var cv = canvases[c];
                     if (cv.width === 0 || cv.clientWidth === 0) {
-                        cv.width = window.innerWidth || 1920;
-                        cv.height = window.innerHeight || 1080;
+                        cv.width = w;
+                        cv.height = h;
                     }
                     cv.style.width = '100vw';
                     cv.style.height = '100vh';
@@ -47,34 +47,50 @@
                         if (!d.querySelector('button') && !d.querySelector('a') && !d.querySelector('input') && !d.classList.contains('PlayList')) {
                             d.style.display = 'none';
                             d.style.opacity = '0';
+                            d.style.visibility = 'hidden';
                         }
                     }
                 }
             } catch(e){}
         }
-        function disposePreloader() {
-            var p = document.getElementById('preloadContainer');
-            if (p) {
-                p.style.opacity = '0';
-                p.style.pointerEvents = 'none';
-                setTimeout(function(){ if(p && p.parentNode) p.parentNode.removeChild(p); }, 300);
-            }
-        }
     </script>
     <style type="text/css">
-        html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background: #000; }
-        #viewer { background: #000; z-index: 1; position: absolute; width: 100vw !important; height: 100vh !important; top: 0 !important; left: 0 !important; }
-        #viewer canvas { width: 100vw !important; height: 100vh !important; position: absolute !important; top: 0 !important; left: 0 !important; object-fit: cover !important; }
-        #preloadContainer { z-index: 9999; position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: #fff; transition: opacity 0.3s; }
-        #viewer div[style*="right"][style*="bottom"] { display: none !important; opacity: 0 !important; }
+        html, body { 
+            width: 100%; 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            background: #000000; 
+        }
+        #viewer { 
+            background: #000000; 
+            z-index: 1; 
+            position: absolute; 
+            width: 100vw !important; 
+            height: 100vh !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        #viewer canvas { 
+            width: 100vw !important; 
+            height: 100vh !important; 
+            position: absolute !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            object-fit: cover !important; 
+        }
+        #viewer div[style*="right"][style*="bottom"] { 
+            display: none !important; 
+            opacity: 0 !important; 
+            visibility: hidden !important;
+        }
     </style>
 </head>
 <body onload="loadTour()">
-    <div id="preloadContainer">
-        <div style="z-index: 4; position: absolute; top: 45%; width: 100%; text-align: center; font-size: 16px; font-weight: 600; font-family: sans-serif; color: #334155;">
-            Loading 360° Virtual Tour...
-        </div>
-    </div>
     <div id="viewer"></div>
 </body>
 </html>
