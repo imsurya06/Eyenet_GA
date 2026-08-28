@@ -275,3 +275,78 @@
 .animate-ticker:hover {
   animation-play-state: paused;
 }
+
+/* Height-Aware Dynamic Scaling for Desktop Screens (Preserves MacBook full view while fitting shorter 1080p/Windows scaled screens) */
+@media (min-width: 1024px) and (max-height: 850px) {
+  .hero-container-compact {
+    min-height: calc(100vh - 110px) !important;
+    max-height: calc(100vh - 60px) !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  .hero-title-compact {
+    font-size: clamp(36px, 3.8vw, 52px) !important;
+    line-height: 1.08 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .hero-desc-compact {
+    font-size: 0.925rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1.25rem !important;
+  }
+  .hero-btn-compact {
+    padding: 0.55rem 1.25rem !important;
+    font-size: 0.875rem !important;
+  }
+  .hero-bento-compact {
+    max-width: 440px !important;
+    gap: 0.75rem !important;
+  }
+  .hero-bento-top-compact {
+    gap: 0.75rem !important;
+  }
+  .hero-bento-main-img-compact {
+    min-height: 165px !important;
+  }
+  .hero-bento-bottom-compact {
+    height: 135px !important;
+    gap: 0.75rem !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 720px) {
+  .hero-container-compact {
+    min-height: calc(100vh - 100px) !important;
+    max-height: calc(100vh - 50px) !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  .hero-title-compact {
+    font-size: clamp(30px, 3.2vw, 40px) !important;
+    line-height: 1.06 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .hero-desc-compact {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.85rem !important;
+  }
+  .hero-btn-compact {
+    padding: 0.45rem 1rem !important;
+    font-size: 0.825rem !important;
+  }
+  .hero-bento-compact {
+    max-width: 360px !important;
+    gap: 0.5rem !important;
+  }
+  .hero-bento-top-compact {
+    gap: 0.5rem !important;
+  }
+  .hero-bento-main-img-compact {
+    min-height: 135px !important;
+  }
+  .hero-bento-bottom-compact {
+    height: 105px !important;
+    gap: 0.5rem !important;
+  }
+}
