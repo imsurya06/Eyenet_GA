@@ -74,6 +74,8 @@ const SecondaryNavbar = () => {
               <a
                 key={link.name}
                 href="/virtualtour/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[13.5px] sm:text-sm md:text-[15px] font-semibold text-slate-800 hover:text-primary transition-colors tracking-tight"
               >
                 {link.name}
