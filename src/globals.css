@@ -276,6 +276,30 @@
   animation-play-state: paused;
 }
 
+/* ==========================================================================
+   Global Desktop Scale Matching:
+   Automatically brings the spacious, elegant 75%-80% scaled aesthetic 
+   (matching MacBook Retina display proportions) to standard desktop & Windows displays
+   across the ENTIRE website (Home, About, Courses, Contact, etc.).
+   ========================================================================== */
+@media (min-width: 1024px) and (max-width: 1536px) {
+  html, :root {
+    zoom: 0.82;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  html, :root {
+    zoom: 0.80;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 720px) {
+  html, :root {
+    zoom: 0.75;
+  }
+}
+
 /* Height-Aware Dynamic Scaling for Desktop Screens (Preserves MacBook full view while fitting shorter 1080p/Windows scaled screens) */
 @media (min-width: 1024px) and (max-height: 850px) {
   .hero-container-compact {
