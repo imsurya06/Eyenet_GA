@@ -1,4 +1,4 @@
-name: Build & Verify Website
+name: Build & Deploy Website
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build & Test
+  build-and-deploy:
+    name: Build & Deploy via FTP
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,11 +19,26 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: |
-          npm install --no-audit --no-fund --legacy-peer-deps
-          npm install @rollup/rollup-linux-x64-gnu --no-save
+        run: npm install --legacy-peer-deps --include=optional
 
       - name: Build production bundle
         env:
           NODE_OPTIONS: "--max-old-space-size=4096"
-        run: npx vite build
+        run: npm run build
+
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        if: ${{ env.FTP_SERVER != '' }}
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: public_html/
+          local-dir: dist/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            virtualtour/**
