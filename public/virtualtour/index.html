@@ -4,21 +4,101 @@
     <title>Eye-Net Educational Academy - 360° Virtual Tour</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover" />
+    <link rel="preload" href="script.js?v=1625125640410" as="script"/>
+    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/l/3/0_0.jpg?v=1625125640410" as="image"/>
+    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/r/3/0_0.jpg?v=1625125640410" as="image"/>
+    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/u/3/0_0.jpg?v=1625125640410" as="image"/>
+    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/d/3/0_0.jpg?v=1625125640410" as="image"/>
+    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/f/3/0_0.jpg?v=1625125640410" as="image"/>
+    <link rel="preload" href="media/panorama_527FFB31_58F5_D352_41CD_A55F73F06667_0/b/3/0_0.jpg?v=1625125640410" as="image"/>
     <meta name="description" content="360° Virtual Tour of Eye-Net Educational Academy Campus"/>
     <meta name="theme-color" content="#1e293b"/>
     <script src="lib/tdvplayer.js?v=1625125640410"></script>
-    <script src="lib/Hls.js?v=1625125640410"></script>
-    <script src="script.js?v=1625125640410"></script>
     <script type="text/javascript">
         var player;
+        var playersPlayingTmp = [];
+        var isInitialized = false;
+        var isPaused = false;
+
         function loadTour() {
             if(player) return;
+
+            var beginFunc = function(event){
+                if(event.name == 'begin') {
+                    var camera = event.data.source.get('camera');
+                    if(camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
+                        return;
+                }
+                if(event.sourceClassName == "MediaAudio") return;
+
+                isInitialized = true;
+                player.unbind('preloadMediaShow', beginFunc, player, true);
+                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+                player.unbind('stateChange', beginFunc, player, true);
+                disposePreloader();
+            };
+
             var settings = new TDV.PlayerSettings();
             settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
             settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1625125640410');
+            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1625125640410');
             settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1625125640410');
             window.tdvplayer = player = TDV.PlayerAPI.create(settings);
+            
+            player.bind('preloadMediaShow', beginFunc, player, true);
+            player.bind('stateChange', beginFunc, player, true);
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+            
+            player.bindOnObject('rootPlayer', 'start', function(e){
+                var queryDict = {};
+                location.search.substr(1).split("&").forEach(function(item) {
+                    var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);
+                    if(k) queryDict[k] = v;
+                });
+                if("media-index" in queryDict){
+                    setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
+                } else if("media-name" in queryDict){
+                    setMediaByName(queryDict["media-name"]);
+                } else {
+                    setMediaByIndex(0);
+                }
+                disposePreloader();
+            }, player, false);
+
+            // Safety timeout to ensure preloader is removed
+            setTimeout(disposePreloader, 1500);
+        }
+
+        function getRootPlayer() {
+            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
+        }
+
+        function setMediaByIndex(index) {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByIndex(index);
+            }
+        }
+
+        function setMediaByName(name) {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByName(name);
+            }
+        }
+
+        function disposePreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if(preloadContainer) {
+                preloadContainer.style.opacity = '0';
+                preloadContainer.style.pointerEvents = 'none';
+                setTimeout(function() {
+                    if(preloadContainer && preloadContainer.parentNode) {
+                        preloadContainer.parentNode.removeChild(preloadContainer);
+                    }
+                }, 400);
+            }
         }
     </script>
     <style type="text/css">
@@ -34,17 +114,29 @@
             background-color: #000000; 
             z-index: 1; 
             position: absolute; 
-            width: 100% !important; 
-            height: 100% !important; 
-            top: 0 !important; 
-            left: 0 !important; 
-            right: 0 !important;
-            bottom: 0 !important;
-            margin: 0 !important;
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+        }
+        #preloadContainer { 
+            z-index: 9999; 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            background: #ffffff; 
+            transition: opacity 0.4s ease; 
         }
     </style>
 </head>
 <body onload="loadTour()">
+    <div id="preloadContainer">
+        <div style="z-index: 4; position: absolute; top: 45%; width: 100%; text-align: center; font-size: 16px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #334155;">
+            Loading 360° Virtual Tour...
+        </div>
+    </div>
     <div id="viewer"></div>
 </body>
 </html>
