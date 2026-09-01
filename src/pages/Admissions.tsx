@@ -149,6 +149,39 @@ interface AdmissionAdItem {
   link?: string;
 }
 
+const initialAdmissionAds: AdmissionAdItem[] = [
+  {
+    id: 'ad-1',
+    title: 'Chudithar making',
+    imageUrl: 'https://cdn.sanity.io/images/kxgkc60l/production/407f66d266842bec935fe4e53dd08dc65b8305b2-1080x1351.png',
+  },
+  {
+    id: 'ad-2',
+    title: 'Diploma in Fashion Designing',
+    imageUrl: 'https://cdn.sanity.io/images/kxgkc60l/production/06e4bd9c0e3d9551b41efc72a9f514311b592ceb-1080x1350.jpg',
+  },
+  {
+    id: 'ad-3',
+    title: 'Diploma in tailoring',
+    imageUrl: 'https://cdn.sanity.io/images/kxgkc60l/production/01953167afb31bf16dd05ab16bee51fd9f8d3bd7-1066x1333.jpg',
+  },
+  {
+    id: 'ad-4',
+    title: 'Diploma in Fashion Illustration',
+    imageUrl: 'https://cdn.sanity.io/images/kxgkc60l/production/fabb322205feb57010e16b419d2f1c79b6eab47f-1080x1350.jpg',
+  },
+  {
+    id: 'ad-5',
+    title: 'Blouse Making',
+    imageUrl: 'https://cdn.sanity.io/images/kxgkc60l/production/6b473a2cfc56e94267e8561df201ccc4c402d22e-1080x1350.jpg',
+  },
+  {
+    id: 'ad-6',
+    title: 'Computer Course',
+    imageUrl: 'https://cdn.sanity.io/images/kxgkc60l/production/d49a92361ca890fedf0c4a4b9cb61cad30540e6f-1206x1507.jpg',
+  },
+];
+
 const AdmissionsCarousel: React.FC<{ ads: AdmissionAdItem[]; onAdClick: () => void }> = ({ ads, onAdClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -264,12 +297,13 @@ const AdmissionsCarousel: React.FC<{ ads: AdmissionAdItem[]; onAdClick: () => vo
             onClick={() => {
               if (!isDragging) onAdClick();
             }}
-            className="shrink-0 cursor-pointer rounded-2xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group bg-white"
+            className="shrink-0 cursor-pointer rounded-2xl overflow-hidden border border-slate-200/90 shadow-md hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 group bg-slate-100 aspect-[4/5] h-[360px] sm:h-[440px] md:h-[480px] w-[288px] sm:w-[352px] md:w-[384px]"
           >
             <img
               src={ad.imageUrl}
               alt={ad.title || `Admission Ad ${idx + 1}`}
-              className="h-[360px] sm:h-[440px] md:h-[480px] w-auto object-contain rounded-2xl pointer-events-none"
+              className="h-full w-full object-cover rounded-2xl pointer-events-none"
+              loading="eager"
             />
           </div>
         ))}
@@ -286,8 +320,8 @@ const Admissions = () => {
   const [batches, setBatches] = useState<BatchItem[]>(initialBatches);
   const [batchesLoading, setBatchesLoading] = useState(false);
 
-  const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>([]);
-  const [adsLoading, setAdsLoading] = useState(true);
+  const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>(initialAdmissionAds);
+  const [adsLoading, setAdsLoading] = useState(false);
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
   // Fetch Upcoming Batches dynamically from Sanity CMS Studio
@@ -403,7 +437,7 @@ const Admissions = () => {
 
   const location = useLocation();
 
-  const scrollToEnrollmentForm = () => {
+  const scrollToEnrollmentForm = (behavior: ScrollBehavior = 'smooth') => {
     const el = document.getElementById('enrollment-form');
     if (el) {
       const navbarHeight = 110;
@@ -411,16 +445,20 @@ const Admissions = () => {
       const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth',
+        behavior,
       });
     }
   };
 
   useEffect(() => {
     if (location.hash === '#enrollment-form' || window.location.hash === '#enrollment-form') {
+      // 1. Instantly anchor to form on page navigation (exact same reliable behavior as refresh)
+      scrollToEnrollmentForm('instant');
+
+      // 2. Re-anchor at 300ms once DOM layout paints to guarantee pixel-perfect alignment
       const timer = setTimeout(() => {
-        scrollToEnrollmentForm();
-      }, 50);
+        scrollToEnrollmentForm('smooth');
+      }, 300);
 
       return () => clearTimeout(timer);
     }
@@ -586,7 +624,7 @@ const Admissions = () => {
       </section>
 
       {/* 2. CONTINUOUS RUNNING TICKER SHOWCASE (PURE AD IMAGES, DRAG-SCROLLABLE & AUTO-SCROLLING) */}
-      <section className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80">
+      <section className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80 min-h-[500px]">
         <div className="w-full text-center mb-8 px-4">
           <AnimateOnScroll delay={100}>
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900">
