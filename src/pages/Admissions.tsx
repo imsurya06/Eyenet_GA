@@ -442,7 +442,7 @@ const Admissions = () => {
     if (el) {
       const navbarHeight = 110;
       const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+      const offsetPosition = Math.max(0, elementPosition + window.pageYOffset - navbarHeight);
       window.scrollTo({
         top: offsetPosition,
         behavior,
@@ -451,17 +451,47 @@ const Admissions = () => {
   };
 
   useEffect(() => {
-    if (location.hash === '#enrollment-form' || window.location.hash === '#enrollment-form') {
-      // 1. Instantly anchor to form on page navigation (exact same reliable behavior as refresh)
-      scrollToEnrollmentForm('instant');
+    const isEnrollmentTarget =
+      location.hash === '#enrollment-form' || window.location.hash === '#enrollment-form';
 
-      // 2. Re-anchor at 300ms once DOM layout paints to guarantee pixel-perfect alignment
-      const timer = setTimeout(() => {
-        scrollToEnrollmentForm('smooth');
-      }, 300);
+    if (!isEnrollmentTarget) return;
 
-      return () => clearTimeout(timer);
-    }
+    const el = document.getElementById('enrollment-form');
+    if (!el) return;
+
+    // 1. Instantly pin to form on navigation
+    scrollToEnrollmentForm('instant');
+
+    // 2. Continually re-pin to form whenever elements above (batches, ads, images) resize or load
+    let rafId: number;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        scrollToEnrollmentForm('instant');
+      });
+    });
+
+    const batchesEl = document.getElementById('upcoming-batches');
+    const adsEl = document.getElementById('special-announcements');
+    if (batchesEl) observer.observe(batchesEl);
+    if (adsEl) observer.observe(adsEl);
+
+    // 3. Re-verify when window or dynamic resources finish loading
+    const handleLoad = () => scrollToEnrollmentForm('instant');
+    window.addEventListener('load', handleLoad);
+
+    // 4. Final smooth polish alignment after 1.5s then disconnect
+    const timer = setTimeout(() => {
+      observer.disconnect();
+      scrollToEnrollmentForm('smooth');
+    }, 1500);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('load', handleLoad);
+    };
   }, [location.hash, location.pathname]);
 
   useEffect(() => {
@@ -624,7 +654,7 @@ const Admissions = () => {
       </section>
 
       {/* 2. CONTINUOUS RUNNING TICKER SHOWCASE (PURE AD IMAGES, DRAG-SCROLLABLE & AUTO-SCROLLING) */}
-      <section className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80 min-h-[500px]">
+      <section id="special-announcements" className="py-10 md:py-14 bg-white overflow-hidden border-b border-slate-200/80 min-h-[500px]">
         <div className="w-full text-center mb-8 px-4">
           <AnimateOnScroll delay={100}>
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900">
