@@ -20,6 +20,11 @@ const ScrollToTop = () => {
       return;
     }
 
+    // If this is the enrollment form, Admissions.tsx handles the dedicated smooth scroll
+    if (hash === '#enrollment-form') {
+      return;
+    }
+
     // If there's a hash, scroll smoothly accounting for sticky navbar
     const id = hash.replace('#', '');
 
@@ -37,22 +42,13 @@ const ScrollToTop = () => {
       return false;
     };
 
-    // Immediate attempt
+    // Single attempt or delayed attempt once element is mounted
     if (!scrollToTarget()) {
-      const checkElement = setInterval(() => {
-        if (scrollToTarget()) {
-          clearInterval(checkElement);
-        }
+      const timer = setTimeout(() => {
+        scrollToTarget();
       }, 100);
 
-      const timeout = setTimeout(() => {
-        clearInterval(checkElement);
-      }, 2500);
-
-      return () => {
-        clearInterval(checkElement);
-        clearTimeout(timeout);
-      };
+      return () => clearTimeout(timer);
     }
   }, [pathname, search, hash]);
 

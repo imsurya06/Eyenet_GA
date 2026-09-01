@@ -67,6 +67,81 @@ interface BatchItem {
   courseTitleToSelect: string;
 }
 
+const initialBatches: BatchItem[] = [
+  {
+    id: 'initial-1',
+    title: 'Diploma in Fashion Designing',
+    tag: 'Seats filling fast',
+    tagBg: 'bg-amber-100 text-amber-800 border-amber-200',
+    startDate: '1 September 2026',
+    duration: '1 Year / 6 Months (Offline Practical Studio)',
+    mode: 'Offline Practical Studio',
+    timing: '10:00 AM - 1:00 PM',
+    seatsLeft: 8,
+    courseTitleToSelect: 'Diploma in Fashion Designing',
+  },
+  {
+    id: 'initial-2',
+    title: 'Aari Embroidery Masterclass',
+    tag: 'New Batch',
+    tagBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    startDate: '10 September 2026',
+    duration: '2 Months (Hands-on Studio Training)',
+    mode: 'Hands-on Studio Training',
+    timing: '2:00 PM - 5:00 PM',
+    seatsLeft: 12,
+    courseTitleToSelect: 'Aari Work',
+  },
+  {
+    id: 'initial-3',
+    title: 'Adobe Illustrator',
+    tag: 'Seats filling fast',
+    tagBg: 'bg-amber-100 text-amber-800 border-amber-200',
+    startDate: '10 September 2026',
+    duration: '1 Month (Live Practical Session)',
+    mode: 'Live Practical Session',
+    timing: 'Flexible Hours',
+    seatsLeft: 6,
+    courseTitleToSelect: 'Adobe Illustrator',
+  },
+  {
+    id: 'initial-4',
+    title: 'Computer Basics Course',
+    tag: 'Seats filling fast',
+    tagBg: 'bg-amber-100 text-amber-800 border-amber-200',
+    startDate: '10 September 2026',
+    duration: '1 Month (Offline)',
+    mode: 'Offline',
+    timing: 'Flexible Hours',
+    seatsLeft: 12,
+    courseTitleToSelect: 'Computer Basics',
+  },
+  {
+    id: 'initial-5',
+    title: 'Spoken English',
+    tag: 'Seats filling fast',
+    tagBg: 'bg-amber-100 text-amber-800 border-amber-200',
+    startDate: '10 September 2026',
+    duration: '1 Month (Hands-on Studio)',
+    mode: 'Hands-on Studio',
+    timing: 'Flexible Hours',
+    seatsLeft: 12,
+    courseTitleToSelect: 'Spoken English',
+  },
+  {
+    id: 'initial-6',
+    title: 'Mobile Cinematography Mastery',
+    tag: 'New Batch',
+    tagBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    startDate: '10 September 2026',
+    duration: '1 Month (Hands-on Studio)',
+    mode: 'Hands-on Studio',
+    timing: 'Flexible Hours',
+    seatsLeft: 12,
+    courseTitleToSelect: 'Cinematography',
+  },
+];
+
 interface AdmissionAdItem {
   id: string;
   title: string;
@@ -208,8 +283,8 @@ const Admissions = () => {
   const [searchParams] = useSearchParams();
   const courseParam = searchParams.get('course');
 
-  const [batches, setBatches] = useState<BatchItem[]>([]);
-  const [batchesLoading, setBatchesLoading] = useState(true);
+  const [batches, setBatches] = useState<BatchItem[]>(initialBatches);
+  const [batchesLoading, setBatchesLoading] = useState(false);
 
   const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>([]);
   const [adsLoading, setAdsLoading] = useState(true);
@@ -343,22 +418,13 @@ const Admissions = () => {
 
   useEffect(() => {
     if (location.hash === '#enrollment-form' || window.location.hash === '#enrollment-form') {
-      scrollToEnrollmentForm();
+      const timer = setTimeout(() => {
+        scrollToEnrollmentForm();
+      }, 50);
 
-      // Re-scroll after dynamic elements (batches, ads, images) load and expand above the form
-      const t1 = setTimeout(scrollToEnrollmentForm, 150);
-      const t2 = setTimeout(scrollToEnrollmentForm, 450);
-      const t3 = setTimeout(scrollToEnrollmentForm, 850);
-      const t4 = setTimeout(scrollToEnrollmentForm, 1400);
-
-      return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-        clearTimeout(t3);
-        clearTimeout(t4);
-      };
+      return () => clearTimeout(timer);
     }
-  }, [location.hash, location.pathname, admissionAds.length, batchesLoading]);
+  }, [location.hash, location.pathname]);
 
   useEffect(() => {
     if (courseParam) {
