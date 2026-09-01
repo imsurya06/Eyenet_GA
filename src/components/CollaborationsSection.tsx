@@ -93,7 +93,7 @@ const CollaborationsSection = () => {
                     alt={partner.name}
                     className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-full shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300"
                   />
-                  <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-muted text-[10px] font-medium text-gray-600 border border-border whitespace-nowrap shadow-xs">
+                  <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-slate-100 text-xs font-semibold text-slate-700 border border-slate-200 whitespace-nowrap shadow-xs">
                     {partner.category}
                   </span>
                 </div>
@@ -102,10 +102,10 @@ const CollaborationsSection = () => {
                 <h3 className="text-xl font-heading font-normal text-foreground mb-1 group-hover:text-primary transition-colors">
                   {partner.name}
                 </h3>
-                <p className="text-xs font-semibold text-primary/80 uppercase tracking-wide mb-3 font-body">
+                <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide mb-3 font-body">
                   {partner.tagline}
                 </p>
-                <p className="text-sm font-body text-gray-600 dark:text-gray-300 leading-relaxed mt-auto">
+                <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed mt-auto">
                   {partner.description}
                 </p>
               </div>
@@ -134,7 +134,7 @@ const CollaborationsSection = () => {
                         alt={partner.name}
                         className="w-24 h-24 object-cover rounded-full shadow-md"
                       />
-                      <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-medium text-slate-700 border border-slate-200 whitespace-nowrap shadow-xs">
+                      <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-slate-100 text-xs font-semibold text-slate-700 border border-slate-200 whitespace-nowrap shadow-xs">
                         {partner.category}
                       </span>
                     </div>
@@ -144,10 +144,10 @@ const CollaborationsSection = () => {
                       <h3 className="text-xl font-heading font-normal text-slate-900 mb-1">
                         {partner.name}
                       </h3>
-                      <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-3 font-body">
+                      <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide mb-3 font-body">
                         {partner.tagline}
                       </p>
-                      <p className="text-xs sm:text-sm font-body text-slate-600 leading-relaxed">
+                      <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed">
                         {partner.description}
                       </p>
                     </div>

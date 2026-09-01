@@ -44,7 +44,7 @@ const VisionMissionValuesSection = () => {
       </div>
 
       <div>
-        <p className="text-slate-700 font-body text-xs sm:text-sm leading-relaxed italic">
+        <p className="text-slate-700 font-body text-sm sm:text-base leading-relaxed italic">
           &ldquo;To empower learners with innovative, industry-relevant education that blends creativity, technology, and practical skills Preparing them to excel in today&apos;s dynamic and competitive world.&rdquo;
         </p>
       </div>
@@ -70,7 +70,7 @@ const VisionMissionValuesSection = () => {
       </div>
 
       <div>
-        <p className="text-slate-700 font-body text-xs sm:text-sm leading-relaxed italic">
+        <p className="text-slate-700 font-body text-sm sm:text-base leading-relaxed italic">
           &ldquo;To be a leading center of excellence in creative and technical education, shaping future-ready professionals who drive innovation, embrace change, and make a positive impact globally.&rdquo;
         </p>
       </div>
@@ -96,12 +96,12 @@ const VisionMissionValuesSection = () => {
       </div>
 
       <div className="pt-1">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-slate-700 font-body text-xs sm:text-sm leading-relaxed italic">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2.5 text-slate-700 font-body text-sm sm:text-base leading-relaxed italic">
           {valuesList.map((val, idx) => (
             <div key={idx} className="inline-flex items-center gap-2">
               <span className="text-slate-800 font-medium whitespace-nowrap">{val}</span>
               {idx < valuesList.length - 1 && (
-                <span className="text-emerald-600 font-bold select-none text-xs">|</span>
+                <span className="text-emerald-600 font-bold select-none text-sm">|</span>
               )}
             </div>
           ))}

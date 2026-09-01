@@ -22,7 +22,7 @@ const FounderDirectorSection = () => {
             <div className="lg:col-span-5 relative group mx-auto lg:mx-0 w-full max-w-md lg:max-w-none">
               <AnimateOnScroll delay={100} className="w-full h-[300px] sm:h-[380px] md:h-[500px] overflow-hidden rounded-2xl md:rounded-3xl shadow-2xl border border-slate-200/80 relative">
                 <img
-                  src="/images/Founder Image.JPEG"
+                  src="/images/Founder Image.jpg"
                   alt="Kubendra Rajan S - Founder & Director"
                   className="w-full h-full object-cover object-[center_28%] group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
@@ -101,7 +101,7 @@ const FounderDirectorSection = () => {
               <AnimateOnScroll delay={700} className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-5 pt-4 md:pt-6 border-t border-slate-200/80">
                 <div className="flex items-center gap-3 text-sm sm:text-base md:text-[17px] font-bold text-slate-900">
                   <CheckCircle2 className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-primary shrink-0" />
-                  <span>Hands-On Studio Training</span>
+                  <span>Hands-On Training</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm sm:text-base md:text-[17px] font-bold text-slate-900">
                   <CheckCircle2 className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-primary shrink-0" />

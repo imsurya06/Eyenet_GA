@@ -29,6 +29,11 @@ const Courses = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Always scroll to top when category filter or course highlight changes
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [categoryFilter, highlight]);
+
   const handleEnrollClick = (e: React.MouseEvent, courseTitle: string) => {
     e.stopPropagation();
     navigate(`/admissions?course=${encodeURIComponent(courseTitle)}`);

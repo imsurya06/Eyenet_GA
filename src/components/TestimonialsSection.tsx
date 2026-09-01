@@ -26,8 +26,8 @@ const TestimonialsSection = () => {
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
       
       <AnimateOnScroll delay={100}>
-        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-foreground font-bold">
-          Student <span className="text-primary font-heading">stories</span>
+        <h2 className="text-h2-mobile md:text-h2-desktop font-heading mb-4 text-primary font-heading font-bold">
+          Testimonials
         </h2>
       </AnimateOnScroll>
       <AnimateOnScroll delay={200}>
@@ -67,7 +67,7 @@ const TestimonialsSection = () => {
                         ))}
                       </div>
                       
-                      <p className="text-text-regular font-body text-gray-700 mb-8 italic flex-grow leading-relaxed">
+                      <p className="text-sm sm:text-base font-body text-slate-700 mb-8 italic flex-grow leading-relaxed">
                         "{testimonial.quote}"
                       </p>
                       
@@ -76,10 +76,10 @@ const TestimonialsSection = () => {
                           <User2 className="h-6 w-6 text-gray-400" />
                         </div>
                         <div>
-                          <p className="text-text-medium font-body font-semibold text-foreground">
+                          <p className="text-base font-body font-semibold text-foreground">
                             {testimonial.name}
                           </p>
-                          <p className="text-text-small font-body text-gray-500">
+                          <p className="text-xs sm:text-sm font-body text-gray-500">
                             Student
                           </p>
                         </div>

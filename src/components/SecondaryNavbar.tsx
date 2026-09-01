@@ -112,7 +112,7 @@ const SecondaryNavbar = () => {
         </div>
 
         {/* Social Icons */}
-        <div className="flex items-center gap-x-4.5 sm:gap-x-3.5 mt-1 sm:mt-0">
+        <div className="flex items-center gap-x-6 sm:gap-x-4 mt-2 sm:mt-0">
           {socialAndContactIcons.map((item) => (
             <a
               key={item.name}
@@ -120,9 +120,9 @@ const SecondaryNavbar = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={item.name}
-              className="hover:text-primary transition-colors text-primary p-0.5"
+              className="hover:text-primary transition-all text-primary p-2 sm:p-1.5 hover:scale-110 active:scale-95 flex items-center justify-center rounded-full hover:bg-primary/5"
             >
-              <item.icon className="h-[19px] w-[19px] sm:h-5 sm:w-5" />
+              <item.icon className="h-5 w-5 sm:h-4.5 sm:w-4.5" />
             </a>
           ))}
         </div>

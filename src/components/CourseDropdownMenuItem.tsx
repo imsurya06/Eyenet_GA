@@ -29,6 +29,10 @@ const CourseDropdownMenuItem = React.forwardRef<
             className
           )
         }
+        onClick={(e) => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (props.onClick) props.onClick(e);
+        }}
         {...props}
       >
         {IconComponent ? (

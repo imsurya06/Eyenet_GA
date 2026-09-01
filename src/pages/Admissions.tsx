@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -326,6 +326,40 @@ const Admissions = () => {
     },
   });
 
+  const location = useLocation();
+
+  const scrollToEnrollmentForm = () => {
+    const el = document.getElementById('enrollment-form');
+    if (el) {
+      const navbarHeight = 110;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (location.hash === '#enrollment-form' || window.location.hash === '#enrollment-form') {
+      scrollToEnrollmentForm();
+
+      // Re-scroll after dynamic elements (batches, ads, images) load and expand above the form
+      const t1 = setTimeout(scrollToEnrollmentForm, 150);
+      const t2 = setTimeout(scrollToEnrollmentForm, 450);
+      const t3 = setTimeout(scrollToEnrollmentForm, 850);
+      const t4 = setTimeout(scrollToEnrollmentForm, 1400);
+
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+        clearTimeout(t4);
+      };
+    }
+  }, [location.hash, location.pathname, admissionAds.length, batchesLoading]);
+
   useEffect(() => {
     if (courseParam) {
       const matched = courses.find(
@@ -336,16 +370,6 @@ const Admissions = () => {
       } else {
         form.setValue('program', courseParam);
       }
-    }
-
-    if (window.location.hash) {
-      const targetId = window.location.hash.replace('#', '');
-      setTimeout(() => {
-        const el = document.getElementById(targetId);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 100);
     }
   }, [courseParam, courses, form]);
 
@@ -533,7 +557,7 @@ const Admissions = () => {
       </section>
 
       {/* 3. ENROLL NOW FORM SECTION (AT THE BOTTOM OF THE PAGE) */}
-      <section id="enrollment-form" className="py-16 md:py-24 px-4 md:px-8 lg:px-[80px] scroll-mt-10">
+      <section id="enrollment-form" className="py-16 md:py-24 px-4 md:px-8 lg:px-[80px] scroll-mt-28 md:scroll-mt-32">
         <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch justify-between gap-10">
           
           {/* Left Section: Enroll Now Form Card */}

@@ -78,14 +78,31 @@ const NewspaperReaderSection: React.FC = () => {
 
   // Fetch Newspaper Clippings dynamically from Sanity CMS
   useEffect(() => {
-    const query = '*[_type == "newspaperClipping"] | order(publishDate desc, date desc, _createdAt desc)';
+    const query = '*[_type == "newspaperClipping"]';
 
     const fetchClippings = async () => {
       setLoading(true);
       try {
         const data = await sanityClient.fetch(query);
         if (data && data.length > 0) {
-          const mapped: NewspaperClipping[] = data.map((doc: any, index: number) => {
+          // Sort strictly by the date the user entered (newest publication date first, older dates on next pages)
+          const sorted = [...data].sort((a: any, b: any) => {
+            const dateA = a.publishDate || a.date;
+            const dateB = b.publishDate || b.date;
+
+            // If both have user-entered dates, compare them descending (newest date first)
+            if (dateA && dateB) {
+              return new Date(dateB).getTime() - new Date(dateA).getTime();
+            }
+            // An item with an entered date always comes before an item without a date
+            if (dateA && !dateB) return -1;
+            if (!dateA && dateB) return 1;
+
+            // If neither has an entered date, fallback to _createdAt descending
+            return new Date(b._createdAt).getTime() - new Date(a._createdAt).getTime();
+          });
+
+          const mapped: NewspaperClipping[] = sorted.map((doc: any, index: number) => {
             let img = '';
             if (typeof doc.clippingImage === 'string' && doc.clippingImage) {
               img = doc.clippingImage;

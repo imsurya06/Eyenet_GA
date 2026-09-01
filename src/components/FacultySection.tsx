@@ -19,8 +19,8 @@ const FacultyCard: React.FC<{ member: Faculty }> = ({ member }) => (
       {/* Qualification Badge at Bottom of Portrait */}
       {member.qualification && (
         <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3 sm:left-3 sm:right-3 z-10 text-left">
-          <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-body font-medium text-slate-800 bg-white/90 backdrop-blur-md px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full border border-slate-200/80 shadow-xs">
-            <GraduationCap className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-primary shrink-0" />
+          <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-body font-medium text-slate-800 bg-white/90 backdrop-blur-md px-2.5 py-1 sm:px-3.5 sm:py-1 rounded-full border border-slate-200/80 shadow-xs">
+            <GraduationCap className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-primary shrink-0" />
             <span className="line-clamp-1">{member.qualification}</span>
           </div>
         </div>
@@ -37,15 +37,15 @@ const FacultyCard: React.FC<{ member: Faculty }> = ({ member }) => (
 
         {/* Achievements */}
         {member.achievements && (
-          <div className="flex items-start gap-2 text-xs sm:text-sm font-body text-primary font-medium bg-primary/5 p-2.5 sm:p-3 rounded-xl border border-primary/10 mb-2.5 sm:mb-3">
-            <Award className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-primary shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2 text-xs sm:text-sm md:text-[15px] font-body text-primary font-medium bg-primary/5 p-2.5 sm:p-3 rounded-xl border border-primary/10 mb-2.5 sm:mb-3">
+            <Award className="w-4 h-4 text-primary shrink-0 mt-0.5" />
             <span className="leading-snug">{member.achievements}</span>
           </div>
         )}
 
         {/* Description */}
         {member.description && (
-          <p className="text-xs sm:text-sm font-body text-muted-foreground leading-relaxed">
+          <p className="text-sm sm:text-base font-body text-slate-700 dark:text-slate-300 leading-relaxed">
             {member.description}
           </p>
         )}

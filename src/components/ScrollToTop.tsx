@@ -4,43 +4,57 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const ScrollToTop = () => {
-  const { pathname, hash } = useLocation();
+  const { pathname, search, hash } = useLocation();
 
   useEffect(() => {
-    // Scroll to top on pathname change if no hash
+    // Disable automatic browser scroll restoration so it never jumps to previous page bottom
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    // If there's no hash, IMMEDIATELY reset scroll position to top
     if (!hash) {
       window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       return;
     }
 
-    // If there's a hash, try to scroll to the element
+    // If there's a hash, scroll smoothly accounting for sticky navbar
     const id = hash.replace('#', '');
-    const element = document.getElementById(id);
 
-    if (element) {
-      // If element is found immediately, scroll
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      // If not found immediately, wait for DOM to be ready or element to appear
+    const scrollToTarget = () => {
+      const element = document.getElementById(id);
+      if (element) {
+        const navbarHeight = 110;
+        const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        return true;
+      }
+      return false;
+    };
+
+    // Immediate attempt
+    if (!scrollToTarget()) {
       const checkElement = setInterval(() => {
-        const foundElement = document.getElementById(id);
-        if (foundElement) {
-          foundElement.scrollIntoView({ behavior: 'smooth' });
+        if (scrollToTarget()) {
           clearInterval(checkElement);
         }
-      }, 100); // Check every 100ms
+      }, 100);
 
-      // Clear interval after a certain time to prevent infinite loop
       const timeout = setTimeout(() => {
         clearInterval(checkElement);
-      }, 2000); // Stop checking after 2 seconds
+      }, 2500);
 
       return () => {
         clearInterval(checkElement);
         clearTimeout(timeout);
       };
     }
-  }, [pathname, hash]); // Depend on both pathname and hash
+  }, [pathname, search, hash]);
 
   return null;
 };

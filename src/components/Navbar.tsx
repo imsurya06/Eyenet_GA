@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -36,7 +36,7 @@ const navItems = [
     footer: {
       text: 'Start your design journey',
       linkText: 'Apply now',
-      linkTo: '/admissions'
+      linkTo: '/admissions#enrollment-form'
     }
   },
   {
@@ -53,12 +53,13 @@ const navItems = [
     footer: {
       text: 'Start your design journey',
       linkText: 'Apply now',
-      linkTo: '/admissions'
+      linkTo: '/admissions#enrollment-form'
     }
   },
 ];
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const location = useLocation();
   const [coursesOpen, setCoursesOpen] = React.useState(false);
@@ -91,6 +92,25 @@ const Navbar = () => {
     }));
   };
 
+  const handleApplyClick = (e: React.MouseEvent) => {
+    if (window.location.pathname === '/admissions') {
+      e.preventDefault();
+      const el = document.getElementById('enrollment-form');
+      if (el) {
+        const navbarHeight = 110;
+        const offsetPosition = el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleContactClick = (e: React.MouseEvent) => {
+    if (window.location.pathname === '/contact') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-background text-foreground shadow-md py-2.5 lg:py-3.5">
       <div className="flex h-auto items-center justify-between px-4 lg:px-[80px]">
@@ -109,6 +129,11 @@ const Navbar = () => {
                   <NavLink
                     key={item.name}
                     to={item.to}
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                      document.documentElement.scrollTop = 0;
+                      document.body.scrollTop = 0;
+                    }}
                     className={({ isActive }) =>
                       cn(
                         "text-base md:text-[17px] lg:text-[18px] font-medium transition-colors hover:text-primary px-4 py-2 rounded-md tracking-tight",
@@ -160,11 +185,29 @@ const Navbar = () => {
                       {item.footer && (
                         <>
                           <DropdownMenuSeparator className="my-2" />
-                          <div className="px-3 py-2 text-xs sm:text-sm">
-                            {item.footer.text}{' '}
-                            <Link to={item.footer.linkTo} className="text-primary hover:underline font-normal">
+                          <div className="px-3 py-2 text-xs sm:text-sm flex items-center justify-between">
+                            <span className="text-slate-600 font-medium">{item.footer.text}</span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                setCoursesOpen(false);
+                                setExploreOpen(false);
+                                if (window.location.pathname === '/admissions') {
+                                  e.preventDefault();
+                                  const el = document.getElementById('enrollment-form');
+                                  if (el) {
+                                    const navbarHeight = 110;
+                                    const offsetPosition = el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+                                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                                  }
+                                } else {
+                                  navigate('/admissions#enrollment-form');
+                                }
+                              }}
+                              className="text-primary hover:underline font-bold text-xs sm:text-sm transition-colors cursor-pointer"
+                            >
                               {item.footer.linkText}
-                            </Link>
+                            </button>
                           </div>
                         </>
                       )}
@@ -178,10 +221,10 @@ const Navbar = () => {
           {/* Buttons - Right aligned with prominent sizing */}
           <div className="hidden lg:flex items-center space-x-3.5">
             <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base px-5 py-2">
-              <Link to="/contact">Contact</Link>
+              <Link to="/contact" onClick={handleContactClick}>Contact</Link>
             </Button>
             <Button variant="default" asChild className="hover:animate-shake text-base px-5 py-2">
-              <Link to="/admissions#enrollment-form">Apply</Link>
+              <Link to="/admissions#enrollment-form" onClick={handleApplyClick}>Apply</Link>
             </Button>
           </div>
         </>
@@ -207,7 +250,12 @@ const Navbar = () => {
                   <NavLink
                     key={item.name}
                     to={item.to}
-                    onClick={() => setIsSheetOpen(false)}
+                    onClick={() => {
+                      setIsSheetOpen(false);
+                      window.scrollTo(0, 0);
+                      document.documentElement.scrollTop = 0;
+                      document.body.scrollTop = 0;
+                    }}
                     className={({ isActive }) =>
                       cn(
                         "text-base font-medium hover:text-primary py-1",
@@ -237,7 +285,10 @@ const Navbar = () => {
                           <NavLink
                             key={link.name}
                             to={link.to}
-                            onClick={() => setIsSheetOpen(false)}
+                            onClick={() => {
+                              setIsSheetOpen(false);
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
                             className={({ isActive }) =>
                               cn(
                                 "text-sm font-normal hover:text-primary py-1",
@@ -254,10 +305,10 @@ const Navbar = () => {
                 )
               ))}
               <Button variant="outline" asChild className="mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base">
-                <Link to="/contact" onClick={() => setIsSheetOpen(false)}>Contact</Link>
+                <Link to="/contact" onClick={(e) => { setIsSheetOpen(false); handleContactClick(e); }}>Contact</Link>
               </Button>
               <Button variant="default" asChild className="mt-2 hover:animate-shake text-base">
-                <Link to="/admissions#enrollment-form" onClick={() => setIsSheetOpen(false)}>Apply</Link>
+                <Link to="/admissions#enrollment-form" onClick={(e) => { setIsSheetOpen(false); handleApplyClick(e); }}>Apply</Link>
               </Button>
             </nav>
           </SheetContent>

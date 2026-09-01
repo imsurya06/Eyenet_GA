@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowRight, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -151,6 +151,20 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     }, 500);
   };
 
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleInteractionStart();
+    setActiveIndex((prev) => (prev - 1 + totalCards) % totalCards);
+    handleInteractionEnd();
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleInteractionStart();
+    setActiveIndex((prev) => (prev + 1) % totalCards);
+    handleInteractionEnd();
+  };
+
   // Render 3D Perspective Stage Carousel (Pauses on Hover)
   const render3DCarousel = () => (
     <div
@@ -161,6 +175,26 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
       className="relative w-full overflow-hidden py-1 sm:py-2 select-none"
     >
       <div className="relative w-full h-[220px] xs:h-[270px] sm:h-[340px] md:h-[410px] lg:h-[460px] flex items-center justify-center [perspective:1400px] [perspective-origin:50%_50%]">
+        {/* Previous Navigation Arrow Icon */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          aria-label="Previous Slide"
+          className="absolute left-3 sm:left-6 md:left-10 lg:left-14 z-[60] w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-white/90 hover:bg-white text-slate-800 hover:text-primary shadow-xl border border-slate-200/90 backdrop-blur-md flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer group"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5 text-slate-700 group-hover:text-primary" />
+        </button>
+
+        {/* Next Navigation Arrow Icon */}
+        <button
+          type="button"
+          onClick={handleNext}
+          aria-label="Next Slide"
+          className="absolute right-3 sm:right-6 md:right-10 lg:right-14 z-[60] w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-white/90 hover:bg-white text-slate-800 hover:text-primary shadow-xl border border-slate-200/90 backdrop-blur-md flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer group"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5 text-slate-700 group-hover:text-primary" />
+        </button>
+
         {displayImageSources.map((src, idx) => {
           let rawOffset = idx - activeIndex;
           if (rawOffset > totalCards / 2) rawOffset -= totalCards;

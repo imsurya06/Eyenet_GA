@@ -92,11 +92,11 @@ export default {
         'h6-mobile': ['1rem', { lineHeight: '140%' }],
 
         // Body Text Sizes (Mobile-first definitions)
-        'text-large': ['1.125rem', { lineHeight: '160%' }], // Reduced from 1.25rem
-        'text-medium': ['1rem', { lineHeight: '160%' }], // Reduced from 1.125rem
-        'text-regular': ['0.875rem', { lineHeight: '160%' }], // Reduced from 1rem
-        'text-small': ['0.75rem', { lineHeight: '160%' }], // Reduced from 0.875rem
-        'text-tiny': ['0.675rem', { lineHeight: '160%' }], // Reduced from 0.75rem
+        'text-large': ['1.25rem', { lineHeight: '160%' }],
+        'text-medium': ['1.125rem', { lineHeight: '160%' }],
+        'text-regular': ['1rem', { lineHeight: '160%' }],
+        'text-small': ['0.875rem', { lineHeight: '160%' }],
+        'text-tiny': ['0.75rem', { lineHeight: '160%' }],
 
         // Desktop overrides for body text (will be applied via globals.css)
         'desktop-text-large': ['1.25rem', { lineHeight: '1.6' }], // 20px

@@ -108,7 +108,7 @@ const ImpactByNumbersSection = () => {
                         {item.title}
                       </h3>
                       {item.subtitle && (
-                        <p className="text-xs sm:text-sm font-body text-slate-600 leading-snug">
+                        <p className="text-sm sm:text-base font-body text-slate-600 leading-snug">
                           {item.subtitle}
                         </p>
                       )}
@@ -134,7 +134,7 @@ const ImpactByNumbersSection = () => {
                         {item.title}
                       </h3>
                       {item.subtitle && (
-                        <p className="text-xs sm:text-sm font-body text-slate-600 leading-snug">
+                        <p className="text-sm sm:text-base font-body text-slate-600 leading-snug">
                           {item.subtitle}
                         </p>
                       )}

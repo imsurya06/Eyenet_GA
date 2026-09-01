@@ -91,7 +91,7 @@ const WhyChooseUsSection = () => {
                       </p>
 
                       {/* Description */}
-                      <p className="text-xs font-body text-slate-500 leading-relaxed mt-auto">
+                      <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed mt-auto">
                         {stat.description}
                       </p>
                     </div>
@@ -129,7 +129,7 @@ const WhyChooseUsSection = () => {
                   </p>
 
                   {/* Description */}
-                  <p className="text-xs font-body text-slate-500 leading-relaxed mt-auto">
+                  <p className="text-sm sm:text-base font-body text-slate-600 leading-relaxed mt-auto">
                     {stat.description}
                   </p>
                 </div>

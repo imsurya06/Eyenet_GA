@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useInfrastructureImages } from '@/context/InfrastructureImageContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { InfrastructureImage } from '@/data/infrastructureImages';
 
 const InfrastructureGridSection = () => {
@@ -12,6 +12,7 @@ const InfrastructureGridSection = () => {
 
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Filter images for ticker (all non-carousel images)
   const tickerImages = images.filter(
@@ -36,10 +37,26 @@ const InfrastructureGridSection = () => {
     if (resumeTimerRef.current) {
       clearTimeout(resumeTimerRef.current);
     }
-    // Resume marquee animation 500ms after user releases touch/mouse/drag
+    // Resume marquee animation 1200ms after user releases touch/mouse/drag
     resumeTimerRef.current = setTimeout(() => {
       setIsPaused(false);
-    }, 500);
+    }, 1200);
+  };
+
+  const handlePrev = () => {
+    handleInteractionStart();
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -420, behavior: 'smooth' });
+    }
+    handleInteractionEnd();
+  };
+
+  const handleNext = () => {
+    handleInteractionStart();
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 420, behavior: 'smooth' });
+    }
+    handleInteractionEnd();
   };
 
   return (
@@ -69,8 +86,29 @@ const InfrastructureGridSection = () => {
             </div>
           ) : tickerImages.length > 0 ? (
             /* Smooth Medium Speed Ticker with Native Touch/Mouse Interaction & 500ms Auto-Resume */
-            <div className="relative w-full py-2 overflow-hidden">
+            <div className="relative w-full py-2 group/arrows overflow-hidden">
+              {/* Previous Arrow Button */}
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous Infrastructure Image"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 text-slate-800 hover:text-primary hover:bg-white shadow-xl border border-slate-200 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none"
+              >
+                <ChevronLeft className="w-6 h-6 -ml-0.5" />
+              </button>
+
+              {/* Next Arrow Button */}
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next Infrastructure Image"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/95 text-slate-800 hover:text-primary hover:bg-white shadow-xl border border-slate-200 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none"
+              >
+                <ChevronRight className="w-6 h-6 -mr-0.5" />
+              </button>
+
               <div
+                ref={scrollContainerRef}
                 onTouchStart={handleInteractionStart}
                 onTouchEnd={handleInteractionEnd}
                 onMouseDown={handleInteractionStart}

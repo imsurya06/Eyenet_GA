@@ -80,7 +80,7 @@ const OurProgramsSection = () => {
 
       <h2 className="text-h2-mobile md:text-h2-desktop font-heading font-normal mb-4 max-w-4xl mx-auto text-slate-900 tracking-tight">
         Comprehensive design courses for <br />
-        <span className="text-primary font-heading italic">aspiring creatives</span>
+        <span className="text-primary font-heading italic">Aspiring Creatives</span>
       </h2>
       <p className="text-slate-600 font-body text-base md:text-lg max-w-2xl mx-auto mb-10 md:mb-14">
         Industry-aligned vocational and professional programs crafted to transform passion into successful creative careers.
@@ -134,7 +134,7 @@ const OurProgramsSection = () => {
                         {program.title}
                       </h3>
 
-                      <p className="text-xs font-body text-slate-600 leading-relaxed mb-4 flex-grow line-clamp-2">
+                      <p className="text-sm font-body text-slate-600 leading-relaxed mb-4 flex-grow line-clamp-2">
                         {program.description}
                       </p>
 

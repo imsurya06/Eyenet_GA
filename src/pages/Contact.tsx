@@ -54,7 +54,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background min-h-screen">
+    <section id="contact-form" className="py-12 md:py-16 lg:py-20 px-4 md:px-8 lg:px-[80px] bg-gradient-to-b from-[#fdfaf6] via-white to-background min-h-screen scroll-mt-28">
       <div className="max-w-7xl mx-auto">
         
         {/* Page Header */}
