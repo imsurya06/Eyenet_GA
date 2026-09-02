@@ -7,7 +7,10 @@ import {
   ChevronRight,
   Maximize2,
   X,
-  Newspaper
+  Newspaper,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw
 } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
 import { sanityClient, urlFor } from '@/lib/sanityClient';
@@ -27,8 +30,97 @@ const NewspaperReaderSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0); // On mobile: page index. On desktop: spread index.
   const [isMobile, setIsMobile] = useState(false);
 
-  // Lightbox Modal State
+  // Lightbox Modal State & Zoom Controls
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [zoomScale, setZoomScale] = useState<number>(1);
+  const [panPosition, setPanPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState<boolean>(false);
+  const panStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lightboxViewportRef = useRef<HTMLDivElement>(null);
+
+  // Reset zoom & pan when image or lightbox changes
+  useEffect(() => {
+    setZoomScale(1);
+    setPanPosition({ x: 0, y: 0 });
+  }, [lightboxIndex]);
+
+  // Lock background scroll when lightbox is open
+  useEffect(() => {
+    if (lightboxIndex !== null) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [lightboxIndex]);
+
+  // Handle smooth wheel zooming & prevent background page scrolling
+  useEffect(() => {
+    const el = lightboxViewportRef.current;
+    if (!el || lightboxIndex === null) return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const delta = -e.deltaY;
+      const zoomFactor = delta > 0 ? 1.15 : 0.87;
+
+      setZoomScale((prev) => {
+        let nextScale = prev * zoomFactor;
+        if (nextScale <= 1.02) {
+          nextScale = 1;
+          setPanPosition({ x: 0, y: 0 });
+        } else if (nextScale > 4.5) {
+          nextScale = 4.5;
+        }
+        return Number(nextScale.toFixed(3));
+      });
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+    };
+  }, [lightboxIndex]);
+
+  const handleZoomIn = () => {
+    setZoomScale((prev) => Math.min(Number((prev + 0.35).toFixed(2)), 4.5));
+  };
+
+  const handleZoomOut = () => {
+    setZoomScale((prev) => {
+      const next = Math.max(Number((prev - 0.35).toFixed(2)), 1);
+      if (next === 1) setPanPosition({ x: 0, y: 0 });
+      return next;
+    });
+  };
+
+  const handleZoomReset = () => {
+    setZoomScale(1);
+    setPanPosition({ x: 0, y: 0 });
+  };
+
+  const handlePanMouseDown = (e: React.MouseEvent) => {
+    if (zoomScale > 1) {
+      setIsPanning(true);
+      panStartRef.current = { x: e.clientX - panPosition.x, y: e.clientY - panPosition.y };
+    }
+  };
+
+  const handlePanMouseMove = (e: React.MouseEvent) => {
+    if (isPanning && zoomScale > 1) {
+      setPanPosition({
+        x: e.clientX - panStartRef.current.x,
+        y: e.clientY - panStartRef.current.y,
+      });
+    }
+  };
+
+  const handlePanMouseUp = () => {
+    setIsPanning(false);
+  };
 
   // Drag & 3D Flip State
   const [isDragging, setIsDragging] = useState(false);
@@ -584,25 +676,77 @@ const NewspaperReaderSection: React.FC = () => {
 
       </div>
 
-      {/* Lightbox Modal with Full Front/Back Navigation Controls */}
+      {/* Lightbox Modal with Full Front/Back Navigation Controls & Mouse Wheel Zoom */}
       {lightboxIndex !== null && clippings[lightboxIndex] && (
         <div
-          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none"
+          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200 select-none overflow-hidden"
           onClick={() => setLightboxIndex(null)}
+          onWheel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           <div
-            className="relative max-w-5xl w-full max-h-[94vh] flex flex-col items-center justify-center"
+            className="relative max-w-5xl w-full max-h-[95vh] flex flex-col items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Toolbar */}
-            <div className="w-full flex items-center justify-between mb-3 text-white">
-              <span className="text-xs sm:text-sm font-semibold text-slate-300 bg-white/10 px-3 py-1 rounded-full border border-white/20">
-                Page {lightboxIndex + 1} of {totalClippings}
-              </span>
+            <div className="w-full flex items-center justify-between mb-3 px-1 text-white gap-2 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="text-xs sm:text-sm font-semibold text-slate-200 bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
+                  Page {lightboxIndex + 1} of {totalClippings}
+                </span>
+
+                {/* Zoom percentage & Controls */}
+                <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2 py-1 rounded-full border border-white/20">
+                  <button
+                    onClick={handleZoomOut}
+                    disabled={zoomScale <= 1}
+                    className="p-1 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    title="Zoom Out"
+                    aria-label="Zoom Out"
+                  >
+                    <ZoomOut className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={handleZoomReset}
+                    className="text-xs font-bold text-slate-200 hover:text-white px-1.5 py-0.5 rounded transition-colors cursor-pointer"
+                    title="Click to reset zoom"
+                  >
+                    {Math.round(zoomScale * 100)}%
+                  </button>
+
+                  <button
+                    onClick={handleZoomIn}
+                    disabled={zoomScale >= 4.5}
+                    className="p-1 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    title="Zoom In"
+                    aria-label="Zoom In"
+                  >
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
+
+                  {zoomScale > 1 && (
+                    <button
+                      onClick={handleZoomReset}
+                      className="p-1 text-amber-300 hover:text-amber-200 hover:bg-white/10 rounded-full transition-colors cursor-pointer ml-0.5"
+                      title="Reset Zoom (100%)"
+                      aria-label="Reset Zoom"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                <span className="hidden md:inline-block text-xs text-slate-400 italic">
+                  Scroll mouse wheel to zoom • Drag to pan
+                </span>
+              </div>
 
               <button
                 onClick={() => setLightboxIndex(null)}
-                className="text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
+                className="text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer ml-auto"
                 aria-label="Close reader modal"
               >
                 <X className="w-6 h-6" />
@@ -632,11 +776,27 @@ const NewspaperReaderSection: React.FC = () => {
                 <ChevronRight className="w-6 h-6" />
               </button>
 
-              <div className="relative max-w-full max-h-[82vh] overflow-auto rounded-xl bg-slate-900 shadow-2xl p-2 border border-white/10">
+              {/* Zoomable & Pan-able Viewport */}
+              <div
+                ref={lightboxViewportRef}
+                onMouseDown={handlePanMouseDown}
+                onMouseMove={handlePanMouseMove}
+                onMouseUp={handlePanMouseUp}
+                onMouseLeave={handlePanMouseUp}
+                className={`relative max-w-full max-h-[82vh] overflow-hidden rounded-xl bg-slate-900 shadow-2xl p-2 border border-white/10 flex items-center justify-center ${
+                  zoomScale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'
+                }`}
+              >
                 <img
                   src={clippings[lightboxIndex].imageUrl}
                   alt={clippings[lightboxIndex].title}
-                  className="max-w-full max-h-[78vh] object-contain rounded-lg mx-auto transition-opacity duration-200"
+                  draggable={false}
+                  style={{
+                    transform: `scale(${zoomScale}) translate(${panPosition.x / zoomScale}px, ${panPosition.y / zoomScale}px)`,
+                    transformOrigin: 'center center',
+                    transition: isPanning ? 'none' : 'transform 0.12s ease-out',
+                  }}
+                  className="max-w-full max-h-[78vh] object-contain rounded-lg mx-auto select-none pointer-events-none"
                 />
               </div>
             </div>

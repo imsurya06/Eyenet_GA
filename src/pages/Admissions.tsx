@@ -610,10 +610,10 @@ const Admissions = () => {
                   
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full border ${batch.tagBg}`}>
+                      <span className={`text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full border ${batch.tagBg}`}>
                         {batch.tag}
                       </span>
-                      <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100">
+                      <span className="text-xs sm:text-sm font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-100">
                         {batch.seatsLeft} seats left
                       </span>
                     </div>
@@ -622,25 +622,25 @@ const Admissions = () => {
                       {batch.title}
                     </h3>
 
-                    <div className="space-y-3 text-xs md:text-sm font-body text-slate-600 mb-6">
-                      <div className="flex items-center gap-2.5">
-                        <Calendar className="w-4 h-4 text-primary shrink-0" />
-                        <span><strong>Starts:</strong> {batch.startDate}</span>
+                    <div className="space-y-3.5 text-sm sm:text-base font-body text-slate-700 mb-7">
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-primary shrink-0" />
+                        <span><strong className="font-semibold text-slate-900">Starts:</strong> {batch.startDate}</span>
                       </div>
-                      <div className="flex items-center gap-2.5">
-                        <Clock className="w-4 h-4 text-primary shrink-0" />
-                        <span><strong>Timing:</strong> {batch.timing}</span>
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-primary shrink-0" />
+                        <span><strong className="font-semibold text-slate-900">Timing:</strong> {batch.timing}</span>
                       </div>
-                      <div className="flex items-center gap-2.5">
-                        <Users className="w-4 h-4 text-primary shrink-0" />
-                        <span><strong>Duration & Mode:</strong> {batch.duration} ({batch.mode})</span>
+                      <div className="flex items-center gap-3">
+                        <Users className="w-5 h-5 text-primary shrink-0" />
+                        <span><strong className="font-semibold text-slate-900">Duration & Mode:</strong> {batch.duration} ({batch.mode})</span>
                       </div>
                     </div>
                   </div>
 
                   <Button
                     onClick={() => handleSelectBatchAndEnroll(batch.courseTitleToSelect)}
-                    className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-3 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                    className="w-full bg-primary hover:bg-primary/95 text-white font-bold py-3.5 text-base rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <span>Enroll Now</span>
                     <ArrowRight className="w-4 h-4" />
@@ -707,7 +707,7 @@ const Admissions = () => {
                 <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-3 text-foreground">
                   Enroll <span className="text-primary font-heading italic">now</span>
                 </h2>
-                <p className="text-sm font-body text-gray-600 mb-8">
+                <p className="text-base font-body text-slate-600 mb-8">
                   Let's start your professional design journey today.
                 </p>
 
@@ -718,9 +718,9 @@ const Admissions = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">Full Name*</FormLabel>
+                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Full Name*</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your full name" className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary" {...field} />
+                            <Input placeholder="Enter your full name" className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -732,9 +732,9 @@ const Admissions = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">Email Address*</FormLabel>
+                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Email Address*</FormLabel>
                           <FormControl>
-                            <Input placeholder="name@example.com" type="email" className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary" {...field} />
+                            <Input placeholder="name@example.com" type="email" className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -746,9 +746,9 @@ const Admissions = () => {
                       name="mobile"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">Mobile Number*</FormLabel>
+                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Mobile Number*</FormLabel>
                           <FormControl>
-                            <Input placeholder="10-digit mobile number" type="tel" className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary" {...field} />
+                            <Input placeholder="10-digit mobile number" type="tel" className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -760,10 +760,10 @@ const Admissions = () => {
                       name="program"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-semibold text-gray-700">Select Program*</FormLabel>
+                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Select Program*</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
-                              <SelectTrigger className="h-12 px-4 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-primary">
+                              <SelectTrigger className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900">
                                 <SelectValue placeholder="Select a program" />
                               </SelectTrigger>
                             </FormControl>
@@ -772,7 +772,7 @@ const Admissions = () => {
                                 <SelectItem value="loading" disabled>Loading programs...</SelectItem>
                               ) : (
                                 courses.map((course) => (
-                                  <SelectItem key={course.id} value={course.title}>
+                                  <SelectItem key={course.id} value={course.title} className="text-base py-2.5">
                                     {course.title}
                                   </SelectItem>
                                 ))
@@ -788,16 +788,16 @@ const Admissions = () => {
                       control={form.control}
                       name="terms"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xl p-3 bg-gray-50 border border-gray-100">
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xl p-3.5 bg-slate-50 border border-slate-200/80">
                           <FormControl>
                             <Checkbox
                               checked={field.value}
                               onCheckedChange={field.onChange}
-                              className="border-primary data-[state=checked]:bg-primary text-white"
+                              className="border-primary data-[state=checked]:bg-primary text-white mt-0.5"
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel className="text-xs font-body text-gray-600 cursor-pointer">
+                            <FormLabel className="text-sm font-body text-slate-700 cursor-pointer">
                               I accept the <a href="/terms-of-service" className="underline hover:text-primary font-semibold">Terms & Conditions</a>
                             </FormLabel>
                             <FormMessage />
@@ -809,7 +809,7 @@ const Admissions = () => {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full h-14 text-base font-bold bg-primary hover:bg-primary/95 text-white rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="w-full h-14 text-base md:text-lg font-bold bg-primary hover:bg-primary/95 text-white rounded-full shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {isSubmitting ? (
                         <>
@@ -840,38 +840,38 @@ const Admissions = () => {
                 <h2 className="text-3xl sm:text-4xl font-heading font-bold mb-3 text-foreground">
                   Find us <span className="text-primary font-heading italic">here</span>
                 </h2>
-                <p className="text-sm font-body text-gray-600 mb-8">
+                <p className="text-base font-body text-slate-600 mb-8">
                   Visit our Madurai campus or connect with our admission counselors.
                 </p>
 
                 {/* Campus Information Box */}
-                <div className="space-y-4 mb-8 bg-slate-50 p-6 rounded-2xl border border-slate-200/80 text-left">
-                  <h3 className="font-heading font-bold text-slate-900 text-lg">Eye-Net Educational Academy</h3>
-                  <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
-                    <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <div className="space-y-4 mb-8 bg-slate-50 p-6 sm:p-7 rounded-2xl border border-slate-200/80 text-left">
+                  <h3 className="font-heading font-bold text-slate-900 text-xl">Eye-Net Educational Academy</h3>
+                  <div className="flex items-start gap-3.5 text-sm sm:text-base text-slate-800 leading-relaxed">
+                    <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <span>Hamdhiya Towers, 2nd Floor, 80 Feet Road Jn, Anna Nagar, Madurai, Tamil Nadu 625020</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-700">
-                    <Phone className="w-4 h-4 text-primary shrink-0" />
+                  <div className="flex items-center gap-3.5 text-sm sm:text-base text-slate-800">
+                    <Phone className="w-5 h-5 text-primary shrink-0" />
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <a href="tel:+919842173725" className="hover:text-primary hover:underline font-semibold text-slate-900">+91 98421 73725</a>
+                      <a href="tel:+919842173725" className="hover:text-primary hover:underline font-bold text-slate-900">+91 98421 73725</a>
                       <span className="text-slate-400 font-normal">/</span>
-                      <a href="tel:+918300064651" className="hover:text-primary hover:underline font-semibold text-slate-900">+91 83000 64651</a>
+                      <a href="tel:+918300064651" className="hover:text-primary hover:underline font-bold text-slate-900">+91 83000 64651</a>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 text-xs sm:text-sm text-slate-700">
-                    <Mail className="w-4 h-4 text-primary shrink-0" />
-                    <span>eyenetfashion@gmail.com</span>
+                  <div className="flex items-center gap-3.5 text-sm sm:text-base text-slate-800">
+                    <Mail className="w-5 h-5 text-primary shrink-0" />
+                    <span className="font-medium">eyenetfashion@gmail.com</span>
                   </div>
 
                   <a 
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline pt-2"
+                    className="inline-flex items-center gap-2 text-sm sm:text-[15px] font-bold text-primary hover:underline pt-2"
                   >
                     <span>View on Google Maps</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
 

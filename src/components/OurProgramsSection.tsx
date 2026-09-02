@@ -110,18 +110,18 @@ const OurProgramsSection = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent z-10 opacity-70" />
 
-                      <span className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-md text-slate-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-xs uppercase">
+                      <span className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-md text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-xs uppercase tracking-wide">
                         {program.category}
                       </span>
 
-                      <span className="absolute top-3 right-3 z-20 bg-primary/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded-md shadow-xs">
+                      <span className="absolute top-3 right-3 z-20 bg-primary/90 text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs">
                         {program.badge}
                       </span>
 
                       {program.duration && (
                         <div className="absolute bottom-3 left-3 right-3 z-20">
                           <span className="text-white/90 text-xs flex items-center gap-1 font-medium">
-                            <Award className="w-3.5 h-3.5 text-primary-foreground" />
+                            <Award className="w-4 h-4 text-primary-foreground" />
                             {program.duration}
                           </span>
                         </div>
@@ -129,19 +129,19 @@ const OurProgramsSection = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="p-5 flex flex-col flex-grow bg-white">
-                      <h3 className="text-lg font-heading font-normal text-slate-900 group-hover:text-primary transition-colors mb-1.5">
+                    <div className="p-5 sm:p-6 flex flex-col flex-grow bg-white">
+                      <h3 className="text-xl font-heading font-semibold text-slate-900 group-hover:text-primary transition-colors mb-2">
                         {program.title}
                       </h3>
 
-                      <p className="text-sm font-body text-slate-600 leading-relaxed mb-4 flex-grow line-clamp-2">
+                      <p className="text-[15px] sm:text-base font-body text-slate-700 leading-relaxed mb-4 flex-grow line-clamp-3">
                         {program.description}
                       </p>
 
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-primary">
+                      <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between text-sm font-bold text-primary">
                         <span>Explore Program</span>
-                        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                          <ArrowRight className="w-3.5 h-3.5" />
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                          <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
@@ -168,34 +168,34 @@ const OurProgramsSection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent z-10 opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
 
-                  <span className="absolute top-3 left-3 z-20 bg-white/90 backdrop-blur-md text-slate-900 text-[11px] font-bold px-3 py-1 rounded-full shadow-sm border border-white/50 tracking-wide uppercase">
+                  <span className="absolute top-3 left-3 z-20 bg-white/90 backdrop-blur-md text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-white/50 tracking-wide uppercase">
                     {program.category}
                   </span>
 
-                  <span className="absolute top-3 right-3 z-20 bg-primary/90 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-md shadow-sm">
+                  <span className="absolute top-3 right-3 z-20 bg-primary/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-md shadow-sm">
                     {program.badge}
                   </span>
 
                   {program.duration && (
                     <div className="absolute bottom-3 left-4 right-4 z-20">
-                      <span className="text-white/80 text-xs flex items-center gap-1 font-medium mb-0.5">
-                        <Award className="w-3.5 h-3.5 text-primary-foreground/90" />
+                      <span className="text-white/90 text-sm flex items-center gap-1.5 font-medium mb-0.5">
+                        <Award className="w-4 h-4 text-primary-foreground/90" />
                         {program.duration}
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className="p-6 flex flex-col flex-grow bg-white">
-                  <h3 className="text-xl font-heading font-normal text-slate-900 group-hover:text-primary transition-colors duration-300 mb-2 flex items-center justify-between">
+                <div className="p-6 md:p-7 flex flex-col flex-grow bg-white">
+                  <h3 className="text-2xl font-heading font-semibold text-slate-900 group-hover:text-primary transition-colors duration-300 mb-2.5 flex items-center justify-between">
                     <span>{program.title}</span>
                   </h3>
 
-                  <p className="text-sm font-body text-slate-600 leading-relaxed mb-6 flex-grow line-clamp-3">
+                  <p className="text-base font-body text-slate-700 leading-relaxed mb-6 flex-grow line-clamp-3">
                     {program.description}
                   </p>
 
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-primary group-hover:text-primary/90 transition-colors">
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-[15px] font-bold text-primary group-hover:text-primary/90 transition-colors">
                     <span>Explore Program</span>
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300">
                       <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />

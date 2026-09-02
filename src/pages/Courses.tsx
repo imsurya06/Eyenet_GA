@@ -317,7 +317,7 @@ const Courses = () => {
                       </Link>
                       <div className="flex flex-col flex-grow justify-between min-w-0">
                         <div>
-                          <span className="inline-block bg-muted text-xs font-semibold font-body text-gray-600 px-3 py-1 rounded-full mb-3 border border-gray-200 max-w-full truncate">
+                          <span className="inline-block bg-slate-100 text-xs sm:text-[13px] font-bold font-body text-slate-700 px-3.5 py-1 rounded-full mb-3 border border-slate-200/80 max-w-full truncate">
                             {course.tag} / {course.category.charAt(0).toUpperCase() + course.category.slice(1)}
                           </span>
 
@@ -327,24 +327,24 @@ const Courses = () => {
                             </h3>
                           </Link>
 
-                          <p className="text-xs font-semibold font-body text-blue-600 mb-3 uppercase tracking-wider">
+                          <p className="text-xs sm:text-sm font-bold font-body text-blue-600 mb-3.5 uppercase tracking-wider">
                             {getCourseSubtitle(course.title)}
                           </p>
 
-                          <div className="flex flex-col gap-2 mb-4 text-sm font-body text-gray-700">
-                            <div className="flex items-center gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <div className="flex flex-col gap-2.5 mb-4 text-sm sm:text-base font-body text-slate-800 font-medium">
+                            <div className="flex items-center gap-2.5">
+                              <CheckCircle2 className="h-4.5 w-4.5 text-blue-500 flex-shrink-0" />
                               <span>{getFormattedDuration(course.duration)}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                            <div className="flex items-center gap-2.5">
+                              <CheckCircle2 className="h-4.5 w-4.5 text-blue-500 flex-shrink-0" />
                               <span>{getFormattedEligibility(course.eligibility)}</span>
                             </div>
                           </div>
 
-                          <p className="text-sm font-body text-gray-600 mb-5 leading-relaxed break-words [overflow-wrap:anywhere]">
+                          <p className="text-sm sm:text-[15px] font-body text-slate-600 mb-5 leading-relaxed break-words [overflow-wrap:anywhere]">
                             {truncateDescription(course.description.replace(' Details...', ''), 140)}{' '}
-                            <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-blue-600 underline font-semibold hover:text-blue-800 transition-colors">
+                            <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-blue-600 underline font-bold hover:text-blue-800 transition-colors">
                               Read More...
                             </Link>
                           </p>
@@ -352,7 +352,7 @@ const Courses = () => {
 
                         <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
                           <Button
-                            className="flex-1 bg-primary hover:bg-primary/95 text-white rounded-xl py-2.5 text-xs font-semibold shadow-sm transition-all"
+                            className="flex-1 bg-primary hover:bg-primary/95 text-white rounded-xl py-3 text-sm font-bold shadow-sm transition-all cursor-pointer"
                             onClick={(e) => handleEnrollClick(e, course.title)}
                           >
                             Enroll Now
@@ -360,7 +360,7 @@ const Courses = () => {
                           <Button
                             variant="outline"
                             asChild
-                            className="flex-1 border-primary text-primary hover:bg-primary hover:text-white rounded-xl py-2.5 text-xs font-semibold shadow-sm transition-all"
+                            className="flex-1 border-primary text-primary hover:bg-primary hover:text-white rounded-xl py-3 text-sm font-bold shadow-sm transition-all cursor-pointer"
                           >
                             <a href="/brochures/diploma%20in%20fashion%20designing.pdf" download="Diploma-in-Fashion-Designing.pdf" onClick={(e) => e.stopPropagation()}>
                               Download Brochure
