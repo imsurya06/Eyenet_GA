@@ -85,13 +85,13 @@ const FounderDirectorSection = () => {
               {/* Desktop Full Narrative */}
               <div className="hidden md:block w-full">
                 <AnimateOnScroll delay={500}>
-                  <p className="text-base font-body text-slate-600 leading-relaxed mb-6">
+                  <p className="text-base font-body text-slate-600 leading-relaxed text-justify mb-6">
                     Guided by the vision of our Founder and Director, Eye-Net is committed to shaping students into confident and skilled professionals. We go beyond theory by offering hands-on training, industry-relevant courses, and practical projects that mirror real-world design challenges.
                   </p>
                 </AnimateOnScroll>
 
                 <AnimateOnScroll delay={600}>
-                  <p className="text-base font-body text-slate-600 leading-relaxed mb-8">
+                  <p className="text-base font-body text-slate-600 leading-relaxed text-justify mb-8">
                     Our teaching approach combines creativity, technology, and professional discipline, ensuring that every student not only masters tools like Photoshop and Illustrator but also develops the confidence to apply their skills in diverse industry settings. By fostering a supportive and inspiring learning environment, we prepare our students to excel in today's fast-paced and highly competitive design world.
                   </p>
                 </AnimateOnScroll>

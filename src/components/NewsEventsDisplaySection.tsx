@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNewsEvents, NewsEvent } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Play, Youtube, ArrowUpRight, Filter, Video, Maximize2, X } from 'lucide-react';
+import { Play, Youtube, ArrowUpRight, Filter, Video, Maximize2, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const CATEGORIES = ['All', 'Fashion Walks', 'Seminar & Workshop', 'Others'] as const;
@@ -14,6 +14,17 @@ const NewsEventsDisplaySection = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('All');
   const [activePlayingVideoId, setActivePlayingVideoId] = useState<string | null>(null);
   const [selectedLightboxPoster, setSelectedLightboxPoster] = useState<{ src: string; title: string } | null>(null);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+
+  const toggleCardExpand = (id: string) => {
+    // Accordion behavior: Clicking an unopened card closes any previously opened card
+    setExpandedCardId((prev) => (prev === id ? null : id));
+  };
+
+  // Reset expanded card when filter changes
+  useEffect(() => {
+    setExpandedCardId(null);
+  }, [selectedCategory]);
 
   // Filter and sort events strictly by Event Date desc (newest event date first)
   const filteredEvents = useMemo(() => {
@@ -32,6 +43,22 @@ const NewsEventsDisplaySection = () => {
     const cat = (event.category || '').toLowerCase();
     const title = (event.title || '').toLowerCase();
     return cat.includes('workshop') || cat.includes('seminar') || title.includes('workshop') || title.includes('poster') || title.includes('photography');
+  };
+
+  // Helper to render markdown bold text cleanly without raw asterisks
+  const renderFormattedDescription = (text: string) => {
+    if (!text || !text.includes('**')) return text;
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={index} className="font-semibold text-slate-900">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
   };
 
   return (
@@ -115,6 +142,8 @@ const NewsEventsDisplaySection = () => {
               const hasDescription = Boolean(item.description && item.description.trim().length > 0);
               const isTall = isTallPoster(item);
               const isFeatured = Boolean(item.isFeatured) || itemIdx === 0;
+              const isExpanded = expandedCardId === item.id;
+              const isLongDescription = Boolean(item.description && item.description.trim().length > 90);
 
               return (
                 <AnimateOnScroll
@@ -183,40 +212,57 @@ const NewsEventsDisplaySection = () => {
                   {/* Clean Content Below Image (No card padding, no card borders) */}
                   <div className="flex flex-col flex-1">
                     {/* Meta Row: Category & Date */}
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-primary">
                         {item.category}
                       </span>
                       <span className="text-slate-300">•</span>
-                      <span className="text-xs font-semibold text-slate-500">
+                      <span className="text-xs sm:text-sm font-semibold text-slate-500">
                         {new Date(item.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-lg sm:text-xl font-heading font-normal text-slate-900 leading-snug mb-2 group-hover:text-primary transition-colors">
+                    <h3 className="text-xl sm:text-2xl font-heading font-semibold text-slate-900 leading-snug mb-2.5 group-hover:text-primary transition-colors">
                       {item.title}
                     </h3>
 
-                    {/* Description (Rendered ONLY IF present) */}
+                    {/* Description (Rendered ONLY IF present with View More / View Less) */}
                     {hasDescription && (
-                      <p className="text-sm font-body text-slate-600 leading-relaxed line-clamp-3 mb-3">
-                        {item.description}
-                      </p>
+                      <div className="mb-3.5">
+                        <p className={`text-[15px] sm:text-base font-body text-slate-700 leading-relaxed text-justify transition-all duration-300 ${
+                          isExpanded ? '' : 'line-clamp-3'
+                        }`}>
+                          {renderFormattedDescription(item.description)}
+                        </p>
+                        {isLongDescription && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleCardExpand(item.id);
+                            }}
+                            className="text-primary hover:underline font-bold text-sm sm:text-[15px] mt-1.5 inline-flex items-center gap-1 cursor-pointer transition-colors"
+                          >
+                            <span>{isExpanded ? 'View Less' : 'View More'}</span>
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                          </button>
+                        )}
+                      </div>
                     )}
 
                     {/* Clean Watch Video Link (Rendered ONLY IF YouTube video exists) */}
                     {item.youtubeUrl && (
-                      <div className="pt-2">
+                      <div className="pt-1.5">
                         <a
                           href={item.youtubeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-900 hover:text-primary transition-colors"
+                          className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-primary transition-colors cursor-pointer"
                         >
-                          <Youtube className="w-3.5 h-3.5 text-primary" />
+                          <Youtube className="w-4 h-4 text-primary" />
                           <span>Watch Video</span>
-                          <ArrowUpRight className="w-3 h-3" />
+                          <ArrowUpRight className="w-3.5 h-3.5" />
                         </a>
                       </div>
                     )}

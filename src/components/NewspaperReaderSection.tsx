@@ -64,18 +64,47 @@ const NewspaperReaderSection: React.FC = () => {
       e.preventDefault();
       e.stopPropagation();
 
-      const delta = -e.deltaY;
-      const zoomFactor = delta > 0 ? 1.15 : 0.87;
+      const rect = el.getBoundingClientRect();
+      const cursorX = e.clientX - rect.left;
+      const cursorY = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const mouseOffsetX = cursorX - centerX;
+      const mouseOffsetY = cursorY - centerY;
 
-      setZoomScale((prev) => {
-        let nextScale = prev * zoomFactor;
-        if (nextScale <= 1.02) {
-          nextScale = 1;
+      // Gentle sensitivity damping:
+      // Clamping delta prevents trackpad or fast mouse wheel spasms
+      const rawDelta = -e.deltaY;
+      const clampedDelta = Math.max(Math.min(rawDelta, 50), -50);
+      const zoomFactor = 1 + clampedDelta * 0.0022; // Smooth ~10% per notch, finely controllable
+
+      setZoomScale((prevScale) => {
+        let newScale = prevScale * zoomFactor;
+
+        // Snapping and clamping between 1x and 5x
+        if (newScale <= 1.04) {
           setPanPosition({ x: 0, y: 0 });
-        } else if (nextScale > 4.5) {
-          nextScale = 4.5;
+          return 1;
         }
-        return Number(nextScale.toFixed(3));
+        if (newScale > 5) {
+          newScale = 5;
+        }
+
+        newScale = Number(newScale.toFixed(3));
+        const scaleRatio = newScale / prevScale;
+
+        // Zoom centered around exact cursor position:
+        setPanPosition((prevPan) => {
+          if (newScale === 1) return { x: 0, y: 0 };
+          const newPanX = prevPan.x - (mouseOffsetX - prevPan.x) * (scaleRatio - 1);
+          const newPanY = prevPan.y - (mouseOffsetY - prevPan.y) * (scaleRatio - 1);
+          return {
+            x: Number(newPanX.toFixed(2)),
+            y: Number(newPanY.toFixed(2)),
+          };
+        });
+
+        return newScale;
       });
     };
 
@@ -86,20 +115,61 @@ const NewspaperReaderSection: React.FC = () => {
   }, [lightboxIndex]);
 
   const handleZoomIn = () => {
-    setZoomScale((prev) => Math.min(Number((prev + 0.35).toFixed(2)), 4.5));
+    setZoomScale((prevScale) => {
+      const newScale = Math.min(Number((prevScale + 0.35).toFixed(2)), 5);
+      const scaleRatio = newScale / prevScale;
+      setPanPosition((prevPan) => ({
+        x: Number((prevPan.x * scaleRatio).toFixed(2)),
+        y: Number((prevPan.y * scaleRatio).toFixed(2)),
+      }));
+      return newScale;
+    });
   };
 
   const handleZoomOut = () => {
-    setZoomScale((prev) => {
-      const next = Math.max(Number((prev - 0.35).toFixed(2)), 1);
-      if (next === 1) setPanPosition({ x: 0, y: 0 });
-      return next;
+    setZoomScale((prevScale) => {
+      const newScale = Math.max(Number((prevScale - 0.35).toFixed(2)), 1);
+      if (newScale === 1) {
+        setPanPosition({ x: 0, y: 0 });
+        return 1;
+      }
+      const scaleRatio = newScale / prevScale;
+      setPanPosition((prevPan) => ({
+        x: Number((prevPan.x * scaleRatio).toFixed(2)),
+        y: Number((prevPan.y * scaleRatio).toFixed(2)),
+      }));
+      return newScale;
     });
   };
 
   const handleZoomReset = () => {
     setZoomScale(1);
     setPanPosition({ x: 0, y: 0 });
+  };
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    const el = lightboxViewportRef.current;
+    if (!el) return;
+
+    if (zoomScale > 1.2) {
+      handleZoomReset();
+    } else {
+      const rect = el.getBoundingClientRect();
+      const cursorX = e.clientX - rect.left;
+      const cursorY = e.clientY - rect.top;
+      const mouseOffsetX = cursorX - rect.width / 2;
+      const mouseOffsetY = cursorY - rect.height / 2;
+
+      const newScale = 2.2;
+      const newPanX = -(mouseOffsetX * (newScale - 1));
+      const newPanY = -(mouseOffsetY * (newScale - 1));
+
+      setZoomScale(newScale);
+      setPanPosition({
+        x: Number(newPanX.toFixed(2)),
+        y: Number(newPanY.toFixed(2)),
+      });
+    }
   };
 
   const handlePanMouseDown = (e: React.MouseEvent) => {
@@ -783,18 +853,21 @@ const NewspaperReaderSection: React.FC = () => {
                 onMouseMove={handlePanMouseMove}
                 onMouseUp={handlePanMouseUp}
                 onMouseLeave={handlePanMouseUp}
+                onDoubleClick={handleDoubleClick}
                 className={`relative max-w-full max-h-[82vh] overflow-hidden rounded-xl bg-slate-900 shadow-2xl p-2 border border-white/10 flex items-center justify-center ${
-                  zoomScale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'
+                  zoomScale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'
                 }`}
+                title={zoomScale > 1 ? 'Drag to pan • Double-click to reset' : 'Scroll or double-click to zoom'}
               >
                 <img
                   src={clippings[lightboxIndex].imageUrl}
                   alt={clippings[lightboxIndex].title}
                   draggable={false}
                   style={{
-                    transform: `scale(${zoomScale}) translate(${panPosition.x / zoomScale}px, ${panPosition.y / zoomScale}px)`,
+                    transform: `translate(${panPosition.x}px, ${panPosition.y}px) scale(${zoomScale})`,
                     transformOrigin: 'center center',
-                    transition: isPanning ? 'none' : 'transform 0.12s ease-out',
+                    transition: isPanning ? 'none' : 'transform 0.08s ease-out',
+                    willChange: 'transform',
                   }}
                   className="max-w-full max-h-[78vh] object-contain rounded-lg mx-auto select-none pointer-events-none"
                 />
