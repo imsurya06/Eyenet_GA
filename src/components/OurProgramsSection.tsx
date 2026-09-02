@@ -134,11 +134,11 @@ const OurProgramsSection = () => {
                         {program.title}
                       </h3>
 
-                      <p className="text-[15px] sm:text-base font-body text-slate-700 leading-relaxed mb-4 flex-grow line-clamp-3">
+                      <p className="text-base font-body text-slate-700 leading-relaxed mb-4 flex-grow line-clamp-3">
                         {program.description}
                       </p>
 
-                      <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between text-sm font-bold text-primary">
+                      <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between text-sm sm:text-base font-bold text-primary">
                         <span>Explore Program</span>
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
                           <ArrowRight className="w-4 h-4" />
@@ -195,7 +195,7 @@ const OurProgramsSection = () => {
                     {program.description}
                   </p>
 
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-[15px] font-bold text-primary group-hover:text-primary/90 transition-colors">
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-base font-bold text-primary group-hover:text-primary/90 transition-colors">
                     <span>Explore Program</span>
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300">
                       <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />

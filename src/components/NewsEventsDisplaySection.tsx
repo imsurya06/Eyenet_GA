@@ -15,6 +15,7 @@ const NewsEventsDisplaySection = () => {
   const [activePlayingVideoId, setActivePlayingVideoId] = useState<string | null>(null);
   const [selectedLightboxPoster, setSelectedLightboxPoster] = useState<{ src: string; title: string } | null>(null);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const [naturalRatios, setNaturalRatios] = useState<Record<string, number>>({});
 
   const toggleCardExpand = (id: string) => {
     // Accordion behavior: Clicking an unopened card closes any previously opened card
@@ -37,12 +38,27 @@ const NewsEventsDisplaySection = () => {
     return list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [newsEvents, selectedCategory]);
 
-  // Helper to determine if an event is a Vertical/Tall Poster
+  // Helper to determine if an event is a Vertical/Tall Poster (no brittle keyword matching)
   const isTallPoster = (event: NewsEvent) => {
+    // If it's a YouTube video, it's 16:9 widescreen
     if (event.youtubeVideoId) return false;
-    const cat = (event.category || '').toLowerCase();
-    const title = (event.title || '').toLowerCase();
-    return cat.includes('workshop') || cat.includes('seminar') || title.includes('workshop') || title.includes('poster') || title.includes('photography');
+
+    // Check dynamic natural aspect ratio measured when browser loads image
+    const dynamicRatio = naturalRatios[event.id];
+    if (typeof dynamicRatio === 'number') {
+      return dynamicRatio < 1.0;
+    }
+
+    // Check Sanity metadata dimensions if available
+    if (event.imageDimensions?.aspectRatio) {
+      return event.imageDimensions.aspectRatio < 1.0;
+    }
+    if (event.imageDimensions?.width && event.imageDimensions?.height) {
+      return event.imageDimensions.height >= event.imageDimensions.width;
+    }
+
+    // Default: all uploaded event posters without video are vertical posters
+    return true;
   };
 
   // Helper to render markdown bold text cleanly without raw asterisks
@@ -138,10 +154,12 @@ const NewsEventsDisplaySection = () => {
           /* CLEAN BENTO GRID - ZERO SIDE BARS ON VIDEOS, ZERO GREY BOXES */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
             {filteredEvents.map((item, itemIdx) => {
-              const isVideoPlaying = activePlayingVideoId === item.id;
+              const isVideo = Boolean(item.youtubeVideoId);
+              const isVideoPlaying = isVideo && activePlayingVideoId === item.id;
               const hasDescription = Boolean(item.description && item.description.trim().length > 0);
               const isTall = isTallPoster(item);
-              const isFeatured = Boolean(item.isFeatured) || itemIdx === 0;
+              // Only featured 16:9 widescreen videos span 2 columns. Posters are always 1 column.
+              const isFeaturedWidescreen = isVideo && Boolean(item.isFeatured);
               const isExpanded = expandedCardId === item.id;
               const isLongDescription = Boolean(item.description && item.description.trim().length > 90);
 
@@ -150,11 +168,11 @@ const NewsEventsDisplaySection = () => {
                   key={item.id}
                   delay={100 + itemIdx * 60}
                   className={`flex flex-col bg-transparent group text-left ${
-                    isFeatured && !isTall ? 'md:col-span-2' : 'col-span-1'
+                    isFeaturedWidescreen ? 'md:col-span-2' : 'col-span-1'
                   }`}
                 >
-                  {/* Media Frame: Videos fill 100% 16:9 edge-to-edge; Posters display natural vertical height */}
-                  <div className={`relative w-full bg-transparent overflow-hidden rounded-2xl mb-4 flex items-center justify-center ${
+                  {/* Media Frame: Videos fill 100% 16:9 widescreen; Posters display natural vertical height without cropping */}
+                  <div className={`relative w-full bg-slate-900/5 overflow-hidden rounded-2xl mb-4 flex items-center justify-center ${
                     isTall ? 'aspect-[3/4] sm:aspect-[4/5]' : 'aspect-video'
                   }`}>
                     {isVideoPlaying && item.youtubeVideoId ? (
@@ -176,12 +194,21 @@ const NewsEventsDisplaySection = () => {
                         }}
                         className="relative w-full h-full cursor-pointer group/media flex items-center justify-center rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-shadow duration-300"
                       >
-                        {/* 100% Clean Image/Video Thumbnail - Videos fill 100% edge-to-edge (object-cover) with ZERO side bars */}
+                        {/* 100% Full Poster Display - Posters use object-contain so NO cropping occurs */}
                         <img
                           src={item.image}
                           alt={item.title}
+                          onLoad={(e) => {
+                            const { naturalWidth, naturalHeight } = e.currentTarget;
+                            if (naturalWidth && naturalHeight) {
+                              setNaturalRatios((prev) => ({
+                                ...prev,
+                                [item.id]: naturalWidth / naturalHeight,
+                              }));
+                            }
+                          }}
                           className={`w-full h-full rounded-2xl group-hover/media:scale-[1.02] transition-transform duration-500 ease-out ${
-                            isTall ? 'object-contain' : 'object-cover'
+                            isTall || !item.youtubeVideoId ? 'object-contain' : 'object-cover'
                           }`}
                         />
 
@@ -230,7 +257,7 @@ const NewsEventsDisplaySection = () => {
                     {/* Description (Rendered ONLY IF present with View More / View Less) */}
                     {hasDescription && (
                       <div className="mb-3.5">
-                        <p className={`text-[15px] sm:text-base font-body text-slate-700 leading-relaxed text-justify transition-all duration-300 ${
+                        <p className={`text-base sm:text-lg font-body text-slate-700 leading-relaxed text-justify transition-all duration-300 ${
                           isExpanded ? '' : 'line-clamp-3'
                         }`}>
                           {renderFormattedDescription(item.description)}
@@ -242,7 +269,7 @@ const NewsEventsDisplaySection = () => {
                               e.stopPropagation();
                               toggleCardExpand(item.id);
                             }}
-                            className="text-primary hover:underline font-bold text-sm sm:text-[15px] mt-1.5 inline-flex items-center gap-1 cursor-pointer transition-colors"
+                            className="text-primary hover:underline font-bold text-sm sm:text-base mt-1.5 inline-flex items-center gap-1 cursor-pointer transition-colors"
                           >
                             <span>{isExpanded ? 'View Less' : 'View More'}</span>
                             <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />

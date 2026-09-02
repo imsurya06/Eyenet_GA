@@ -99,19 +99,19 @@ const FounderDirectorSection = () => {
 
               {/* Vision Highlights Pills (Prominent & Larger Font Size) */}
               <AnimateOnScroll delay={700} className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-5 pt-4 md:pt-6 border-t border-slate-200/80">
-                <div className="flex items-center gap-3 text-sm sm:text-base md:text-[17px] font-bold text-slate-900">
+                <div className="flex items-center gap-3 text-base sm:text-lg font-bold text-slate-900">
                   <CheckCircle2 className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-primary shrink-0" />
                   <span>Hands-On Training</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm sm:text-base md:text-[17px] font-bold text-slate-900">
+                <div className="flex items-center gap-3 text-base sm:text-lg font-bold text-slate-900">
                   <CheckCircle2 className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-primary shrink-0" />
                   <span>Real-World Design Projects</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm sm:text-base md:text-[17px] font-bold text-slate-900">
+                <div className="flex items-center gap-3 text-base sm:text-lg font-bold text-slate-900">
                   <CheckCircle2 className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-primary shrink-0" />
                   <span>Mastery of Design Tools</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm sm:text-base md:text-[17px] font-bold text-slate-900">
+                <div className="flex items-center gap-3 text-base sm:text-lg font-bold text-slate-900">
                   <CheckCircle2 className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-primary shrink-0" />
                   <span>Supportive Mentorship</span>
                 </div>

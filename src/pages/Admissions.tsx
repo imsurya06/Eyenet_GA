@@ -718,7 +718,7 @@ const Admissions = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Full Name*</FormLabel>
+                          <FormLabel className="text-base font-semibold text-slate-800">Full Name*</FormLabel>
                           <FormControl>
                             <Input placeholder="Enter your full name" className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900" {...field} />
                           </FormControl>
@@ -732,7 +732,7 @@ const Admissions = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Email Address*</FormLabel>
+                          <FormLabel className="text-base font-semibold text-slate-800">Email Address*</FormLabel>
                           <FormControl>
                             <Input placeholder="name@example.com" type="email" className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900" {...field} />
                           </FormControl>
@@ -746,7 +746,7 @@ const Admissions = () => {
                       name="mobile"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Mobile Number*</FormLabel>
+                          <FormLabel className="text-base font-semibold text-slate-800">Mobile Number*</FormLabel>
                           <FormControl>
                             <Input placeholder="10-digit mobile number" type="tel" className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900" {...field} />
                           </FormControl>
@@ -760,7 +760,7 @@ const Admissions = () => {
                       name="program"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[15px] sm:text-base font-semibold text-slate-800">Select Program*</FormLabel>
+                          <FormLabel className="text-base font-semibold text-slate-800">Select Program*</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
                               <SelectTrigger className="h-13 px-4 text-base rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-2 focus:ring-primary text-slate-900">
@@ -868,7 +868,7 @@ const Admissions = () => {
                     href={googleMapsUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm sm:text-[15px] font-bold text-primary hover:underline pt-2"
+                    className="inline-flex items-center gap-2 text-base font-bold text-primary hover:underline pt-2"
                   >
                     <span>View on Google Maps</span>
                     <ArrowRight className="w-4 h-4" />

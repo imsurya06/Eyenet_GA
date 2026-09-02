@@ -757,31 +757,31 @@ const NewspaperReaderSection: React.FC = () => {
           }}
         >
           <div
-            className="relative max-w-5xl w-full max-h-[95vh] flex flex-col items-center justify-center"
+            className="relative w-full max-w-[96vw] xl:max-w-[94vw] h-[96vh] flex flex-col items-center justify-between"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Toolbar */}
-            <div className="w-full flex items-center justify-between mb-3 px-1 text-white gap-2 flex-wrap">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <span className="text-xs sm:text-sm font-semibold text-slate-200 bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
+            <div className="w-full flex items-center justify-between mb-2 px-2 text-white gap-2 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <span className="text-xs sm:text-sm font-bold text-slate-200 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/20">
                   Page {lightboxIndex + 1} of {totalClippings}
                 </span>
 
                 {/* Zoom percentage & Controls */}
-                <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2 py-1 rounded-full border border-white/20">
+                <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
                   <button
                     onClick={handleZoomOut}
                     disabled={zoomScale <= 1}
-                    className="p-1 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    className="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     title="Zoom Out"
                     aria-label="Zoom Out"
                   >
-                    <ZoomOut className="w-4 h-4" />
+                    <ZoomOut className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   </button>
 
                   <button
                     onClick={handleZoomReset}
-                    className="text-xs font-bold text-slate-200 hover:text-white px-1.5 py-0.5 rounded transition-colors cursor-pointer"
+                    className="text-xs sm:text-sm font-bold text-slate-100 hover:text-white px-2 py-0.5 rounded transition-colors cursor-pointer"
                     title="Click to reset zoom"
                   >
                     {Math.round(zoomScale * 100)}%
@@ -789,64 +789,64 @@ const NewspaperReaderSection: React.FC = () => {
 
                   <button
                     onClick={handleZoomIn}
-                    disabled={zoomScale >= 4.5}
-                    className="p-1 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    disabled={zoomScale >= 5}
+                    className="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                     title="Zoom In"
                     aria-label="Zoom In"
                   >
-                    <ZoomIn className="w-4 h-4" />
+                    <ZoomIn className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   </button>
 
                   {zoomScale > 1 && (
                     <button
                       onClick={handleZoomReset}
-                      className="p-1 text-amber-300 hover:text-amber-200 hover:bg-white/10 rounded-full transition-colors cursor-pointer ml-0.5"
+                      className="p-1.5 text-amber-300 hover:text-amber-200 hover:bg-white/15 rounded-full transition-colors cursor-pointer ml-0.5"
                       title="Reset Zoom (100%)"
                       aria-label="Reset Zoom"
                     >
-                      <RotateCcw className="w-3.5 h-3.5" />
+                      <RotateCcw className="w-4 h-4" />
                     </button>
                   )}
                 </div>
 
-                <span className="hidden md:inline-block text-xs text-slate-400 italic">
-                  Scroll mouse wheel to zoom • Drag to pan
+                <span className="hidden md:inline-block text-xs sm:text-sm text-slate-300 italic">
+                  Scroll mouse wheel to zoom into cursor • Drag to pan • Double-click to magnify
                 </span>
               </div>
 
               <button
                 onClick={() => setLightboxIndex(null)}
-                className="text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer ml-auto"
+                className="text-white/80 hover:text-white p-2 sm:p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer ml-auto"
                 aria-label="Close reader modal"
               >
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6 sm:w-7 sm:h-7" />
               </button>
             </div>
 
             {/* Modal Image Container */}
-            <div className="relative w-full flex items-center justify-center">
+            <div className="relative w-full flex-1 flex items-center justify-center min-h-0">
 
               {/* Prev Lightbox Button */}
               <button
                 onClick={handleLightboxPrev}
                 disabled={lightboxIndex === 0}
-                className="absolute left-2 sm:left-4 z-50 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-primary text-white border border-white/20 shadow-2xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                className="absolute left-2 sm:left-4 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-900/80 hover:bg-primary text-white border border-white/25 shadow-2xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
                 aria-label="Previous Lightbox Image"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-7 h-7 sm:w-8 sm:h-8" />
               </button>
 
               {/* Next Lightbox Button */}
               <button
                 onClick={handleLightboxNext}
                 disabled={lightboxIndex >= totalClippings - 1}
-                className="absolute right-2 sm:right-4 z-50 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-primary text-white border border-white/20 shadow-2xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                className="absolute right-2 sm:right-4 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-900/80 hover:bg-primary text-white border border-white/25 shadow-2xl flex items-center justify-center transition-all cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
                 aria-label="Next Lightbox Image"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8" />
               </button>
 
-              {/* Zoomable & Pan-able Viewport */}
+              {/* Zoomable & Pan-able Viewport (Large Full Height Preview) */}
               <div
                 ref={lightboxViewportRef}
                 onMouseDown={handlePanMouseDown}
@@ -854,7 +854,7 @@ const NewspaperReaderSection: React.FC = () => {
                 onMouseUp={handlePanMouseUp}
                 onMouseLeave={handlePanMouseUp}
                 onDoubleClick={handleDoubleClick}
-                className={`relative max-w-full max-h-[82vh] overflow-hidden rounded-xl bg-slate-900 shadow-2xl p-2 border border-white/10 flex items-center justify-center ${
+                className={`relative w-full h-[88vh] md:h-[90vh] overflow-hidden rounded-2xl bg-slate-900/90 shadow-2xl p-2 sm:p-3 border border-white/10 flex items-center justify-center ${
                   zoomScale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'
                 }`}
                 title={zoomScale > 1 ? 'Drag to pan • Double-click to reset' : 'Scroll or double-click to zoom'}
@@ -869,7 +869,7 @@ const NewspaperReaderSection: React.FC = () => {
                     transition: isPanning ? 'none' : 'transform 0.08s ease-out',
                     willChange: 'transform',
                   }}
-                  className="max-w-full max-h-[78vh] object-contain rounded-lg mx-auto select-none pointer-events-none"
+                  className="h-full w-auto max-h-[86vh] md:max-h-[88vh] max-w-[92vw] object-contain rounded-lg mx-auto select-none pointer-events-none shadow-2xl"
                 />
               </div>
             </div>

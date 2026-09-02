@@ -317,7 +317,7 @@ const Courses = () => {
                       </Link>
                       <div className="flex flex-col flex-grow justify-between min-w-0">
                         <div>
-                          <span className="inline-block bg-slate-100 text-xs sm:text-[13px] font-bold font-body text-slate-700 px-3.5 py-1 rounded-full mb-3 border border-slate-200/80 max-w-full truncate">
+                          <span className="inline-block bg-slate-100 text-sm font-bold font-body text-slate-700 px-3.5 py-1 rounded-full mb-3 border border-slate-200/80 max-w-full truncate">
                             {course.tag} / {course.category.charAt(0).toUpperCase() + course.category.slice(1)}
                           </span>
 
@@ -342,7 +342,7 @@ const Courses = () => {
                             </div>
                           </div>
 
-                          <p className="text-sm sm:text-[15px] font-body text-slate-600 mb-5 leading-relaxed break-words [overflow-wrap:anywhere]">
+                          <p className="text-base font-body text-slate-600 mb-5 leading-relaxed break-words [overflow-wrap:anywhere]">
                             {truncateDescription(course.description.replace(' Details...', ''), 140)}{' '}
                             <Link to={`/courses/${course.category === 'fashion' ? 'fashion-design' : course.category === 'computer' ? 'computer-courses' : 'other-courses'}/${course.id}`} className="text-blue-600 underline font-bold hover:text-blue-800 transition-colors">
                               Read More...

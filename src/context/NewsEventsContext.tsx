@@ -35,8 +35,8 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch all news events ordered strictly by Event Date desc (newest event date first)
-    const query = '*[_type == "newsEvent"] | order(date desc)';
+    // Fetch all news events with image dimensions ordered strictly by Event Date desc
+    const query = '*[_type == "newsEvent"] { ..., "imageDimensions": image.asset->metadata.dimensions } | order(date desc)';
 
     const fetchNewsEvents = async (showLoading = true) => {
       if (showLoading) setLoading(true);
@@ -75,6 +75,7 @@ export const NewsEventsProvider: React.FC<{ children: ReactNode }> = ({ children
             youtubeVideoId: videoId,
             isFeatured: Boolean(doc.isFeatured),
             image: image || 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=1200',
+            imageDimensions: doc.imageDimensions || undefined,
           };
         });
 

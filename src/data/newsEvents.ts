@@ -8,6 +8,11 @@ export interface NewsEvent {
   youtubeVideoId?: string;
   isFeatured?: boolean;
   image?: string;
+  imageDimensions?: {
+    aspectRatio?: number;
+    width?: number;
+    height?: number;
+  };
 }
 
 export const initialNewsEvents: NewsEvent[] = [];

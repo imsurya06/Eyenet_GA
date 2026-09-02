@@ -103,6 +103,10 @@
 }
 
 @layer base {
+  html {
+    font-size: 115%; /* Scale all typography across the entire website up by 15% */
+  }
+
   * {
     @apply border-border;
   }
