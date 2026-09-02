@@ -45,8 +45,8 @@ const CourseDropdownMenuItem = React.forwardRef<
           </div>
         )}
         <div className="flex flex-col justify-center min-h-[2.5rem]">
-          <p className="text-base sm:text-[16px] font-normal leading-snug">{title}</p>
-          <p className="line-clamp-2 text-xs sm:text-[13px] leading-snug text-muted-foreground mt-0.5">
+          <p className="text-base sm:text-lg font-semibold leading-snug">{title}</p>
+          <p className="line-clamp-2 text-sm sm:text-[15px] leading-snug text-muted-foreground mt-0.5">
             {description || '\u00A0'}
           </p>
         </div>

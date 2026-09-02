@@ -76,7 +76,7 @@ const SecondaryNavbar = () => {
                 href="/virtualtour/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[13.5px] sm:text-sm md:text-[15px] font-semibold text-slate-800 hover:text-primary transition-colors tracking-tight"
+                className="text-sm sm:text-base md:text-[16.5px] lg:text-[17px] font-semibold text-slate-800 hover:text-primary transition-colors tracking-tight"
               >
                 {link.name}
               </a>
@@ -89,7 +89,7 @@ const SecondaryNavbar = () => {
               to={link.to}
               className={({ isActive }) =>
                 cn(
-                  "text-[13.5px] sm:text-sm md:text-[15px] font-semibold text-slate-800 hover:text-primary transition-colors tracking-tight",
+                  "text-sm sm:text-base md:text-[16.5px] lg:text-[17px] font-semibold text-slate-800 hover:text-primary transition-colors tracking-tight",
                   ((isActive && !isFaqLink) || (isFaqLink && isFaqInView)) && "text-primary font-bold"
                 )
               }
@@ -104,8 +104,8 @@ const SecondaryNavbar = () => {
       {/* Right Section: Contact Info and Social Icons (Prominent Sizing on Mobile) */}
       <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-2 sm:gap-x-6 flex-wrap w-full sm:w-auto mt-0.5 sm:mt-0">
         {/* Phone Numbers */}
-        <div className="flex items-center gap-1 text-primary font-bold text-[14px] sm:text-sm md:text-[15px]">
-          <Phone className="h-4 w-4 sm:h-4.5 sm:w-4.5 flex-shrink-0" />
+        <div className="flex items-center gap-1.5 text-primary font-bold text-sm sm:text-base md:text-[16.5px] lg:text-[17px]">
+          <Phone className="h-4.5 w-4.5 sm:h-5 sm:w-5 flex-shrink-0" />
           <a href="tel:+919842173725" className="hover:underline">+91 9842173725</a>
           <span className="text-slate-400 font-normal">/</span>
           <a href="tel:+918300064651" className="hover:underline">+91 8300064651</a>

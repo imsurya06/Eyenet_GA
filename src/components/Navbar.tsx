@@ -136,8 +136,8 @@ const Navbar = () => {
                     }}
                     className={({ isActive }) =>
                       cn(
-                        "text-base md:text-[17px] lg:text-[18px] font-medium transition-colors hover:text-primary px-4 py-2 rounded-md tracking-tight",
-                        isActive ? "text-primary font-semibold" : "text-slate-800"
+                        "text-lg lg:text-[19px] xl:text-[20px] font-semibold transition-colors hover:text-primary px-4 py-2.5 rounded-md tracking-tight",
+                        isActive ? "text-primary font-bold" : "text-slate-800"
                       )
                     }
                   >
@@ -153,13 +153,13 @@ const Navbar = () => {
                       <Button
                         variant="ghost"
                         className={cn(
-                          "text-base md:text-[17px] lg:text-[18px] font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2 tracking-tight",
-                          (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) ? "text-primary font-semibold" : "text-slate-800",
-                          (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) ? "text-primary font-semibold" : "text-slate-800"
+                          "text-lg lg:text-[19px] xl:text-[20px] font-semibold transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 h-auto px-4 py-2.5 tracking-tight",
+                          (item.name === 'Courses' && (isCoursesPathActive || coursesOpen)) ? "text-primary font-bold" : "text-slate-800",
+                          (item.name === 'Explore' && (isExplorePathActive || exploreOpen)) ? "text-primary font-bold" : "text-slate-800"
                         )}
                       >
                         {item.name}
-                        <ChevronDown className="ml-1 h-4.5 w-4.5" />
+                        <ChevronDown className="ml-1 h-5 w-5" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -220,10 +220,10 @@ const Navbar = () => {
 
           {/* Buttons - Right aligned with prominent sizing */}
           <div className="hidden lg:flex items-center space-x-3.5">
-            <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base px-5 py-2">
+            <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground text-base lg:text-lg font-bold px-6 py-2.5 h-auto transition-all">
               <Link to="/contact" onClick={handleContactClick}>Contact</Link>
             </Button>
-            <Button variant="default" asChild className="hover:animate-shake text-base px-5 py-2">
+            <Button variant="default" asChild className="hover:animate-shake text-base lg:text-lg font-bold px-6 py-2.5 h-auto transition-all shadow-sm">
               <Link to="/admissions#enrollment-form" onClick={handleApplyClick}>Apply</Link>
             </Button>
           </div>
