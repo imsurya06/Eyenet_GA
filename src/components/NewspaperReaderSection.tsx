@@ -749,16 +749,16 @@ const NewspaperReaderSection: React.FC = () => {
       {/* Lightbox Modal with Full Front/Back Navigation Controls & Mouse Wheel Zoom */}
       {lightboxIndex !== null && clippings[lightboxIndex] && (
         <div
-          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-between p-2 sm:p-4 animate-in fade-in duration-200 select-none overflow-hidden"
+          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md animate-in fade-in duration-200 select-none overflow-hidden"
           onClick={() => setLightboxIndex(null)}
           onWheel={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
         >
-          {/* Modal Header Toolbar */}
+          {/* Modal Header Toolbar - Pinned to Top */}
           <div 
-            className="w-full max-w-7xl flex items-center justify-between px-3 py-1.5 text-white gap-3 shrink-0 z-50"
+            className="absolute top-0 left-0 right-0 h-14 sm:h-16 z-50 flex items-center justify-between px-4 sm:px-8 text-white gap-3 bg-gradient-to-b from-slate-950/80 to-transparent"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-2 sm:gap-4">
@@ -848,7 +848,7 @@ const NewspaperReaderSection: React.FC = () => {
             <ChevronRight className="w-7 h-7 sm:w-8 sm:h-8" />
           </button>
 
-          {/* Full Screen Interactive Viewport */}
+          {/* Full Screen Viewport: Pinned directly from below toolbar to bottom of screen */}
           <div
             ref={lightboxViewportRef}
             onClick={(e) => e.stopPropagation()}
@@ -857,7 +857,7 @@ const NewspaperReaderSection: React.FC = () => {
             onMouseUp={handlePanMouseUp}
             onMouseLeave={handlePanMouseUp}
             onDoubleClick={handleDoubleClick}
-            className={`relative w-full flex-1 flex items-center justify-center overflow-hidden my-auto ${
+            className={`absolute inset-0 top-14 sm:top-16 bottom-3 sm:bottom-5 px-4 sm:px-16 flex items-center justify-center overflow-hidden ${
               zoomScale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'
             }`}
             title={zoomScale > 1 ? 'Drag to pan • Double-click to reset' : 'Scroll or double-click to zoom'}
@@ -867,16 +867,17 @@ const NewspaperReaderSection: React.FC = () => {
               alt={clippings[lightboxIndex].title}
               draggable={false}
               style={{
-                height: '84vh',
+                height: '100%',
+                maxHeight: '100%',
                 width: 'auto',
-                maxWidth: '90vw',
+                maxWidth: '100%',
                 objectFit: 'contain',
                 transform: `translate(${panPosition.x}px, ${panPosition.y}px) scale(${zoomScale})`,
                 transformOrigin: 'center center',
                 transition: isPanning ? 'none' : 'transform 0.08s ease-out',
                 willChange: 'transform',
               }}
-              className="rounded-xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] border border-white/10 select-none pointer-events-none"
+              className="rounded-xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] border border-white/15 select-none pointer-events-none"
             />
           </div>
         </div>
