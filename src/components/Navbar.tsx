@@ -28,7 +28,6 @@ const navItems = [
     links: [
       { name: 'Fashion design Courses', description: 'Professional certification for creative professionals', to: '/courses?category=fashion', icon: LucideIcons.Tablet },
       { name: 'Computer courses', description: 'Digital and print design curriculum', to: '/courses?category=computer', icon: LucideIcons.Laptop },
-      { name: 'Visual Media Training', description: 'Comprehensive training in video editing, animation, and digital content creation.', to: '/courses?category=multimedia', icon: LucideIcons.MonitorPlay },
       { name: 'Photography', description: 'Master the art of photography, from basic techniques to advanced studio setups.', to: '/courses?category=photography', icon: LucideIcons.Camera },
       { name: 'Spoken English', description: 'Improve your communication skills with our interactive spoken English courses.', to: '/courses?category=spoken-english', icon: LucideIcons.MessageSquareText },
       { name: 'Beautician Course', description: 'Learn professional beauty techniques, makeup artistry, and salon management.', to: '/courses?category=beautician', icon: LucideIcons.Sparkles },
@@ -148,6 +147,7 @@ const Navbar = () => {
                     key={item.name}
                     open={item.name === 'Courses' ? coursesOpen : exploreOpen}
                     onOpenChange={item.name === 'Courses' ? setCoursesOpen : setExploreOpen}
+                    modal={false}
                   >
                     <DropdownMenuTrigger asChild>
                       <Button

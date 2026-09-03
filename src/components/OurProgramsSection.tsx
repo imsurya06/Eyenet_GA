@@ -34,7 +34,7 @@ const programs = [
   {
     image: 'https://i.pinimg.com/736x/0b/3e/28/0b3e28bc4f888f2eeed42d021ff95c8a.jpg',
     title: 'Photography',
-    category: 'Visual Media',
+    category: 'Creative Arts',
     duration: '',
     description: 'Master studio lighting, camera mechanics, framing, portraiture, and commercial studio photography.',
     href: '/courses?category=photography',
@@ -46,7 +46,7 @@ const programs = [
     category: 'Digital Production',
     duration: '',
     description: 'Explore video editing suite, motion graphics timeline, 2D/3D animation, and digital post-production.',
-    href: '/courses?category=multimedia',
+    href: '/courses?category=computer',
     badge: 'Industry Standard'
   },
   {

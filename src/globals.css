@@ -105,6 +105,9 @@
 @layer base {
   html {
     font-size: 115%; /* Scale all typography across the entire website up by 15% */
+    overscroll-behavior: none;
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
   }
 
   * {
@@ -127,6 +130,17 @@
 
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
   }
 
   h1,

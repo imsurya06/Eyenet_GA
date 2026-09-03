@@ -46,7 +46,6 @@ export default defineType({
         list: [
           {title: 'Fashion', value: 'fashion'},
           {title: 'Computer', value: 'computer'},
-          {title: 'Multimedia', value: 'multimedia'},
           {title: 'Photography', value: 'photography'},
           {title: 'Beautician', value: 'beautician'},
           {title: 'Spoken English', value: 'spoken-english'}

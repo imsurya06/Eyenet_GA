@@ -63,6 +63,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           return {
             ...doc,
             id: doc._id,
+            category: doc.category === 'multimedia' ? 'computer' : (doc.category || 'computer'),
             image: getImageUrl(doc),
             gallery: getGalleryUrls(doc),
             tag: tag,
@@ -73,10 +74,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         const categoryOrder: Record<string, number> = {
           'fashion': 1,
           'computer': 2,
-          'multimedia': 3,
-          'photography': 4,
-          'beautician': 5,
-          'spoken-english': 6
+          'photography': 3,
+          'beautician': 4,
+          'spoken-english': 5
         };
 
         const sortedCourses = [...mappedCourses].sort((a, b) => {

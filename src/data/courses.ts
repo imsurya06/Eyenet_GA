@@ -6,7 +6,7 @@ export interface Course {
   description: string;
   brochureLink?: string;
   enrollLink?: string;
-  category: 'fashion' | 'computer' | 'multimedia' | 'photography' | 'beautician' | 'spoken-english'; // Updated categories
+  category: 'fashion' | 'computer' | 'photography' | 'beautician' | 'spoken-english'; // Updated categories
   icon?: React.ElementType; // Optional icon for dropdowns
   duration: string;
   eligibility: string;

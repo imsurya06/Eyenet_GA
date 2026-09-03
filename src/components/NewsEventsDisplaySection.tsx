@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useNewsEvents, NewsEvent } from '@/context/NewsEventsContext';
 import AnimateOnScroll from './AnimateOnScroll';
-import { Play, Youtube, ArrowUpRight, Filter, Video, Maximize2, X, ChevronDown } from 'lucide-react';
+import { Play, Youtube, ArrowUpRight, Filter, Video, Maximize2, X, ChevronDown, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const CATEGORIES = ['All', 'Fashion Walks', 'Seminar & Workshop', 'Others'] as const;
@@ -16,6 +16,159 @@ const NewsEventsDisplaySection = () => {
   const [selectedLightboxPoster, setSelectedLightboxPoster] = useState<{ src: string; title: string } | null>(null);
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [naturalRatios, setNaturalRatios] = useState<Record<string, number>>({});
+
+  // Lightbox Zoom and Pan State
+  const [zoomScale, setZoomScale] = useState(1);
+  const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const panStartRef = useRef({ x: 0, y: 0 });
+  const lightboxViewportRef = useRef<HTMLDivElement | null>(null);
+
+  // Background body scroll lock & reset zoom on open
+  useEffect(() => {
+    if (selectedLightboxPoster) {
+      setZoomScale(1);
+      setPanPosition({ x: 0, y: 0 });
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [selectedLightboxPoster]);
+
+  // Handle smooth wheel zooming & prevent background page scrolling
+  useEffect(() => {
+    const el = lightboxViewportRef.current;
+    if (!el || !selectedLightboxPoster) return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const rect = el.getBoundingClientRect();
+      const cursorX = e.clientX - rect.left;
+      const cursorY = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const mouseOffsetX = cursorX - centerX;
+      const mouseOffsetY = cursorY - centerY;
+
+      const rawDelta = -e.deltaY;
+      const clampedDelta = Math.max(Math.min(rawDelta, 50), -50);
+      const zoomFactor = 1 + clampedDelta * 0.0022;
+
+      setZoomScale((prevScale) => {
+        let newScale = prevScale * zoomFactor;
+
+        if (newScale <= 1.04) {
+          setPanPosition({ x: 0, y: 0 });
+          return 1;
+        }
+        if (newScale > 5) {
+          newScale = 5;
+        }
+
+        newScale = Number(newScale.toFixed(3));
+        const scaleRatio = newScale / prevScale;
+
+        setPanPosition((prevPan) => {
+          if (newScale === 1) return { x: 0, y: 0 };
+          const newPanX = prevPan.x - (mouseOffsetX - prevPan.x) * (scaleRatio - 1);
+          const newPanY = prevPan.y - (mouseOffsetY - prevPan.y) * (scaleRatio - 1);
+          return {
+            x: Number(newPanX.toFixed(2)),
+            y: Number(newPanY.toFixed(2)),
+          };
+        });
+
+        return newScale;
+      });
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+    };
+  }, [selectedLightboxPoster]);
+
+  const handleZoomIn = () => {
+    setZoomScale((prevScale) => {
+      const newScale = Math.min(Number((prevScale + 0.35).toFixed(2)), 5);
+      const scaleRatio = newScale / prevScale;
+      setPanPosition((prevPan) => ({
+        x: Number((prevPan.x * scaleRatio).toFixed(2)),
+        y: Number((prevPan.y * scaleRatio).toFixed(2)),
+      }));
+      return newScale;
+    });
+  };
+
+  const handleZoomOut = () => {
+    setZoomScale((prevScale) => {
+      const newScale = Math.max(Number((prevScale - 0.35).toFixed(2)), 1);
+      if (newScale === 1) {
+        setPanPosition({ x: 0, y: 0 });
+        return 1;
+      }
+      const scaleRatio = newScale / prevScale;
+      setPanPosition((prevPan) => ({
+        x: Number((prevPan.x * scaleRatio).toFixed(2)),
+        y: Number((prevPan.y * scaleRatio).toFixed(2)),
+      }));
+      return newScale;
+    });
+  };
+
+  const handleZoomReset = () => {
+    setZoomScale(1);
+    setPanPosition({ x: 0, y: 0 });
+  };
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    const el = lightboxViewportRef.current;
+    if (!el) return;
+
+    if (zoomScale > 1.2) {
+      handleZoomReset();
+    } else {
+      const rect = el.getBoundingClientRect();
+      const cursorX = e.clientX - rect.left;
+      const cursorY = e.clientY - rect.top;
+      const mouseOffsetX = cursorX - rect.width / 2;
+      const mouseOffsetY = cursorY - rect.height / 2;
+
+      const newScale = 2.2;
+      const newPanX = -(mouseOffsetX * (newScale - 1));
+      const newPanY = -(mouseOffsetY * (newScale - 1));
+
+      setZoomScale(newScale);
+      setPanPosition({
+        x: Number(newPanX.toFixed(2)),
+        y: Number(newPanY.toFixed(2)),
+      });
+    }
+  };
+
+  const handlePanMouseDown = (e: React.MouseEvent) => {
+    if (zoomScale > 1) {
+      setIsPanning(true);
+      panStartRef.current = { x: e.clientX - panPosition.x, y: e.clientY - panPosition.y };
+    }
+  };
+
+  const handlePanMouseMove = (e: React.MouseEvent) => {
+    if (isPanning && zoomScale > 1) {
+      setPanPosition({
+        x: e.clientX - panStartRef.current.x,
+        y: e.clientY - panStartRef.current.y,
+      });
+    }
+  };
+
+  const handlePanMouseUp = () => {
+    setIsPanning(false);
+  };
 
   const toggleCardExpand = (id: string) => {
     // Accordion behavior: Clicking an unopened card closes any previously opened card
@@ -322,33 +475,115 @@ const NewsEventsDisplaySection = () => {
 
       </div>
 
-      {/* Lightbox Modal for Full Resolution Poster View */}
+      {/* Lightbox Modal for Full Resolution Poster View with Smooth Mouse Wheel Zoom & Background Scroll Lock */}
       {selectedLightboxPoster && (
         <div
-          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200 select-none"
+          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md animate-in fade-in duration-200 select-none overflow-hidden"
           onClick={() => setSelectedLightboxPoster(null)}
+          onWheel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
+          {/* Top Header Bar */}
           <div
-            className="relative max-w-5xl w-full max-h-[90vh] flex flex-col items-center justify-center"
+            className="absolute top-0 left-0 right-0 h-14 sm:h-16 z-50 flex items-center justify-between px-4 sm:px-8 text-white gap-3 bg-gradient-to-b from-slate-950/80 to-transparent"
             onClick={(e) => e.stopPropagation()}
           >
+            <div className="flex items-center gap-2 sm:gap-4 overflow-hidden">
+              {selectedLightboxPoster.title && (
+                <span className="text-xs sm:text-sm font-bold text-slate-200 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/20 truncate max-w-[180px] sm:max-w-xs md:max-w-md">
+                  {selectedLightboxPoster.title}
+                </span>
+              )}
+
+              {/* Zoom Controls */}
+              <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
+                <button
+                  onClick={handleZoomOut}
+                  disabled={zoomScale <= 1}
+                  className="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  title="Zoom Out"
+                  aria-label="Zoom Out"
+                >
+                  <ZoomOut className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                </button>
+
+                <button
+                  onClick={handleZoomReset}
+                  className="text-xs sm:text-sm font-bold text-slate-100 hover:text-white px-2 py-0.5 rounded transition-colors cursor-pointer"
+                  title="Click to reset zoom"
+                >
+                  {Math.round(zoomScale * 100)}%
+                </button>
+
+                <button
+                  onClick={handleZoomIn}
+                  disabled={zoomScale >= 5}
+                  className="p-1.5 text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  title="Zoom In"
+                  aria-label="Zoom In"
+                >
+                  <ZoomIn className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                </button>
+
+                {zoomScale > 1 && (
+                  <button
+                    onClick={handleZoomReset}
+                    className="p-1.5 text-amber-300 hover:text-amber-200 hover:bg-white/15 rounded-full transition-colors cursor-pointer ml-0.5"
+                    title="Reset Zoom (100%)"
+                    aria-label="Reset Zoom"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              <span className="hidden md:inline-block text-xs sm:text-sm text-slate-300 italic truncate">
+                Scroll mouse wheel to zoom into cursor • Drag to pan • Double-click to magnify
+              </span>
+            </div>
+
             <button
               onClick={() => setSelectedLightboxPoster(null)}
-              className="absolute -top-12 right-0 md:top-2 md:-right-12 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
+              className="text-white/80 hover:text-white p-2 sm:p-2.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer ml-auto"
               aria-label="Close modal"
             >
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6 sm:w-7 sm:h-7" />
             </button>
+          </div>
+
+          {/* Full Screen Viewport: Pinned directly from below toolbar to bottom of screen */}
+          <div
+            ref={lightboxViewportRef}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={handlePanMouseDown}
+            onMouseMove={handlePanMouseMove}
+            onMouseUp={handlePanMouseUp}
+            onMouseLeave={handlePanMouseUp}
+            onDoubleClick={handleDoubleClick}
+            className={`absolute inset-0 top-14 sm:top-16 bottom-3 sm:bottom-5 px-3 sm:px-6 flex items-center justify-center overflow-hidden ${
+              zoomScale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in'
+            }`}
+            title={zoomScale > 1 ? 'Drag to pan • Double-click to reset' : 'Scroll or double-click to zoom'}
+          >
             <img
               src={selectedLightboxPoster.src}
               alt={selectedLightboxPoster.title}
-              className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-white/10"
+              draggable={false}
+              style={{
+                height: '100%',
+                maxHeight: '100%',
+                width: 'auto',
+                maxWidth: '100%',
+                objectFit: 'contain',
+                transform: `translate(${panPosition.x}px, ${panPosition.y}px) scale(${zoomScale})`,
+                transformOrigin: 'center center',
+                transition: isPanning ? 'none' : 'transform 0.08s ease-out',
+                willChange: 'transform',
+              }}
+              className="rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] border border-white/15 select-none pointer-events-none"
             />
-            {selectedLightboxPoster.title && (
-              <p className="text-white/90 text-sm font-heading font-medium mt-3 text-center">
-                {selectedLightboxPoster.title}
-              </p>
-            )}
           </div>
         </div>
       )}

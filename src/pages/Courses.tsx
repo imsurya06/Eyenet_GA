@@ -12,7 +12,8 @@ const Courses = () => {
   const { courses, loading } = useCourses();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const categoryFilter = searchParams.get('category');
+  const rawCategory = searchParams.get('category');
+  const categoryFilter = rawCategory === 'multimedia' ? 'computer' : rawCategory;
   const highlight = searchParams.get('highlight');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [showSuggestions, setShowSuggestions] = React.useState(false);
@@ -73,43 +74,38 @@ const Courses = () => {
     return description.substring(0, maxLength) + '...';
   };
 
-  // Compute autocomplete suggestions for the typed word
-  const suggestions = React.useMemo(() => {
-    if (!searchQuery.trim()) return [];
+  // Search filter implementation
+  const searchFilteredCourses = React.useMemo(() => {
+    if (!searchQuery.trim()) return courses;
     const q = searchQuery.toLowerCase().trim();
     return courses.filter(course =>
-      course.title.toLowerCase().includes(q) ||
-      course.category.toLowerCase().includes(q) ||
+      (course.title && course.title.toLowerCase().includes(q)) ||
+      (course.category && course.category.toLowerCase().includes(q)) ||
       (course.tag && course.tag.toLowerCase().includes(q)) ||
-      course.description.toLowerCase().includes(q)
+      (course.description && course.description.toLowerCase().includes(q))
     );
   }, [searchQuery, courses]);
 
+  // Compute autocomplete suggestions for the typed word
+  const suggestions = React.useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return searchFilteredCourses;
+  }, [searchQuery, searchFilteredCourses]);
+
   const filteredCourses = React.useMemo(() => {
-    let result = courses;
+    let result = searchFilteredCourses;
 
     if (categoryFilter) {
       result = result.filter(course => course.category === categoryFilter);
-    }
-
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      result = result.filter(course =>
-        course.title.toLowerCase().includes(q) ||
-        course.category.toLowerCase().includes(q) ||
-        (course.tag && course.tag.toLowerCase().includes(q)) ||
-        course.description.toLowerCase().includes(q)
-      );
     }
 
     // Sort: prioritize Diploma courses first (checking both tag and title), then by category order (fashion first), then by title
     const categoryOrder: Record<string, number> = {
       'fashion': 1,
       'computer': 2,
-      'multimedia': 3,
-      'photography': 4,
-      'beautician': 5,
-      'spoken-english': 6
+      'photography': 3,
+      'beautician': 4,
+      'spoken-english': 5
     };
 
     const sorted = [...result].sort((a, b) => {
@@ -120,7 +116,7 @@ const Courses = () => {
       if (isAFashionDesigning && !isBFashionDesigning) return -1;
       if (!isAFashionDesigning && isBFashionDesigning) return 1;
 
-      // 2. Strict Category Grouping: Fashion courses first, then Computer, Multimedia, Photography, Beautician, Spoken English
+      // 2. Strict Category Grouping: Fashion courses first, then Computer, Photography, Beautician, Spoken English
       const catA = categoryOrder[a.category] || 99;
       const catB = categoryOrder[b.category] || 99;
       if (catA !== catB) {
@@ -147,13 +143,12 @@ const Courses = () => {
     }
 
     return sorted;
-  }, [categoryFilter, courses, highlight, searchQuery]);
+  }, [categoryFilter, searchFilteredCourses, highlight]);
 
   const getCategoryTitle = (category: string | null) => {
     switch (category) {
       case 'fashion': return 'Fashion Design Courses';
       case 'computer': return 'Computer Courses';
-      case 'multimedia': return 'Visual Media Training Courses';
       case 'photography': return 'Photography Courses';
       case 'beautician': return 'Beautician Courses';
       case 'spoken-english': return 'Spoken English Courses';
@@ -165,7 +160,6 @@ const Courses = () => {
     switch (category) {
       case 'fashion': return 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1000';
       case 'computer': return 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000';
-      case 'multimedia': return 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1000';
       case 'photography': return 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1000';
       case 'beautician': return 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=1000';
       default: return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1000';

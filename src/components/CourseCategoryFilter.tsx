@@ -9,7 +9,6 @@ const filterItems = [
   { name: 'All Courses', category: null, icon: LayoutGrid },
   { name: 'Fashion Design', category: 'fashion', icon: Scissors },
   { name: 'Computer Courses', category: 'computer', icon: Laptop },
-  { name: 'Visual Media Training', category: 'multimedia', icon: Monitor },
   { name: 'Photography', category: 'photography', icon: Camera },
   { name: 'Beautician Course', category: 'beautician', icon: Flower2 },
   { name: 'Spoken English', category: 'spoken-english', icon: Mic },
