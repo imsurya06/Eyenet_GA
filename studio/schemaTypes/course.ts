@@ -54,6 +54,19 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'isFeatured',
+      title: '⭐ Featured / Priority Course',
+      description: 'Turn this on to display this course first at the top of its category (no "Featured" badge will be shown on the website).',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'hoursPerDay',
+      title: 'Course Hours / Daily Timing',
+      description: 'e.g., Part Time - 2Hrs/Day, Flexible Batches - 1.5Hrs/Day, Weekend Batches - 3Hrs/Day',
+      type: 'string',
+    }),
+    defineField({
       name: 'duration',
       title: 'Duration',
       type: 'string',
@@ -88,27 +101,6 @@ export default defineType({
           ],
         },
       ],
-    }),
-    defineField({
-      name: 'gallery',
-      title: 'Course Showcase Gallery Images',
-      type: 'array',
-      of: [
-        {
-          type: 'image',
-          options: {
-            hotspot: true,
-          },
-          fields: [
-            {
-              name: 'alt',
-              title: 'Alt Text / Caption',
-              type: 'string',
-            },
-          ],
-        },
-      ],
-      description: 'Upload gallery images for this course to display in the animated infinite ticker carousel on the course details page.',
     }),
   ],
 })

@@ -5,6 +5,7 @@ import { ArrowRight, Clock, User, Search, SearchX, X, BookOpen, Frown, CheckCirc
 import AnimateOnScroll from '@/components/AnimateOnScroll';
 import CallToActionSection from '@/components/CallToActionSection';
 import { useCourses } from '@/context/CourseContext';
+import { getDurationWeight } from '@/data/courses';
 import NCFTLogo from '@/components/NCFTLogo';
 import CourseCategoryFilter from '@/components/CourseCategoryFilter';
 
@@ -99,7 +100,7 @@ const Courses = () => {
       result = result.filter(course => course.category === categoryFilter);
     }
 
-    // Sort: prioritize Diploma courses first (checking both tag and title), then by category order (fashion first), then by title
+    // Category Grouping Hierarchy: Fashion -> Computer -> Photography -> Beautician -> Spoken English
     const categoryOrder: Record<string, number> = {
       'fashion': 1,
       'computer': 2,
@@ -109,26 +110,25 @@ const Courses = () => {
     };
 
     const sorted = [...result].sort((a, b) => {
-      // 1. Primary Flagship Course: Diploma in Fashion Designing
-      const isAFashionDesigning = a.title && a.title.toLowerCase().includes('fashion designing');
-      const isBFashionDesigning = b.title && b.title.toLowerCase().includes('fashion designing');
-
-      if (isAFashionDesigning && !isBFashionDesigning) return -1;
-      if (!isAFashionDesigning && isBFashionDesigning) return 1;
-
-      // 2. Strict Category Grouping: Fashion courses first, then Computer, Photography, Beautician, Spoken English
-      const catA = categoryOrder[a.category] || 99;
-      const catB = categoryOrder[b.category] || 99;
+      // 1. Strict Category Grouping: Fashion courses first, then Computer, Photography, Beautician, Spoken English
+      const catA = a.category ? categoryOrder[a.category] || 99 : 99;
+      const catB = b.category ? categoryOrder[b.category] || 99 : 99;
       if (catA !== catB) {
         return catA - catB;
       }
 
-      // 3. Within the same category, prioritize Diplomas
-      const isADiploma = a.tag && a.tag.toLowerCase().includes('diploma');
-      const isBDiploma = b.tag && b.tag.toLowerCase().includes('diploma');
-      
-      if (isADiploma && !isBDiploma) return -1;
-      if (!isADiploma && isBDiploma) return 1;
+      // 2. Featured / Priority Course first within its category
+      const isAFeatured = Boolean(a.isFeatured);
+      const isBFeatured = Boolean(b.isFeatured);
+      if (isAFeatured && !isBFeatured) return -1;
+      if (!isAFeatured && isBFeatured) return 1;
+
+      // 3. Duration Order: Shortest duration first (e.g. 10 Days -> 1 Month -> 2 Months -> 6 Months -> 1 Year)
+      const durA = getDurationWeight(a.duration, a.tag);
+      const durB = getDurationWeight(b.duration, b.tag);
+      if (durA !== durB) {
+        return durA - durB;
+      }
 
       // 4. Alphabetical by title
       return (a.title || '').localeCompare(b.title || '');
@@ -322,7 +322,7 @@ const Courses = () => {
                           </Link>
 
                           <p className="text-xs sm:text-sm font-bold font-body text-blue-600 mb-3.5 uppercase tracking-wider">
-                            {getCourseSubtitle(course.title)}
+                            {course.hoursPerDay || getCourseSubtitle(course.title)}
                           </p>
 
                           <div className="flex flex-col gap-2.5 mb-4 text-sm sm:text-base font-body text-slate-800 font-medium">

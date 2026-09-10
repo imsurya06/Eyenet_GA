@@ -117,7 +117,7 @@ const FashionCoursesSection = () => {
                         </h3>
 
                         <p className="text-xs font-semibold font-body text-blue-600 mb-3 uppercase tracking-wider">
-                          {getCourseSubtitle(course.title)}
+                          {course.hoursPerDay || getCourseSubtitle(course.title)}
                         </p>
 
                         <div className="flex flex-col gap-2 mb-4 text-sm font-body text-gray-700">

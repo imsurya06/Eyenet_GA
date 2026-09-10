@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { Course } from '@/data/courses';
+import { Course, getDurationWeight } from '@/data/courses';
 import { sanityClient, urlFor } from '@/lib/sanityClient';
 import { toast } from 'sonner';
 
@@ -67,10 +67,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             image: getImageUrl(doc),
             gallery: getGalleryUrls(doc),
             tag: tag,
+            isFeatured: Boolean(doc.isFeatured),
+            hoursPerDay: doc.hoursPerDay || '',
           };
         });
 
-        // Sort: prioritize Diploma courses first, then by category order (fashion first), then by title
+        // Category Grouping Hierarchy: Fashion -> Computer -> Photography -> Beautician -> Spoken English
         const categoryOrder: Record<string, number> = {
           'fashion': 1,
           'computer': 2,
@@ -80,26 +82,25 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         };
 
         const sortedCourses = [...mappedCourses].sort((a, b) => {
-          // 1. Primary Flagship Course: Diploma in Fashion Designing
-          const isAFashionDesigning = a.title && a.title.toLowerCase().includes('fashion designing');
-          const isBFashionDesigning = b.title && b.title.toLowerCase().includes('fashion designing');
-
-          if (isAFashionDesigning && !isBFashionDesigning) return -1;
-          if (!isAFashionDesigning && isBFashionDesigning) return 1;
-
-          // 2. Strict Category Grouping: Fashion courses first, then Computer, Multimedia, Photography, Beautician, Spoken English
-          const catA = categoryOrder[a.category] || 99;
-          const catB = categoryOrder[b.category] || 99;
+          // 1. Strict Category Grouping
+          const catA = a.category ? categoryOrder[a.category] || 99 : 99;
+          const catB = b.category ? categoryOrder[b.category] || 99 : 99;
           if (catA !== catB) {
             return catA - catB;
           }
 
-          // 3. Within the same category, prioritize Diplomas
-          const isADiploma = a.tag && a.tag.toLowerCase().includes('diploma');
-          const isBDiploma = b.tag && b.tag.toLowerCase().includes('diploma');
-          
-          if (isADiploma && !isBDiploma) return -1;
-          if (!isADiploma && isBDiploma) return 1;
+          // 2. Featured / Priority Course first within its category
+          const isAFeatured = Boolean(a.isFeatured);
+          const isBFeatured = Boolean(b.isFeatured);
+          if (isAFeatured && !isBFeatured) return -1;
+          if (!isAFeatured && isBFeatured) return 1;
+
+          // 3. Duration Order: Shortest duration first
+          const durA = getDurationWeight(a.duration, a.tag);
+          const durB = getDurationWeight(b.duration, b.tag);
+          if (durA !== durB) {
+            return durA - durB;
+          }
 
           // 4. Alphabetical by title
           return (a.title || '').localeCompare(b.title || '');
