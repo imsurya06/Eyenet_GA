@@ -54,6 +54,12 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'priority',
+      title: '🔢 Display Priority / Order Number (e.g., 1, 2, 3...)',
+      description: 'Set custom display order (1 = 1st place, 2 = 2nd place, 3 = 3rd place, etc.). Lower numbers appear first. Courses without a number follow duration order.',
+      type: 'number',
+    }),
+    defineField({
       name: 'isFeatured',
       title: '⭐ Featured / Priority Course',
       description: 'Turn this on to display this course first at the top of its category (no "Featured" badge will be shown on the website).',

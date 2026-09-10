@@ -67,6 +67,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             image: getImageUrl(doc),
             gallery: getGalleryUrls(doc),
             tag: tag,
+            priority: typeof doc.priority === 'number' && !isNaN(doc.priority) ? doc.priority : undefined,
             isFeatured: Boolean(doc.isFeatured),
             hoursPerDay: doc.hoursPerDay || '',
           };
@@ -89,20 +90,31 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             return catA - catB;
           }
 
-          // 2. Featured / Priority Course first within its category
+          // 2. Explicit Priority Number (1 comes before 2, 2 before 3, etc.)
+          const priorityA = typeof a.priority === 'number' && !isNaN(a.priority) ? a.priority : null;
+          const priorityB = typeof b.priority === 'number' && !isNaN(b.priority) ? b.priority : null;
+          if (priorityA !== null && priorityB !== null) {
+            if (priorityA !== priorityB) return priorityA - priorityB;
+          } else if (priorityA !== null) {
+            return -1;
+          } else if (priorityB !== null) {
+            return 1;
+          }
+
+          // 3. Featured / Priority Switch (isFeatured: true)
           const isAFeatured = Boolean(a.isFeatured);
           const isBFeatured = Boolean(b.isFeatured);
           if (isAFeatured && !isBFeatured) return -1;
           if (!isAFeatured && isBFeatured) return 1;
 
-          // 3. Duration Order: Shortest duration first
+          // 4. Duration Order: Shortest duration first
           const durA = getDurationWeight(a.duration, a.tag);
           const durB = getDurationWeight(b.duration, b.tag);
           if (durA !== durB) {
             return durA - durB;
           }
 
-          // 4. Alphabetical by title
+          // 5. Alphabetical by title
           return (a.title || '').localeCompare(b.title || '');
         });
 

@@ -663,31 +663,10 @@ const Admissions = () => {
           </AnimateOnScroll>
         </div>
 
-        {admissionAds.length > 0 ? (
-          <AdmissionsCarousel ads={admissionAds} onAdClick={() => scrollToElement('enrollment-form')} />
-        ) : (
-          /* Guidance Container when 0 images are uploaded in Sanity CMS yet */
-          <AnimateOnScroll delay={150}>
-            <div className="max-w-xl mx-auto p-8 rounded-3xl bg-slate-50 border border-slate-200 text-center shadow-sm">
-              <div className="w-14 h-14 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center mb-4">
-                <ImageIcon className="w-7 h-7" />
-              </div>
-              <h3 className="text-xl font-heading font-bold text-slate-900 mb-2">
-                Admission Ads Ticker
-              </h3>
-              <p className="text-xs sm:text-sm font-body text-slate-600 mb-6 leading-relaxed">
-                Upload your vertical ad images in Sanity CMS Studio under the <strong>"Admission Ads"</strong> document menu to display them live in this continuous running ticker loop.
-              </p>
-              <Button
-                onClick={() => window.open('https://eyenet-cms-studio.sanity.studio/', '_blank')}
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white rounded-full text-xs font-bold"
-              >
-                Open Sanity Studio
-              </Button>
-            </div>
-          </AnimateOnScroll>
-        )}
+        <AdmissionsCarousel
+          ads={admissionAds.length > 0 ? admissionAds : initialAdmissionAds}
+          onAdClick={() => scrollToElement('enrollment-form')}
+        />
       </section>
 
       {/* 3. ENROLL NOW FORM SECTION (AT THE BOTTOM OF THE PAGE) */}

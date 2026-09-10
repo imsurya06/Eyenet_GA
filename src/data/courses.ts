@@ -15,6 +15,7 @@ export interface Course {
   modules: { title: string; description: string; }[];
   gallery?: string[];
   isFeatured?: boolean;
+  priority?: number;
   hoursPerDay?: string;
 }
 

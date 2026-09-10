@@ -117,20 +117,31 @@ const Courses = () => {
         return catA - catB;
       }
 
-      // 2. Featured / Priority Course first within its category
+      // 2. Explicit Priority Number (1 comes before 2, 2 before 3, etc.)
+      const priorityA = typeof a.priority === 'number' && !isNaN(a.priority) ? a.priority : null;
+      const priorityB = typeof b.priority === 'number' && !isNaN(b.priority) ? b.priority : null;
+      if (priorityA !== null && priorityB !== null) {
+        if (priorityA !== priorityB) return priorityA - priorityB;
+      } else if (priorityA !== null) {
+        return -1;
+      } else if (priorityB !== null) {
+        return 1;
+      }
+
+      // 3. Featured / Priority Course switch (isFeatured: true)
       const isAFeatured = Boolean(a.isFeatured);
       const isBFeatured = Boolean(b.isFeatured);
       if (isAFeatured && !isBFeatured) return -1;
       if (!isAFeatured && isBFeatured) return 1;
 
-      // 3. Duration Order: Shortest duration first (e.g. 10 Days -> 1 Month -> 2 Months -> 6 Months -> 1 Year)
+      // 4. Duration Order: Shortest duration first (e.g. 10 Days -> 1 Month -> 2 Months -> 6 Months -> 1 Year)
       const durA = getDurationWeight(a.duration, a.tag);
       const durB = getDurationWeight(b.duration, b.tag);
       if (durA !== durB) {
         return durA - durB;
       }
 
-      // 4. Alphabetical by title
+      // 5. Alphabetical by title
       return (a.title || '').localeCompare(b.title || '');
     });
 
