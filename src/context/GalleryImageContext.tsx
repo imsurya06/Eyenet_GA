@@ -60,6 +60,21 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
     };
 
     fetchImages();
+
+    // Auto-refresh fresh data when the user switches tabs back from Sanity Studio
+    const handleFocus = () => {
+      if (document.visibilityState === 'visible') {
+        fetchImages();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleFocus);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleFocus);
+    };
   }, []);
 
   return (
