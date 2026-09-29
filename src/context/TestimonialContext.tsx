@@ -1,17 +1,11 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { Testimonial, fallbackTestimonials } from '@/data/testimonials';
 import { fetchSanityWithCache, getInitialCachedData } from '@/lib/sanityClient';
 import { toast } from 'sonner';
 
-export interface Testimonial {
-  id: string;
-  name: string;
-  rating: number;
-  quote: string;
-  approved: boolean;
-  created_at: string;
-}
+export type { Testimonial };
 
 interface TestimonialContextType {
   testimonials: Testimonial[];
@@ -22,27 +16,35 @@ interface TestimonialContextType {
 const TestimonialContext = createContext<TestimonialContextType | undefined>(undefined);
 
 export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => getInitialCachedData<Testimonial[]>('testimonials', []));
-  const [loading, setLoading] = useState<boolean>(() => getInitialCachedData<Testimonial[]>('testimonials', []).length === 0);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => 
+    getInitialCachedData<Testimonial[]>('testimonials', fallbackTestimonials)
+  );
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const query = '*[_type == "testimonial" && approved == true] | order(_createdAt desc)';
+    // Query all testimonials that are not explicitly dis-approved
+    const query = '*[_type == "testimonial" && approved != false] | order(_createdAt desc)';
 
     const fetchTestimonials = async () => {
       try {
         const data = await fetchSanityWithCache<any[]>('testimonials_raw', query);
         if (data && Array.isArray(data) && data.length > 0) {
-          const mappedTestimonials: Testimonial[] = data.map((doc: any) => ({
-            ...doc,
-            id: doc._id || doc.id,
-            created_at: doc._createdAt,
-          }));
+          const mappedTestimonials: Testimonial[] = data.map((doc: any, idx: number) => ({
+            id: doc._id || doc.id || `sanity-t-${idx}`,
+            name: doc.name || 'Academy Graduate',
+            rating: typeof doc.rating === 'number' ? doc.rating : 5,
+            quote: doc.quote || '',
+            approved: doc.approved !== false,
+            created_at: doc._createdAt || new Date().toISOString(),
+          })).filter(t => t.quote && t.quote.trim().length > 0);
 
-          setTestimonials(mappedTestimonials);
-          if (typeof window !== 'undefined') {
-            try {
-              localStorage.setItem('eyenet_cache_testimonials', JSON.stringify(mappedTestimonials));
-            } catch {}
+          if (mappedTestimonials.length > 0) {
+            setTestimonials(mappedTestimonials);
+            if (typeof window !== 'undefined') {
+              try {
+                localStorage.setItem('eyenet_cache_testimonials', JSON.stringify(mappedTestimonials));
+              } catch {}
+            }
           }
         }
       } catch (error) {

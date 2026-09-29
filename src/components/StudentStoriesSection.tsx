@@ -13,9 +13,12 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
+import { fallbackTestimonials } from '@/data/testimonials';
+
 const StudentStoriesSection = () => {
   const { testimonials, loading } = useTestimonials();
-  const approvedTestimonials = testimonials.filter(t => t.approved);
+  const validTestimonials = testimonials.filter(t => t.approved !== false && t.quote && t.quote.trim().length > 0);
+  const displayTestimonials = validTestimonials.length > 0 ? validTestimonials : fallbackTestimonials;
 
   const plugin = React.useRef(
     Autoplay({ delay: 4000, stopOnInteraction: false })
@@ -36,11 +39,7 @@ const StudentStoriesSection = () => {
         </p>
       </AnimateOnScroll>
 
-      {loading ? (
-        <AnimateOnScroll delay={300} className="col-span-full text-center text-text-medium text-gray-600">
-          Loading student stories...
-        </AnimateOnScroll>
-      ) : approvedTestimonials.length > 0 ? (
+      {displayTestimonials.length > 0 ? (
         <div className="max-w-7xl mx-auto px-4">
           <AnimateOnScroll delay={300}>
             <Carousel
@@ -52,7 +51,7 @@ const StudentStoriesSection = () => {
               }}
             >
               <CarouselContent className="-ml-4 flex py-6">
-                {approvedTestimonials.map((testimonial) => (
+                {displayTestimonials.map((testimonial) => (
                   <CarouselItem key={testimonial.id} className="pl-4 basis-full md:basis-1/2 lg:basis-1/3 flex pb-2">
                     <div className="bg-white rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 p-8 flex flex-col h-full text-left relative border border-slate-200/80 group w-full">
                       <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors duration-300" />
@@ -72,15 +71,15 @@ const StudentStoriesSection = () => {
                       </p>
                       
                       <div className="flex items-center gap-4 mt-auto">
-                        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200 flex-shrink-0">
-                          <User2 className="h-6 w-6 text-gray-400" />
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20 flex-shrink-0 text-primary font-bold">
+                          {testimonial.name ? testimonial.name.charAt(0).toUpperCase() : <User2 className="h-6 w-6 text-gray-400" />}
                         </div>
                         <div>
                           <p className="text-base font-body font-semibold text-foreground">
                             {testimonial.name}
                           </p>
                           <p className="text-xs sm:text-sm font-body text-gray-500">
-                            Student
+                            {testimonial.role || testimonial.course || 'Academy Student'}
                           </p>
                         </div>
                       </div>
@@ -98,7 +97,7 @@ const StudentStoriesSection = () => {
         </div>
       ) : (
         <AnimateOnScroll delay={300} className="col-span-full text-center text-text-medium text-gray-600">
-          No student stories to display yet.
+          Loading student stories...
         </AnimateOnScroll>
       )}
     </section>

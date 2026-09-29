@@ -104,10 +104,16 @@
 
 @layer base {
   html {
-    font-size: 115%; /* Scale all typography across the entire website up by 15% */
+    font-size: 90%; /* Mobile version: 90% body font scale */
     overscroll-behavior: none;
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      font-size: 115%; /* Desktop version untouched: 115% scale */
+    }
   }
 
   * {
