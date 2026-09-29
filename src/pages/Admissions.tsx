@@ -16,8 +16,7 @@ import AnimateOnScroll from '@/components/AnimateOnScroll';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { sendEmailJSNotification, EMAILJS_CONFIG } from '@/lib/emailjs';
-import { sanityClient, urlFor } from '@/lib/sanityClient';
+import { fetchSanityWithCache, getInitialCachedData, urlFor } from '@/lib/sanityClient';
 import {
   Form,
   FormControl,
@@ -317,11 +316,11 @@ const Admissions = () => {
   const [searchParams] = useSearchParams();
   const courseParam = searchParams.get('course');
 
-  const [batches, setBatches] = useState<BatchItem[]>(initialBatches);
-  const [batchesLoading, setBatchesLoading] = useState(false);
+  const [batches, setBatches] = useState<BatchItem[]>(() => getInitialCachedData<BatchItem[]>('admissions_batches', initialBatches));
+  const [batchesLoading, setBatchesLoading] = useState(() => getInitialCachedData<BatchItem[]>('admissions_batches', []).length === 0);
 
-  const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>(initialAdmissionAds);
-  const [adsLoading, setAdsLoading] = useState(false);
+  const [admissionAds, setAdmissionAds] = useState<AdmissionAdItem[]>(() => getInitialCachedData<AdmissionAdItem[]>('admissions_ads', initialAdmissionAds));
+  const [adsLoading, setAdsLoading] = useState(() => getInitialCachedData<AdmissionAdItem[]>('admissions_ads', []).length === 0);
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
   // Fetch Upcoming Batches dynamically from Sanity CMS Studio
@@ -340,9 +339,8 @@ const Admissions = () => {
     };
 
     const fetchSanityBatches = async () => {
-      setBatchesLoading(true);
       try {
-        const data = await sanityClient.fetch(query);
+        const data = await fetchSanityWithCache<any[]>('admissions_batches_raw', query);
         if (data && data.length > 0) {
           const mapped: BatchItem[] = data.map((doc: any, index: number) => ({
             id: doc._id || `sanity-batch-${index}`,
@@ -358,8 +356,11 @@ const Admissions = () => {
             courseTitleToSelect: doc.courseTitleToSelect || doc.title || '',
           }));
           setBatches(mapped);
-        } else {
-          setBatches([]);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('eyenet_cache_admissions_batches', JSON.stringify(mapped));
+            } catch {}
+          }
         }
       } catch (err) {
         console.warn('Error fetching batches from Sanity:', err);
@@ -369,13 +370,6 @@ const Admissions = () => {
     };
 
     fetchSanityBatches();
-
-    const subscription = sanityClient.listen(query).subscribe({
-      next: () => fetchSanityBatches(),
-      error: (err) => console.warn('Sanity batch subscription error:', err),
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   // Fetch Admission Ads dynamically from Sanity CMS Studio (Admission Ads)
@@ -383,7 +377,7 @@ const Admissions = () => {
     const fetchSanityAds = async () => {
       try {
         const query = '*[_type == "admissionAd" && active != false] | order(_createdAt desc)';
-        const data = await sanityClient.fetch(query);
+        const data = await fetchSanityWithCache<any[]>('admissions_ads_raw', query);
         if (data && data.length > 0) {
           const mapped: AdmissionAdItem[] = data
             .map((doc: any, index: number) => {
@@ -403,7 +397,14 @@ const Admissions = () => {
               };
             })
             .filter((item: AdmissionAdItem) => item.imageUrl !== '');
-          setAdmissionAds(mapped);
+          if (mapped.length > 0) {
+            setAdmissionAds(mapped);
+            if (typeof window !== 'undefined') {
+              try {
+                localStorage.setItem('eyenet_cache_admissions_ads', JSON.stringify(mapped));
+              } catch {}
+            }
+          }
         }
       } catch (err) {
         console.warn('Sanity CMS Admission Ads fetch error:', err);

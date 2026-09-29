@@ -13,7 +13,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import AnimateOnScroll from './AnimateOnScroll';
-import { sanityClient, urlFor } from '@/lib/sanityClient';
+import { fetchSanityWithCache, getInitialCachedData, urlFor } from '@/lib/sanityClient';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export interface NewspaperClipping {
@@ -23,8 +23,8 @@ export interface NewspaperClipping {
 }
 
 const NewspaperReaderSection: React.FC = () => {
-  const [clippings, setClippings] = useState<NewspaperClipping[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [clippings, setClippings] = useState<NewspaperClipping[]>(() => getInitialCachedData<NewspaperClipping[]>('newspaper_clippings', []));
+  const [loading, setLoading] = useState<boolean>(() => getInitialCachedData<NewspaperClipping[]>('newspaper_clippings', []).length === 0);
 
   // Index state
   const [currentIndex, setCurrentIndex] = useState(0); // On mobile: page index. On desktop: spread index.
@@ -243,9 +243,8 @@ const NewspaperReaderSection: React.FC = () => {
     const query = '*[_type == "newspaperClipping"]';
 
     const fetchClippings = async () => {
-      setLoading(true);
       try {
-        const data = await sanityClient.fetch(query);
+        const data = await fetchSanityWithCache<any[]>('newspaper_clippings_raw', query);
         if (data && data.length > 0) {
           // Sort strictly by the date the user entered (newest publication date first, older dates on next pages)
           const sorted = [...data].sort((a: any, b: any) => {
@@ -285,28 +284,28 @@ const NewspaperReaderSection: React.FC = () => {
 
           if (mapped.length > 0) {
             setClippings(mapped);
+            if (typeof window !== 'undefined') {
+              try {
+                localStorage.setItem('eyenet_cache_newspaper_clippings', JSON.stringify(mapped));
+              } catch {}
+            }
           } else {
             setClippings(fallbackClippings);
           }
-        } else {
+        } else if (clippings.length === 0) {
           setClippings(fallbackClippings);
         }
       } catch (err) {
         console.warn('Could not fetch newspaperClipping from Sanity:', err);
-        setClippings(fallbackClippings);
+        if (clippings.length === 0) {
+          setClippings(fallbackClippings);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchClippings();
-
-    const subscription = sanityClient.listen(query).subscribe({
-      next: () => fetchClippings(),
-      error: (err) => console.warn('Sanity newspaperClipping subscription error:', err),
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   const totalClippings = clippings.length;

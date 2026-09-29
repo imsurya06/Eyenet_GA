@@ -7,7 +7,7 @@ import { ArrowRight, X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCcw } 
 import AnimateOnScroll from './AnimateOnScroll';
 import { useGalleryImages } from '@/context/GalleryImageContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import { sanityClient, urlFor } from '@/lib/sanityClient';
+import { fetchSanityWithCache, getInitialCachedData, urlFor } from '@/lib/sanityClient';
 
 interface DynamicGalleryCarouselSectionProps {
   withButton?: boolean;
@@ -21,8 +21,8 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
   variant = '2d'
 }) => {
   const { images: galleryImages = [], loading: contextLoading } = useGalleryImages();
-  const [aboutSliderImages, setAboutSliderImages] = useState<string[]>([]);
-  const [loadingAboutImages, setLoadingAboutImages] = useState(false);
+  const [aboutSliderImages, setAboutSliderImages] = useState<string[]>(() => getInitialCachedData<string[]>('about_hero_slider', []));
+  const [loadingAboutImages, setLoadingAboutImages] = useState(() => getInitialCachedData<string[]>('about_hero_slider', []).length === 0);
   const [selectedLightboxImage, setSelectedLightboxImage] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -198,9 +198,8 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     const query = '*[_type == "aboutSliderImage" || (_type == "galleryImage" && category == "about_hero_slider")] | order(order asc, _createdAt desc)';
 
     const fetchAboutSliderImages = async () => {
-      setLoadingAboutImages(true);
       try {
-        const data = await sanityClient.fetch(query);
+        const data = await fetchSanityWithCache<any[]>('about_hero_slider_raw', query);
         if (data && data.length > 0) {
           const urls: string[] = data.map((doc: any) => {
             if (typeof doc.image === 'string' && doc.image) return doc.image;
@@ -217,6 +216,11 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
 
           if (urls.length > 0) {
             setAboutSliderImages(urls);
+            if (typeof window !== 'undefined') {
+              try {
+                localStorage.setItem('eyenet_cache_about_hero_slider', JSON.stringify(urls));
+              } catch {}
+            }
           }
         }
       } catch (err) {

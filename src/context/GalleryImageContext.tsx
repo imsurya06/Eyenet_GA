@@ -2,8 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { GalleryImage } from '@/data/galleryImages';
-import { sanityClient, urlFor } from '@/lib/sanityClient';
-import { toast } from 'sonner';
+import { fetchSanityWithCache, getInitialCachedData, urlFor } from '@/lib/sanityClient';
 
 interface GalleryImageContextType {
   images: GalleryImage[];
@@ -13,54 +12,51 @@ interface GalleryImageContextType {
 const GalleryImageContext = createContext<GalleryImageContextType | undefined>(undefined);
 
 export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [images, setImages] = useState<GalleryImage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState<GalleryImage[]>(() => getInitialCachedData<GalleryImage[]>('gallery_images', []));
+  const [loading, setLoading] = useState<boolean>(() => getInitialCachedData<GalleryImage[]>('gallery_images', []).length === 0);
 
   useEffect(() => {
     const query = '*[_type == "galleryImage"] | order(_createdAt desc)';
 
-    const fetchImages = async (showLoading = true) => {
-      if (showLoading) setLoading(true);
+    const fetchImages = async () => {
       try {
-        const data = await sanityClient.fetch(query);
-        
-        const getImageUrl = (doc: any): string => {
-          if (!doc) return '';
-          if (typeof doc.image === 'string' && doc.image) return doc.image;
-          if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
-          if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
-            try {
-              return urlFor(doc.image).url();
-            } catch {
-              return '';
+        const data = await fetchSanityWithCache<any[]>('gallery_images_raw', query);
+        if (data && Array.isArray(data) && data.length > 0) {
+          const getImageUrl = (doc: any): string => {
+            if (!doc) return '';
+            if (typeof doc.image === 'string' && doc.image) return doc.image;
+            if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
+            if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
+              try {
+                return urlFor(doc.image).url();
+              } catch {
+                return '';
+              }
             }
+            return '';
+          };
+
+          const mappedImages: GalleryImage[] = data.map((doc: any) => ({
+            ...doc,
+            id: doc._id || doc.id,
+            src: getImageUrl(doc),
+          }));
+
+          setImages(mappedImages);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('eyenet_cache_gallery_images', JSON.stringify(mappedImages));
+            } catch {}
           }
-          return '';
-        };
-
-        const mappedImages: GalleryImage[] = data.map((doc: any) => ({
-          ...doc,
-          id: doc._id,
-          src: getImageUrl(doc),
-        }));
-
-        setImages(mappedImages);
+        }
       } catch (error) {
-        console.error('Error fetching gallery images from Sanity:', error);
-        toast.error('Failed to load gallery images.');
+        console.warn('Error fetching gallery images from Sanity:', error);
       } finally {
-        if (showLoading) setLoading(false);
+        setLoading(false);
       }
     };
 
     fetchImages();
-
-    const subscription = sanityClient.listen(query).subscribe({
-      next: () => fetchImages(false),
-      error: (err) => console.warn('Sanity gallery images subscription error:', err),
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   return (

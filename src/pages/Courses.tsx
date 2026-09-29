@@ -385,17 +385,32 @@ const Courses = () => {
                   <SearchX className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-2xl font-heading font-bold mb-2 text-foreground">
-                  No Matching Courses Found
+                  {searchQuery ? 'No Matching Courses Found' : 'No Courses Found'}
                 </h3>
                 <p className="text-gray-600 font-body max-w-md mx-auto mb-6 leading-relaxed text-sm md:text-base">
-                  We couldn't find any courses matching "<span className="font-semibold text-primary">{searchQuery}</span>". Try searching for terms like <span className="font-medium text-foreground">"Fashion"</span>, <span className="font-medium text-foreground">"Aari"</span>, <span className="font-medium text-foreground">"Python"</span>, or clear the search to view all options.
+                  {searchQuery ? (
+                    <>
+                      We couldn't find any courses matching "<span className="font-semibold text-primary">{searchQuery}</span>". Try searching for terms like <span className="font-medium text-foreground">"Fashion"</span>, <span className="font-medium text-foreground">"Aari"</span>, <span className="font-medium text-foreground">"Python"</span>, or clear the search to view all options.
+                    </>
+                  ) : (
+                    <>There are currently no courses matching the selected filter.</>
+                  )}
                 </p>
-                <Button
-                  onClick={() => setSearchQuery('')}
-                  className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 font-bold shadow-md text-sm"
-                >
-                  Clear Search & View All Courses
-                </Button>
+                {searchQuery ? (
+                  <Button
+                    onClick={() => setSearchQuery('')}
+                    className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 font-bold shadow-md text-sm"
+                  >
+                    Clear Search & View All Courses
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => navigate('/courses')}
+                    className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 py-2.5 font-bold shadow-md text-sm"
+                  >
+                    View All Courses
+                  </Button>
+                )}
               </div>
             </AnimateOnScroll>
           )}

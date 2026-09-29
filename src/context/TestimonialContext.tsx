@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { sanityClient } from '@/lib/sanityClient';
+import { fetchSanityWithCache, getInitialCachedData } from '@/lib/sanityClient';
 import { toast } from 'sonner';
 
 export interface Testimonial {
@@ -22,41 +22,37 @@ interface TestimonialContextType {
 const TestimonialContext = createContext<TestimonialContextType | undefined>(undefined);
 
 export const TestimonialProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => getInitialCachedData<Testimonial[]>('testimonials', []));
+  const [loading, setLoading] = useState<boolean>(() => getInitialCachedData<Testimonial[]>('testimonials', []).length === 0);
 
   useEffect(() => {
     const query = '*[_type == "testimonial" && approved == true] | order(_createdAt desc)';
 
-    const fetchTestimonials = async (showLoading = true) => {
-      if (showLoading) setLoading(true);
+    const fetchTestimonials = async () => {
       try {
-        // Only fetch approved testimonials for the frontend
-        const data = await sanityClient.fetch(query);
-        
-        const mappedTestimonials: Testimonial[] = data.map((doc: any) => ({
-          ...doc,
-          id: doc._id,
-          created_at: doc._createdAt,
-        }));
+        const data = await fetchSanityWithCache<any[]>('testimonials_raw', query);
+        if (data && Array.isArray(data) && data.length > 0) {
+          const mappedTestimonials: Testimonial[] = data.map((doc: any) => ({
+            ...doc,
+            id: doc._id || doc.id,
+            created_at: doc._createdAt,
+          }));
 
-        setTestimonials(mappedTestimonials);
+          setTestimonials(mappedTestimonials);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('eyenet_cache_testimonials', JSON.stringify(mappedTestimonials));
+            } catch {}
+          }
+        }
       } catch (error) {
-        console.error('Error fetching testimonials from Sanity:', error);
-        toast.error('Failed to load testimonials.');
+        console.warn('Error fetching testimonials from Sanity:', error);
       } finally {
-        if (showLoading) setLoading(false);
+        setLoading(false);
       }
     };
 
     fetchTestimonials();
-
-    const subscription = sanityClient.listen(query).subscribe({
-      next: () => fetchTestimonials(false),
-      error: (err) => console.warn('Sanity testimonial subscription error:', err),
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   const addTestimonial = async (newTestimonial: Omit<Testimonial, 'id' | 'created_at' | 'approved'>) => {

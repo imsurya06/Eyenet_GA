@@ -2,8 +2,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { Blog } from '@/data/blogs';
-import { sanityClient, urlFor } from '@/lib/sanityClient';
-import { toast } from 'sonner';
+import { fetchSanityWithCache, getInitialCachedData, urlFor } from '@/lib/sanityClient';
 
 interface BlogContextType {
   blogs: Blog[];
@@ -13,55 +12,51 @@ interface BlogContextType {
 const BlogContext = createContext<BlogContextType | undefined>(undefined);
 
 export const BlogProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<Blog[]>(() => getInitialCachedData<Blog[]>('blogs', []));
+  const [loading, setLoading] = useState<boolean>(() => getInitialCachedData<Blog[]>('blogs', []).length === 0);
 
   useEffect(() => {
     const query = '*[_type == "blog"] | order(date desc)';
 
-    const fetchBlogs = async (showLoading = true) => {
-      if (showLoading) setLoading(true);
+    const fetchBlogs = async () => {
       try {
-        const data = await sanityClient.fetch(query);
-        
-        const getImageUrl = (doc: any): string => {
-          if (!doc) return '';
-          if (typeof doc.image === 'string' && doc.image) return doc.image;
-          if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
-          if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
-            try {
-              return urlFor(doc.image).url();
-            } catch {
-              return '';
+        const data = await fetchSanityWithCache<any[]>('blogs_raw', query);
+        if (data && Array.isArray(data) && data.length > 0) {
+          const getImageUrl = (doc: any): string => {
+            if (!doc) return '';
+            if (typeof doc.image === 'string' && doc.image) return doc.image;
+            if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
+            if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
+              try {
+                return urlFor(doc.image).url();
+              } catch {
+                return '';
+              }
             }
+            return '';
+          };
+
+          const mappedBlogs: Blog[] = data.map((doc: any) => ({
+            ...doc,
+            id: doc._id || doc.id,
+            image: getImageUrl(doc),
+          }));
+
+          setBlogs(mappedBlogs);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('eyenet_cache_blogs', JSON.stringify(mappedBlogs));
+            } catch {}
           }
-          return '';
-        };
-
-        const mappedBlogs: Blog[] = data.map((doc: any) => ({
-          ...doc,
-          id: doc._id,
-          image: getImageUrl(doc),
-        }));
-
-        setBlogs(mappedBlogs);
+        }
       } catch (error) {
-        console.error('Error fetching blogs from Sanity:', error);
-        toast.error('Failed to load blogs.');
+        console.warn('Error fetching blogs from Sanity:', error);
       } finally {
-        if (showLoading) setLoading(false);
+        setLoading(false);
       }
     };
 
     fetchBlogs();
-
-    // Listen for real-time updates
-    const subscription = sanityClient.listen(query).subscribe({
-      next: () => fetchBlogs(false),
-      error: (err) => console.warn('Sanity blog subscription error:', err),
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   return (
