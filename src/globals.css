@@ -104,7 +104,7 @@
 
 @layer base {
   html {
-    font-size: 90%; /* Mobile version: 90% body font scale */
+    font-size: 100%; /* Mobile version: 100% body font scale */
     overscroll-behavior: none;
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;
