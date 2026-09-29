@@ -56,13 +56,7 @@ const GalleryCarouselSection = () => {
               <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2" />
               <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2" />
             </Carousel>
-          ) : (
-            <div className="flex aspect-video items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-gray-500">
-              <p className="font-body text-text-medium">
-                No carousel images added yet. Add images with category &ldquo;Carousel&rdquo; in Sanity Studio.
-              </p>
-            </div>
-          )}
+          ) : null}
         </AnimateOnScroll>
       </div>
     </section>

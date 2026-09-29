@@ -26,6 +26,7 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
             if (!doc) return '';
             if (typeof doc.image === 'string' && doc.image) return doc.image;
             if (doc.imageUrl && typeof doc.imageUrl === 'string') return doc.imageUrl;
+            if (typeof doc.src === 'string' && doc.src) return doc.src;
             if (doc.image && typeof doc.image === 'object' && doc.image.asset) {
               try {
                 return urlFor(doc.image).url();
@@ -40,7 +41,9 @@ export const GalleryImageProvider: React.FC<{ children: ReactNode }> = ({ childr
             ...doc,
             id: doc._id || doc.id,
             src: getImageUrl(doc),
-          }));
+            alt: doc.alt || doc.title || 'Eye-Net Creative Work',
+            category: doc.category || 'fashion',
+          })).filter((img: GalleryImage) => Boolean(img.src));
 
           setImages(mappedImages);
           if (typeof window !== 'undefined') {

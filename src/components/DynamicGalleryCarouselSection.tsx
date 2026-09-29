@@ -233,55 +233,26 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     fetchAboutSliderImages();
   }, [variant]);
 
-  // Valid general gallery images
-  const validGalleryImages = galleryImages.filter(img => Boolean(img.src));
+  // Valid general gallery images from Sanity (exclude about slider images from 2D gallery strip)
+  const validGalleryImages = galleryImages.filter(img => Boolean(img.src) && img.category !== 'about_hero_slider');
 
   const getOrderedSources = () => {
-    // If custom About Slider images uploaded in Sanity, use them!
-    if (aboutSliderImages.length > 0) {
+    // If 3D variant (About page hero 3D carousel) and custom About Slider images are uploaded in Sanity, use them!
+    if (variant === '3d' && aboutSliderImages.length > 0) {
       return aboutSliderImages;
     }
 
-    if (validGalleryImages.length === 0) return fallbackImages;
+    // For 2D Gallery / Creative Works Showcase, ALWAYS showcase Sanity General Gallery Images!
+    if (validGalleryImages.length > 0) {
+      return validGalleryImages.map(img => img.src);
+    }
 
-    const redGowns: string[] = [];
-    const rainbowSkirts: string[] = [];
-    const greenBlouses: string[] = [];
-    const lehengasAndDresses: string[] = [];
-    const remainingPhotos: string[] = [];
+    if (galleryImages.length > 0) {
+      const anyValid = galleryImages.filter(img => Boolean(img.src)).map(img => img.src);
+      if (anyValid.length > 0) return anyValid;
+    }
 
-    validGalleryImages.forEach(img => {
-      const text = `${img.alt || ''} ${img.category || ''} ${img.src || ''}`.toLowerCase();
-      if (text.includes('salwar') || text.includes('pattern') || text.includes('red') || text.includes('gown') || text.includes('stitching')) {
-        redGowns.push(img.src);
-      } else if (text.includes('rainbow') || text.includes('skirt') || text.includes('runway') || text.includes('exhibition') || text.includes('annual')) {
-        rainbowSkirts.push(img.src);
-      } else if (text.includes('aari') || text.includes('green') || text.includes('blouse') || text.includes('computer') || text.includes('lab') || text.includes('workshop')) {
-        greenBlouses.push(img.src);
-      } else if (text.includes('illustration') || text.includes('sketching') || text.includes('convocation') || text.includes('ceremony') || text.includes('painting') || text.includes('lehenga')) {
-        lehengasAndDresses.push(img.src);
-      } else {
-        remainingPhotos.push(img.src);
-      }
-    });
-
-    const combined = [
-      ...redGowns,
-      ...rainbowSkirts,
-      ...greenBlouses,
-      ...lehengasAndDresses,
-      ...remainingPhotos,
-    ];
-
-    const uniqueSequence: string[] = [];
-    combined.forEach(src => {
-      if (!uniqueSequence.includes(src)) uniqueSequence.push(src);
-    });
-    validGalleryImages.forEach(img => {
-      if (!uniqueSequence.includes(img.src)) uniqueSequence.push(img.src);
-    });
-
-    return uniqueSequence;
+    return fallbackImages;
   };
 
   const displayImageSources = getOrderedSources();
@@ -503,20 +474,32 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     trackSources = [...trackSources, ...displayImageSources];
   }
 
-  const renderVerticalCard = (src: string, indexKey: string) => (
-    <div
-      key={indexKey}
-      onClick={() => setSelectedLightboxImage(src)}
-      className="group relative w-[240px] sm:w-[280px] md:w-[320px] h-[340px] sm:h-[400px] md:h-[460px] rounded-2xl md:rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer flex-shrink-0"
-    >
-      <img
-        src={src}
-        alt="Creative Work"
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        loading="lazy"
-      />
-    </div>
-  );
+  const renderVerticalCard = (src: string, indexKey: string) => {
+    const matching = validGalleryImages.find(img => img.src === src);
+    const altText = matching?.alt || 'Eye-Net Creative Work';
+
+    return (
+      <div
+        key={indexKey}
+        onClick={() => setSelectedLightboxImage(src)}
+        className="group relative w-[240px] sm:w-[280px] md:w-[320px] h-[340px] sm:h-[400px] md:h-[460px] rounded-2xl md:rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer flex-shrink-0"
+      >
+        <img
+          src={src}
+          alt={altText}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+          loading="lazy"
+        />
+        {altText && altText !== 'Creative Work' && (
+          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <p className="text-white text-xs sm:text-sm font-semibold drop-shadow line-clamp-2">
+              {altText}
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const render2DCarousel = () => (
     <div
@@ -545,7 +528,7 @@ const DynamicGalleryCarouselSection: React.FC<DynamicGalleryCarouselSectionProps
     </div>
   );
 
-  const isOverallLoading = contextLoading || loadingAboutImages;
+  const isOverallLoading = variant === '3d' ? (contextLoading && loadingAboutImages) : contextLoading;
 
   return (
     <section className={`bg-background text-foreground overflow-hidden ${hideHeading ? 'py-4 md:py-6' : 'py-12 md:py-16'}`}>
